@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import './validation.css';
 
 //Firebase
-import firebase from 'firebase/compat/firestore';
 import 'firebase/compat/firestore';
 
 //Next Imports
@@ -38,20 +37,9 @@ interface CertificateData {
   topics: string;
 }
 
-import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDltlN8U2xBjWCSuaQibd06XGm4fk8rBxI",
-    authDomain: "fluency-lab.firebaseapp.com",
-    projectId: "fluency-lab",
-    storageBucket: "fluency-lab.appspot.com",
-    messagingSenderId: "564217505235",
-    appId: "1:564217505235:web:b6899d3fd11a64e8753b26"
-  };
+import { db, app } from '@/app/firebase';
   
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
 
 const Validation = () => {
   const isLocalStorageAvailable = typeof window !== 'undefined' && window.localStorage;

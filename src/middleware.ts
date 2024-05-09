@@ -39,4 +39,4 @@ export default withAuth(
 )
 
 
-export const config = { matcher: ["/admin-dashboard", "/teacher-dashboard", "/student-dashboard", "/signin"] }
+export const config = { matcher: ["/admin-dashboard", "/teacher-dashboard", "/student-dashboard"] }
