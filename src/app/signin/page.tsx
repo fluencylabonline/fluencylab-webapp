@@ -39,6 +39,11 @@ export default function SignIn(){
   const [isLoginLoading, setIsLoginLoading] = useState(false); // State to track login loading
   const [isDashboardLoading, setIsDashboardLoading] = useState(false); // State to track dashboard loading
 
+  function handleKeyDown(event: { key: string; }) {
+    if (event.key === 'Enter') {
+        handleSignIn();
+    }
+}
   async function handleSignIn() {
     setIsLoginLoading(true); // Set login loading state to true when login starts
     const signInResponse = await signIn('credentials', { email, password, redirect: false }); // Disable automatic redirect
@@ -134,6 +139,7 @@ export default function SignIn(){
                         type="password"
                         autoComplete="current-password"
                         onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         required
                         placeholder='Sua senha aqui'
                         className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 text-fluency-text-light border-fluency-gray-100 outline-none focus:border-fluency-blue-500 ease-in-out duration-300" 

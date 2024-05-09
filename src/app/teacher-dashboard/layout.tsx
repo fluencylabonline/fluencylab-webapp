@@ -20,7 +20,21 @@ interface ISidebarItem {
   icon: any;
 }
 
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
+import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
+
 export default function Layout({ children }: { children: React.ReactNode }) {
+    const { data: session } = useSession({
+      required: true,
+      onUnauthenticated() {
+          redirect('/signin')
+      }
+    })
+    if (session?.user.role !== "teacher") {
+        return <RedirectinAnimation />
+    };
+
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
     const [isMenuHidden, setIsMenuHidden] = useState(false);
     const [isMobile, setIsMobile] = useState(false);

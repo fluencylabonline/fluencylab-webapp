@@ -32,12 +32,11 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
   };
 
   const handleAvatarClick = () => {
-    router.push('/admin-dashboard/perfil');
+    router.push('perfil');
   };
 
   function handleLogout() {
-    signOut();
-    router.push('/signin');
+    signOut({ callbackUrl: '/signin' })
   }
 
   return (

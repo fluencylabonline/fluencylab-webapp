@@ -15,7 +15,7 @@ export default withAuth(
         if (request.nextUrl.pathname.startsWith("/admin-dashboard")
             && request.nextauth.token.role !== "admin") {
             return NextResponse.rewrite(
-                new URL("/not-authorized", request.url)
+                new URL("/not-authorized", request.url) // only if I am authenticated and try to access it, otherwise I'll be sent to Login
             )
         }
 
