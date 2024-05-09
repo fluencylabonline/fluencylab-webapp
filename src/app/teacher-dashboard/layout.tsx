@@ -1,18 +1,19 @@
-'use client';
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
-//Icons
+import MobileHeader from '@/app/ui/Dashboard/mobileheader';
+import MobileSidebar from '@/app/ui/Dashboard/mobilesidebar';
+import Sidebar from "@/app/ui/Dashboard/sidebar";
+import Header from '@/app/ui/Dashboard/header';
+import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
+
+// Icons
 import { PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { IoGameControllerSharp } from 'react-icons/io5';
 import { FaFacebookMessenger } from 'react-icons/fa6';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
-
-//Components Imports
-import MobileHeader from '@/app/ui/Dashboard/mobileheader';
-import MobileSidebar from '@/app/ui/Dashboard/mobilesidebar';
-import Sidebar from "@/app/ui/Dashboard/sidebar";
-import Header from '@/app/ui/Dashboard/header';
 
 interface ISidebarItem {
   name: string;
@@ -20,86 +21,81 @@ interface ISidebarItem {
   icon: any;
 }
 
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
-import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
-
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const { data: session } = useSession({
-      required: true,
-      onUnauthenticated() {
-          redirect('/signin')
-      }
-    })
-    if (session?.user.role !== "teacher") {
-        return <RedirectinAnimation />
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin')
+    }
+  });
+
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [isMenuHidden, setIsMenuHidden] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
-    const [isMenuHidden, setIsMenuHidden] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-  
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth <= 768);
-      };
-  
-      handleResize();
-      window.addEventListener('resize', handleResize);
-  
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
-  
-    const toggleSidebar = () => {
-      setIsSidebarCollapsed(!isSidebarCollapsed);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
-  
-    const toggleMenu = () => {
-      setIsMenuHidden(!isMenuHidden);
-    };
-  
-  
-    const sidebarProps = {
-      isCollapsed: isSidebarCollapsed,
-      isMenuHidden: isMenuHidden,
-      toggleSidebar: toggleSidebar,
-      toggleMenu: toggleMenu,
-      isMobile: isMobile,
-    };
-  
-    const menuItems: ISidebarItem[] = [
-      {
-        name: "Alunos",
-        path: "/teacher-dashboard/alunos",
-        icon: <PiStudentFill className="h-6 w-6"/>,
-      },
-      {
-        name: "Material",
-        path: "/teacher-dashboard/material",
-        icon: <MdOutlineCollectionsBookmark className="h-6 w-6"/>,
-      },
-      {
-        name: "Perguntas",
-        path: "/teacher-dashboard/perguntas",
-        icon: <TbMessageQuestion className="h-6 w-6"/>,
-      },
-      {
-        name: "Prática",
-        path: "/teacher-dashboard/pratica",
-        icon: <IoGameControllerSharp className="h-6 w-6"/>,
-      },
-      {
-        name: "Conversas",
-        path: "/teacher-dashboard/conversas",
-        icon: <FaFacebookMessenger className="h-6 w-6"/>,
-      },
-    ];
-  
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuHidden(!isMenuHidden);
+  };
+
+  const sidebarProps = {
+    isCollapsed: isSidebarCollapsed,
+    isMenuHidden: isMenuHidden,
+    toggleSidebar: toggleSidebar,
+    toggleMenu: toggleMenu,
+    isMobile: isMobile,
+  };
+
+  const menuItems: ISidebarItem[] = [
+    {
+      name: "Alunos",
+      path: "/teacher-dashboard/alunos",
+      icon: <PiStudentFill className="h-6 w-6"/>,
+    },
+    {
+      name: "Material",
+      path: "/teacher-dashboard/material",
+      icon: <MdOutlineCollectionsBookmark className="h-6 w-6"/>,
+    },
+    {
+      name: "Perguntas",
+      path: "/teacher-dashboard/perguntas",
+      icon: <TbMessageQuestion className="h-6 w-6"/>,
+    },
+    {
+      name: "Prática",
+      path: "/teacher-dashboard/pratica",
+      icon: <IoGameControllerSharp className="h-6 w-6"/>,
+    },
+    {
+      name: "Conversas",
+      path: "/teacher-dashboard/conversas",
+      icon: <FaFacebookMessenger className="h-6 w-6"/>,
+    },
+  ];
+
+  if (!session || session.user.role !== "teacher") {
+    return <RedirectinAnimation />;
+  }
+
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
-
       {isMobile ? (
         <div>
           <div>
@@ -111,9 +107,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {children}
           </div>
         </div>
-
       ) : (
-
         <div>
           <div>
             <Sidebar {...sidebarProps} menuItems={menuItems}/>
@@ -129,7 +123,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       )}
-
     </div>
   );
 }
