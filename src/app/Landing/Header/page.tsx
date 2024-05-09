@@ -1,10 +1,8 @@
 'use client';
 
-
 //NextImports
 import Link from 'next/link'
 import Image from "next/image"
-
 
 //Images
 import IconLogoDark from '../../../../public/images/brand/icon-logodark.png'
@@ -15,27 +13,23 @@ export default function HeaderLanding(){
     return(
         <div>
 
+            <Link href={'/signin'} >Login Page</Link>
+
             <Image
               src={IconLogoDark}
               alt="IconLogoDark"
-              width={100}
-              height={100}
               priority
             /> 
 
             <Image
               src={IconLogoLight}
               alt="IconLogoDark"
-              width={100}
-              height={100}
               priority
             /> 
 
             <Image
               src={LandingHeader}
               alt="IconLogoDark"
-              width={100}
-              height={100}
               priority
             /> 
         </div>
