@@ -1,0 +1,60 @@
+.validationpage {
+    padding: 15px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+}
+
+.validationpage form {
+  margin-bottom: 20px;
+}
+
+.validationpage h2 {
+  margin-top: 20px;
+}
+
+.validationpage p {
+  margin-bottom: 10px;
+}
+
+.centered-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 85vh;
+    background-image: url(../../../public/images/backgrounds/variaspalavras.svg); 
+    width: 100%;
+}
+  
+.infocertificados{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 85vh;
+    text-align: center;
+    background-color: rgb(236, 236, 236);
+    border-radius: 12px;
+    width: 90%;
+    padding: 10%;
+    background-image: url(../../../public/images/backgrounds/variaspalavras.svg);
+}
+
+.infocertificados h2{
+    margin-bottom: 20px;
+}
+
+.infonome{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.infohoras{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
