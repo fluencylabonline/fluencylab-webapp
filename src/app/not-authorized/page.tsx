@@ -1,7 +1,7 @@
 export default function NotAuthorized(){
     return(
         <div>
-            Ops
+            Você não deveria estar aqui...
         </div>
     );
 }
