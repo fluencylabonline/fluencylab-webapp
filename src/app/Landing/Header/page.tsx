@@ -1,6 +1,7 @@
 'use client';
 
 import './Header.css';
+import { Toaster } from 'react-hot-toast';
 
 //React Imports
 import React, { useState, useEffect  } from 'react'
@@ -67,7 +68,7 @@ return(
     <div className="text-fluency-text-light mt-2 mr-3 ml-3 rounded-xl overflow-hidden">
         {/*Navbar*/}
             <div className="absolute inset-x-0 top-0 z-10">
-
+            <Toaster />
                 {/*Desktop*/}
                 <div className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
@@ -97,7 +98,7 @@ return(
                     </div>
                     <div className="hidden lg:flex lg:gap-x-12">
                         {navigation.map((item) => (
-                        <a key={item.name} href={item.href} className="navbar font-semibold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
+                        <a id='navbarheader' key={item.name} href={item.href} className="font-semibold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
                             {item.name}
                         </a>
                         ))}

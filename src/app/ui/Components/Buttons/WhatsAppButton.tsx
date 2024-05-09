@@ -53,7 +53,7 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
     const handleSubmit = () => {
         if (!name || !email || !selectedLanguage) {
           // Display toast message for form validation failure
-          toast.error("Please fill out all fields.");
+          toast.error("Por favor, preencha todos os campos.",);
           return;
         }
       
@@ -103,10 +103,10 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
         <Toaster />
 
         {modalOpen && (
-          <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="fixed z-100 inset-0 overflow-y-auto">
             <div className="flex items-center justify-center min-h-screen">
               <div className="fixed inset-0 transition-opacity">
-                <div className="absolute inset-0 bg-fluency-gray-300 opacity-75"></div>
+                <div className="absolute inset-0 bg-fluency-gray-400 opacity-95"></div>
               </div>
               <div className="bg-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-max p-5">
                 <div className="sm:flex sm:items-start">

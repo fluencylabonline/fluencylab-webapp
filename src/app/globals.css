@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+  height: 1px;
+  width: 1px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 12px;
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-track:active {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+  background-color: #21b5de00;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #158eb000;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #65c5e000;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -12,4 +43,12 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.tiptap .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #ced4da;
+  pointer-events: none;
+  height: 0;
 }
