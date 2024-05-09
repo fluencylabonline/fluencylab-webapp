@@ -1,0 +1,106 @@
+/* Basic editor styles */
+
+.tiptap {
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    
+      ul,
+      ol,
+      li {
+        padding: 0 1rem;
+      }
+    
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 1.1;
+      }
+    
+      h1{
+        font-size: 2rem;
+        font-weight: 600;
+      }
+      h2{
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      h3{
+        font-size: 1.125rem;
+      }
+      h4{
+        font-size: 1.123rem;
+      }
+      h5{
+        font-size: 1rem;
+      }
+      h6{
+        font-size: 1rem;
+      }
+  
+      code {
+        background-color: rgba(#616161, 0.1);
+        color: #616161;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    
+      pre {
+        background: #DEBE16;
+        color: #FFF;
+        font-weight: 700;
+        font-family: 'QuickSand', monospace;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        
+        code {
+          color: inherit;
+          padding: 0;
+          background: none;
+          font-size: 1rem;
+        }
+      }
+    
+      img {
+        max-width: 100%;
+        height: auto;
+    
+        &.ProseMirror-selectednode {
+          outline: 3px solid #68CEF8;
+        }
+      }
+    
+      blockquote {
+        padding-left: 1rem;
+        border-left: 2px solid rgba(#0D0D0D, 0.1);
+      }
+    
+      hr {
+        border: none;
+        border-top: 2px solid rgba(#0D0D0D, 0.1);
+        margin: 2rem 0;
+      }
+  
+      .bold{
+        background-color: aqua;
+      }
+    }
+  
+    .Popover {
+      background: #e6dfdf36;
+      border-radius: 8px;
+      padding: 10px;
+      padding-right: 16px;
+      padding-left: 16px;
+      margin: -5px;
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+    }
+  
+    
