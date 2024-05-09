@@ -2,36 +2,19 @@
 
 //NextImports
 import Link from 'next/link'
-import Image from "next/image"
 
-//Images
-import IconLogoDark from '../../../../public/images/brand/icon-logodark.png'
-import IconLogoLight from '../../../../public/images/brand/icon-logolight.png'
-import LandingHeader from '../../../../public/images/landing/landing-header-image.png'
+//Notification
+import toast, { Toaster } from 'react-hot-toast';
+const notify = () => toast('Here is your toast.');
 
-export default function HeaderLanding(){
+export default function Header(){
     return(
         <div>
 
             <Link href={'/signin'} >Login Page</Link>
+            <button onClick={notify}>Make me a toast</button>
+            <Toaster />
 
-            <Image
-              src={IconLogoDark}
-              alt="IconLogoDark"
-              priority
-            /> 
-
-            <Image
-              src={IconLogoLight}
-              alt="IconLogoDark"
-              priority
-            /> 
-
-            <Image
-              src={LandingHeader}
-              alt="IconLogoDark"
-              priority
-            /> 
         </div>
     );
 }
