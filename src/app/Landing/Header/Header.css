@@ -1,0 +1,56 @@
+    @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.3s ease forwards;
+    }
+
+    /* Define the keyframes for the opening animation */
+    @keyframes menu-open {
+        from {
+        transform: translateX(100%);
+        }
+        to {
+        transform: translateX(50%);
+        }
+        to {
+        transform: translateX(0);
+        }
+    }
+  
+    /* Define the keyframes for the closing animation */
+    @keyframes animate-menu-close {
+        from {
+        transform: translateX(0);
+        }
+        to {
+        transform: translateX(100%);
+        }
+    }
+    
+    /* Apply the animations to the menu */
+    .animate-menu-open {
+        animation: menu-open 0.4s ease-in-out forwards;
+    }
+    
+    .animate-menu-close {
+        animation: menu-close 0.4s ease-in-out forwards;
+    }
+    a:after {
+      display:block;
+      content: '';
+      border-bottom: solid 3px #019fb6;  
+      transform: scaleX(0);  
+      transition: transform 250ms ease-in-out;
+    }
+    a:hover:after { transform: scaleX(1); }
+    a.fromRight:after{ transform-origin:100% 50%; }
+    a.fromLeft:after{  transform-origin:  0% 50%; }

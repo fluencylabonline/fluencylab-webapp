@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AuthProvider from './context/AuthProvider'
 import { Quicksand } from "next/font/google";
 import "./globals.css";
 
@@ -11,12 +12,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="pt-br">
-      <body className={quicksand.className}>{children}</body>
+      <body className={quicksand.className}>
+        <AuthProvider>
+          <main>
+            {children}
+          </main>
+        </AuthProvider>
+      </body>
     </html>
   );
 }
