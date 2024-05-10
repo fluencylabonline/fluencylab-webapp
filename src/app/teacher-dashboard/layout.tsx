@@ -12,9 +12,9 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
-import { IoGameControllerSharp } from 'react-icons/io5';
-import { FaFacebookMessenger } from 'react-icons/fa6';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
+import { LuGamepad2 } from 'react-icons/lu';
+import { IoChatbubblesOutline } from 'react-icons/io5';
 
 interface ISidebarItem {
   name: string;
@@ -70,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <PiStudentFill className="h-6 w-6"/>,
     },
     {
-      name: "Material",
+      name: "Suporte",
       path: "/teacher-dashboard/material",
       icon: <MdOutlineCollectionsBookmark className="h-6 w-6"/>,
     },
@@ -82,12 +82,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "Prática",
       path: "/teacher-dashboard/pratica",
-      icon: <IoGameControllerSharp className="h-6 w-6"/>,
+      icon: <LuGamepad2 className="h-6 w-6"/>,
     },
     {
       name: "Conversas",
       path: "/teacher-dashboard/conversas",
-      icon: <FaFacebookMessenger className="h-6 w-6"/>,
+      icon: <IoChatbubblesOutline className="h-6 w-6"/>,
     },
   ];
 

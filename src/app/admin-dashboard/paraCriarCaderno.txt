@@ -1,0 +1,9 @@
+//Firebase
+import { db } from '@/app/firebase';
+import { doc, setDoc } from "firebase/firestore"; 
+
+setDoc(doc(db, "cities", "LA"), {
+            name: "Los Angeles",
+            state: "CA",
+            country: "USA"
+        });

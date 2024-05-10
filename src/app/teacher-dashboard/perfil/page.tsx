@@ -204,6 +204,7 @@ function Perfil() {
                     </ul>
                   <p className='my-2'>Esses critérios ajudarão a garantir a eficácia e qualidade das aulas de idioma online individual.</p>
                 </AccordionItem>
+
                 <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Critérios para remarcação de aula online" title="Critérios para remarcação de aula online">
                   <p className='my-2'>O professor pode considerar os seguintes critérios para decidir se precisa remarcar uma aula online para um aluno:</p>
                     <ul className='ml-2 list-disc'>
@@ -216,15 +217,15 @@ function Perfil() {
                   <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Critérios para remarcação de aula online" title="Como usar o OBS">
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Como usar o OBS" title="Como usar o OBS">
                   <p>Exemplo de texto</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Critérios para remarcação de aula online" title="Material de aula">
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="4" aria-label="Material de aula" title="Material de aula">
                   <p>Exemplo de texto</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Critérios para remarcação de aula online" title="Material para professores">
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="5" aria-label="Material para professores" title="Material para professores">
                   <p>Exemplo de texto</p>
                 </AccordionItem>
               </Accordion>

@@ -515,7 +515,7 @@ export default function Forum() {
 
                     <div className="flex flex-row gap-4 items-center">
                         <button onClick={openModal} className="bg-yellow-400 hover:bg-yellow-500 focus:bg-fluency-darker-blue text-white rounded-lg px-2 py-2 font-semibold relative ease-in-out duration-300 flex flex-row gap-1 items-center"><TbLocationQuestion />Pergunte</button>
-                        <div className="relative" onClick={toggleDropdown}>
+                        <div className="hidden" onClick={toggleDropdown}>
                             {badgeCount > 0 ? (
                                 <IoNotificationsCircle className="text-red-400 hover:text-red-500 transition-all ease-in-out duration-300 h-10 w-10 cursor-pointer" />
                             ) : <IoNotificationsCircle  className="text-green-400 hover:text-green-500 transition-all ease-in-out duration-300 h-10 w-10 cursor-pointer" />}

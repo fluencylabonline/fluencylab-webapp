@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/404.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/404.js", "src/app/teacher-dashboard/suporte/hooks/useFolder.js", "src/app/teacher-dashboard/suporte/AddFolderButton.js"],
   "exclude": ["node_modules"]
 }

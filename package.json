@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.0.3",
+    "@nextui-org/dropdown": "^2.1.23",
     "@nextui-org/react": "^2.3.6",
     "@nextui-org/table": "^2.0.33",
     "@tiptap/core": "^2.3.2",
