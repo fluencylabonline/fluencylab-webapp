@@ -12,8 +12,7 @@ import { FaFilePdf, FaRegFileAudio, FaRegFileImage, FaRegFileVideo } from "react
 import AlunosAulas from './aluno-aulas';
 import Link from 'next/link';
 
-import { toast, Toaster } from 'react-hot-toast';
-
+import { toast } from 'react-hot-toast';
 
 import { FaFileAlt } from 'react-icons/fa';
 import { IoClose, IoCloudDownloadOutline } from 'react-icons/io5';
@@ -310,7 +309,7 @@ function AlunoPainel() {
 
               // Show toast with task status
               toast[toastColor](`Tarefa ${taskStatus}!`, {
-                  position: "top-right",
+                  position: "top-center",
               });
 
           } catch (error) {
