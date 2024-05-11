@@ -79,7 +79,7 @@ function Footer(){
                     <a rel="noopener noreferrer" href="#" onClick={openModal}>Fale conosco</a>
                   </li>
                   <li className='hover:text-fluency-gray-500 hover:dark:text-fluency-gray-300 ease-in-out duration-300'>
-                    <a rel="noopener noreferrer" href="/privacy">Privacidade</a>
+                    <a rel="noopener noreferrer" href="/LandingPages/privacy">Privacidade</a>
                   </li>
                   <li className='hover:text-fluency-gray-500 hover:dark:text-fluency-gray-300 ease-in-out duration-300'>
                     <a rel="noopener noreferrer" href="/termsandpolicies">Termos de Serviço</a>

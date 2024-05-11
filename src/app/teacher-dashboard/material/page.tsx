@@ -16,7 +16,7 @@ import DicasParaAulas from "./dicas-para-aulas";
 export default function Material(){
     return(
     <div className="flex flex-col items-center justify-center py-3 px-4 overflow-x-hidden overflow-y-hidden h-[90vh]">
-      <Tabs aria-label="Options">
+      <Tabs fullWidth={true} aria-label="Options">
         <Tab
           key="Apostilas"
           title={

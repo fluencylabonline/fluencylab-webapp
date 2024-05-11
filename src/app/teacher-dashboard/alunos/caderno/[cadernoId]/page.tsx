@@ -359,9 +359,9 @@ export default function Caderno(){
                                 </div>
                             </Link>
                             <div className='flex flex-row gap-2 items-center'>
-                                <p><MdDeleteSweep onClick={() => deleteNotebook(notebook.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
-                                <p><GiSchoolBag onClick={() => createReviewTask(notebook.description)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
-                                <p><BsFilePdfFill className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><MdDeleteSweep onClick={() => deleteNotebook(notebook.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><GiSchoolBag onClick={() => createReviewTask(notebook.description)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><BsFilePdfFill className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
                             </div>
                         </li>
                     ))}

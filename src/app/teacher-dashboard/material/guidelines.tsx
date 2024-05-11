@@ -3,7 +3,7 @@ import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
 
 export default function Guidelines(){
     return(
-        <div className="w-[74rem] flex flex-col gap-3 items-start overflow-y-scroll h-[75vh] bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 rounded-md">
+        <div className="w-full flex flex-col gap-3 items-start overflow-y-scroll h-[75vh] bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 rounded-md">
             <Accordion>
                 <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="1" aria-label="Critérios para aulas de idioma online individual" title="Critérios para aulas de idioma online individual">
                     <div className="px-4 py-2">

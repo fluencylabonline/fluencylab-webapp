@@ -21,7 +21,7 @@ import { MdOutlineDeleteSweep } from 'react-icons/md';
 //Next
 import { useSession } from 'next-auth/react';
 import FluencyInput from '@/app/ui/Components/Input/input';
-import FluencyButton from '../ui/Components/Button/button';
+import FluencyButton from '../../ui/Components/Button/button';
 
 interface Question {
     id: string;

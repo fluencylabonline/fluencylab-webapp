@@ -6,7 +6,7 @@ import Image from "next/image"
 import Link from 'next/link';
 
 //Image
-import Logo from '../../../public/images/brand/logo.png';
+import Logo from '../../../../public/images/brand/logo.png';
 
 //Icons
 import { BsArrowLeft } from "react-icons/bs";

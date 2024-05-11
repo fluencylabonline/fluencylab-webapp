@@ -78,6 +78,7 @@ function AlunoPainel() {
 
         fetchStudentData();
     }, [id]);
+    
 
     const [materials, setMaterials] = useState<any[]>([]);
     const storage = getStorage();
@@ -427,7 +428,7 @@ function AlunoPainel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, tasksCompletedToastShown]);
 
-
+    
 return (
     <div>
       {/*Modais*/}
@@ -528,9 +529,10 @@ return (
 
               <div className='lg:flex lg:flex-row flex flex-col h-full w-full gap-3 items-strech'>
                 <div className="flex justify-center items-center w-max h-full rounded-md bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 cursor-pointer duration-300 ease-in-out transition-all">
-                  <Link href={''}>
+                 {studentData && (
+                  <Link href={{ pathname: `caderno/${encodeURIComponent(studentData.name)}`, query: { id: id } }} passHref>
                     <h1 className="text-xl font-semibold text-center lg:px-4 md:px-4 sm:px-4 sm:py-8">Anotações</h1>
-                  </Link>
+                  </Link>)}
                 </div>
               
                 <div className='h-full w-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-1 rounded-lg flex flex-col items-center justify-center gap-1'>
