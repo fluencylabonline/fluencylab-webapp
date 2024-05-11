@@ -1,0 +1,12 @@
+[
+  [
+    { "starter": "PERRO", "hint": "UN ANIMAL DOMÉSTICO", "answer": "PERRO" },
+    { "starter": "LUZÓN", "hint": "UNA ESTRELLA BRILLANTE", "answer": "LUZÓN" },
+    { "starter": "MADRE", "hint": "FIGURA FEMENINA", "answer": "MADRE" },
+    { "starter": "AZUL", "hint": "COLOR DEL CIELO", "answer": "AZUL" },
+    { "starter": "COCHE", "hint": "MEDIO DE TRANSPORTE", "answer": "COCHE" },
+    { "starter": "NIEVE", "hint": "ELEMENTO NATURAL EN FRÍO", "answer": "NIEVE" },
+    { "starter": "GAFAS", "hint": "OBJETO PARA VER MEJOR", "answer": "GAFAS" }
+    ]
+  ]
+  

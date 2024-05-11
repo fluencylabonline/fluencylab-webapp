@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: center;
     height: 85vh;
-    background-image: url(../../../public/images/backgrounds/variaspalavras.svg); 
+    background-image: url(../../../../public/images/backgrounds/variaspalavras.svg); 
     width: 100%;
 }
   
@@ -38,7 +38,7 @@
     border-radius: 12px;
     width: 90%;
     padding: 10%;
-    background-image: url(../../../public/images/backgrounds/variaspalavras.svg);
+    background-image: url(../../../../public/images/backgrounds/variaspalavras.svg);
 }
 
 .infocertificados h2{

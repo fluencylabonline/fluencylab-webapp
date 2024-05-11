@@ -1,9 +1,9 @@
-import ComingSoon from '@/app/ComingSoon/coming-soon'
+import GamesPro from '@/app/SharedPages/Games/page';
 
 export default function Pratica(){
     return(
         <div>
-            <ComingSoon />
+            <GamesPro />
         </div>
     );
 }

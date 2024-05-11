@@ -64,7 +64,7 @@ function Footer(){
                 <h3 className="tracking-wide uppercase dark:text-gray-50 font-bold">Para alunos</h3>
                 <ul className="space-y-1 text-fluency-gray-400 dark:text-fluency-gray-200">
                   <li className='hover:text-fluency-gray-500 hover:dark:text-fluency-gray-300 ease-in-out duration-300'>
-                    <a rel="noopener noreferrer" href="/validation">Validar certificado</a>
+                    <a rel="noopener noreferrer" href="/LandingPages/validation">Validar certificado</a>
                   </li>
                   <li className='hover:text-fluency-gray-500 hover:dark:text-fluency-gray-300 ease-in-out duration-300'>
                     <a rel="noopener noreferrer" href="#">Remarcações</a>
@@ -82,7 +82,7 @@ function Footer(){
                     <a rel="noopener noreferrer" href="/LandingPages/privacy">Privacidade</a>
                   </li>
                   <li className='hover:text-fluency-gray-500 hover:dark:text-fluency-gray-300 ease-in-out duration-300'>
-                    <a rel="noopener noreferrer" href="/termsandpolicies">Termos de Serviço</a>
+                    <a rel="noopener noreferrer" href="/LandingPages/termsandpolicies">Termos de Serviço</a>
                   </li>
                   
                 </ul>

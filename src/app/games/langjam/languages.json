@@ -1,0 +1,386 @@
+[
+    {
+        "name": "Chinês Mandarim",
+        "population": "Mais de 1 bilhão de falantes",
+        "countryOfOrigin": "China",
+        "flagCode": "CN"
+    },
+    {
+        "name": "Espanhol",
+        "population": "Mais de 460 milhões de falantes",
+        "countryOfOrigin": "Espanha",
+        "flagCode": "ES"
+    },
+    {
+        "name": "Inglês",
+        "population": "Mais de 1,5 bilhão de falantes (incluindo falantes de segunda língua)",
+        "countryOfOrigin": "Inglaterra (Reino Unido)",
+        "flagCode": "GB"
+    },
+    {
+        "name": "Hindi",
+        "population": "Mais de 600 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Árabe",
+        "population": "Mais de 400 milhões de falantes",
+        "countryOfOrigin": "Vários países da região do Oriente Médio e Norte da África",
+        "flagCode": "AE"
+    },
+    {
+        "name": "Bengali",
+        "population": "Mais de 250 milhões de falantes",
+        "countryOfOrigin": "Bangladesh, Índia",
+        "flagCode": "BD"
+    },
+    {
+        "name": "Português",
+        "population": "Mais de 220 milhões de falantes",
+        "countryOfOrigin": "Portugal",
+        "flagCode": "PT"
+    },
+    {
+        "name": "Russo",
+        "population": "Mais de 250 milhões de falantes",
+        "countryOfOrigin": "Rússia",
+        "flagCode": "RU"
+    },
+    {
+        "name": "Japonês",
+        "population": "Mais de 130 milhões de falantes",
+        "countryOfOrigin": "Japão",
+        "flagCode": "JP"
+    },
+    {
+        "name": "Alemão",
+        "population": "Mais de 130 milhões de falantes",
+        "countryOfOrigin": "Alemanha",
+        "flagCode": "DE"
+    },
+    {
+        "name": "Francês",
+        "population": "Mais de 270 milhões de falantes",
+        "countryOfOrigin": "França",
+        "flagCode": "FR"
+    },
+    {
+        "name": "Urdu",
+        "population": "Mais de 100 milhões de falantes",
+        "countryOfOrigin": "Paquistão, Índia",
+        "flagCode": "PK"
+    },
+    {
+        "name": "Coreano",
+        "population": "Mais de 77 milhões de falantes",
+        "countryOfOrigin": "Coreia (Coreia do Sul e Coreia do Norte)",
+        "flagCode": "KR"
+    },
+    {
+        "name": "Turco",
+        "population": "Mais de 80 milhões de falantes",
+        "countryOfOrigin": "Turquia",
+        "flagCode": "TR"
+    },
+    {
+        "name": "Italiano",
+        "population": "Mais de 70 milhões de falantes",
+        "countryOfOrigin": "Itália",
+        "flagCode": "IT"
+    },
+    {
+        "name": "Vietnamita",
+        "population": "Mais de 90 milhões de falantes",
+        "countryOfOrigin": "Vietnã",
+        "flagCode": "VN"
+    },
+    {
+        "name": "Tâmil",
+        "population": "Mais de 75 milhões de falantes",
+        "countryOfOrigin": "Índia, Sri Lanka",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Tailandês",
+        "population": "Mais de 70 milhões de falantes",
+        "countryOfOrigin": "Tailândia",
+        "flagCode": "TH"
+    },
+    {
+        "name": "Punjabi",
+        "population": "Mais de 100 milhões de falantes",
+        "countryOfOrigin": "Índia, Paquistão",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Gujarati",
+        "population": "Mais de 50 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Polonês",
+        "population": "Mais de 40 milhões de falantes",
+        "countryOfOrigin": "Polônia",
+        "flagCode": "PL"
+    },
+    {
+        "name": "Persa (Farsi)",
+        "population": "Mais de 110 milhões de falantes",
+        "countryOfOrigin": "Irã",
+        "flagCode": "IR"
+    },
+    {
+        "name": "Ucraniano",
+        "population": "Mais de 45 milhões de falantes",
+        "countryOfOrigin": "Ucrânia",
+        "flagCode": "UA"
+    },
+    {
+        "name": "Malaio",
+        "population": "Mais de 275 milhões de falantes",
+        "countryOfOrigin": "Malásia, Indonésia",
+        "flagCode": "MY"
+    },
+    {
+        "name": "Holandês",
+        "population": "Mais de 23 milhões de falantes",
+        "countryOfOrigin": "Países Baixos",
+        "flagCode": "NL"
+    },
+    {
+        "name": "Sueco",
+        "population": "Mais de 10 milhões de falantes",
+        "countryOfOrigin": "Suécia",
+        "flagCode": "SE"
+    },
+    {
+        "name": "Tcheco",
+        "population": "Mais de 10 milhões de falantes",
+        "countryOfOrigin": "República Tcheca",
+        "flagCode": "CZ"
+    },
+    {
+        "name": "Grego",
+        "population": "Mais de 15 milhões de falantes",
+        "countryOfOrigin": "Grécia",
+        "flagCode": "GR"
+    },
+    {
+        "name": "Húngaro",
+        "population": "Mais de 13 milhões de falantes",
+        "countryOfOrigin": "Hungria",
+        "flagCode": "HU"
+    },
+    {
+        "name": "Romeno",
+        "population": "Mais de 24 milhões de falantes",
+        "countryOfOrigin": "Romênia",
+        "flagCode": "RO"
+    },
+    {
+        "name": "Curdo",
+        "population": "Mais de 30 milhões de falantes",
+        "countryOfOrigin": "Região Curdistão (Iraque, Irã, Turquia, Síria)",
+        "flagCode": "IQ"
+    },
+    {
+        "name": "Sindi",
+        "population": "Mais de 25 milhões de falantes",
+        "countryOfOrigin": "Paquistão, Índia",
+        "flagCode": "PK"
+    },
+    {
+        "name": "Odia (Oriya)",
+        "population": "Mais de 35 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Birmanês",
+        "population": "Mais de 33 milhões de falantes",
+        "countryOfOrigin": "Myanmar (Birmânia)",
+        "flagCode": "MM"
+    },
+    {
+        "name": "Tagalo (Filipino)",
+        "population": "Mais de 25 milhões de falantes",
+        "countryOfOrigin": "Filipinas",
+        "flagCode": "PH"
+    },
+    {
+        "name": "Ioruba",
+        "population": "Mais de 40 milhões de falantes",
+        "countryOfOrigin": "Nigéria, Benin, Togo",
+        "flagCode": "NG"
+    },
+    {
+        "name": "Malaiala",
+        "population": "Mais de 38 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Cingalês",
+        "population": "Mais de 19 milhões de falantes",
+        "countryOfOrigin": "Sri Lanka",
+        "flagCode": "LK"
+    },
+    {
+        "name": "Somali",
+        "population": "Mais de 20 milhões de falantes",
+        "countryOfOrigin": "Somália",
+        "flagCode": "SO"
+    },
+    {
+        "name": "Cebuano",
+        "population": "Mais de 20 milhões de falantes",
+        "countryOfOrigin": "Filipinas",
+        "flagCode": "PH"
+    },
+    {
+        "name": "Nepali",
+        "population": "Mais de 20 milhões de falantes",
+        "countryOfOrigin": "Nepal",
+        "flagCode": "NP"
+    },
+    {
+        "name": "Marata",
+        "population": "Mais de 80 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Bhojpuri",
+        "population": "Mais de 50 milhões de falantes",
+        "countryOfOrigin": "Índia, Nepal",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Hauçá",
+        "population": "Mais de 50 milhões de falantes",
+        "countryOfOrigin": "Nigéria, Níger",
+        "flagCode": "NG"
+    },
+    {
+        "name": "Fula",
+        "population": "Mais de 30 milhões de falantes",
+        "countryOfOrigin": "África Ocidental (Vários países)",
+        "flagCode": "NG"
+    },
+    {
+        "name": "Uzbeque",
+        "population": "Mais de 32 milhões de falantes",
+        "countryOfOrigin": "Uzbequistão",
+        "flagCode": "UZ"
+    },
+    {
+        "name": "Awadhi",
+        "population": "Mais de 30 milhões de falantes",
+        "countryOfOrigin": "Índia, Nepal",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Amárico",
+        "population": "Mais de 30 milhões de falantes",
+        "countryOfOrigin": "Etiópia",
+        "flagCode": "ET"
+    },
+    {
+        "name": "Canarês",
+        "population": "Mais de 40 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Oromo",
+        "population": "Mais de 35 milhões de falantes",
+        "countryOfOrigin": "Etiópia",
+        "flagCode": "ET"
+    },
+    {
+        "name": "Telugu",
+        "population": "Mais de 80 milhões de falantes",
+        "countryOfOrigin": "Índia",
+        "flagCode": "IN"
+    },
+    {
+        "name": "Hmong",
+        "population": "Mais de 3 milhões de falantes",
+        "countryOfOrigin": "China",
+        "flagCode": "CN"
+    },
+    {
+        "name": "Shona",
+        "population": "Mais de 10 milhões de falantes",
+        "countryOfOrigin": "Zimbábue",
+        "flagCode": "ZW"
+    },
+    {
+        "name": "Quíchua",
+        "population": "Mais de 8 milhões de falantes",
+        "countryOfOrigin": "Peru, Bolívia, Equador",
+        "flagCode": "PE"
+    },
+    {
+        "name": "Tibetano",
+        "population": "Mais de 8 milhões de falantes",
+        "countryOfOrigin": "Tibete (China)",
+        "flagCode": "CN"
+    },
+    {
+        "name": "Chichewa (Nianja)",
+        "population": "Mais de 10 milhões de falantes",
+        "countryOfOrigin": "Malawi, Zâmbia, Moçambique",
+        "flagCode": "MW"
+    },
+    {
+        "name": "Kinyarwanda",
+        "population": "Mais de 12 milhões de falantes",
+        "countryOfOrigin": "Ruanda",
+        "flagCode": "RW"
+    },
+    {
+        "name": "Chittagoniano",
+        "population": "Mais de 15 milhões de falantes",
+        "countryOfOrigin": "Bangladesh",
+        "flagCode": "BD"
+    },
+    {
+        "name": "Saraiki",
+        "population": "Mais de 20 milhões de falantes",
+        "countryOfOrigin": "Paquistão",
+        "flagCode": "PK"
+    },
+    {
+        "name": "Malgaxe",
+        "population": "Mais de 20 milhões de falantes",
+        "countryOfOrigin": "Madagáscar",
+        "flagCode": "MG"
+    },
+    {
+        "name": "Khmer (Cambojano)",
+        "population": "Mais de 16 milhões de falantes",
+        "countryOfOrigin": "Camboja",
+        "flagCode": "KH"
+    },
+    {
+        "name": "Chewa",
+        "population": "Mais de 12 milhões de falantes",
+        "countryOfOrigin": "Malawi, Zâmbia, Moçambique",
+        "flagCode": "MW"
+    },
+    {
+        "name": "Sinhala",
+        "population": "Mais de 19 milhões de falantes",
+        "countryOfOrigin": "Sri Lanka",
+        "flagCode": "LK"
+    },
+    {
+        "name": "Akan",
+        "population": "Mais de 20 milhões de falantes",
+        "countryOfOrigin": "Gana, Costa do Marfim",
+        "flagCode": "GH"
+    }
+]

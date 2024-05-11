@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 
 //Images
-import Logo from '../../../public/images/brand/logo.png';
+import Logo from '../../../../public/images/brand/logo.png';
 
 //Icons
 import { GrValidate } from "react-icons/gr";
