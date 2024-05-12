@@ -11,7 +11,7 @@ import './styles.scss'
 
 import { FaRedoAlt, FaUndoAlt } from "react-icons/fa";
 import { LuHeading1, LuHeading2,LuHeading3 } from "react-icons/lu";
-import { FaItalic } from "react-icons/fa6";
+import { FaFont, FaItalic } from "react-icons/fa6";
 import { LuHighlighter } from "react-icons/lu";
 import { PiTextBBold, PiTextAlignCenter, PiTextAlignJustify, PiTextAlignLeft, PiTextAlignRight, PiTextTBold } from "react-icons/pi";
 import { IoImage } from "react-icons/io5";
@@ -110,6 +110,7 @@ const increaseFontSize = () => {
       
       <p>|</p>
 
+      <div className="lg:block md:block hidden">
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Título H1"
@@ -155,6 +156,32 @@ const increaseFontSize = () => {
         <PiTextTBold className="w-5 h-auto" />
         </button>
       </Tooltip>
+      </div>
+
+      <Dropdown>
+        <DropdownTrigger>
+          <Button 
+            variant="bordered" 
+            className="lg:hidden md:hidden block"
+          >
+            <PiTextTBold className="w-5 h-auto" />
+          </Button>
+        </DropdownTrigger>
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextTBold className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <LuHeading1 className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <LuHeading2 className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <LuHeading3 className="w-5 h-auto" />
+            </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
 
       <p>|</p>
 
@@ -214,7 +241,7 @@ const increaseFontSize = () => {
           </Tooltip>
         </div>
 
-
+        <div className="lg:block md:block hidden">
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Negrito (Ctrl + B)"
@@ -225,7 +252,6 @@ const increaseFontSize = () => {
         <PiTextBBold className="w-5 h-auto" />
         </button>
       </Tooltip>
-
 
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
@@ -238,7 +264,6 @@ const increaseFontSize = () => {
         </button>
       </Tooltip>
 
-
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Marcador"
@@ -249,7 +274,29 @@ const increaseFontSize = () => {
         <LuHighlighter className="w-5 h-auto" />
         </button>
       </Tooltip>
+      </div>
 
+      <Dropdown>
+        <DropdownTrigger>
+          <Button 
+            variant="bordered" 
+            className="lg:hidden md:hidden block"
+          >
+            <FaFont className="w-4 h-auto" />
+          </Button>
+        </DropdownTrigger>
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextBBold className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <FaItalic  className="w-4 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <LuHighlighter className="w-5 h-auto" />
+            </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
 
       <p>|</p>
 

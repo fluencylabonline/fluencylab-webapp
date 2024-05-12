@@ -83,14 +83,14 @@
 }
 
 .cardsbg{
-  background-image: url('../../../public/images/games/cards.svg');
+  background-image: url('../../../public/images/games/flashcards.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 40%;
 }
 
 .fluencyjam{
-  background-image: url('../../../public/images/games/langjam.svg');
+  background-image: url('../../../public/images/games/langjam.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 70%;  
