@@ -51,7 +51,7 @@ function Popovers({ editor }: PopoversProps) {
           </button>
 
           <button
-            onClick={() => editor.chain().focus().setColor('#0047AB').run()}
+            onClick={() => editor.chain().focus().setColor('#21B5DE').run()}
             className={editor.isActive('textStyle', { color: '#0047AB' }) ? 'is-active' : ''}
             data-testid="setRed"
             >        
@@ -88,6 +88,14 @@ function Popovers({ editor }: PopoversProps) {
             data-testid="setRed"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out transition-all'></div>
+          </button>
+
+          <button
+            onClick={() => editor.chain().focus().setColor('#FFFFFF').run()}
+            className={editor.isActive('textStyle', { color: '#000000' }) ? 'is-active' : ''}
+            data-testid="setRed"
+            >        
+            <div className='w-5 h-5 p-2 rounded-full bg-fluency-gray-100 hover:bg-fluency-gray-200 duration-300 ease-in-out transition-all'></div>
           </button>
       </BubbleMenu>
   )
@@ -188,7 +196,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     editorProps: {
       attributes: {
         class:
-          "min-w-[794px] max-w-[794px] min-h-[1123px] p-16 border-[0.5px] border-[#cfcfcf] dark:border-fluency-gray-300 outline-none bg-white dark:bg-fluency-gray-900",
+          "lg:min-w-[794px] md:max-w-[700px] max-w-[320px] min-h-screen p-16 border-[0.5px] border-[#cfcfcf] dark:border-fluency-gray-300 outline-none bg-white dark:bg-fluency-gray-900",
       },
     },
     autofocus: true,
@@ -236,14 +244,14 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
         <button
           onClick={scrollToBottom}
-          className="fixed bottom-5 right-5 flex items-center justify-center w-10 h-10 bg-fluency-gray-100 rounded-full hover:bg-fluency-gray-300"
+          className="fixed bottom-5 right-5 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
         >
           <FaArrowDown />
         </button>
 
         <button
           onClick={scrollToTop}
-          className="fixed bottom-16 right-5 flex items-center justify-center w-10 h-10 bg-fluency-gray-100 rounded-full hover:bg-fluency-gray-300"
+          className="fixed bottom-16 right-5 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
         >
           <FaArrowUp />
         </button>
@@ -251,11 +259,11 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
         <div className="fixed top-32 right-5">
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
-                <Button className='bg-fluency-gray-100 dark:bg-fluency-gray-300 hover:bg-fluency-gray-300 text-fluency-gray-700 dark:text-fluency-gray-50 hover:dark:bg-fluency-gray-500 duration-150 ease-in-out transition-all rounded-full p-2 px-2 text-md'>
+                <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
                   <VscWholeWord className="w-6 h-auto"/>
                 </Button>      
             </PopoverTrigger>
-            <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark border border-fluency-gray-500 p-3 rounded-md">
+            <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-pages-dark border border-fluency-gray-500 p-3 rounded-md">
               {(titleProps) => (
                 <div className="px-1 py-2 w-full">
                   <p className="text-md font-bold text-foreground" {...titleProps}>

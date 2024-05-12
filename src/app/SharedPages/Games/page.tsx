@@ -1,8 +1,5 @@
 'use client'
 
-//Games
-import Wordle from "./wordle/en/page";
-
 //Next Imports
 import Image from "next/image";
 import Link from "next/link";

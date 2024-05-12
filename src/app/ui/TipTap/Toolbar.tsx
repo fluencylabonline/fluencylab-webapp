@@ -4,6 +4,7 @@ import { type Editor } from "@tiptap/react";
 
 //NextReactImports
 import { Tooltip } from '@nextui-org/react';
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 
 //Icons and Style
 import './styles.scss'
@@ -16,6 +17,7 @@ import { PiTextBBold, PiTextAlignCenter, PiTextAlignJustify, PiTextAlignLeft, Pi
 import { IoImage } from "react-icons/io5";
 import { GoHorizontalRule } from "react-icons/go";
 import { AiOutlineBlock } from "react-icons/ai";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 type Props = {
   editor: Editor | null;
@@ -39,19 +41,27 @@ const Toolbar = ({ editor, isTyping, addImage }: Props) => {
   };
   
   const decreaseFontSize = () => {
-    const newSize = parseInt(selectedFontSize, 10) - 2; // Decrease font size by 2
+    let newSize = parseInt(selectedFontSize, 10) - 2; // Decrease font size by 2
+    if (newSize < 8) {
+        newSize = 8; // Ensure minimum font size is 8
+    }
     setSelectedFontSize(`${newSize}`);
     editor.chain().focus().setFontSize(`${newSize}px`).run();
-  };
-  
-  const increaseFontSize = () => {
-    const newSize = parseInt(selectedFontSize, 10) + 2; // Increase font size by 2
+};
+
+const increaseFontSize = () => {
+    let newSize = parseInt(selectedFontSize, 10) + 2; // Increase font size by 2
+    if (newSize > 48) {
+        newSize = 48; // Ensure maximum font size is 48
+    }
     setSelectedFontSize(`${newSize}`);
     editor.chain().focus().setFontSize(`${newSize}px`).run();
-  };
+};
+
+
   
   return (
-    <div className='sticky top-0 z-50 flex flex-row items-center justify-center gap-2 w-full rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
+    <div className='sticky top-0 z-50 flex flex-row flex-wrap items-center justify-center gap-2 w-full rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
       
         <div role="status">
           <svg aria-hidden="true" className={`w-5 h-5 text-gray-200 ${isTyping ? 'animate-spin fill-fluency-blue-500 ease-in-out transition-all duration-300' : 'flex ease-in-out transition-all duration-300'} dark:text-gray-600`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -243,7 +253,7 @@ const Toolbar = ({ editor, isTyping, addImage }: Props) => {
 
       <p>|</p>
 
-
+      <div className="lg:block md:block hidden">
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Alinhar à esquerda (Ctrl + L)"
@@ -290,10 +300,36 @@ const Toolbar = ({ editor, isTyping, addImage }: Props) => {
           <PiTextAlignJustify className="w-5 h-auto" />
           </button>
       </Tooltip>
+      </div>
 
+      <Dropdown>
+        <DropdownTrigger>
+          <Button 
+            variant="bordered" 
+            className="lg:hidden md:hidden block"
+          >
+            <PiTextAlignCenter className="w-5 h-auto" />
+          </Button>
+        </DropdownTrigger>
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignJustify className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignJustify className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignJustify className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignJustify className="w-5 h-auto" />
+            </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
 
       <p>|</p>
 
+      <div className="lg:block md:block hidden">
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Adicionar imagem com link"
@@ -330,6 +366,30 @@ const Toolbar = ({ editor, isTyping, addImage }: Props) => {
           <GoHorizontalRule className="w-6 h-auto"/>
         </button>
       </Tooltip>
+      </div>
+      
+      <Dropdown>
+        <DropdownTrigger>
+          <Button 
+            variant="bordered" 
+            className="lg:hidden md:hidden block"
+          >
+            <BsThreeDotsVertical className="w-5 h-auto" />
+          </Button>
+        </DropdownTrigger>
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <GoHorizontalRule className="w-6 h-auto"/>
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <AiOutlineBlock className="w-5 h-auto" />
+            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <IoImage className="w-5 h-auto" />
+            </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+
       </div>
   );
 };
