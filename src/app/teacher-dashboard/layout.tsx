@@ -100,7 +100,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {isMobile ? (
         <div>
           <div>
-            <MobileSidebar {...sidebarProps} menuItems={menuItems}/>
+            <MobileSidebar isSidebarCollapsed={false} {...sidebarProps} menuItems={menuItems}/>
           </div>
 
           <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>

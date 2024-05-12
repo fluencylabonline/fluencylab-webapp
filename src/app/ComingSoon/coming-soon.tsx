@@ -1,7 +1,7 @@
 export default function ComingSoon(){
     return(
     <div className="relative overflow-y-hidden h-[80vh] w-full flex items-center justify-center bg-cover bg-center text-center px-5">
-      <div className="z-50 flex flex-col justify-center text-black dark:text-white w-full h-screen">
+      <div className="flex flex-col justify-center text-black dark:text-white w-full h-screen">
         <h1 className="text-5xl">We are <b>Almost</b> there!</h1>
         <p>Stay tuned for something amazing!!!</p>
 

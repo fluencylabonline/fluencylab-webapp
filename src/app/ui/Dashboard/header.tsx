@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import { ToggleDarkMode } from '../Components/Buttons/ToggleDarkMode';
 
@@ -16,7 +16,7 @@ export default function Header({ isCollapsed, toggleSidebar, isMobile }: HeaderP
     
     
     // Split pathname into segments
-    const cleanedPathname = pathname.replace('/teacher-dashboard', "Home");
+    const cleanedPathname = pathname.replace('/teacher-dashboard' || 'admin-dashboard' || 'student-dashboard', "Home");
     const segments = cleanedPathname.split('/').filter(segment => segment !== '');
 
     // Function to capitalize the first letter of a string

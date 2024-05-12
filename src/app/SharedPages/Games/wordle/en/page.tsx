@@ -223,7 +223,7 @@ const Wordle = () => {
                 </div>
     
                 <button onClick={handlePlayAgain} className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
-                  Play Again
+                  Jogar Novamente
                 </button>
     
               <div className="font-bold text-center text-black dark:text-white">{resultMessage}</div>        

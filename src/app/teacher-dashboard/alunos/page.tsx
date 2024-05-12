@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, Suspense, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
@@ -417,10 +417,9 @@ function Alunos(){
         setIsModalOpen(false);
     };
 
+    
     // Function to retrieve all overdue classes
     const retrieveOverdueClasses = () => {
-        // Logic to retrieve overdue classes from your state
-        // Example:
         const allOverdueClasses = students.flatMap(student => student.classDatesWithStatus.filter(classData => classData.status === 'Atrasada'));
         setOverdueClasses(allOverdueClasses);
         openModal(); // Open modal when classes are retrieved
@@ -428,7 +427,6 @@ function Alunos(){
     
       
     return(
-    <Suspense fallback={<p className='min-h-screen min-w-screen bg-black'>Loading feed...</p>}>
         <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
                 {isModalOpen && <OverdueClassesModal overdueClasses={overdueClasses} onClose={closeModal} />}   
                 <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
@@ -568,7 +566,6 @@ function Alunos(){
                 </div>
             </div>}
         </div>
-    </Suspense>
     );
 }
 

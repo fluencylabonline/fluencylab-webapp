@@ -568,11 +568,15 @@ export default function Forum() {
                                     <div className="lg:flex lg:flex-row lg:items-start flex flex-col items-center justify-between">
                                         <div className="flex flex-row items-start gap-1 mr-2">
                                             <div className="relative inline-block w-10 h-10">
-                                                <img
-                                                    src={question.userProfilePic}
-                                                    className="object-cover w-full h-full rounded-full"
-                                                    alt="Profile"
-                                                />
+                                            {question.userProfilePic ? (
+                                                    <img
+                                                        src={question.userProfilePic}
+                                                        className="object-cover w-full h-full rounded-full"
+                                                        alt="Profile"
+                                                    />
+                                                ) : (
+                                                    <FaUserCircle className="w-full h-full rounded-full" />
+                                                )}
                                                 <span className={`absolute animate-pulse top-0 right-0 w-3 h-3 border-2 border-white rounded-full ${getBadgeColor(question.userId)}`}></span>
                                             </div>
                                             <div className="flex flex-col">
@@ -743,7 +747,15 @@ export default function Forum() {
                                             <div className="flex flex-row gap-2 items-center">
                                                 {/* Render user profile picture */}
                                                 <div className="relative inline-block w-16 h-16">
-                                                    <img src={selectedQuestion.userProfilePic} className="object-cover w-full h-full rounded-full" alt="Profile" />
+                                                    {selectedQuestion.userProfilePic ? (
+                                                        <img
+                                                            src={selectedQuestion.userProfilePic}
+                                                            className="object-cover w-full h-full rounded-full"
+                                                            alt="Profile"
+                                                        />
+                                                    ) : (
+                                                        <FaUserCircle className="w-full h-full rounded-full" />
+                                                    )}                                                
                                                 </div>
                                                 {/* Render user name and email */}
                                                 <div className="flex flex-col items-start">
@@ -794,8 +806,16 @@ export default function Forum() {
                                                             <li key={index}>
                                                                 <div className='flex flex-col gap-1 items-start bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 rounded-lg'>
                                                                     <div className="flex items-center gap-2">
-                                                                        <img src={answer.userProfilePic} className="object-cover w-9 h-9 rounded-full" alt="Profile" />
-                                                                        <div className='flex flex-col items-start'>
+                                                                            {answer.userProfilePic ? (
+                                                                                <img
+                                                                                    src={answer.userProfilePic}
+                                                                                    className="object-cover w-9 h-9 rounded-full"
+                                                                                    alt="Profile"
+                                                                                />
+                                                                            ) : (
+                                                                                <FaUserCircle className="w-9 h-9 rounded-full" />
+                                                                            )}                                                                        
+                                                                            <div className='flex flex-col items-start'>
                                                                             <span className="font-semibold">{answer.name}</span>
                                                                             <span className="font-light text-xs">{formatDate(answer.dia)}</span>
                                                                         </div>

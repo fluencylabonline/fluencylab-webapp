@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/app/firebase';
 import { FaUserCircle } from 'react-icons/fa';
-import Image from 'next/image';
 
 type AvatarProps = {
     isCollapsed: boolean;

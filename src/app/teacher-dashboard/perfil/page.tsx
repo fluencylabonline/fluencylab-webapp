@@ -6,7 +6,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/app/firebase';
-import { signOut } from 'firebase/auth';
+import { signOut, sendPasswordResetEmail } from 'firebase/auth';
 
 //Components Imports
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -93,34 +93,70 @@ function Perfil() {
     };
 
     const handleSaveProfile = async () => {
-        if (!session || !session.user) {
-          return;
+      if (!session || !session.user) {
+        return;
+      }
+      const { id } = session.user; // Get the user ID from the session
+      const updatedData = {
+        name,
+        number,
+        link,
+      };
+
+      const userDocRef = doc(db, 'users', id); // Reference to the user document in Firestore
+      try {
+          await setDoc(userDocRef, updatedData, { merge: true });
+          toast.success('Perfil atualizado com sucesso!', {
+              position: 'top-center',
+              duration: 2000,
+            });
+          toast.loading('Leva um tempo até aparecer...', {
+            position: 'top-center',
+            duration: 4000,
+          });
+          closeEditModal();
+          setIsEditModalOpenTwo(false);
+        } catch (error) {
+          console.error('Erro ao salvar dados do perfil:', error);
+          toast.error('Erro ao salvar dados do perfil!', {
+              position: 'top-center',
+            });
         }
-        const { id } = session.user; // Get the user ID from the session
-        const updatedData = {
-          name,
-          number,
-          link,
-        };
-      
-        const userDocRef = doc(db, 'users', id); // Reference to the user document in Firestore
-        try {
-            await setDoc(userDocRef, updatedData, { merge: true });
-            toast.success('Perfil atualizado com sucesso!', {
-                position: 'top-center',
-              });
-            closeEditModal();
-            setIsEditModalOpenTwo(false);
-          } catch (error) {
-            console.error('Erro ao salvar dados do perfil:', error);
-            toast.error('Erro ao salvar dados do perfil!', {
-                position: 'top-center',
-              });
-          }
+  };
+  
+
+  const [resetPassword, setResetPassword] = useState(false);
+    const openResetPassword = () => {
+      setResetPassword(true);
     };
-    
+  
+    const closeResetPassword = () => {
+      setResetPassword(false);
+    };
+
+    const [email, setEmail] = useState('');
+
+    const handleResetPassword = () => {
+      // Ensure email is not empty
+      if (!email) {
+        toast.error('Por favor, insira um endereço de e-mail válido.');
+        return;
+      }
+  
+      // Send password reset email using Firebase Authentication
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          toast.success('Um e-mail de redefinição de senha foi enviado para o endereço fornecido.');
+          closeResetPassword();
+        })
+        .catch((error) => {
+          console.error('Erro ao enviar e-mail de redefinição de senha:', error);
+          toast.error('Erro ao enviar e-mail de redefinição de senha. Por favor, tente novamente mais tarde.');
+        });
+    };
+
     return (
-    <div className="flex flex-col items-center lg:pr-2 md:pr-2 pr-0 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
+    <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
         <div className='fade-in fade-out w-full lg:flex lg:flex-row gap-4 md:flex md:flex-col sm:flex sm:flex-col overflow-y-auto h-[90vh]'>
           <div className="lg:flex lg:flex-col lg:items-stretch w-full gap-4">
             <div className="bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-row lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
@@ -155,8 +191,8 @@ function Perfil() {
                   <p className='flex flex-wrap gap-1 justify-center'><strong>Email pessoal:</strong> {session?.user.email}</p>
                   <p><strong>Número:</strong> {session?.user.numero}</p>
 
-                  <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-center">
-                        <FluencyButton  variant='danger'>Redefinir senha</FluencyButton>  
+                  <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-2 justify-center">
+                        <FluencyButton variant='danger' onClick={openResetPassword}>Redefinir senha</FluencyButton>  
                         <FluencyButton onClick={openEditModal} variant='solid'>Atualizar perfil</FluencyButton>  
                     </div>
                 </div>
@@ -164,22 +200,13 @@ function Perfil() {
 
 
             <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch w-full gap-4 lg:mt-0 mt-2'>
-              <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900  ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1'>
+              <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
                 <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
-                <p className='flex flex-wrap gap-1 justify-center'><strong>Seu link:</strong> {session?.user.link}</p>
-                <p className='flex flex-wrap gap-1 justify-center'><strong>Seu login:</strong> {session?.user.userName}</p>
+                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {session?.user.link}</p>
+                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
 
-                <div className="mt-4 text-center flex justify-center">
+                <div className="mt-4 text-center flex flex-col justify-center">
                     <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
-                </div>
-              </div>
-
-              <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1'>
-                <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre suas aulas:</h1>
-                <p><strong>Aulas atrasadas:</strong> 0</p>
-                <p><strong>Lista de Alunos</strong></p>
-                <div className="mt-4 text-center flex justify-center">
-                    <FluencyButton variant='warning'>Solicitar Certificado para Aluno</FluencyButton>
                 </div>
               </div>
             </div>   
@@ -249,8 +276,8 @@ function Perfil() {
                                 Atualizar Perfil
                             </h3>
                             <div className="mt-2 flex flex-col gap-3 p-4">                    
-                              <FluencyInput type="text" placeholder="Nome" value={name} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)} variant='solid' />
-                              <FluencyInput type="text" placeholder="Número" value={number} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNumber(e.target.value)} variant='solid' />
+                              <FluencyInput type="text" defaultValue={session?.user.name} placeholder="Nome" value={name} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)} variant='solid' />
+                              <FluencyInput type="text" defaultValue={session?.user.numero} placeholder="Número" value={number} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNumber(e.target.value)} variant='solid' />
 
                             <div className="flex w-full">                            
                               <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
@@ -279,10 +306,47 @@ function Perfil() {
                                   Atualizar Informações                            
                               </h3>
                               <div className="mt-2 flex flex-col items-center gap-3 p-4">
-                                <FluencyInput type="text" placeholder="Link" value={link} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLink(e.target.value)} variant='solid' />
+                                <FluencyInput defaultValue={session?.user.link} type="text" placeholder="Link" value={link} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLink(e.target.value)} variant='solid' />
                                 <div className="flex justify-center">
                                   <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
                                   <FluencyButton variant='gray' onClick={closeEditModalTwo}>Cancelar</FluencyButton>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
+
+            {resetPassword && 
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen">
+                    
+                    <div className="fixed inset-0 transition-opacity">
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                        <div className="flex flex-col items-center justify-center">
+                            
+                            <FluencyCloseButton onClick={closeResetPassword}/>
+                            
+                              <h3 className="text-lg leading-6 font-medium  mb-2">
+                                  Insira seu email pessoal                         
+                              </h3>
+                              <div className="mt-2 flex flex-col items-center gap-3 p-4">
+                                <FluencyInput 
+                                variant='solid' 
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                placeholder={session?.user.link}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required/>
+                                <div className="flex justify-center">
+                                  <FluencyButton variant='confirm' onClick={handleResetPassword}>Enviar</FluencyButton>
+                                  <FluencyButton variant='gray' onClick={closeResetPassword}>Cancelar</FluencyButton>
                                 </div>
                               </div>
                         </div>
