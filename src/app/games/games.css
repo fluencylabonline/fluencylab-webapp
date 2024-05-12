@@ -76,21 +76,21 @@
 }
 
 .guessly{
-  background-image: url('../../../public/images/games/guesslybg.png');
+  background-image: url('../../../public/images/games/guessly.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 40%;
 }
 
 .cardsbg{
-  background-image: url('../../../public/images/games/cardsbg.png');
+  background-image: url('../../../public/images/games/cards.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 40%;
 }
 
 .fluencyjam{
-  background-image: url('../../../public/images/games/langjambg.png');
+  background-image: url('../../../public/images/games/langjam.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 70%;  
