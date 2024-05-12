@@ -244,19 +244,19 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
         <button
           onClick={scrollToBottom}
-          className="fixed bottom-5 right-5 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          className="fixed bottom-5 right-2 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
         >
           <FaArrowDown />
         </button>
 
         <button
           onClick={scrollToTop}
-          className="fixed bottom-16 right-5 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          className="fixed bottom-16 right-2 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
         >
           <FaArrowUp />
         </button>
 
-        <div className="fixed top-32 right-5">
+        <div className="fixed top-32 right-2">
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
                 <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>

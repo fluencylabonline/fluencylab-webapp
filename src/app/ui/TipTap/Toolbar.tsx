@@ -18,6 +18,7 @@ import { IoImage } from "react-icons/io5";
 import { GoHorizontalRule } from "react-icons/go";
 import { AiOutlineBlock } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { RiFontSansSerif } from "react-icons/ri";
 
 type Props = {
   editor: Editor | null;
@@ -185,6 +186,7 @@ const increaseFontSize = () => {
 
       <p>|</p>
 
+      <div className="lg:flex lg:flex-row md:flex md:flex-row items-center gap-2 hidden">
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Fonte"
@@ -240,8 +242,55 @@ const increaseFontSize = () => {
               +</button>
           </Tooltip>
         </div>
+      </div>
 
-        <div className="lg:block md:block hidden">
+      <Dropdown>
+        <DropdownTrigger>
+          <Button 
+            variant="bordered" 
+            className="lg:hidden md:hidden block"
+          >
+            <RiFontSansSerif  className="w-5 h-auto" />
+          </Button>
+        </DropdownTrigger>
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-md hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <div className="flex flex-row gap-2 items-center justify-center w-min">
+                <Tooltip
+                      className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+                      content="Diminuir fonte"
+                      color="primary"
+                      placement="bottom"
+                    >
+                  <button onClick={decreaseFontSize} className="text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all p-1 px-2 rounded-md font-bold text-xl">
+                    -</button>
+                </Tooltip>  
+                          
+                  <select
+                    value={selectedFontSize}
+                    onChange={handleFontSizeChange}
+                    className={editor.isActive('fontsize') ? 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md appearance-none p-1 px-2 text-md' : 'appearance-none outline-none text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md p-1 px-2 text-md'}>
+                    {[8, 10, 12, 14, 16, 18, 20, 22, 28, 36, 42, 48].map((size) => (
+                      <option key={size} value={size}>{size}</option>
+                    ))}
+                  </select>
+
+                <Tooltip
+                      className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+                      content="Aumentar fonte"
+                      color="primary"
+                      placement="bottom"
+                    >
+                  <button onClick={increaseFontSize} className="text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all p-1 px-2 rounded-md font-bold text-xl">
+                    +</button>
+                </Tooltip>
+              </div>            
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+
+
+      <div className="lg:block md:block hidden">
       <Tooltip
           className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
           content="Negrito (Ctrl + B)"
