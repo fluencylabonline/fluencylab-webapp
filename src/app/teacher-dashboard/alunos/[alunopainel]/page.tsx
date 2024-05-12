@@ -528,7 +528,7 @@ return (
             <div className='flex flex-col gap-3'>
 
               <div className='lg:flex lg:flex-row flex flex-col h-full w-full gap-3 items-strech'>
-                <div className="flex justify-center items-center w-max h-full rounded-md bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 cursor-pointer duration-300 ease-in-out transition-all">
+                <div className="flex justify-center items-center h-full rounded-md bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 cursor-pointer duration-300 ease-in-out transition-all">
                  {studentData && (
                   <Link href={{ pathname: `caderno/${encodeURIComponent(studentData.name)}`, query: { id: id } }} passHref>
                     <h1 className="text-xl font-semibold text-center lg:px-4 md:px-4 sm:px-4 sm:py-8">Anotações</h1>
@@ -543,8 +543,8 @@ return (
               </div>
 
 
-              <div className="w-max h-full flex flex-col items-center overflow-hidden p-2 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
-                  <div className='lg:flex lg:flex-row lg:justify-between lg:items-center lg:gap-2  md:flex md:flex-col md:justify-between md:items-center md:gap-2  flex flex-col justify-center items-center gap-2 mx-3'>
+              <div className="h-full flex flex-col items-center overflow-hidden p-2 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+                  <div className='lg:flex lg:flex-row lg:justify-between lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2  flex flex-col justify-center items-center gap-2 mx-4'>
                     <h1 className='p-1 font-semibold text-xl'>Tarefas</h1>
                     <div className="flex justify-center">
                         <div className="w-72 bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
@@ -556,27 +556,29 @@ return (
                           </div>
                         </div>
                     </div>
-                      <FluencyButton onClick={openDeleteConfirmationModal} className='h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas as Tarefas</FluencyButton>                
+                      <FluencyButton onClick={openDeleteConfirmationModal} className='h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas</FluencyButton>                
                   </div>
 
 
-                  <div className='flex flex-col items-start w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-blue-100 dark:bg-fluency-bg-dark'>
-                    <div className='flex flex-row justify-center items-center gap-2 pb-2'>
+                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-blue-100 dark:bg-fluency-bg-dark'>
+                    <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-center items-center gap-2 pb-2'>
                       <input className='lg:w-[26rem] md:w-[22rem] w-[17rem] h-7 border-fluency-gray-100 outline-none focus:border-fluency-red-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-400 dark:text-fluency-gray-100 text-fluency-gray-800 rounded-md p-2' 
                         placeholder='Adicionar Tarefa: Segunda - Treinar a atividade 1.2' id="taskInput"
                         onKeyPress={(e) => handleKeyPress(e, 'Task')} />
-                        <p>
-                          <MdOutlineAddTask 
-                            onClick={() => {
-                              const taskContent = (document.getElementById('taskInput') as HTMLInputElement)?.value.trim();
-                              if (taskContent) {
-                                handleAddTask('Task', taskContent, false);
-                                (document.getElementById('taskInput') as HTMLInputElement).value = '';
-                              }
-                            }}
-                            className='w-6 h-auto text-fluency-green-500 hover:text-fluency-green-600 duration-300 ease-in-out transition-all cursor-pointer' />
-                          </p>
-                          <CiCircleQuestion className='w-6 h-auto cursor-pointer' onClick={openInstrucoes}/>
+                        <div className='flex flex-row gap-2 justify-center items-center'>
+                          <p>
+                            <MdOutlineAddTask 
+                              onClick={() => {
+                                const taskContent = (document.getElementById('taskInput') as HTMLInputElement)?.value.trim();
+                                if (taskContent) {
+                                  handleAddTask('Task', taskContent, false);
+                                  (document.getElementById('taskInput') as HTMLInputElement).value = '';
+                                }
+                              }}
+                              className='w-6 h-auto text-fluency-green-500 hover:text-fluency-green-600 duration-300 ease-in-out transition-all cursor-pointer' />
+                            </p>
+                            <CiCircleQuestion className='w-6 h-auto cursor-pointer' onClick={openInstrucoes}/>
+                        </div>
                     </div>
 
                     <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>            
@@ -611,13 +613,13 @@ return (
 
             </div>
 
-              <div className="w-full h-full px-12 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="lg:w-max md:w-max sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
                     <div className="flex flex-col gap-2 items-center justify-center w-full p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>
                       <div className="flex flex-col rounded-lg gap-2 ustify-start w-full h-80 overflow-y-auto overflow-hidden">
                         {materials.map((material, index) => (
-                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark rounded-md p-1 px-4 flex flex-row items-center justify-between w-full min-h-16">
+                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark rounded-md p-1 px-4 gap-4 flex flex-row items-center justify-between w-full min-h-16">
                             <p className='font-semibold'>{material.name}</p>
                             <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-3 px-5 rounded-md flex flex-row gap-6'>
                               <p>{renderMaterialIcon(material.name)}</p>

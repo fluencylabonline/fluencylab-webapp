@@ -228,7 +228,7 @@ export default function Caderno(){
             tasks: { Task: tasksArray }
           });
       
-          toast.error('Tarefa adicionada!', {
+          toast.success('Tarefa adicionada!', {
             position: "top-center",
           });
         } catch (error) {
@@ -326,25 +326,27 @@ export default function Caderno(){
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
                 <h1 className='text-3xl font-bold'>Aulas</h1>
-                <div className='flex flex-row justify-around gap-4 items-center w-full'>
+                <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-around gap-4 items-center w-full'>
                     <FluencyInput placeholder='Procure por uma aula específica...' 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}/>
-                    <FluencyButton variant='confirm' className='min-w-max' onClick={handleOpenModalDescription}>Começar aula</FluencyButton>
-                    <FluencyButton variant='warning' className='min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
-                    <div className="flex min-w-max">  
-                        <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
-                            <IoFilter />
+                       <div className='flex flex-row gap-2 items-center justify-center'>
+                        <FluencyButton variant='confirm' className='min-w-max' onClick={handleOpenModalDescription}>Começar aula</FluencyButton>
+                        <FluencyButton variant='warning' className='min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
+                       </div>
+                        <div className="flex min-w-max">  
+                            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
+                                <IoFilter />
+                            </div>
+                            <select 
+                                className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"                        
+                                onChange={handleSortChange}
+                                value={sortOrder}
+                                >
+                                <option value="asc">Crescente</option>
+                                <option value="desc">Decrescente</option>
+                            </select>
                         </div>
-                        <select 
-                            className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"                        
-                            onChange={handleSortChange}
-                            value={sortOrder}
-                            >
-                            <option value="asc">Crescente</option>
-                            <option value="desc">Decrescente</option>
-                        </select>
-                    </div>
                 </div>
             </div>
 
