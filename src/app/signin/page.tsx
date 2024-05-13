@@ -79,7 +79,7 @@ export default function SignIn(){
           {isDashboardLoading && <TransitionAnimation/>}
               <div className='flex flex-row w-full justify-between items-center px-2'>
                   <Link href="/">
-                    <button className="text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 ease-in-out duration-300 flex justify-center">
+                    <button className="text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 ease-in-out duration-300 flex justify-center">
                       <BsArrowLeft className='lg:w-9 lg:h-9  w-7 h-7' />
                     </button>
                   </Link>

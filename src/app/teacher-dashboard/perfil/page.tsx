@@ -174,7 +174,7 @@ function Perfil() {
                       width={100}
                       className="border-full border-1 lg:w-58 lg:h-58 md:w-40 md:h-40 w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300 ease-in-out mx-auto"
                       style={{
-                        display: 'flex',
+                      display: 'flex',
                       }}
                     />
                   ) : (
@@ -188,7 +188,7 @@ function Perfil() {
                 <div className='p-3 rounded-lg flex flex-col lg:items-start md:items-start items-center gap-1'>
                   <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Informações Pessoais</h1>
                   <p><strong>Nome:</strong> {session?.user.name}</p>
-                  <p className='flex flex-wrap gap-1 justify-center'><strong>Email pessoal:</strong> {session?.user.email}</p>
+                  <p className='flex flex-wrap gap-1 justify-start'><strong>Email pessoal:</strong> {session?.user.email}</p>
                   <p><strong>Número:</strong> {session?.user.numero}</p>
 
                   <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-2 justify-center">

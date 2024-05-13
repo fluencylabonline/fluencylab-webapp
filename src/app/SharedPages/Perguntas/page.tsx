@@ -185,7 +185,7 @@ export default function Forum() {
                         userProfilePic: userProfilePicUrl,
                         date: data.date,
                         numAnswers: numAnswers,
-                        read: data.read, // Assign the number of answers to the numAnswers property
+                        read: data.read,
                     };
                 }));
                 setQuestions(loadedQuestions);

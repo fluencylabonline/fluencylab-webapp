@@ -11,6 +11,8 @@ import { CiCircleQuestion } from 'react-icons/ci';
 
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+import { Tooltip } from '@nextui-org/react';
 
 interface Aluno {
     overdueClassesCount: number;
@@ -157,6 +159,18 @@ function Alunos(){
             // Retrieve user profile picture URLs and count of 'Feita' classes
             const studentDataPromises = querySnapshot.docs.map(async (doc) => {
                 const studentId = doc.id;
+                const storage = getStorage();
+                const userProfilePicRef = ref(storage, `profilePictures/${studentId}`);
+
+                let url: string | null = null; // Initialize with default URL
+
+                try {
+                    // Attempt to fetch the profile picture URL
+                    url = await getDownloadURL(userProfilePicRef);
+                } catch (error) {
+                    // Handle the error if profile picture fetching fails
+                    console.error('Error fetching profile picture for student:', error);
+                }
     
                 try {
                     // Get count of 'Feita' classes
@@ -214,6 +228,7 @@ function Alunos(){
                         doneClassesCount: doneClassesCount,
                         overdueClassesCount: overdueClassesCount,
                         classDatesWithStatus: classDatesWithStatus,
+                        profilePicUrl: url,
                     };
                 } catch (error) {
                     console.error('Error fetching profile picture for student:', error);
@@ -440,7 +455,12 @@ function Alunos(){
                                             {student.profilePicUrl ? (
                                                 <img src={student.profilePicUrl} alt="Profile"  className='w-[4rem] h-[4rem] object-cover rounded-full'/>
                                             ) : (
-                                                <FaUserCircle className='text-[4rem] object-cover rounded-full'/>
+                                                <div className="cursor-pointer relative inline-block">
+                                                    <FaUserCircle className='text-[4rem] object-cover rounded-full' />
+                                                    <Tooltip className='bg-fluency-yellow-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Sem foto de perfil">
+                                                        <span className="absolute top-0 right-0 w-4 h-4 bg-fluency-yellow-500 border-2 border-white rounded-full animate-pulse"></span>
+                                                    </Tooltip>
+                                                </div>
                                             )}
                                         </div>
                                         <div>

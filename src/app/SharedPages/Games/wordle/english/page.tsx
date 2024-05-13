@@ -1,14 +1,9 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-import { BsArrowLeft } from "react-icons/bs";
-import { CiCircleQuestion } from "react-icons/ci";
-import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import { toast, Toaster } from 'react-hot-toast';
-import Keyboard from '@/app/games/wordle/keyboard';
+import Keyboard from '@/app/ui/Components/Keyboard/keyboard';
 import '@/app/games/wordle/wordle.css';
 import WORDS from '@/app/games/wordle/en/words.json';
-import { IoClose } from 'react-icons/io5';
 
 const Wordle = () => {
     const [word, setWord] = useState("");
@@ -41,9 +36,6 @@ const Wordle = () => {
     }, [isChecked, isLocalStorageAvailable]);
 
     {/*MAIN FUNCTIONS HERE*/}
-    const toggleInstructions = () => {
-        setShowInstructions(!showInstructions);
-      };
 
       useEffect(() => {
         // Pick a random word from the words.json file
@@ -266,63 +258,16 @@ const Wordle = () => {
           }
         };
 
-    const [isInstrucoesOpen, setIsInstrucoesOpen] = useState(false);
-    const openInstrucoes = () => {
-        setIsInstrucoesOpen(true);
-    };
-
-    const closeInstrucoes = () => {
-        setIsInstrucoesOpen(false);
-    };  
 
   return (
     <div className='h-[90vh] bg-blue-different dark:bg-fluency-dark-bg p-8'>
 
       <div className='flex flex-col items-center'>
-          <div className='flex flex-row items-center justify-around gap-4'>
-            <CiCircleQuestion className='lg:w-7 lg:h-7 w-5 h-5 text-transparent' />
-            <h1 className="text-yellow-500 dark:yellow-600 text-xl font-bold">WORDLY</h1>
-            <CiCircleQuestion onClick={openInstrucoes} className='lg:w-7 lg:h-7 w-5 h-5 text-black dark:text-white cursor-pointer'/>
-          </div>
-          
-          <div className='mt-10'>{renderWordDisplay()}</div>
+          <div className='mt-5'>{renderWordDisplay()}</div>
           {!gameOver && <div className='absolute bottom-0'><Keyboard onKeyPress={handleKeyboardKeyPress} /></div>}
       </div>   
 
       <Toaster />
-
-      {isInstrucoesOpen && 
-        <div className="fixed z-[9999] inset-0 overflow-y-hidden text-fluency-text-light  ">
-        <div className="flex items-center justify-center min-h-screen">
-
-                <div className="fade-in fade-out fixed inset-0 transition-opacity duration-200 ease-in-out">
-                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-
-            <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8">                        
-                        
-                    <button onClick={closeInstrucoes} className="absolute top-0 left-0 mt-2 ml-2 ">
-                        <span className="sr-only">Fechar</span>
-                        <IoClose className="w-10 h-10 text-fluency-text-light hover:text-fluency-blue-600 ease-in-out duration-300" />
-                    </button>
-            
-                    <h3 className="text-xl font-bold text-center leading-6 mb-4">
-                        Instruções
-                    </h3>   
-
-                <div className='text-justify flex gap-1 flex-col'>
-                    <span>1. Se não conseguir fazer uma aula, simplesmente não marque como feita até fazer a reposição.</span>
-                    <span>2. Se não for fazer a reposição marque como cancelada.</span>
-                    <span>3. Clique ou passe o mouse em cima de cada data para saber o status de cada uma.</span>
-                    <p className='mt-2 font-semibold'>Cores:</p>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-red-600'>Vermelho</span> são aulas atrasadas que não foram nem canceladas nem feitas</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-green-600'>Verde</span> são as aulas feitas.</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-yellow-600'>Amarelo</span> são as aulas canceladas.</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-blue-600'>Azul</span> são as aulas ainda por fazer.</span>  
-                </div>                                                      
-            </div>
-        </div>
-    </div>}
 
     </div>
   );

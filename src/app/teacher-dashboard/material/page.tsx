@@ -1,82 +1,34 @@
 'use client'
 import React from "react";
-import {Tabs, Tab, Card, CardBody} from "@nextui-org/react";
 
 //Icons
-import { FaBookBookmark } from "react-icons/fa6";
-import { MdRule, MdTipsAndUpdates } from "react-icons/md";
-import { FaHandsHelping } from "react-icons/fa";
+import { CiCircleQuestion } from "react-icons/ci";
+import Image from "next/image";
 
-//Pages
-import Guidelines from "./guidelines";
-import Apostilas from "./apostilas";
-import MaterialDeApoio from "./material-de-apoio";
-import DicasParaAulas from "./dicas-para-aulas";
+import Suporte1 from '../../../../public/images/suporte/suporte1.jpg';
+import Suporte2 from '../../../../public/images/suporte/suporte2.jpg';
+import Suporte3 from '../../../../public/images/suporte/suporte3.jpg';
+import Suporte4 from '../../../../public/images/suporte/suporte4.jpg';
+import Link from "next/link";
 
 export default function Material(){
     return(
-    <div className="flex flex-col items-center justify-center py-3 px-4 overflow-x-hidden overflow-y-hidden h-[90vh]">
-      <Tabs fullWidth={true} aria-label="Options">
-        <Tab
-          key="Apostilas"
-          title={
-            <div className="hover:text-fluency-blue-600 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all flex items-center space-x-2 w-max font-bold flex-nowrap">
-              <FaBookBookmark />
-              <span>Apostilas</span>
-            </div>
-          }>
-          <Card className="w-full">
-            <CardBody>
-                <Apostilas />
-            </CardBody>
-          </Card>  
-        </Tab>
+    <div className="flex flex-wrap justify-center gap-3 p-10">
 
-        <Tab
-          key="Guidelines"
-          title={
-            <div className="hover:text-fluency-red-600 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all flex items-center space-x-2 w-52 justify-center font-bold">
-              <MdRule />
-              <span>Guidelines</span>
-            </div>
-          }>
-          <Card className="w-full">
-            <CardBody>
-                <Guidelines />
-            </CardBody>
-          </Card>  
-        </Tab>
+      <Link href={"material/apostilas"}>
+        <div className="w-80 h-auto rounded-md overflow-hidden bg-fluency-yellow-200 dark:bg-fluency-gray-700 hover:bg-fluency-yellow-300 hover:dark:bg-fluency-gray-800 flex flex-col items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+            <Image src={Suporte1} priority alt={"Suporte"} />
+            <p className="p-3 flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Guidelines</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+        </div>
+      </Link>
 
-        <Tab
-          key="Material de Apoio"
-          title={
-            <div className="hover:text-fluency-green-600 hover:dark:text-fluency-green-500 duration-300 ease-in-out transition-all flex items-center space-x-2 w-52 justify-center font-bold">
-              <FaHandsHelping />
-              <span>Material de Apoio</span>
-            </div>
-          }>
-          <Card>
-            <CardBody>
-                <MaterialDeApoio />
-            </CardBody>
-          </Card>  
-        </Tab>
+      <Link href={"material/apostilas"}>
+        <div className="w-80 h-auto rounded-md overflow-hidden bg-fluency-yellow-200 dark:bg-fluency-gray-700 hover:bg-fluency-yellow-300 hover:dark:bg-fluency-gray-800 flex flex-col items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+            <Image src={Suporte2} priority alt={"Suporte"} />
+            <p className="p-3 flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Apostilas</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+        </div>
+      </Link>
 
-        <Tab
-          key="Dicas para aulas"
-          title={
-            <div className="hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all flex items-center space-x-2 w-52 justify-center font-bold">
-              <MdTipsAndUpdates />
-              <span>Dicas para aulas</span>
-            </div>
-          }>
-          <Card>
-            <CardBody>
-                <DicasParaAulas />
-            </CardBody>
-          </Card>  
-        </Tab>
-      </Tabs>
     </div>
     );
 }

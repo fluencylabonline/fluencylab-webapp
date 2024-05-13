@@ -7,7 +7,7 @@ import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import { WhatsAppButton } from '@/app/ui/Components/Buttons/WhatsAppButton';
 import { toast, Toaster } from 'react-hot-toast';
 import '../wordle.css';
-import Keyboard from '../keyboard';
+import Keyboard from '../../../ui/Components/Keyboard/keyboard';
 import WORDS from './palavras.json';
 
 const Wordle = () => {

@@ -27,7 +27,7 @@ return(
                     <rect fill="url(#247432cb-6e6c-4bec-9766-564ed7c230dc)" width="52" height="24"></rect>
                     </svg>
                 </span>
-                Nosso time de professores excepcionais!
+                Vem conhecer nosso time excepcional!
                 </h2>
                 <p className="text-base text-fluency-text-light dark:text-fluency-text-dark md:text-lg">
                 Aqui você vai encontrar pessoas dedicadas, que amam ensinar e que têm como objetivo tornar sua jornada o mais agradável possível.
@@ -115,7 +115,7 @@ return(
               </div>
 
                 {/*PERSON7*/}
-                              <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center">
                   <Image
                   className="object-cover w-20 h-20 mb-2 rounded-full shadow"
                   src={Team7}
@@ -124,6 +124,19 @@ return(
                 <div className="flex flex-col items-center">
                   <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Anny</p>
                   <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professora de Libras</p>
+                </div>
+              </div>
+
+              {/*PERSON8*/}
+              <div className="flex flex-col items-center">
+                  <Image
+                  className="object-cover w-20 h-20 mb-2 rounded-full shadow"
+                  src={Team7}
+                  alt="FluencyLab"
+                  />
+                <div className="flex flex-col items-center">
+                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Deise</p>
+                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Equipe de Apoio</p>
                 </div>
               </div>
             </div>

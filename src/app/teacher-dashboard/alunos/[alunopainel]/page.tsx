@@ -531,7 +531,7 @@ return (
                 <div className="flex justify-center items-center h-full rounded-md bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 cursor-pointer duration-300 ease-in-out transition-all">
                  {studentData && (
                   <Link href={{ pathname: `caderno/${encodeURIComponent(studentData.name)}`, query: { id: id } }} passHref>
-                    <h1 className="text-xl font-semibold text-center lg:px-4 md:px-4 sm:px-4 sm:py-8">Anotações</h1>
+                    <h1 className="text-xl font-semibold text-center lg:px-12 md:px-4 sm:px-4 sm:py-8">Anotações</h1>
                   </Link>)}
                 </div>
               
@@ -543,8 +543,8 @@ return (
               </div>
 
 
-              <div className="h-full flex flex-col items-center overflow-hidden p-2 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
-                  <div className='lg:flex lg:flex-row lg:justify-between lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2  flex flex-col justify-center items-center gap-2 mx-4'>
+              <div className="h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+                  <div className='lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4'>
                     <h1 className='p-1 font-semibold text-xl'>Tarefas</h1>
                     <div className="flex justify-center">
                         <div className="w-72 bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
@@ -556,7 +556,7 @@ return (
                           </div>
                         </div>
                     </div>
-                      <FluencyButton onClick={openDeleteConfirmationModal} className='h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas</FluencyButton>                
+                      <FluencyButton onClick={openDeleteConfirmationModal} className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas as Tarefas</FluencyButton>                
                   </div>
 
 
@@ -613,7 +613,7 @@ return (
 
             </div>
 
-              <div className="lg:w-max md:w-max sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="lg:w-max md:w-full sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
                     <div className="flex flex-col gap-2 items-center justify-center w-full p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>

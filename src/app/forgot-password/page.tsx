@@ -34,7 +34,7 @@ export default function ForgotPassword() {
     <div className="p-2 flex flex-col items-center justify-center gap-2 w-screen h-screen bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">
       <div className='absolute top-2 flex flex-row w-full justify-between items-center px-4'>
           <Link href="/">
-            <button className="text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 ease-in-out duration-300 flex justify-center">
+            <button className="text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 ease-in-out duration-300 flex justify-center">
               <BsArrowLeft className='lg:w-9 lg:h-9  w-7 h-7' />
             </button>
           </Link>
@@ -50,7 +50,7 @@ export default function ForgotPassword() {
 
       <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark rounded-xl shadow-xl overflow-hidden lg:-mt-8 mt-10">
         <div className="flex flex-col gap-4 w-full py-10 px-5 md:px-10">
-          <div className="text-center mb-10">
+          <div className="text-center mb-6">
             <h1 className="font-bold text-3xl">Vamos lá!</h1>
             <p>Por favor, informe seu e-mail para recuperamors sua senha.</p>
           </div>
