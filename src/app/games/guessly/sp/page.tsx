@@ -7,7 +7,7 @@ import { TbPlayerTrackNext } from 'react-icons/tb';
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import '../../games.css';
 import allWordsDataSpanish from './wordsDataSpanish.json';
-import Keyboard from '../../gamescomponents';
+import Keyboard from '../keyboard-guessly';
 
 const Guessly = () =>{
   const [currentSetIndex, setCurrentSetIndex] = useState(0);

@@ -6,7 +6,7 @@ import { TbPlayerTrackNext } from 'react-icons/tb';
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import '../../games.css';
 import allWordsDataEnglish from './wordsDataEnglish.json';
-import Keyboard from '../../gamescomponents';
+import Keyboard from '../keyboard-guessly';
 import { CiCircleQuestion } from "react-icons/ci";
 
 const Guessly = () =>{
