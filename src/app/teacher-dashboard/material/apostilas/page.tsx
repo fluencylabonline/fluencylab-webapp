@@ -1,12 +1,7 @@
 'use client'
 import { useState, ChangeEvent, useEffect } from "react";
-
-import { TiUpload } from "react-icons/ti";
 import { BsThreeDotsVertical } from "react-icons/bs";
-
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
-
-import { db } from "@/app/firebase";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 
 import {toast, Toaster} from "react-hot-toast";

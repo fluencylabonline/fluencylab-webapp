@@ -474,7 +474,7 @@ export default function Forum() {
         });
     
         return () => unsubscribe();
-    }, [db]);
+    }, []);
     
     // Function to determine badge color based on user's online status
     const getBadgeColor = (userId: string | number) => {
