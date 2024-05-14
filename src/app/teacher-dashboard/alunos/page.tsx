@@ -449,7 +449,7 @@ function Alunos(){
                 <div className='flex flex-col gap-3 lg:items-start md:items-start items-center'>
                     {filteredStudents.map((student) => (
                         <div className="bg-fluency-blue-200 dark:bg-fluency-pages-dark lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
-                            <div className='bg-fluency-pages-light dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-start justify-between rounded-lg gap-2'>
+                            <div className='bg-fluency-blue-100 dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-start justify-between rounded-lg gap-2'>
                                     <div className='flex flex-row items-start gap-4'>
                                         <div key={student.id}>
                                             {student.profilePicUrl ? (
@@ -487,7 +487,7 @@ function Alunos(){
                                     </div>
                             </div>
 
-                            <div className="bg-fluency-pages-light dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-center rounded-lg gap-2">
+                            <div className="bg-fluency-blue-100 dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-center rounded-lg gap-2">
                                 <div className='flex flex-row justify-around w-full items-center gap-3'>
                                     
                                     <CiCircleQuestion className='text-transparent'/>

@@ -604,7 +604,7 @@ export default function Forum() {
                                         {question.pergunta}
                                     </span>
                                     <div className="lg:flex lg:flex-row lg:items-start flex flex-col items-center gap-1 justify-between">
-                                        <div className="dark:text-fluency-gray-900 text-fluency-gray-50  bg-fluency-orange-600 dark:bg-fluency-orange-400 hover:bg-fluency-orange-500 hover:dark:bg-fluency-orange-500 p-2 rounded-md flex flex-wrap gap-1 text-xs font-semibold items-center">
+                                        <div className="dark:text-fluency-gray-900 text-fluency-gray-50 bg-fluency-orange-600 dark:bg-fluency-orange-400 hover:bg-fluency-orange-500 hover:dark:bg-fluency-orange-500 duration-300 ease-in-out p-2 rounded-md flex flex-wrap gap-1 text-xs font-semibold items-center">
                                             Tags: 
                                             {question.tags.map((tag, index) => (
                                                 <p key={index}>{tag};</p>

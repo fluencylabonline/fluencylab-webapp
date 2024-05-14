@@ -560,7 +560,7 @@ return (
                   </div>
 
 
-                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-blue-100 dark:bg-fluency-bg-dark'>
+                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
                     <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-center items-center gap-2 pb-2'>
                       <input className='lg:w-[26rem] md:w-[22rem] w-[17rem] h-7 border-fluency-gray-100 outline-none focus:border-fluency-red-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-400 dark:text-fluency-gray-100 text-fluency-gray-800 rounded-md p-2' 
                         placeholder='Adicionar Tarefa: Segunda - Treinar a atividade 1.2' id="taskInput"
@@ -583,7 +583,7 @@ return (
 
                     <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>            
                       {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
-                        <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-gray-100 hover:bg-fluency-gray-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
+                        <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
                           <div className='flex flex-row gap-2 items-center'> 
                             <label className="relative flex items-center p-3 rounded-full cursor-pointer" htmlFor="checkbox">
                               <input 

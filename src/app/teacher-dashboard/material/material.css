@@ -1,0 +1,31 @@
+#apostilas{
+    background-image: url(../../../../public/images/suporte/suporte2.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 50;
+}
+
+#apoio{
+    background-image: url(../../../../public/images/suporte/suporte3.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 50;
+}
+
+#guidelines{
+    background-image: url(../../../../public/images/suporte/suporte1.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 50;
+}
+
+#dicas{
+    background-image: url(../../../../public/images/suporte/suporte4.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 50;
+}

@@ -10,16 +10,42 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'fluency-blue-100': '#E4EDF0',
-        'fluency-blue-200': '#C0E5F0',
-        'fluency-blue-300': '#8BD4E8',
-        'fluency-blue-400': '#65C6E0',
-        'fluency-blue-500': '#21B5DE',
-        'fluency-blue-600': '#158EB0',
-        'fluency-blue-700': '#0A6882',
-        'fluency-blue-800': '#044B5E',
-        'fluency-blue-900': '#033947',
-        'fluency-blue-1000': '#001E26',
+
+        //components
+        //light fluency-pages-light, hover:fluency-blue-100
+        //dark fluency-pages-dark, hover:fluency-gray-900
+
+      'fluency-bg': {
+        'dark': '#282828',
+        'light': '#F5F5F5',
+
+        },
+
+      'fluency-pages': {
+                'dark': '#121212',
+                'light': '#E3E7E8',
+            },
+
+      'fluency-text': {
+                'dark': '#FAFAFA',
+                'light': '#013A49',
+            },
+
+      'fluency-blue': {
+        '50': '#EDFCFE',
+        '100': '#DBE8EC',
+        '200': '#C0E5F0',
+        '300': '#8BD4E8',
+        '400': '#65C6E0',
+        '500': '#21B5DE',
+        '600': '#149DC6',
+        '700': '#147EA6',
+        '800': '#176687',
+        '900': '#1B546F',
+        '950': '#1B465E',
+        '1000': '#0C2D40',
+        '1100': '#001E26',
+        },
 
         'fluency-yellow-100': '#F0E8C0',
         'fluency-yellow-200': '#F5F3E9',
@@ -76,14 +102,6 @@ const config: Config = {
         'fluency-gray-800': '#05090A',
         'fluency-gray-900': '#010303',
 
-
-        'fluency-bg-light': '#FFFFFF',
-        'fluency-bg-dark': '#282828',
-        'fluency-pages-light': '#E9F2F5',
-        'fluency-pages-dark': '#121212',
-
-        'fluency-text-light': '#034354', /*A LITTLE BIT DARKER THAN FLUENCY-BLUE-800*/
-        'fluency-text-dark': '#FAFAFA', /*A LITTLE BIT LIGHET THAN FLUENCY-GRAY-100*/
       }
     },
   },
