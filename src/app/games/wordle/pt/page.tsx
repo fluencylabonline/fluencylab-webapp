@@ -312,7 +312,7 @@ const Wordle = () => {
 
                 <p>mas, se já for um de nossos alunos:</p>
                 <div>
-                    <a href="/login" className="cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 ease-in-out duration-300 text-white text-sm font-medium rounded-md">
+                    <a href="/signin" className="cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 ease-in-out duration-300 text-white text-sm font-medium rounded-md">
                       Entrar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" /></svg>
                     </a>
                 </div>
@@ -328,7 +328,7 @@ const Wordle = () => {
         );
       } else {
         return (
-          <div className='mt-20 flex flex-col items-center gap-8 bg-blue-different dark:bg-fluency-dark-bg p-5 rounded-md'>
+          <div className='mt-14 flex flex-col items-center gap-8 bg-blue-different dark:bg-fluency-dark-bg p-5 rounded-md'>
             <h1 className='text-2xl font-bold text-black dark:text-white'>A PALAVRA ERA:</h1>
             <div className="grid grid-cols-5 gap-1 lg:w-[21rem] w-[17rem]">
               {Array.from(word).map((letter, index) => (
@@ -387,28 +387,8 @@ const Wordle = () => {
   return (
     <div className='h-[100vh] bg-blue-different dark:bg-black-different'>
 
-      <div className='header'>
-        <div className='w-full flex flex-row gap-3 justify-between px-4 py-3 items-center absolute top-0'>
-          <Link href="/games">
-            <button className="text-yellow-500 dark:text-yellow-600 hover:text-yellow-600 dark:hover:yellow-700 ease-in-out duration-300">
-              <BsArrowLeft className='lg:w-9 lg:h-9 w-5 h-5' />
-            </button>
-          </Link>
-
-          <div className='flex flex-row items-center justify-around gap-4'>
-            <CiCircleQuestion className='lg:w-7 lg:h-7 w-5 h-5 text-transparent' />
-            <h1 className="text-yellow-500 dark:yellow-600 text-xl font-bold">WORDLY</h1>
-            <CiCircleQuestion className='lg:w-7 lg:h-7 w-5 h-5 text-black dark:text-white cursor-pointer' onClick={toggleInstructions} />
-          </div>
-
-          <div>
-            <ToggleDarkMode />
-          </div>
-        </div>
-      </div>
-
       <div className='flex flex-col items-center gap-4'>
-        <div className='mt-20'>{renderWordDisplay()}</div>
+        <div className='mt-14'>{renderWordDisplay()}</div>
         {!gameOver && <div className='absolute bottom-0'><Keyboard onKeyPress={handleKeyboardKeyPress} /></div>}
       </div>
 

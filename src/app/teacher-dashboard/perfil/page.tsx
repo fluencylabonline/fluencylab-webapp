@@ -215,8 +215,8 @@ function Perfil() {
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
               <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Professores FluencyLab:</h1>
               <Accordion>
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="1" aria-label="Critérios para aulas de idioma online individual" title="Critérios para aulas de idioma online individual">
-                  <p className='my-2'>Ao ministrar aulas de idioma online individual, os professores devem seguir os seguintes critérios:</p>
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="1" aria-label="Manual do Professor" title="Manual do Professor">
+                  <p className='my-2'>Manual do Professor</p>
                     <ul className='ml-2 list-disc'>
                         <li>Planejamento de aulas personalizado, levando em consideração as necessidades e objetivos específicos do aluno.</li>
                         <li>Utilização de recursos adequados para aulas virtuais, como plataformas de videochamada e materiais interativos.</li>
@@ -232,8 +232,8 @@ function Perfil() {
                   <p className='my-2'>Esses critérios ajudarão a garantir a eficácia e qualidade das aulas de idioma online individual.</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Critérios para remarcação de aula online" title="Critérios para remarcação de aula online">
-                  <p className='my-2'>O professor pode considerar os seguintes critérios para decidir se precisa remarcar uma aula online para um aluno:</p>
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Material de Apoio" title="Material de Apoio">
+                  <p className='my-2'>Material de Apoio</p>
                     <ul className='ml-2 list-disc'>
                         <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
                         <li>Conflitos de horário inesperados que impossibilitem a participação do aluno.</li>
@@ -244,17 +244,6 @@ function Perfil() {
                   <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Como usar o OBS" title="Como usar o OBS">
-                  <p>Exemplo de texto</p>
-                </AccordionItem>
-
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="4" aria-label="Material de aula" title="Material de aula">
-                  <p>Exemplo de texto</p>
-                </AccordionItem>
-
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="5" aria-label="Material para professores" title="Material para professores">
-                  <p>Exemplo de texto</p>
-                </AccordionItem>
               </Accordion>
             </div>
                  

@@ -4,6 +4,15 @@ import Link from 'next/link';
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import { BsArrowLeft } from "react-icons/bs";
 import './games.css';
+import Image from 'next/image';
+import WordleImage from '../../../public/images/games/wordlebg.png';
+import GuesslyImage from '../../../public/images/games/guessly.svg';
+import LangJamImage from '../../../public/images/games/langjam.png';
+import FlagImage from '../../../public/images/games/flashcards.svg';
+import TicTacToeImage from '../../../public/images/games/tictactoe.svg';
+import RollAndTellImage from '../../../public/images/games/rollandtell.svg';
+import WhatAmIImage from '../../../public/images/games/whatami.svg';
+import { CiCircleQuestion } from 'react-icons/ci';
 
 export default function Games() {
 
@@ -25,70 +34,18 @@ useEffect(() => {
   }
 }, [isChecked, isLocalStorageAvailable]);
 
-  const [selectedLanguage, setSelectedLanguage] = useState('english');
-  const handleLanguageChange = (e: { target: { value: SetStateAction<string>; }; }) => {
-    setSelectedLanguage(e.target.value);
-  };
-
-  // Define the type for game paths
-type GamePaths = {
-  [key: string]: {
-    guessly: string;
-    wordle: string;
-  };
-};
-
-// Define the URL paths for each game and language
-const gamePaths: GamePaths = {
-  english: {
-    guessly: 'en',
-    wordle: 'en'
-  },
-  spanish: {
-    guessly: 'sp',
-    wordle: 'sp'
-  },
-  portuguese: {
-    guessly: 'pt',
-    wordle: 'pt'
-  }
-};
-  // Dynamically generate the URL path based on the selected language and game
-  const guesslyPath = gamePaths[selectedLanguage].guessly;
-  const wordlePath = gamePaths[selectedLanguage].wordle;
-
-  // Dynamically generate the button label based on the selected language
-  const jogarButtonLabel = {
-    english: 'START',
-    spanish: 'COMENZAR',
-    portuguese: 'COMEÇAR'
-  }[selectedLanguage];
-
-
   return (
     <div className="p-2 overflow-y-auto flex flex-col items-center gap-2 w-screen h-screen bg-fluency-bg-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark">    
         <div className='flex flex-row w-full justify-between items-center px-2'>
             <Link href="/">
-              <button className="text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 ease-in-out duration-300 flex justify-center">
-                <BsArrowLeft className='lg:w-9 lg:h-9 w-9 h-9' />
+              <button className="flex justify-center">
+                <BsArrowLeft className='lg:w-9 lg:h-9 w-9 h-9 hover:text-fluency-blue-500 ease-in-out duration-300' />
               </button>
             </Link>
 
             <div className='flex flex-row w-full items-center justify-around'>
-              <h1 className="text-transparent dark:text-transparent lg:text-xl text-sm font-bold">GAMES</h1>
               <h1 className="text-fluency-text-light dark:text-fluency-text-dark lg:text-xl text-sm font-bold">GAMES</h1>
-            <div className="z-50">
-                <select
-                  value={selectedLanguage}
-                  onChange={handleLanguageChange}
-                  className="hover:bg-gray-300 dark:hover:bg-neutral-900 cursor-pointer before:inline-flex justify-center w-min px-0 py-1 lg:text-xl text-sm font-small font-semibold text-black-different dark:text-white transition duration-150 ease-in-out bg-transparent border-0 rounded-md focus:outline-none"
-                >
-                  <option value="english">Inglês</option>
-                  <option value="spanish">Espanhol</option>
-                  <option value="portuguese">Portugûes</option>
-                </select>
             </div>
-          </div>
                 
           <div>
             <ToggleDarkMode />
@@ -97,63 +54,42 @@ const gamePaths: GamePaths = {
 
     <div className='lg:mt-12 mt-2 p-1 flex flex-wrap items-center justify-center lg:h-min h-[90vh] overflow-y-auto gap-3'>
         
-                  <div className='wordle overflow-hidden justify-between w-64 h-64 bg-gray-100 dark:bg-stone-900 rounded-lg flex flex-col items-center text-center'>
-                      <div className='flex flex-row items-center pb-6 mt-2'>
-                        <h1 className='text-3xl font-semibold text-yellow-500 dark:text-amber-600'>Wordle</h1>
-                      </div>
+            <Link href={"games/wordle"}>
+              <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                  <Image alt="Wordle" className="w-36 h-auto mt-2"src={WordleImage} />
+                  <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Wordle</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+              </div>
+            </Link>
 
-                      <div className="bg-yellow-500 hover:bg-yellow-400 dark:bg-amber-600 dark:hover:bg-amber-700 ease-in-out duration-300 w-full p-1 cursor-pointer text-center">                 
-                        <Link href={`/games/wordle/${wordlePath}`}>
-                          <button className="text-md font-bold px-3 py-2 text-white hover:text-gray-100">{jogarButtonLabel}</button>
-                        </Link>
-                    </div>
-                  </div>
-                
+            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image alt="Wordle" src={GuesslyImage} className="w-36 h-auto mt-6" />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Guessly</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
 
+            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image priority alt="Wordle" className="w-38 h-auto mt-3"  src={LangJamImage} />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">LangJam</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
 
-                {/*GUESLLY*/}
-                  <div className='guessly overflow-hidden justify-between w-64 h-64 bg-gray-100 dark:bg-stone-900 rounded-lg flex flex-col items-center text-center'>
-                      <div className='flex flex-row items-center pb-6 mt-2'>
-                        <h1 className='text-3xl font-semibold text-red-500'>Gueslly</h1>
-                      </div>
+            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image alt="Wordle" className="w-32 h-auto mt-2" src={FlagImage} />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">FlashCards</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
 
-                      <div className="bg-red-500 hover:bg-red-600 ease-in-out duration-300 w-full p-1 cursor-pointer text-center">                 
-                        <Link href={`/games/guessly/${wordlePath}`}>
-                          <button className="text-md font-bold px-3 py-2 text-white hover:text-gray-100">{jogarButtonLabel}</button>
-                        </Link>
-                    </div>
-                  </div>
+            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image alt="Wordle" className="w-28 h-auto mt-4" src={TicTacToeImage} />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">TicTacToe</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
 
+            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image alt="Wordle" className="w-32 h-auto mt-2" src={WhatAmIImage} />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">What Am I?</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
 
-
-                  {/*CARDS*/}
-                  <div className='cardsbg overflow-hidden justify-between w-64 h-64 bg-gray-100 dark:bg-stone-900 rounded-lg flex flex-col items-center text-center'>
-                      <div className='flex flex-row items-center pb-6 mt-2'>
-                        <h1 className='text-3xl font-semibold text-emerald-500'>Cards</h1>
-                      </div>
-
-                      <div className="bg-emerald-700 hover:bg-emerald-600 ease-in-out duration-300 w-full p-1 cursor-pointer text-center">                 
-                        <Link href={`/games/flashcards`}>
-                          <button className="text-md font-bold px-3 py-2 text-white hover:text-gray-100">{jogarButtonLabel}</button>
-                        </Link>
-                    </div>
-                  </div>
-
-
-
-                  
-                  {/*FLUENCYJAM*/}
-                  <div className='fluencyjam overflow-hidden justify-between w-64 h-64 bg-langjam-blue  rounded-lg flex flex-col items-center text-center'>
-                      <div className='flex flex-row items-center pb-6 mt-2'>
-                        <h1 className='text-3xl font-semibold text-white dark:text-langjam-darker-blue'>FluencyJam</h1>
-                      </div>
-
-                      <div className="bg-langjam-dark-blue hover:bg-langjam-darker-blueease-in-out duration-300 w-full p-1 cursor-pointer text-center">                 
-                        <Link href={`/games/langjam`}>
-                          <button className="text-md font-bold px-3 py-2 text-white hover:text-gray-100">{jogarButtonLabel}</button>
-                        </Link>
-                    </div>
-                  </div>
+            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image alt="Wordle" className="w-36 h-auto mt-4" src={RollAndTellImage} />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Roll and Tell</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
 
 
          </div>

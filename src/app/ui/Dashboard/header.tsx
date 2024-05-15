@@ -13,8 +13,7 @@ type HeaderProps = {
 export default function Header({ isCollapsed, toggleSidebar, isMobile }: HeaderProps) {
     const pathname = usePathname();
     const nameId = useParams<{ alunopainel: string }>();
-    
-    
+
     // Split pathname into segments
     const cleanedPathname = pathname.replace('/teacher-dashboard' || 'admin-dashboard' || 'student-dashboard', "Home");
     const segments = cleanedPathname.split('/').filter(segment => segment !== '');
@@ -43,15 +42,17 @@ export default function Header({ isCollapsed, toggleSidebar, isMobile }: HeaderP
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/>
                                         </svg>
                                     )}
-                                    <span className="cursor-pointer text-sm font-bold text-fluency-blue-700 dark:text-fluency-text-dark hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500">
-                                        {capitalizeFirstLetter(segment)}
-                                    </span>
+                                    
+<span className="cursor-pointer text-sm font-bold text-fluency-blue-700 dark:text-fluency-text-dark hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500">
+    {capitalizeFirstLetter(decodeURIComponent(segment))}
+</span>
+
                                 </li>
                             ))}
                         </ol>
                     </div>
 
-                    <h1 className="lg:text-xl md:text-lg font-semibold mr-36 -mt-1 lg:block md:block hidden">{capitalizeFirstLetter(segments[segments.length - 1])}</h1>
+<h1 className="lg:text-xl md:text-lg font-semibold mr-36 -mt-1 lg:block md:block hidden">{capitalizeFirstLetter(decodeURIComponent(segments[segments.length - 1]))}</h1>
                   
                     <div>
                         <ToggleDarkMode />

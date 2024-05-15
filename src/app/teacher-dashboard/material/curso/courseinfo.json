@@ -1,0 +1,34 @@
+[
+    {
+        "Name": "1. Primeiros Passos",
+        "Description": "Introdução básica aos fundamentos do assunto em questão.",
+        "Duration": "10min",
+        "lessonFinished": "",
+        "page": "primeirospassos"
+    },
+    {
+        "Name": "2. Dinâmica de aulas",
+        "Description": "Exploração das diferentes dinâmicas de aulas e métodos de ensino.",
+        "Duration": "",
+        "DoneOrNot": "",
+        "CourseID": "dinamicasdasaulas",
+        "PageName": "Primeiros Passos"
+    },
+    {
+        "Name": "3. Nivelamento",
+        "Description": "Curso para nivelar o conhecimento prévio dos participantes.",
+        "Duration": "",
+        "DoneOrNot": "",
+        "CourseID": "nivelamento",
+        "PageName": "Primeiros Passos"
+    },
+    {
+        "Name": "4. Ferramentas e Métodos",
+        "Description": "Apresentação e prática das ferramentas e métodos relevantes para o assunto.",
+        "Duration": "",
+        "DoneOrNot": "",
+        "CourseID": "ferramentasemetodos",
+        "PageName": "Primeiros Passos"
+    }
+]
+

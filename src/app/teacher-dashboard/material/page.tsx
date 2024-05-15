@@ -23,7 +23,7 @@ export default function Material(){
                 </div>
                 <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="#" className="text-fluency-blue-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Apostilas
+                        <a href="material/apostilas" className="text-fluency-blue-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Apostilas
                             &rarr;
                         </a>
                     </p>
@@ -31,7 +31,7 @@ export default function Material(){
             </div>
         </div>
 
-        <div id="apoio" className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+        <div id="apoio" className="hidden mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
             <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-orange-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-orange-500 transition-all duration-300 group-hover:bg-fluency-orange-400">
@@ -83,7 +83,7 @@ export default function Material(){
                 </div>
                 <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="#" className="text-fluency-green-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Guidelines
+                        <a href="material/guidelines" className="text-fluency-green-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Guidelines
                             &rarr;
                         </a>
                     </p>
@@ -102,11 +102,11 @@ export default function Material(){
                 </span>
                 <div
                     className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-500 transition-all duration-300 group-hover:text-white/90">
-                    <p>Aqui você vai encontrar todas as apostilas da FluencyLab, inclusive algumas que ainda estão em construção! Fique semprea tento à atualizações.</p>
+                    <p>Queremos que nossos professores consigam ensinar de uma forma que demonstre sempre qualidade e dedicação da nossa parte. Esse mini-curso foi preapardo para te ajudar!.</p>
                 </div>
                 <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="#" className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Dicas para Aulas
+                        <a href="material/curso" className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Curso para Professores
                             &rarr;
                         </a>
                     </p>
