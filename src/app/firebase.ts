@@ -4,13 +4,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage'; 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDWcf-ML7SYn_N_g0wyw-YG5IqDbm0Mezw",
-  authDomain: "fluencylabweb-pro.firebaseapp.com",
-  projectId: "fluencylabweb-pro",
-  storageBucket: "fluencylabweb-pro.appspot.com",
-  messagingSenderId: "719140672285",
-  appId: "1:719140672285:web:94d7809dd5841b482287f4",
-  measurementId: "G-87Q2PZL594"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
