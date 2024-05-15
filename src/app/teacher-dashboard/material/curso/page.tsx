@@ -28,7 +28,7 @@ export default function CursoParaProfessores(){
 
             <div className='mt-3 flex flex-row gap-2'>
                {CourseInfo.map((course, index) => (
-                         <div onClick={() => handleCardClick(course.page)} className="flex flex-col justify-between gap-2 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 w-54 h-max">
+                         <div key={index} onClick={() => handleCardClick(course.page)} className="flex flex-col justify-between gap-2 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 w-54 h-max">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-semibold">{course.Name}</h2>
                                 <IoIosArrowBack />
