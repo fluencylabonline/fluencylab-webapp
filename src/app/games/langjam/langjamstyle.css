@@ -8,6 +8,6 @@
   }
 
 .flag-wrapper {
-  border-radius: 24px; /* Adjust the value as needed for desired roundness */
+  border-radius: 10px; /* Adjust the value as needed for desired roundness */
   overflow: hidden; /* Ensure the flag fits within the rounded border */
 }

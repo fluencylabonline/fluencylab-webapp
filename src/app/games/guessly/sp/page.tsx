@@ -1,13 +1,12 @@
 "use client";
-import { useState, useEffect, ChangeEvent, KeyboardEvent, useRef, SetStateAction } from 'react';
+import { useState, useEffect, ChangeEvent, KeyboardEvent, useRef } from 'react';
 import Link from 'next/link';
-import { BsArrowLeft } from "react-icons/bs";
-import { FaCheck } from 'react-icons/fa6';
 import { TbPlayerTrackNext } from 'react-icons/tb';
-import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import '../../games.css';
-import allWordsDataSpanish from './wordsDataSpanish.json';
+import allWordsDataEnglish from './wordsDataSpanish.json';
 import Keyboard from '../keyboard-guessly';
+import { CiCircleQuestion } from "react-icons/ci";
+import { IoClose } from 'react-icons/io5';
 
 const Guessly = () =>{
   const [currentSetIndex, setCurrentSetIndex] = useState(0);
@@ -22,11 +21,17 @@ const Guessly = () =>{
   const [feedbackMessageType, setFeedbackMessageType] = useState('');
   const [remainingAttempts, setRemainingAttempts] = useState(2);
   const lastInputRef = useRef<HTMLInputElement>(null);
-  const [score, setScore] = useState(0);
-  
-  const wordsData = allWordsDataSpanish[currentSetIndex];
+  const [score, setScore] = useState(0); 
+  const [showInstructions, setShowInstructions] = useState(true);
+  const [timerStarted, setTimerStarted] = useState(false); // New state variable for controlling timer start
+
+  const toggleInstructions = () => {
+    setShowInstructions(!showInstructions);
+  };
+
+  const wordsData = allWordsDataEnglish[currentSetIndex];
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * allWordsDataSpanish.length);
+    const randomIndex = Math.floor(Math.random() * allWordsDataEnglish.length);
     setCurrentSetIndex(randomIndex);
   }, []);
 
@@ -37,17 +42,31 @@ const Guessly = () =>{
     setUserInput(Array(wordsData[currentWordIndex].starter.length).fill(''));
   }, [currentWordIndex, currentSetIndex, wordsData]);
 
+  // Timer effect
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (timeLeft > 0) {
-        setTimeLeft(timeLeft - 0.1);
-      } else {
-        setGameOver(true);
-      }
-    }, 500);
-
+    let timer: NodeJS.Timeout;
+    if (!showInstructions && !gameOver && timerStarted) {
+      timer = setTimeout(() => {
+        if (timeLeft > 0) {
+          setTimeLeft(timeLeft - 0.1);
+        } else {
+          setGameOver(true);
+        }
+      }, 500);
+    }
     return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [timeLeft, showInstructions, gameOver, timerStarted]);
+
+  const handleStartGame = () => {
+    setShowInstructions(false);
+    setTimerStarted(true);
+  
+    // Focus on the first input element
+    const firstInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+    if (firstInput) {
+      firstInput.focus();
+    }
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const newValue = e.target.value.toUpperCase();
@@ -111,11 +130,18 @@ const Guessly = () =>{
       } else {
         setGameOver(true);
       }
+      
+      // Focus on the first input element
+      const firstInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+      }
+
     } else {
       setFeedbackMessage('Incorrect guess. Please try again.');
       setFeedbackMessageType('incorrect');
     }
-  };
+  };  
 
   const skipWord = () => {
     if (remainingAttempts > 0) {
@@ -125,9 +151,22 @@ const Guessly = () =>{
       setFeedbackMessageType('skip');
       setTempUserInput(Array(wordsData[currentWordIndex + 1].starter.length).fill(''));
       setUserInput(Array(wordsData[currentWordIndex + 1].starter.length).fill(''));
+      
+        // Focus on the first input element
+        const firstInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+        if (firstInput) {
+          firstInput.focus();
+        }
+
     } else {
       setFeedbackMessage('No more attempts to skip.');
       setFeedbackMessageType('error');
+
+        // Focus on the first input element
+        const firstInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+        if (firstInput) {
+          firstInput.focus();
+        }
     }
   };
 
@@ -186,93 +225,119 @@ const Guessly = () =>{
     }
   };
   
-  if (gameOver) {
-    return (
-      <div className='flex flex-col gap-10 min-h-screen w-[70] justify-center items-center bg-blue-different dark:bg-fluency-dark-bg'>
-              <div className='w-full flex flex-row gap-3 justify-between px-4 py-2 items-center absolute top-0'>
-                <Link href="/games">
-                  <button className=" text-yellow-500 dark:text-yellow-600 hover:text-yellow-600 dark:hover:yellow-700 ease-in-out duration-300">
-                    <BsArrowLeft className='w-9 h-9' />
-                  </button>
-                </Link>
-
-                <h1 className="text-yellow-500 dark:yellow-600 text-xl font-bold">GUESSLY</h1>
-
-                <div className=''>
-                  <ToggleDarkMode />
-                </div>
-              </div>
-        <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-md" onClick={restartGame}>Jogar novamente</button>
-        <div className="text-lg text-black-different dark:text-white font-semibold">Pontuação: {score}</div>
-      </div>
-    );
-  }
-
   return (
+    <div className='h-[100vh] overflow-y-hidden'>
 
-  <div className='bg-white dark:bg-fluency-dark-bg h-[100vh] overflow-y-hidden'>
-    
-              <div className='w-full flex flex-row gap-3 justify-between px-4 py-3 items-center absolute top-0'>
-                <Link href="/games">
-                  <button className=" text-yellow-500 dark:text-yellow-600 hover:text-yellow-600 dark:hover:yellow-700 ease-in-out duration-300">
-                  <BsArrowLeft className='lg:w-9 lg:h-9 w-5 h-5' />
-                  </button>
-                </Link>
-
-                <h1 className="text-yellow-500 dark:yellow-600 text-xl font-bold">GUESSLY</h1>
-
-                <div className=''>
-                  <ToggleDarkMode />
-                </div>
-              </div>
-  
-    <div className="flex flex-col min-h-screen w-full justify-center items-center bg-blue-different dark:bg-fluency-dark-bg overflow-y-hidden">
-      
-      <div className="progressBar bg-[#f1f1f1] dark:bg-black">
-        <div className="timeLeft bg-yellow-500" style={{ width: `${(timeLeft / 60) * 100}%` }}></div>
-      </div>
-      
-      <div className='lg:w-[35%] w-[85%] h-[60vh] justify-center p-7 bg-slate-300 dark:bg-black-different rounded-xl flex flex-col items-center absolute top-[15%] overflow-y-hidden'>
-        <div className="flex items-center space-x-2">
-          {currentWord.split('').map((letter, index) => (
-            <div key={index} className="bg-gray-200 lg:w-16 lg:h-16 w-[3rem] h-[3rem] text-3xl flex items-center justify-center rounded font-extrabold border-black-different border-2 dark:bg-black-different text-black-different dark:text-white dark:border-white">
-              {userInput[index] !== '' ? userInput[index] : letter}
+      <div className="components">
+        {gameOver && (
+          <div className='flex flex-col min-h-screen w-full justify-center items-center bg-blue-different dark:bg-black-different overflow-y-hidden'>
+            <div className="congratulations-message">
+              {score === wordsData.length ? (
+                <>
+                  <div>Congratulations! You have completed the game.</div>
+                  <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md" onClick={restartGame}>Play Again</button>
+                </>
+              ) : (
+                <>
+                  <div>Sorry, you lost the game. Better luck next time!</div>
+                  <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md" onClick={restartGame}>Try Again</button>
+                </>
+              )}
             </div>
-          ))}
-        </div>
-
-        <div className="mt-4 flex items-center space-x-2">
-          {tempUserInput.map((letter, index) => (
-            <input
-              key={index}
-              type="text"
-              value={letter}
-              maxLength={1}
-              className="text-center bg-gray-200 lg:w-16 lg:h-16 w-[3rem] h-[3rem] text-3xl flex items-center justify-center rounded font-extrabold border-black-different border-2 dark:bg-black-different text-black-different dark:text-white dark:border-white"
-              onChange={(e) => handleInputChange(e, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)} // Bind handleKeyDown function here
-              ref={index === tempUserInput.length - 1 ? lastInputRef : null}
-              
-            />
-          ))}
-        </div>
-
-        <div className='mt-4 p-2 rounded-md font-semibold text-black-different dark:text-white'>{hint}</div>
-        <div className='flex flex-row gap-3 mt-2'>
-          <button className="flex-row gap-1 items-center px-3 mt-4 bg-zinc-700 hover:bg-zinc-800 ease-in-out duration-300 rounded-md p-2 font-semibold text-white hidden" onClick={checkAnswer}><FaCheck /> Check</button>
-          <button className="flex flex-row gap-2 items-center px-5 mt-4 bg-red-700 hover:bg-red-600 ease-in-out duration-300 rounded-md p-2 font-semibold text-white" onClick={skipWord}><TbPlayerTrackNext /> Skip <span>({remainingAttempts})</span></button>
-        </div>
-
-        {feedbackMessage && (
-          <div className={`feedback-message text-center ${feedbackMessageType}`}>
-            {feedbackMessage}
           </div>
         )}
-      </div>
 
-          <Keyboard onKeyPress={handleKeyPress} />
+        {!gameOver && (
+          <div className='flex flex-col min-h-screen w-full justify-center items-center overflow-y-hidden'>
+              
+          <div className='lg:w-[45%] w-[85%] lg:h-[65vh] h-[50vh] justify-center p-7 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-xl flex flex-col items-center absolute top-[15%] overflow-y-hidden'>
+          
+              <div className="progressBar bg-[#f1f1f1] dark:bg-black">
+                <div className="timeLeft bg-red-600" style={{ width: `${(timeLeft / 60) * 100}%` }}></div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                {currentWord.split('').map((letter, index) => (
+                  <div key={index} className="lg:w-16 lg:h-16 w-[3rem] h-[3rem] text-3xl flex items-center justify-center rounded-md font-extrabold bg-gray-200  border-black border-2 dark:bg-fluency-pages-dark text-black dark:text-white dark:border-white">
+                    {userInput[index] !== '' ? userInput[index] : letter}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-3 flex items-center space-x-2">
+                {tempUserInput.map((letter, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    value={letter}
+                    maxLength={1}
+                    readOnly={window.innerWidth < 768}
+                    className="caret-transparent text-center bg-gray-200 lg:w-16 lg:h-16 w-[3rem] h-[3rem] text-3xl flex items-center justify-center rounded-md font-extrabold border-black border-2 dark:bg-fluency-pages-dark text-black dark:text-white dark:border-white"
+                    onChange={(e) => handleInputChange(e, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)} // Bind handleKeyDown function here
+                    ref={index === tempUserInput.length - 1 ? lastInputRef : null}
+                    
+                  />
+                ))}
+              </div>
+
+          <div className='mt-4 p-2 rounded-md font-bold dark:font-semibold text-black-different dark:text-white text-center'>{hint}</div>
+        
+          <div className='flex flex-row items-center gap-3 mt-4'>
+            <button className="flex flex-row gap-2 items-center px-5 bg-red-700 hover:bg-red-600 ease-in-out duration-300 rounded-md p-2 font-semibold text-white" onClick={skipWord}><TbPlayerTrackNext /> Pular palavra <span>({remainingAttempts})</span></button>
+            <CiCircleQuestion onClick={toggleInstructions} className='lg:w-7 lg:h-7 w-5 h-5 text-black dark:text-white cursor-pointer'/>
+          </div>
+
+          {feedbackMessage && (
+            <div className={`feedback-message text-center ${feedbackMessageType}`}>
+              {feedbackMessage}
+            </div>
+          )}
+        </div>
+        <Keyboard onKeyPress={handleKeyPress} />
      
-    </div>
+        </div>
+        )}
+
+        <div>
+          Component that appears when the user already played the game
+        </div>
+
+        {showInstructions && (
+          <div className="fixed z-[9999] inset-0 overflow-y-hidden text-fluency-text-light  ">
+          <div className="flex items-center justify-center min-h-screen">
+  
+                  <div className="fade-in fade-out fixed inset-0 transition-opacity duration-200 ease-in-out">
+                      <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                  </div>
+  
+              <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8">                        
+                          
+                      <button onClick={handleStartGame} className="absolute top-0 left-0 mt-2 ml-2 ">
+                          <span className="sr-only">Fechar</span>
+                          <IoClose className="w-10 h-10 text-black dark:text-white hover:text-fluency-red-600 hover:dark:text-fluency-red-600 ease-in-out duration-300" />
+                      </button>
+              
+                      <h3 className="text-xl font-bold text-center leading-6 mb-4">
+                          Instruções
+                      </h3>   
+  
+                      <div className="mt-4 text-sm">
+                      <strong>Discover the WORD of the day in 6 attempts.</strong>
+                      <br />
+                      <p>Each attempt must be a 5-letter word. Use the Enter button to submit. After each attempt, the color of the squares will change according to the following examples:</p>
+                      <ul className="list-disc list-inside">
+                        <li><strong className='text-green-700'>When the letter is green</strong> the letter is correct and in the correct position.</li>
+                        <li><strong className='text-yellow-700'>When the letter is yellow</strong> the letter is correct and in the incorrect position.</li>
+                        <li><strong className='text-stone-700'>When the letter is dark gray</strong> the letter is incorrect.</li>
+                      </ul>
+                      Every day there is a new WORD!
+                    </div>                                                     
+              </div>
+          </div>
+      </div>)}
+
+      </div>
     </div>
   );
 };

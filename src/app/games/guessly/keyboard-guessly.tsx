@@ -40,7 +40,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
                     <button 
                         key={letter}
                         onClick={() => handleKeyPress(letter)}
-                        className="px-1 py-2 min-w-8 min-h-23 bg-blue-different dark:bg-black-different text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                        className="px-1 py-2 min-w-8 min-h-23 bg-fluency-pages-light dark:bg-fluency-pages-dark text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
                     >
                         {letter}
                     </button>
@@ -52,7 +52,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
                     <button 
                         key={letter}
                         onClick={() => handleKeyPress(letter)}
-                        className="px-1 py-2 min-w-8 min-h-23 bg-blue-different dark:bg-black-different text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                        className="px-1 py-2 min-w-8 min-h-23 bg-fluency-pages-light dark:bg-fluency-pages-dark text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
                     >
                         {letter}
                     </button>
@@ -62,7 +62,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
             <div className='flex flex-row items-center gap-1 my-1 justify-center'>
                     <button 
                     onClick={() => onKeyPress('Backspace')}
-                    className="px-1 py-3 min-w-8 min-h-25 flex justify-center bg-blue-different dark:bg-black-different text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                    className="px-1 py-3 min-w-8 min-h-25 flex justify-center bg-fluency-pages-light dark:bg-fluency-pages-dark text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
                     >
                         <FaBackspace />
                     </button>
@@ -70,14 +70,14 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
                     <button 
                         key={letter}
                         onClick={() => handleKeyPress(letter)}
-                        className="px-1 py-2 min-w-8 min-h-23 bg-blue-different dark:bg-black-different text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                        className="px-1 py-2 min-w-8 min-h-23 bg-fluency-pages-light dark:bg-fluency-pages-dark text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
                     >
                         {letter}
                     </button>
             ))}
                     <button 
                     onClick={() => onKeyPress('Enter')}
-                    className="px-1 py-3 min-w-8 min-h-25 flex justify-center bg-blue-different dark:bg-black-different text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                    className="px-1 py-3 min-w-8 min-h-25 flex justify-center bg-fluency-pages-light dark:bg-fluency-pages-dark text-gray-800 dark:text-white rounded-md shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
                     >
                         <AiOutlineEnter />
                     </button>

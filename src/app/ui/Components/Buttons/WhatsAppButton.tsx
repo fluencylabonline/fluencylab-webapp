@@ -108,7 +108,7 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
               <div className="fixed inset-0 transition-opacity">
                 <div className="absolute inset-0 bg-fluency-gray-400 opacity-95"></div>
               </div>
-              <div className="bg-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-max p-5">
+              <div className="bg-fluency-text-dark text-black dark:text-white dark:bg-fluency-pages-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-max p-5">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left p-4">
                     <button
@@ -118,7 +118,7 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
                       <span className="sr-only">Fechar</span>
                       <IoClose className="w-7 h-7 hover:text-fluency-green-600 ease-in-out duration-300" />
                     </button>
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-2">
                       Fala com a gente!
                     </h3>
                     <div className="mt-2 flex flex-col">
@@ -127,7 +127,7 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
                         placeholder="Seu nome"
                         value={name}
                         onChange={handleNameChange}
-                        className="border rounded-md px-3 py-2 w-full mb-2"
+                        className="border rounded-md px-3 py-2 w-full mb-2 dark:bg-fluency-pages-dark"
                         required
                       />
                       <input
@@ -135,13 +135,13 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
                         placeholder="Seu e-mail"
                         value={email}
                         onChange={handleEmailChange}
-                        className="border rounded-md px-3 py-2 w-full mb-2"
+                        className="border rounded-md px-3 py-2 w-full mb-2 dark:bg-fluency-pages-dark"
                         required
                       />
                       <select
                         value={selectedLanguage}
                         onChange={handleLanguageChange}
-                        className="border rounded-md px-3 py-2 w-full mb-2"
+                        className="border rounded-md px-3 py-2 w-full mb-2 dark:bg-fluency-pages-dark"
                         required
                       >
                         <option value="">Selecione o idioma</option>

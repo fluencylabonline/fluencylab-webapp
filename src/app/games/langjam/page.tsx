@@ -7,9 +7,11 @@ import './langjamstyle.css';
 import languagesData from './languages.json';
 import { Language } from './languages';
 import Image from 'next/image';
-import Logo01 from '../../../../public/images/brand/logo.png';
+import Logo from '../../../../public/images/brand/logo.png';
 import Flag from 'react-world-flags';
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
+import FluencyButton from '@/app/ui/Components/Button/button';
+import '../../Landing/Header/Header.css'
 
 const LangJam = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('');
@@ -44,16 +46,17 @@ const LangJam = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-fluency-dark-bg h-screen overflow-y-auto">
-        <div className='flex flex-row gap-3 justify-between px-4 py-2 items-center'>
+        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark h-screen overflow-hidden overflow-y-auto">
+            <div className='flex flex-row gap-3 justify-between px-4 py-2 items-center'>
                 <Link href="/games">
-                  <button className=" text-gray-800 dark:text-white hover:text-black dark:hover:text-gray-500 ease-in-out duration-300">
+                  <button className=" text-gray-800 dark:text-white hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500 ease-in-out duration-300">
                   <BsArrowLeft className='lg:w-9 lg:h-9 w-5 h-5' />
                   </button>
                 </Link>
 
                 <div className='flex flex-row gap-5'>
-                    <button className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'>Material</button>                    <button className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'>Métodos</button>
+                    <button id='navbarheader' className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'>Material</button>                    
+                    <button id='navbarheader' className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'>Métodos</button>
                 </div>
 
                 <div className=''>
@@ -61,24 +64,23 @@ const LangJam = () => {
                 </div>
             </div>
 
-                <div className='m-5 flex items-center'>
-                        <div className='bg-blue-different dark:bg-black-different text-zinc-900 dark:text-gray-100 rounded-xl lg:p-0 p-10 flex flex-col justify-center items-center gap-5 w-screen h-max'>
-                    <Image
+                <div className='m-5 flex items-center overflow-hidden'>
+                    <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark text-zinc-900 dark:text-gray-100 rounded-xl lg:p-0 p-10 flex flex-col justify-center items-center gap-5 w-screen h-max'>
+                        <Image
                             className="h-auto w-auto"
-                            src={Logo01}
+                            src={Logo}
                             alt="FluencyLab"
                             priority
                         />
-                        <button
-                            className={`leading-6 inline-flex items-center px-5 py-3 bg-fluency-light-blue hover:bg-fluency-dark-blue ease-in-out duration-300 text-white text-xl font-medium rounded-md ${
+                        <FluencyButton
+                            className={`leading-6 inline-flex items-center px-5 py-3 ease-in-out duration-300 text-xl font-medium ${
                                 isLanguageChosen && 'cursor-not-allowed opacity-50'
                             }`}
                             onClick={getRandomLanguage}
                             disabled={isLanguageChosen}
                         >
-                            <Image src="https://img.icons8.com/fluency/48/000000/earth-planet.png" width={100} height={100} alt="Earth Planet" className="w-10 h-10 mr-2" />
                             <span>Escolher Idioma!</span>
-                        </button>
+                        </FluencyButton>
                         <Confetti
                             active={showConfetti}
                             config={{
@@ -97,7 +99,7 @@ const LangJam = () => {
                         {selectedLanguageInfo && (
                             <div className="fade-in mt-8 text-2xl duration-3000 flex flex-col items-center">
                                 <div className='lg:flex lg:flex-row lg:gap-8 lg:justify-center lg:text-start flex flex-col gap-8 text-center p-5 items-center'>
-                                    <Flag className='flag-wrapper lg:w-[55%] sm:w-[40%]' code={selectedLanguageInfo.flagCode} />
+                                    <Flag className='flag-wrapper lg:w-[45%] sm:w-[40%]' code={selectedLanguageInfo.flagCode} />
                                     <div className='lg:w-[80%] w-[110%] font-xl'>                        
                                         <p>Seu idioma é: <span className="text-blue-500 font-semibold">{selectedLanguage}!</span></p>
                                         <p>País de origem: {selectedLanguageInfo.countryOfOrigin}</p>

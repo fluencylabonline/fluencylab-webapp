@@ -281,9 +281,9 @@ const Wordle = () => {
     if (gameOver) {
       if (lastPlayedDate === new Date().toLocaleDateString()) {
         return (
-          <div className='lg:mt-4 md:mt-1 gap-4 flex flex-col items-center bg-blue-different dark:bg-black-different'>
+          <div className='gap-4 flex flex-col items-center'>
 
-            <div className='flex flex-col items-center p-6 gap-4 bg-slate-300 dark:bg-fluency-dark-bg rounded-md'>
+            <div className='flex flex-col items-center p-6 gap-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
               <h1 className='text-2xl font-bold text-black dark:text-white'>THE WORD WAS:</h1>
               <div className="grid grid-cols-5 gap-1 lg:w-[19rem] w-[17rem]">
                 {Array.from(word).map((letter, index) => (
@@ -304,7 +304,7 @@ const Wordle = () => {
 
               <div className='flex flex-col items-center gap-2 text-black dark:text-white'>
                 <div className='lg:flex lg:flex-row flex flex-col gap-2 items-center'>
-                  <Link href="/googlecalendarpage" className="cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-fluency-light-blue hover:bg-fluency-dark-blue ease-in-out duration-300 text-white text-sm font-medium rounded-md"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
+                <Link href="/LandingPages/googlecalendarpage" className="cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-fluency-blue-500 hover:bg-fluency-blue-600 ease-in-out duration-300 text-white text-sm font-medium rounded-md"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
                   Schedule a trial class!
                   </Link>
                   <WhatsAppButton buttonText="Or text us here"/>
@@ -328,7 +328,7 @@ const Wordle = () => {
         );
       } else {
         return (
-          <div className='mt-14 flex flex-col items-center gap-8 bg-blue-different dark:bg-fluency-dark-bg p-5 rounded-md'>
+          <div className='mt-14 flex flex-col items-center gap-8 p-5 rounded-md'>
             <h1 className='text-2xl font-bold text-black dark:text-white'>THE WORD WAS:</h1>
             <div className="grid grid-cols-5 gap-1 lg:w-[21rem] w-[17rem]">
               {Array.from(word).map((letter, index) => (
@@ -391,39 +391,6 @@ const Wordle = () => {
         <div className='mt-14'>{renderWordDisplay()}</div>
         {!gameOver && <div className='absolute bottom-0'><Keyboard onKeyPress={handleKeyboardKeyPress} /></div>}
       </div>
-
-
-          <div>
-            {showInstructions && (
-              <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none`}>
-                <div className={`relative w-auto max-w-md mx-auto my-6 p-6 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark shadow-xl shadow-fluency-gray-200 dark:shadow-fluency-gray-600 rounded-xl instructions-enter`}>
-                  {/* Instructions content goes here */}
-                  <div className="flex justify-between items-center">
-                    <h1 className="text-lg font-bold">Instructions</h1>
-                    <button
-                      className="p-1 transition-colors duration-200 transform rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={toggleInstructions}
-                    >
-                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="mt-4 text-sm">
-                    <strong>Discover the WORD of the day in 6 attempts.</strong>
-                    <br />
-                    Each attempt must be a 5-letter word. Use the Enter button to submit. After each attempt, the color of the squares will change according to the following examples:
-                    <ul className="list-disc list-inside">
-                      <li><strong className='text-green-700'>When the letter is in green</strong>, the letter is correct and in the correct position.</li>
-                      <li><strong className='text-yellow-700'>When the letter is in yellow</strong>, the letter is correct but in the wrong position.</li>
-                      <li><strong className='text-stone-700'>When the letter is in dark gray</strong>, the letter is incorrect.</li>
-                    </ul>
-                    Every day there&apos;s a new WORD!
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
 
       <Toaster />
     
