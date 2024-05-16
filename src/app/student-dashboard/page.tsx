@@ -1,7 +1,9 @@
+import Perfil from './perfil/page';
+
 export default function StudentDashboard(){
     return(
         <div>
-            StudentDashboard
+            <Perfil />
         </div>
     )
 }

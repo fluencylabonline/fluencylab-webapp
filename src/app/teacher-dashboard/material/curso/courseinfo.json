@@ -12,7 +12,7 @@
         "Duration": "",
         "DoneOrNot": "",
         "CourseID": "dinamicasdasaulas",
-        "PageName": "Primeiros Passos"
+        "page": "dinamicaaulas"
     },
     {
         "Name": "3. Nivelamento",
@@ -20,7 +20,7 @@
         "Duration": "",
         "DoneOrNot": "",
         "CourseID": "nivelamento",
-        "PageName": "Primeiros Passos"
+        "page": "nivelamento"
     },
     {
         "Name": "4. Ferramentas e Métodos",
@@ -28,7 +28,7 @@
         "Duration": "",
         "DoneOrNot": "",
         "CourseID": "ferramentasemetodos",
-        "PageName": "Primeiros Passos"
+        "page": "ferramentas"
     }
 ]
 

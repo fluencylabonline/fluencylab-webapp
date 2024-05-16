@@ -12,7 +12,7 @@ export default function Material(){
             <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-blue-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-blue-500 transition-all duration-300 group-hover:bg-fluency-blue-400">
-                    <svg viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
+                    <svg viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
                         <path d="M136,48V176H88V80H40V48a7.99993,7.99993,0,0,1,8-8H80a7.99993,7.99993,0,0,1,8,8,7.99993,7.99993,0,0,1,8-8h32A7.99993,7.99993,0,0,1,136,48Zm89.8877,149.64526-8.28223-30.90966-46.36426,12.42334,8.28223,30.90966a7.99989,7.99989,0,0,0,9.79785,5.65674l30.90967-8.28222A7.9999,7.9999,0,0,0,225.8877,197.64526ZM184.47656,43.09717a7.99994,7.99994,0,0,0-9.79785-5.657L143.769,45.72241a8.00015,8.00015,0,0,0-5.65674,9.7981l8.28223,30.90954,46.36426-12.42334Z" opacity="0.2"/>
                         <path d="M233.61523,195.5752,192.2041,41.02637a16.0157,16.0157,0,0,0-19.5957-11.31348l-30.91016,8.28223c-.33935.09094-.66357.20923-.99219.32043A15.96591,15.96591,0,0,0,128,32H96a15.8799,15.8799,0,0,0-8,2.16492A15.8799,15.8799,0,0,0,80,32H48A16.01833,16.01833,0,0,0,32,48V208a16.01833,16.01833,0,0,0,16,16H80a15.8799,15.8799,0,0,0,8-2.16492A15.8799,15.8799,0,0,0,96,224h32a16.01833,16.01833,0,0,0,16-16V108.40283l27.7959,103.73584a15.992,15.992,0,0,0,19.5957,11.31445l30.91016-8.28222A16.01822,16.01822,0,0,0,233.61523,195.5752ZM156.19238,92.08679l30.91211-8.28259,20.71045,77.27234-30.917,8.28454ZM176.749,45.167l6.21338,23.18238-30.91113,8.28247L145.83984,53.4502ZM128,48l.00732,120H96V48ZM80,48V72H48V48ZM48,208V88H80V208Zm80,0H96V184h32.0083l.00147,24Zm90.16016-8.28418-30.90967,8.28223-6.21143-23.18189,30.918-8.28491,6.21289,23.18164Z"/>
                     </svg>
@@ -35,7 +35,7 @@ export default function Material(){
             <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-orange-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-orange-500 transition-all duration-300 group-hover:bg-fluency-orange-400">
-                    <svg viewBox="0 0 512 512" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
+                    <svg viewBox="0 0 512 512" id="Flat" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
                         <path d="M463.313,346.29c-0.758-2.274-2.224-4.747-4.085-6.608l-83.683-83.682l131.503-131.502c6.603-6.603,6.603-17.307,0-23.909
                         L411.411,4.952C408.241,1.782,403.941,0,399.456,0s-8.785,1.782-11.954,4.952c-4.677,4.677-123.793,123.793-131.502,131.502
                         l-71.724-71.725c-0.001-0.001-0.002-0.002-0.003-0.005c-0.001-0.002-0.002-0.002-0.005-0.003l-47.815-47.815
@@ -73,8 +73,8 @@ export default function Material(){
             <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:bg-fluency-green-400">
-                    <svg viewBox="0 0 1920 1920" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
-                        <path d="M960.057 0 112 363.42v715.76c0 390.672 512 670.417 730.572 789.824 27.477 15.038 49.753 27.137 65.018 36.296v.113c16.17 9.725 34.262 14.587 52.467 14.587 18.091 0 36.296-4.862 52.466-14.7 15.265-9.159 37.54-21.258 65.018-36.296 218.572-119.407 730.572-399.152 730.572-789.824V363.42L960.057 0ZM846.982 1272.198 524.27 949.484l80.056-79.943 242.657 242.77 525.343-525.456 80.057 79.944-605.4 605.399Z" fill-rule="evenodd"/>
+                    <svg viewBox="0 0 1920 1920" id="Flat" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
+                        <path d="M960.057 0 112 363.42v715.76c0 390.672 512 670.417 730.572 789.824 27.477 15.038 49.753 27.137 65.018 36.296v.113c16.17 9.725 34.262 14.587 52.467 14.587 18.091 0 36.296-4.862 52.466-14.7 15.265-9.159 37.54-21.258 65.018-36.296 218.572-119.407 730.572-399.152 730.572-789.824V363.42L960.057 0ZM846.982 1272.198 524.27 949.484l80.056-79.943 242.657 242.77 525.343-525.456 80.057 79.944-605.4 605.399Z" fillRule="evenodd"/>
                     </svg>
                 </span>
                 <div

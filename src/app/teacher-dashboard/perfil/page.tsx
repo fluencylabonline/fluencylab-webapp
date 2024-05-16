@@ -244,6 +244,18 @@ function Perfil() {
                   <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
                 </AccordionItem>
 
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Contrato" title="Contrato">
+                  <p className='my-2'>Contrato</p>
+                    <ul className='ml-2 list-disc'>
+                        <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
+                        <li>Conflitos de horário inesperados que impossibilitem a participação do aluno.</li>
+                        <li>Questões de saúde ou emergências pessoais que tornem inviável a participação do aluno na aula.</li>
+                        <li>Ausência do aluno sem aviso prévio ou justificativa adequada.</li>
+                    </ul>
+                  <p className='my-2'>É importante que o professor avalie cada caso individualmente e se comunique com o aluno para encontrar a melhor solução para ambas as partes.</p>
+                  <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
+                </AccordionItem>
+
               </Accordion>
             </div>
                  

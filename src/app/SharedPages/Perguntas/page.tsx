@@ -660,14 +660,14 @@ export default function Forum() {
                             <div className="mt-2 flex flex-col items-center gap-2">
                                 <FluencyInput
                                     type="text"
-                                    placeholder="Pergunta"
+                                    placeholder="Coloca aqui o que precisa de ajuda"
                                     className="border rounded-md px-3 py-2 lg:w-[25rem] md:w-[25rem] w-min h-full focus:outline-none"
                                     value={pergunta}
                                     onChange={(e) => setPergunta(e.target.value)}
                                     required
                                 />
                                 <textarea
-                                    placeholder="Coloque os detalhes aqui"
+                                    placeholder="Aqui vão os detalhes"
                                     className="dark:bg-fluency-pages-dark border rounded-md px-3 py-2 lg:w-[25rem] md:w-[25rem] w-min h-[7rem] mb-2 focus:outline-none"
                                     value={descricao}
                                     onChange={(e) => setDescricao(e.target.value)}

@@ -90,7 +90,7 @@ function AlunoPainel() {
       const file = files[0];
     
       // Generate a unique filename (you can use UUID or any other method)
-      const fileName = `${id}/materiais/archives/${file.name}`;
+      const fileName = `alunosmateriais/${id}/materiais/archives/${file.name}`;
     
       // Create a reference to the storage location
       const storageRef = ref(storage, fileName);
@@ -117,7 +117,7 @@ function AlunoPainel() {
     
     const fetchMaterialsReal = async () => {
       try {
-          const materialsRef = ref(storage, `${id}/materiais/archives`);
+          const materialsRef = ref(storage, `alunosmateriais/${id}/materiais/archives`);
           const materialList = await listAll(materialsRef);
           const materialUrls = await Promise.all(materialList.items.map(async (item) => {
               const downloadUrl = await getDownloadURL(item);
@@ -136,7 +136,7 @@ function AlunoPainel() {
     useEffect(() => {
       const fetchMaterials = async () => {
         try {
-          const materialsRef = ref(storage, `${id}/materiais/archives`);
+          const materialsRef = ref(storage, `alunosmateriais/${id}/materiais/archives`);
           const materialList = await listAll(materialsRef);
           const materialUrls = await Promise.all(materialList.items.map(async (item) => {
             const downloadUrl = await getDownloadURL(item);
@@ -200,7 +200,7 @@ function AlunoPainel() {
   
 
     const handleFileDelete = async (fileName: string) => {
-            const fileRef = ref(storage, `${id}/materiais/archives/${fileName}`);
+            const fileRef = ref(storage, `/alunosmateriais/${id}/materiais/archives/${fileName}`);
             try {
                 await deleteObject(fileRef);
                 // Fetch materials again to reflect the changes
@@ -448,18 +448,13 @@ return (
                     </button>
             
                     <h3 className="text-xl font-bold text-center leading-6 mb-4">
-                        Instruções
+                        Tarefas
                     </h3>   
 
                 <div className='text-justify flex gap-1 flex-col'>
-                    <span>1. Se não conseguir fazer uma aula, simplesmente não marque como feita até fazer a reposição.</span>
-                    <span>2. Se não for fazer a reposição marque como cancelada.</span>
-                    <span>3. Clique ou passe o mouse em cima de cada data para saber o status de cada uma.</span>
-                    <p className='mt-2 font-semibold'>Cores:</p>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-red-600'>Vermelho</span> são aulas atrasadas que não foram nem canceladas nem feitas</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-green-600'>Verde</span> são as aulas feitas.</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-yellow-600'>Amarelo</span> são as aulas canceladas.</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-blue-600'>Azul</span> são as aulas ainda por fazer.</span>  
+                    <span>Coloque aqui as atividades para ajudar seu aluno a estudar todo dia.</span>
+                    <span>O ideal criar uma atividade para cada dia.</span>
+                    <span>Ao fim de cada semana pode excluir todas e criar novas.</span>
                 </div>                                                      
             </div>
         </div>
@@ -613,7 +608,7 @@ return (
 
             </div>
 
-              <div className="lg:w-max md:w-full sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="lg:w-full md:w-full sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
                     <div className="flex flex-col gap-2 items-center justify-center w-full p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>

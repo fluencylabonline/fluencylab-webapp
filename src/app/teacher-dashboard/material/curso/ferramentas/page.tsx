@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react';
 import { doc, setDoc, updateDoc, getDoc, collection } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
-const CursoDetails = () => {
+const Ferramentas = () => {
     const { data: session } = useSession();
     const userId = session?.user.id
     const [lessonFinished, setLessonFinished] = useState<{ [key: string]: boolean }>({});
@@ -78,7 +78,7 @@ const CursoDetails = () => {
 
             <div className='p-6 px-32 mt-4 text-justify'>
 
-                <p className='text-3xl font-bold py-2'>Primeiros Passos</p>
+                <p className='text-3xl font-bold py-2'>Ferramentas</p>
 
                 <div className='flex flex-col gap-4'>
                     <p>Queremos que nossos alunos sempre sintam nossa dedicação. Por isso preparamos algumas informações que podem ser de ajuda. Essa plataforma foi e está sendo construída para facilitar seu trabalho. Nela você pode encontrar <strong className='hover:text-fluency-blue-500'><Link href={'/teacher-dashboard/material/apostilas'}>material para suas aulas</Link></strong> e o <strong className='hover:text-fluency-blue-500'><Link href={'/teacher-dashboard/material/apostilas'}>material de apoio</Link></strong> extra com ideias, dicas, e conteúdo adicional, inclusive algumas aulas gravadas.</p>
@@ -110,4 +110,4 @@ const CursoDetails = () => {
     );
 };
 
-export default CursoDetails;
+export default Ferramentas;
