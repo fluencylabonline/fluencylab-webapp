@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { redirect, useRouter } from 'next/navigation';
 
 import MobileHeader from '@/app/ui/Dashboard/mobileheader';
@@ -87,13 +87,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [showAnimation, setShowAnimation] = useState(true);
   useEffect(() => {
+    if (!session || session.user.role !== "admin") {
+      setShowAnimation(true);
+
       const timer = setTimeout(() => {
-          setShowAnimation(false);
-          router.push(`/signin`);
-        }, 5000); // 5000 milliseconds = 5 seconds
+        signOut({ callbackUrl: '/' })
+      }, 5000); // 5000 milliseconds = 5 seconds
 
       return () => clearTimeout(timer);
-  }, []); 
+  }
+  }, [session]);
 
   if (!session || session.user.role !== "admin") {
     return showAnimation ? <RedirectinAnimation /> : null;
