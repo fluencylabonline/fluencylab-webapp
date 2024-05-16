@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 import MobileHeader from '@/app/ui/Dashboard/mobileheader';
 import MobileSidebar from '@/app/ui/Dashboard/mobilesidebar';
@@ -78,10 +78,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <IoChatbubblesOutline className="h-6 w-6"/>,
     },
   ];
+  
+  const router = useRouter();
+  const [showAnimation, setShowAnimation] = useState(true);
+  useEffect(() => {
+      const timer = setTimeout(() => {
+          setShowAnimation(false);
+          router.push(`/signin`);
+        }, 5000); // 5000 milliseconds = 5 seconds
+
+      return () => clearTimeout(timer);
+  }, []); 
 
   if (!session || session.user.role !== "student") {
-    return <RedirectinAnimation />;
-  }
+    return showAnimation ? <RedirectinAnimation /> : null;
+}
 
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
