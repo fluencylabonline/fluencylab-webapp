@@ -10,7 +10,7 @@ import Header from '@/app/ui/Dashboard/header';
 import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 
 // Icons
-import { PiStudentFill } from 'react-icons/pi';
+import { PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
 
@@ -70,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "Professores",
       path: "/admin-dashboard/professores",
-      icon: <PiStudentFill className="h-6 w-6"/>,
+      icon: <PiChalkboardTeacherFill className="h-6 w-6"/>,
       },
     {
       name: "Suporte",
