@@ -95,7 +95,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       return () => clearTimeout(timer);
   }, []); 
 
-  if (!session || session.user.role !== "student") {
+  if (!session || session.user.role !== "admin") {
     return showAnimation ? <RedirectinAnimation /> : null;
 }
 
