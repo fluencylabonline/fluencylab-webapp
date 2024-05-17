@@ -224,6 +224,11 @@ function Perfil() {
                 <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
+                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
+                    <div>Link pendente</div>
+                ) : (
+                    <div>{calendarLink}</div>
+                )}</p>
 
                 <div className="mt-4 text-center flex flex-col justify-center">
                   <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
