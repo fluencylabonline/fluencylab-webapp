@@ -41,6 +41,8 @@ export const options: NextAuthOptions = {
                   link: userData.link,
                   numero:userData.numero,
                   idioma: userData.idioma,
+                  professorId: userData.professorId,
+                  calendarLink: userData.calendarLink,
                 };
               }
             }
@@ -60,6 +62,8 @@ export const options: NextAuthOptions = {
         token.link = user.link;
         token.numero = user.numero;
         token.idioma = user.idioma;
+        token.professorId = user.professorId;
+        token.calendarLink = user.calendarLink;
       }
       return token
     }, 
@@ -73,6 +77,8 @@ export const options: NextAuthOptions = {
         session.user.link = token.link;
         session.user.numero = token.numero;
         session.user.idioma = token.idioma;
+        session.user.professorId = token.professorId;
+        session.user.calendarLink = token.calendarLink;
       }
       return session
     },

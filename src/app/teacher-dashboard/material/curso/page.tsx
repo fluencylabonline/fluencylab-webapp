@@ -23,12 +23,12 @@ export default function CursoParaProfessores(){
     const [finished, setFinished] = useState(false)
 
     return(
-        <div className="mt-4 h-[90vh] overflow-hidden overflow-y-scroll bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 rounded-md flex flex-col gap-4 items-center">
+        <div className="mt-4 h-[90vh] overflow-hidden overflow-y-scroll p-4 rounded-md flex flex-col gap-4 items-center">
             <p className='text-2xl font-bold'>Bem-vindo, {session?.user.name}</p>
 
             <div className='mt-3 flex flex-row gap-2'>
                {CourseInfo.map((course, index) => (
-                         <div key={index} onClick={() => handleCardClick(course.page)} className="flex flex-col justify-between gap-2 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 w-54 h-max">
+                         <div key={index} onClick={() => handleCardClick(course.page)} className="flex flex-col justify-between gap-2 bg-fluency-pages-light dark:bg-fluency-pages-dark hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all cursor-pointer shadow-md rounded-lg p-6 w-54 h-max">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-semibold">{course.Name}</h2>
                                 <IoIosArrowBack />

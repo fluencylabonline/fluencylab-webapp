@@ -12,7 +12,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { PiStudentFill } from 'react-icons/pi';
 import { LuGamepad2 } from 'react-icons/lu';
-import { IoChatbubblesOutline } from 'react-icons/io5';
+import { RiCalendarScheduleLine } from 'react-icons/ri';
 
 interface ISidebarItem {
   name: string;
@@ -63,7 +63,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const menuItems: ISidebarItem[] = [
     {
-      name: "Alunos",
+      name: "Caderno",
       path: "/student-dashboard/caderno",
       icon: <PiStudentFill className="h-6 w-6"/>,
     },
@@ -75,7 +75,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "Remarcar Aula",
       path: "/student-dashboard/remarcacao",
-      icon: <IoChatbubblesOutline className="h-6 w-6"/>,
+      icon: <RiCalendarScheduleLine className="h-6 w-6"/>,
     },
   ];
   

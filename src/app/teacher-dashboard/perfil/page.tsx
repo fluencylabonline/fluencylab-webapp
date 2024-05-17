@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 //Firebase
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -72,6 +72,31 @@ function Perfil() {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [link, setLink] = useState('');
+    const [calendarLink, setCalendarLink] = useState('');
+
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+          if (session && session.user && session.user.id) {
+              try {
+                  const profile = doc(db, 'users', session.user.id);
+                  const docSnap = await getDoc(profile);
+                  if (docSnap.exists()) {
+                      setName(docSnap.data().name);
+                      setNumber(docSnap.data().number);
+                      setLink(docSnap.data().link);
+                      setCalendarLink(docSnap.data().calendarLink);
+                  } else {
+                      console.log("No such document!");
+                  }
+              } catch (error) {
+                  console.error("Error fetching document: ", error);
+              }
+          }
+      };
+
+      fetchUserInfo()
+  }, [session]);
+
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const openEditModal = () => {
@@ -101,6 +126,7 @@ function Perfil() {
         name,
         number,
         link,
+        calendarLink,
       };
 
       const userDocRef = doc(db, 'users', id); // Reference to the user document in Firestore
@@ -110,10 +136,6 @@ function Perfil() {
               position: 'top-center',
               duration: 2000,
             });
-          toast.loading('Leva um tempo até aparecer...', {
-            position: 'top-center',
-            duration: 4000,
-          });
           closeEditModal();
           setIsEditModalOpenTwo(false);
         } catch (error) {
@@ -124,7 +146,6 @@ function Perfil() {
         }
   };
   
-
   const [resetPassword, setResetPassword] = useState(false);
     const openResetPassword = () => {
       setResetPassword(true);
@@ -135,7 +156,6 @@ function Perfil() {
     };
 
     const [email, setEmail] = useState('');
-
     const handleResetPassword = () => {
       // Ensure email is not empty
       if (!email) {
@@ -187,9 +207,9 @@ function Perfil() {
          
                 <div className='p-3 rounded-lg flex flex-col lg:items-start md:items-start items-center gap-1'>
                   <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Informações Pessoais</h1>
-                  <p><strong>Nome:</strong> {session?.user.name}</p>
+                  <p><strong>Nome:</strong> {name}</p>
                   <p className='flex flex-wrap gap-1 justify-start'><strong>Email pessoal:</strong> {session?.user.email}</p>
-                  <p><strong>Número:</strong> {session?.user.numero}</p>
+                  <p><strong>Número:</strong> {number}</p>
 
                   <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-2 justify-center">
                         <FluencyButton variant='danger' onClick={openResetPassword}>Redefinir senha</FluencyButton>  
@@ -202,11 +222,11 @@ function Perfil() {
             <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch w-full gap-4 lg:mt-0 mt-2'>
               <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
                 <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
-                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {session?.user.link}</p>
+                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
 
                 <div className="mt-4 text-center flex flex-col justify-center">
-                    <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
+                  <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
                 </div>
               </div>
             </div>   
@@ -244,7 +264,7 @@ function Perfil() {
                   <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Contrato" title="Contrato">
+                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Contrato" title="Contrato">
                   <p className='my-2'>Contrato</p>
                     <ul className='ml-2 list-disc'>
                         <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
@@ -277,8 +297,8 @@ function Perfil() {
                                 Atualizar Perfil
                             </h3>
                             <div className="mt-2 flex flex-col gap-3 p-4">                    
-                              <FluencyInput type="text" defaultValue={session?.user.name} placeholder="Nome" value={name} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)} variant='solid' />
-                              <FluencyInput type="text" defaultValue={session?.user.numero} placeholder="Número" value={number} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNumber(e.target.value)} variant='solid' />
+                              <FluencyInput type="text" placeholder="Nome" value={name} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)} variant='solid' />
+                              <FluencyInput type="text" placeholder="Número" value={number} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNumber(e.target.value)} variant='solid' />
 
                             <div className="flex w-full">                            
                               <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
@@ -307,7 +327,8 @@ function Perfil() {
                                   Atualizar Informações                            
                               </h3>
                               <div className="mt-2 flex flex-col items-center gap-3 p-4">
-                                <FluencyInput defaultValue={session?.user.link} type="text" placeholder="Link" value={link} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLink(e.target.value)} variant='solid' />
+                                <FluencyInput type="text" placeholder="Link" value={link} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLink(e.target.value)} variant='solid' />
+                                <FluencyInput type="text" placeholder="Calendario Link" value={calendarLink} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setCalendarLink(e.target.value)} variant='solid' />
                                 <div className="flex justify-center">
                                   <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
                                   <FluencyButton variant='gray' onClick={closeEditModalTwo}>Cancelar</FluencyButton>

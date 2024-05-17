@@ -15,6 +15,8 @@ declare module "next-auth" {
             link: string,
             numero:string,
             idioma: string,
+            professorId: string,
+            calendarLink: string,
         } & DefaultSession
     }
 
@@ -28,6 +30,8 @@ declare module "next-auth" {
         link: string,
         numero:string,
         idioma: string,
+        professorId: string,
+        calendarLink: string,
     }
 }
 
@@ -42,5 +46,7 @@ declare module "next-auth/jwt" {
         link: string,
         numero:string,
         idioma: string,
+        professorId: string,
+        calendarLink: string,
     }
 }
