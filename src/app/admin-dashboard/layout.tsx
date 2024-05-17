@@ -10,7 +10,7 @@ import Header from '@/app/ui/Dashboard/header';
 import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 
 // Icons
-import { PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
+import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill, PiUserCirclePlusFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
 
@@ -71,7 +71,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Professores",
       path: "/admin-dashboard/professores",
       icon: <PiChalkboardTeacherFill className="h-6 w-6"/>,
-      },
+    },
+    {
+      name: "Adicionar Usuário",
+      path: "/admin-dashboard/criarusuario",
+      icon: <PiUserCirclePlusFill className="h-6 w-6"/>,
+    },
     {
       name: "Suporte",
       path: "/admin-dashboard/suporte",
@@ -81,6 +86,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Perguntas",
       path: "/admin-dashboard/perguntas",
       icon: <TbMessageQuestion className="h-6 w-6"/>,
+    },
+    {
+      name: "Emitir Certificado",
+      path: "/admin-dashboard/certificados",
+      icon: <PiCertificateBold  className="h-6 w-6"/>,
     },
   ];
 

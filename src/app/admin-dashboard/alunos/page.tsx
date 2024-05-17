@@ -7,8 +7,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Tooltip,
-  Skeleton,
+  Tooltip
 } from '@nextui-org/react';
 import Image from 'next/image';
 import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot  } from 'firebase/firestore';
@@ -23,6 +22,7 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
+import FluencySearch from '@/app/ui/Components/Search/search';
 
 interface Aluno {
   id: string;
@@ -135,7 +135,7 @@ export default function Students() {
     try {
       // Create references to the user's document in both collections
       const userRef = doc(db, 'users', userId);
-      const pastUserRef = doc(db, 'past-users', userId);
+      const pastUserRef = doc(db, 'past-students', userId);
   
       // Get the user's data from the 'users' collection
       const userSnapshot = await getDoc(userRef);
@@ -211,17 +211,43 @@ export default function Students() {
   //Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedAluno, setSelectedAluno] = useState<Aluno | null>(null);
+  const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(null);
+  const [selectedUserProfilePic, setSelectedUserProfilePic] = useState<string | null>(null);
+  const languages = ['Português', 'Inglês', 'Espanhol', 'Libras', 'Alemão'];
+  const [professors, setProfessors] = useState<Professor[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [selectedProfessor, setSelectedProfessor] = useState<Professor | null>(null);
 
+  useEffect(() => {
+    const fetchProfessors = async () => {
+        try {
+            const q = query(collection(db, 'users'), where('role', '==', 'teacher'));
+            const querySnapshot = await getDocs(q);
+            const professorList: Professor[] = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                name: doc.data().name
+            }));
+            setProfessors(professorList);
+        } catch (error) {
+            console.error('Error fetching professors:', error);
+        }
+    };
+
+    fetchProfessors();
+    }, []);
+  
   const openEditModal = async (aluno: Aluno) => {
     setSelectedAluno(aluno);
     setIsEditModalOpen(true);
+    setSelectedLanguages(aluno.idioma ? [aluno.idioma] : []);
+    setSelectedProfessor(professors.find(prof => prof.name === aluno.professor) || null);
     try {
       const userRef = doc(db, 'users', aluno.id);
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
       if (userData) {
-        setSelectedUserEmail(userData.email); // Assuming the email field is named 'email'
-        setSelectedUserProfilePic(userData.profilePicture); // Assuming the profile picture URL field is named 'profilePicture'
+        setSelectedUserEmail(userData.email);
+        setSelectedUserProfilePic(userData.profilePicture);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -230,63 +256,34 @@ export default function Students() {
     }
   };
   
-  const handleMensalidadeChange = (value: number) => {
-    if (selectedAluno) {
-      setSelectedAluno({ ...selectedAluno, mensalidade: value });
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedAluno(null);
+    setSelectedLanguages([]);
+    setSelectedProfessor(null);
+  };
+  
+  const saveChanges = async () => {
+    if (!selectedAluno) return;
+  
+    try {
+      const userRef = doc(db, 'users', selectedAluno.id);
+      const updatedData = {
+        mensalidade: selectedAluno.mensalidade,
+        idioma: selectedLanguages.length > 0 ? selectedLanguages[0] : null,
+        professor: selectedProfessor ? selectedProfessor.name : selectedAluno.professor,
+      };
+  
+      await setDoc(userRef, updatedData, { merge: true });
+      toast.success('Alterações salvas!', { position: 'top-center' });
+      closeEditModal();
+    } catch (error) {
+      console.error('Error saving changes:', error);
+      toast.error('Erro ao salvar alterações!', { position: 'top-center' });
     }
   };
-
-  const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(null);
-  const [selectedUserProfilePic, setSelectedUserProfilePic] = useState<string | null>(null);
-
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
-
-  const languages = ['Português', 'Inglês', 'Espanhol', 'Libras', 'Alemão'];
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguage(e.target.value);
-  };
-
-  const [professors, setProfessors] = useState<Professor[]>([]);
-
-    useEffect(() => {
-        const fetchProfessors = async () => {
-            try {
-                const q = query(collection(db, 'users'), where('role', '==', 'teacher'));
-                const querySnapshot = await getDocs(q);
-                const professorList: Professor[] = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    name: doc.data().name
-                }));
-                setProfessors(professorList);
-            } catch (error) {
-                console.error('Error fetching professors:', error);
-            }
-        };
-
-        fetchProfessors();
-    }, []);
-
-    const [selectedProfessor, setSelectedProfessor] = useState<Professor | null>(null); // Store the selected professor
-    const handleProfessorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const professorId = e.target.value;
-      const selectedProf = professors.find((professor) => professor.id === professorId);
-      setSelectedProfessor(selectedProf || null);
-    };
-
-
-    const saveChanges = async (updatedAluno: Aluno) => {
-      try {
-        const { id, ...alunoData } = updatedAluno;
-        const userRef = doc(db, 'users', id);
-        const dataToSave = { ...alunoData, idioma: selectedLanguage };
-        await setDoc(userRef, dataToSave, { merge: true });
-        toast.success('Alterações salvas com sucesso!', { position: 'top-center' });
-        setIsEditModalOpen(false);
-      } catch (error) {
-        console.error('Error saving changes:', error);
-        toast.error('Erro ao salvar alterações!', { position: 'top-center' });
-      }
-    };
+  
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   return (
     <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
@@ -295,6 +292,13 @@ export default function Students() {
           <h3 className='font-semibold text-xl'>
             Alunos Fluency Lab
           </h3>
+
+          <FluencySearch 
+          value={searchQuery}
+          placeholder='Procurar por nome'
+          onChange={(e) => setSearchQuery(e.target.value)}
+          />
+
         <select
           className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark px-5 py-2 rounded-md'
           value={selectedMonth}
@@ -331,7 +335,10 @@ export default function Students() {
           <TableColumn>Ações</TableColumn>
         </TableHeader>
         <TableBody>
-          {alunos.map((aluno) => (
+          {alunos.filter(aluno => {
+            const searchText = `${aluno.name.toLowerCase()} ${aluno.professor.toLowerCase()}`;
+            return searchText.includes(searchQuery.toLowerCase());
+            }).map((aluno) => (
             <TableRow key={aluno.id}>
               <TableCell>
                   <span className="cursor-pointer" onClick={() => openEditModal(aluno)}>{aluno.name}</span>
@@ -389,6 +396,7 @@ export default function Students() {
               </div>
             </div>)}
 
+
             {isEditModalOpen && selectedAluno && (
               <div className="fixed z-50 inset-0 overflow-y-auto">
                 <div className="flex items-center justify-center min-h-screen">
@@ -428,39 +436,46 @@ export default function Students() {
 
                             <div>
                               <p className='text-xs font-semibold'>Mensalidade</p>
-                              <FluencyInput 
-                                type="number"
-                                id="mensalidade"
-                                value={selectedAluno.mensalidade}
-                                onChange={(e) => handleMensalidadeChange(parseFloat(e.target.value))}/>
+                                <FluencyInput
+                                  type="number"
+                                  value={selectedAluno.mensalidade}
+                                  onChange={(e) => setSelectedAluno({ ...selectedAluno, mensalidade: Number(e.target.value) })}
+                                />
                             </div>
 
                             <div>
                               <p className='text-xs font-semibold'>Idioma</p>
-                              <select value={selectedLanguage} onChange={handleLanguageChange} className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'>
-                                <option value="">Selecionar Idioma</option>
-                                {languages.map((language) => (
-                                  <option key={language} value={language}>
-                                    {language}
-                                  </option>
-                                ))}
-                              </select>
+                                <select
+                                  value={selectedLanguages}
+                                  onChange={(e) => setSelectedLanguages(Array.from(e.target.selectedOptions, option => option.value))}
+                                  className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
+                                >
+                                  {languages.map((lang) => (
+                                    <option key={lang} value={lang}>{lang}</option>
+                                  ))}
+                                </select>
                             </div>
                             
                             <div>
-                              <p className='text-xs font-semibold'>Professor</p>
-                              <select value={selectedProfessor?.id || ''} onChange={handleProfessorChange} className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-yellow-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'>
-                                <option value="">Selecionar Professor</option>
-                                  {professors.map((professor) => (
-                                    <option key={professor.id} value={professor.id}>
-                                      {professor.name}
-                                </option>))}
-                              </select>
+                                <p className='text-xs font-semibold'>Professor</p>
+                                <select
+                                  value={selectedProfessor ? selectedProfessor.id : ''}
+                                  onChange={(e) => {
+                                    const selectedProf = professors.find(prof => prof.id === e.target.value) || null;
+                                    setSelectedProfessor(selectedProf);
+                                  }}
+                                  className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-yellow-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
+                                >
+                                  <option value="">Selecionar Professor</option>
+                                  {professors.map((prof) => (
+                                    <option key={prof.id} value={prof.id}>{prof.name}</option>
+                                  ))}
+                                </select>
                             </div>
 
                             <div className="flex flex-row justify-center">                            
-                              <FluencyButton variant='confirm' onClick={() => saveChanges(selectedAluno)}>Salvar</FluencyButton>
-                              <FluencyButton variant='gray' onClick={() => setIsEditModalOpen(false)}>Cancelar</FluencyButton>
+                              <FluencyButton variant='confirm' onClick={saveChanges}>Salvar</FluencyButton>
+                              <FluencyButton variant='gray' onClick={closeEditModal}>Cancelar</FluencyButton>
                             </div>
                             </div>
                         </div>
@@ -468,7 +483,7 @@ export default function Students() {
                 </div>
             </div>)}
 
-    </div>
+      </div>
     <Toaster />
   </div>
   );
