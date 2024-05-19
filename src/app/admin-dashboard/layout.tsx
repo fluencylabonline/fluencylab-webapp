@@ -73,11 +73,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <PiChalkboardTeacherFill className="h-6 w-6"/>,
     },
     {
-      name: "Adicionar Usuário",
-      path: "/admin-dashboard/criarusuario",
-      icon: <PiUserCirclePlusFill className="h-6 w-6"/>,
-    },
-    {
       name: "Suporte",
       path: "/admin-dashboard/suporte",
       icon: <MdOutlineCollectionsBookmark className="h-6 w-6"/>,

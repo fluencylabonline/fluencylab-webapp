@@ -66,8 +66,8 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                                 <span className="absolute top-0 right-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
                             </div>
                         ) : (
-                            <div className="bg-gray-200 dark:bg-fluency-gray-800 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity duration-300 ease-in-out mx-auto">
-                                <div><FaUserCircle className='icon w-14 h-14 rounded-full'/></div>
+                            <div className="bg-gray-400 dark:bg-fluency-gray-800 w-14 h-14 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity duration-300 ease-in-out mx-auto">
+                                <div><FaUserCircle className='text-fluency-bg-light icon w-14 h-14 rounded-full'/></div>
                             </div>
                         )}
                     </div>

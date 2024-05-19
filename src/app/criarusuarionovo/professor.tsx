@@ -1,9 +1,16 @@
 'use client';
 import { useState } from "react";
+
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/app/firebase";
 import { FaKey, FaLink, FaRegCircleUser, FaUser } from "react-icons/fa6";
-import { TbUserEdit } from "react-icons/tb";
+import { TbLogin2, TbUserEdit } from "react-icons/tb";
 
 import { toast, Toaster } from 'react-hot-toast';
+import FluencyButton from "../ui/Components/Button/button";
+import { LuUserPlus2 } from "react-icons/lu";
+import Link from "next/link";
 
 export default function CreateProfessor(){
     const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +21,58 @@ export default function CreateProfessor(){
     const [userName, setUserName] = useState('');
     const [link, setLink] = useState('');
 
-      
+    const handleProfessorCreating = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Create a new student document
+        await setDoc(doc(db, 'users', user.uid), {
+            name: name,
+            userName: userName,
+            email: email,
+            role: "teacher",
+            link: link,
+            
+        });
+
+        // Reset form fields after successful sign-up
+        setName('');
+        setUserName('');
+        setEmail('');
+        setLink('');
+
+        // Sign out the user
+        await auth.signOut();
+
+        setIsLoading(false);
+        
+        toast.success('Professor criado com sucesso!', {
+            position: "top-center",
+        });
+    
+        } catch (error: any) { // Explicitly define the type of error
+            setIsLoading(false);
+    
+            // Display an error message based on the error code
+            if (error.code === 'auth/email-already-in-use') {
+                toast.error('Este email já está sendo usado.', {
+                    position: "top-center",
+                });
+            } else if (error.code === 'auth/weak-password') {
+                toast.error('Senha fraca, use uma mais forte.', {
+                    position: "top-center",
+                });
+            } else {
+                toast.error('Um erro aconteceu, por favor tente novamente', {
+                    position: "top-center",
+                });
+            }
+        }
+    };
       
     return(
         <>
@@ -110,15 +168,23 @@ export default function CreateProfessor(){
                 </div>
             </div>
 
-            <div className="w-full px-3 mb-4 mt-4">
-                <button
-                        className="block w-full max-w-xs mx-auto px-3 py-3 font-semibold rounded-lg border border-fluency-blue-500 hover:border-fluency-blue-600 bg-fluency-blue-500 text-fluency-text-dark hover:bg-fluency-blue-600 focus:bg-fluency-blue-700 transition-all ease-in-out duration-100  dark:bg-transparent dark:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-500 hover:dark:border-fluency-blue-500"
-                        disabled={isLoading}
+            <div className="w-full px-3 mb-4 mt-4 flex flex-row gap-2 justify-center">
+                <FluencyButton
+                    disabled={isLoading}
+                    onClick={handleProfessorCreating}
                 >
-                    {isLoading ? 'Cadastrando...' : 'Criar Usuário'}
-                </button>
+                    {isLoading ? 'Cadastrando...' : 'Criar Professor'}
+                    <LuUserPlus2 className="w-6 h-auto" />
+                </FluencyButton>
+
+                <Link href={"/signin"}>
+                    <FluencyButton variant="warning"> 
+                        Entrar <TbLogin2 className="w-6 h-auto" />
+                    </FluencyButton>
+                </Link>
             </div>
-            <Toaster />
+
+          <Toaster />
         </>
     );
 }
