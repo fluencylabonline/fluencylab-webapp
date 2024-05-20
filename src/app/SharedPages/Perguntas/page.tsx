@@ -13,7 +13,6 @@ import { toast, Toaster } from 'react-hot-toast';
 import { FaUserCircle } from 'react-icons/fa';
 import { FaReplyAll } from "react-icons/fa";
 import { TbLocationQuestion } from "react-icons/tb";
-import { AiTwotoneBell } from "react-icons/ai";
 import { IoClose, IoNotificationsCircle } from "react-icons/io5";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { MdOutlineDeleteSweep } from 'react-icons/md';
@@ -155,8 +154,6 @@ export default function Forum() {
     
         return () => unsubscribe();
     }, []);
-    
-
 
     const [questions, setQuestions] = useState<Question[]>([]);
     useEffect(() => {
@@ -171,7 +168,7 @@ export default function Forum() {
                     
                     // Fetch answers for the question
                     const answersQuerySnapshot = await getDocs(collection(db, `Questions/${doc.id}/Answers`));
-                    const numAnswers = answersQuerySnapshot.docs.length; // Count the number of answers
+                    const numAnswers = answersQuerySnapshot.docs.length;
                     
                     return {
                         id: doc.id,
@@ -197,9 +194,6 @@ export default function Forum() {
         fetchQuestions();
     }, []);
 
-
-
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => {
         setIsModalOpen(true);
@@ -223,7 +217,6 @@ export default function Forum() {
         setSelectedQuestion(null);
         setIsQuestionOpen(false);
     };
-
 
     const [replyText, setReplyText] = useState('');
     const [openReply, setOpenReply] = useState(false);
@@ -263,7 +256,6 @@ export default function Forum() {
         }
     };
     
-    
     //SEE ANSWERS
     const [answers, setAnswers] = useState<Reply[]>([]);
     useEffect(() => {
@@ -274,9 +266,7 @@ export default function Forum() {
                     setAnswers(loadedAnswers);
                 });
                 return () => unsubscribeAnswers();
-            }
-        };
-
+            }};
         fetchAnswers();
     }, [selectedQuestion]);
 
@@ -310,7 +300,7 @@ export default function Forum() {
             });
     
             setNewQuestions(newQuestionsData);
-            setBadgeCount(unreadCount); // Set badge count to the number of unread questions
+            setBadgeCount(unreadCount);
         });
     
         return () => unsubscribe();

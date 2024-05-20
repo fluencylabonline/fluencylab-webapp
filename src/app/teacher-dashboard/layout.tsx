@@ -71,7 +71,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
     {
       name: "Suporte",
-      path: "/teacher-dashboard/material",
+      path: "/teacher-dashboard/suporte",
       icon: <MdOutlineCollectionsBookmark className="h-6 w-6"/>,
     },
     {
@@ -95,9 +95,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [showAnimation, setShowAnimation] = useState(true);
   useEffect(() => {
     if (!session || session.user.role !== "teacher") {
-      setShowAnimation(true);
-
-      const timer = setTimeout(() => {
+        setShowAnimation(true);
+        const timer = setTimeout(() => {
         signOut({ callbackUrl: '/' })
       }, 5000); // 5000 milliseconds = 5 seconds
 

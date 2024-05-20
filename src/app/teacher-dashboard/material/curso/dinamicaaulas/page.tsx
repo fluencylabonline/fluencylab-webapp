@@ -113,6 +113,12 @@ const DinamicaAulas = () => {
                             <FluencyButton onClick={handleNextStep}>
                                 Próxima <FaArrowRight className="w-4 h-auto ml-2" />
                             </FluencyButton>
+                            )}{currentStep === totalSteps && (
+                            <Link href={'nivelamento'}>
+                                <FluencyButton>
+                                    Próxima lição <FaArrowRight className="w-4 h-auto ml-2" />
+                                </FluencyButton>
+                            </Link>
                             )}
                         </div>
                     </div>

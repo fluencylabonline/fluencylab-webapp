@@ -166,7 +166,7 @@ export default function SignIn(){
                   </button>
 
                   <Link href="/forgot-password">
-                    <p className="cursor-pointer font-bold text-fluency-text-light dark:text-fluency-text-dark hover:dark:text-gray-50 hover:text-gray-950 ease-in-out duration-300">
+                    <p className="cursor-pointer font-bold text-fluency-text-light dark:text-fluency-text-dark hover:dark:text-fluency-blue-500 hover:text-gray-950 ease-in-out duration-300">
                       Esqueceu a senha?
                     </p>
                   </Link>

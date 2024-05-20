@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import FluencyButton from "./ui/Components/Button/button";
+import FluencyButton from "../ui/Components/Button/button";
 
 
 export default function Custom404(){

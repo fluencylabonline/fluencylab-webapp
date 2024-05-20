@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 //Firebase
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -23,6 +23,7 @@ import { toast, Toaster } from 'react-hot-toast';
 //Icons
 import { FaUserCircle } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
+import { Tooltip } from '@nextui-org/react';
 
 function Perfil() {
   const handleLogout = async () => {
@@ -52,6 +53,27 @@ function Perfil() {
 
 
     const { data: session } = useSession();
+
+    useEffect(() => {
+      if (session) {
+        const updateUserStatus = async () => {
+          const { user } = session;
+          const userDocRef = doc(db, 'users', user.id);
+  
+          try {
+            // Update the status field to 'online'
+            await updateDoc(userDocRef, {
+              status: 'online'
+            });
+            console.log('User status updated to online');
+          } catch (error) {
+            console.error('Error updating user status:', error);
+          }
+        };
+  
+        updateUserStatus();
+      }
+    }, [session]);
 
     const [profilePictureURL, setProfilePictureURL] = useState<string | null>(null);
     useEffect(() => {
@@ -227,7 +249,7 @@ function Perfil() {
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
                     <div>Link pendente</div>
                 ) : (
-                    <div>{calendarLink}</div>
+                    <div><Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink} >Link registrado</Tooltip></div>
                 )}</p>
 
                 <div className="mt-4 text-center flex flex-col justify-center">

@@ -56,7 +56,7 @@ function OverdueClassesModal({ overdueClasses, onClose }: { overdueClasses: Clas
                 <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8">
                     <button onClick={onClose} className="absolute top-0 left-0 mt-2 ml-2 ">
                         <span className="sr-only">Fechar</span>
-                        <IoClose className="w-10 h-10 text-fluency-text-light hover:text-fluency-red-600 ease-in-out duration-300" />
+                        <IoClose className="w-10 h-10 text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-red-600 ease-in-out duration-300" />
                     </button>
                     <h3 className="text-xl font-bold text-center leading-6 mb-4 text-fluency-red-600">
                         Aulas em Atraso
@@ -412,15 +412,14 @@ function Alunos(){
             openModal(); // Open modal when classes are retrieved
         }
     };
-    
-    
-      
+
     return(
         <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
                 {isModalOpen && <OverdueClassesModal overdueClasses={overdueClasses} onClose={closeModal} />}   
-                <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
 
+                <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
                 <div className='flex flex-col gap-3 lg:items-start md:items-start items-center'>
+                    {filteredStudents.length === 0 && <div className='font-bold p-1 text-xl'>Sem alunos para mostrar ainda...</div>}
                     {filteredStudents.map((student) => (
                         <div className="bg-fluency-blue-200 dark:bg-fluency-pages-dark lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
                             <div className='bg-fluency-blue-100 dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-start justify-between rounded-lg gap-2'>

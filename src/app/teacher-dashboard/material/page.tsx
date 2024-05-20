@@ -4,7 +4,7 @@ import './material.css';
 
 import Link from "next/link";
 
-export default function Material(){
+export default function Suporte(){
     return(
     <div className="lg:flex lg:flex-row md:flex md:flex-grid sm:flex sm:flex-grid justify-center mt-2 gap-2 p-4">
 

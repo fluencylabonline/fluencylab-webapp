@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
 import Image from "next/image"
 import { signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 interface ISidebarItem {
   name: string;
@@ -21,11 +22,14 @@ type SidebarProps = {
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
 import { BsFillDoorOpenFill } from 'react-icons/bs';
+import { db } from '@/app/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 
 export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: SidebarProps) {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState('');
-  
+  const { data: session } = useSession();
+  const userId = session?.user.id;
   const handleItemClick = (path: string) => {
     router.push(path);
     setSelectedItem(path);
@@ -35,8 +39,29 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
     router.push('perfil');
   };
 
-  function handleLogout() {
-    signOut({ callbackUrl: '/signin' })
+  async function handleLogout() {
+    // Sign out the user
+    await signOut({ callbackUrl: '/signin' });
+
+    // Update user status to offline in Firestore
+    if (session) {
+      const updateUserStatus = async () => {
+        const { user } = session;
+        const userDocRef = doc(db, 'users', user.id);
+
+        try {
+          // Update the status field to 'online'
+          await updateDoc(userDocRef, {
+            status: 'offline'
+          });
+          console.log('User status updated to offline');
+        } catch (error) {
+          console.error('Error updating user status:', error);
+        }
+      };
+
+      updateUserStatus();
+    }
   }
 
   return (

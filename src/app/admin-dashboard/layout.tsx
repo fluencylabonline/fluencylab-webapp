@@ -10,7 +10,7 @@ import Header from '@/app/ui/Dashboard/header';
 import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 
 // Icons
-import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill, PiUserCirclePlusFill } from 'react-icons/pi';
+import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
 

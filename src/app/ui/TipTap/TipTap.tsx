@@ -28,11 +28,12 @@ import FontFamily from '@tiptap/extension-font-family'
 import {FontSize} from './font-size';
 
 import Toolbar from "./Toolbar";
-import { Popover, PopoverTrigger, PopoverContent, Button } from '@nextui-org/react';
+import { Popover, PopoverTrigger, PopoverContent, Button, Accordion } from '@nextui-org/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { VscWholeWord } from 'react-icons/vsc';
+import { PiNotebookBold } from 'react-icons/pi';
 
 type PopoversProps = {
   editor: Editor;
@@ -272,6 +273,37 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                   <div className="mt-2 flex flex-col gap-2 w-full">
                   <FluencyInput className="w-full" defaultValue={description} placeholder="Descrição da aula" onChange={handleDescriptionChange} />
                   <FluencyButton variant="confirm" onClick={handleUpdateDescription} className="w-full">Salvar</FluencyButton>
+                  </div>
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <div className="fixed top-44 right-2">
+          <Popover placement="bottom" showArrow offset={10}>
+            <PopoverTrigger>
+                <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+                  <PiNotebookBold className="w-6 h-auto"/>
+                </Button>      
+            </PopoverTrigger>
+            <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-pages-dark border border-fluency-gray-500 p-3 rounded-md">
+              {(titleProps) => (
+                <div className="px-1 py-2 w-full">
+                  <div>
+                    <ul>
+                      <li>Apostila1</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <ul>
+                      <li>Apostila2</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <ul>
+                      <li>Apostila3</li>
+                    </ul>
                   </div>
                 </div>
               )}

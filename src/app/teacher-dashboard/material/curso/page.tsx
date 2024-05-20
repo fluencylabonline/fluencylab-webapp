@@ -25,17 +25,16 @@ export default function CursoParaProfessores(){
     return(
         <div className="mt-4 h-[90vh] overflow-hidden overflow-y-scroll p-4 rounded-md flex flex-col gap-4 items-center">
             <p className='text-2xl font-bold'>Bem-vindo, {session?.user.name}</p>
-
             <div className='mt-3 flex flex-row gap-2'>
                {CourseInfo.map((course, index) => (
-                         <div key={index} onClick={() => handleCardClick(course.page)} className="flex flex-col justify-between gap-2 bg-fluency-pages-light dark:bg-fluency-pages-dark hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all cursor-pointer shadow-md rounded-lg p-6 w-54 h-max">
+                         <div key={index} onClick={() => handleCardClick(course.page)} className="flex flex-col justify-between gap-2 bg-fluency-pages-light dark:bg-fluency-pages-dark hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all cursor-pointer shadow-md rounded-lg p-6 w-full h-54">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-semibold">{course.Name}</h2>
                                 <IoIosArrowBack />
                             </div>
                             <div>
                                 <p className="p-1 my-1">{course.Description}</p>
-                                <div className="flex justify-between mt-2">
+                                <div className="flex justify-between mt-4">
                                     <p className='flex flex-row gap-1 items-center'><IoMdTime /> {course.Duration}</p>
                                     <button>{finished ? 'Concluído' : 'Não concluído'}</button>
                                 </div>
@@ -50,36 +49,3 @@ export default function CursoParaProfessores(){
         </div>
     );
 }
-
-
-
-{/* <div>
-Name, and short description duration, done or not, how much done
-open them in modals to make it easier and faster
-</div>
-
-<div>
- Primeiros Passos
- Falar da plataforma, onde encontrar material e material de apoio, inclusive aulas gravadas
-</div>
-
-<div>
- Nossa dinamica de aulas
- O que se espera do professor relacionamento com Aluno
- Fazer amizade, ser simpatico, 
- Marcar aulas feitas
- passar atividades para todo dia da semana usando a apostila nova
-</div>
-
-<div>
- Nivelamento
- PDF's para nivelamento, testes, aplicativos como English Score
- exemplo de nivelamento e considerações
-</div>
-
-<div>
- Ferramentas e métodos
- OBS, Google Meet link e salvar no desktop, Fonética, Anki, TipTap, Tarefas, Material para Aluno,
- remarcação gerar link
- Shadowing, falar a palavra de trás para frente e dividir ela, pedir que o aluno estude todo dia 15min
-</div> */}
