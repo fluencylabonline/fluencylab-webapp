@@ -12,6 +12,7 @@ import FlagImage from '../../../../public/images/games/flashcards.svg';
 import TicTacToeImage from '../../../../public/images/games/tictactoe.svg';
 import RollAndTellImage from '../../../../public/images/games/rollandtell.svg';
 import WhatAmIImage from '../../../../public/images/games/whatami.svg';
+import QuizzImage from '../../../../public/images/games/quizz.svg';
 
 //Icons
 import { CiCircleQuestion } from "react-icons/ci";
@@ -56,6 +57,13 @@ export default function GamesPro(){
                 <Image alt="Wordle" className="w-36 h-auto mt-4" src={RollAndTellImage} />
                 <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Roll and Tell</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
             </div>
+
+            <Link href={"pratica/quizz"}>
+            <div className="w-52 h-auto rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+                <Image alt="Wordle" className="w-36 h-auto mt-2"src={QuizzImage} />
+                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Quizz</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
+            </div>
+            </Link>
             
         </div>
     )

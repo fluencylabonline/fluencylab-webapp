@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { Tooltip } from '@nextui-org/react';
+import FluencyInput from '@/app/ui/Components/Input/input';
 
 interface Aluno {
     overdueClassesCount: number;
@@ -87,7 +88,32 @@ function Alunos(){
     const [currentMonth, setCurrentMonth] = useState<string>(months[new Date().getMonth()]);
     const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
 
+    const [searchQuery, setSearchQuery] = useState('');
     const [filteredStudents, setFilteredStudents] = useState<Aluno[]>([]);
+
+    // Function to filter students based on search query
+    const filterStudents = useCallback(() => {
+        if (!searchQuery) {
+            setFilteredStudents(students); // Show all students if search query is empty
+            return;
+        }
+
+        const filtered = students.filter(student =>
+            student.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredStudents(filtered);
+    }, [searchQuery, students]);
+
+    // Update filtered students when search query changes
+    useEffect(() => {
+        filterStudents();
+    }, [filterStudents]);
+
+    // Event handler to update search query
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+    };
+
     useEffect(() => {
         const filteredStudentsData = students.map((student) => {
             const classDatesWithStatus = student.classDatesWithStatus.filter((classDate) => {
@@ -416,7 +442,13 @@ function Alunos(){
     return(
         <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
                 {isModalOpen && <OverdueClassesModal overdueClasses={overdueClasses} onClose={closeModal} />}   
-
+                <FluencyInput
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Buscar aluno..."
+                    className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100"
+                />
                 <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
                 <div className='flex flex-col gap-3 lg:items-start md:items-start items-center'>
                     {filteredStudents.length === 0 && <div className='font-bold p-1 text-xl'>Sem alunos para mostrar ainda...</div>}

@@ -58,11 +58,11 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                     )}
                 </div>
             ) : (
-                <div className='bg-fluency-blue-200 hover:bg-fluency-blue-300 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-[13.5rem] rounded-xl p-3 flex flex-row items-center gap-3'>
+                <div className='bg-fluency-blue-200 hover:bg-fluency-blue-300 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-[13.5rem] rounded-xl p-3 flex flex-row items-center gap-2'>
                     <div className='flex flex-col items-center'>
                         {profilePictureURL ? (
                             <div className="cursor-pointer relative inline-block">
-                                <img src={profilePictureURL} className="object-cover w-14 h-14 rounded-full" alt="Profile" />
+                                <img src={profilePictureURL} className="object-cover min-w-14 h-14 rounded-full" alt="Profile" />
                                 <span className="absolute top-0 right-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
                             </div>
                         ) : (
@@ -72,7 +72,7 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                         )}
                     </div>
                     <div className='flex flex-col text-left'>
-                        <p className='text-sm'>{name}</p>
+                        <p className='text-sm text-nowrap'>{name}</p>
                         <p className='text-[0.6rem] font-normal'>{email}</p>
                         <p className='text-xs'>{role?.charAt(0).toUpperCase() + role?.slice(1)}</p>
                     </div>

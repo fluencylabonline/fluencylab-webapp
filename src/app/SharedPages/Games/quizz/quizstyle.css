@@ -1,0 +1,5 @@
+.timer-bar {
+    height: 10px;
+    background-color: blue; /* Change color as needed */
+    transition: width 1s linear; /* Smooth animation */
+}

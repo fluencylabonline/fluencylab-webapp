@@ -291,7 +291,7 @@ function Perfil() {
                   <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
                 </AccordionItem>
 
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Contrato" title="Contrato">
+                <AccordionItem className='font-semibold hidden' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Contrato" title="Contrato">
                   <p className='my-2'>Contrato</p>
                     <ul className='ml-2 list-disc'>
                         <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>

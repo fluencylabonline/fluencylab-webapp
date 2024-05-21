@@ -67,7 +67,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
   return (
     <aside className={`fixed inset-y-0 left-0 bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? 'w-16' : ''}`}>
         <div className="flex flex-col items-center space-y-10 w-full">
-            <div onClick={toggleSidebar} className={`flex justify-center items-center p-4 text-center border-b ${isCollapsed ? '' : 'gap-3 px-6'}`}>
+            <div onClick={toggleSidebar} className={`flex justify-center items-center p-4 text-center ${isCollapsed ? '' : 'gap-3 px-6'}`}>
                 {isCollapsed ? (
                 ''
                 ):(

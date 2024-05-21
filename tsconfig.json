@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/pages/404.js", "src/app/teacher-dashboard/suporte/hooks/useFolder.js", "src/app/teacher-dashboard/suporte/AddFolderButton.js", "src/app/teacher-dashboard/material/material-apoio/firebase.js", "src/app/ui/Components/Plugins/pageThumbnailPlugin.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/pages/404.js", "src/app/teacher-dashboard/suporte/hooks/useFolder.js", "src/app/teacher-dashboard/suporte/AddFolderButton.js", "src/app/teacher-dashboard/material/material-apoio/firebase.js", "src/app/ui/Components/Plugins/pageThumbnailPlugin.tsx", "src/app/SharedPages/Games/quizz/page.js"],
   "exclude": ["node_modules"]
 }
