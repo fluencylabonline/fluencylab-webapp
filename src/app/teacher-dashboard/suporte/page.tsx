@@ -23,7 +23,7 @@ export default function Suporte(){
                 </div>
                 <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="material/apostilas" className="text-fluency-blue-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Apostilas
+                        <a href="suporte/apostilas" className="text-fluency-blue-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Apostilas
                             &rarr;
                         </a>
                     </p>
@@ -83,7 +83,7 @@ export default function Suporte(){
                 </div>
                 <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="material/guidelines" className="text-fluency-green-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Guidelines
+                        <a href="suporte/guidelines" className="text-fluency-green-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Guidelines
                             &rarr;
                         </a>
                     </p>
@@ -106,7 +106,7 @@ export default function Suporte(){
                 </div>
                 <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="material/curso" className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Curso para Professores
+                        <a href="suporte/curso" className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Curso para Professores
                             &rarr;
                         </a>
                     </p>
