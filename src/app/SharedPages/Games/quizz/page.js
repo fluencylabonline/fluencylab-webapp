@@ -47,7 +47,6 @@ export default function Quiz() {
     const [feedbackColor, setFeedbackColor] = useState('');
     const [remainingTime, setRemainingTime] = useState(60); // Initial time in seconds (1 minute)
     const [score, setScore] = useState(0);
-    const scores = JSON.parse(localStorage.getItem("quizScores")) || {};
 
     const [createQuiz, setCreateQuizz] = useState(false);
     const [questions, setQuestions] = useState([]);
@@ -396,7 +395,6 @@ export default function Quiz() {
         // Update score if the answer is correct
         if (isCorrect) {
             setScore((prevScore) => prevScore + 1);
-            updateScoreInLocalStorage(selectedDeck.id, score + 1);
         }
     
         // Move to next question after 1 minute
@@ -424,14 +422,6 @@ export default function Quiz() {
         setUserAnswer(null);
         setFeedback('');
     };
-
-    const updateScoreInLocalStorage = (deckId, score) => {
-        if (typeof window !== 'undefined') {
-            const scores = JSON.parse(localStorage.getItem("quizScores")) || {};
-            scores[deckId] = score;
-            localStorage.setItem("quizScores", JSON.stringify(scores));
-        }
-    };
      
     function handleKeyPress(event) {
         if (event.key === "Enter") {
@@ -458,7 +448,7 @@ return (
             <div key={deck.id} className="px-4 w-full">
                 <div className="bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 rounded-md cursor-pointer flex flex-row items-center justify-between gap-2">
                     <p onClick={() => openPlayQuiz(deck)} className="cursor-pointer font-bold p-2 ml-2 flex flex-row gap-1 items-center"><TbCardsFilled className="w-6 h-auto" /> {deck.deckTitle}</p>                     
-                    <p className="text-center font-semibold">Pontuação: {scores[deck.id] || 0}</p>
+                    <p className="text-center font-semibold">Pontuação: {score[deck.id] || 0}</p>
                     {role === 'teacher' && (
                     <div className="flex flex-row items-center gap-2">
                         <Tooltip content="Editar deck" className="bg-fluency-blue-600 p-1 rounded-md font-medium text-sm text-white"><p><FiEdit onClick={() => openEditQuiz(deck)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
