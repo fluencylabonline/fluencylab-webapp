@@ -14,8 +14,10 @@ import { MdDeleteSweep } from 'react-icons/md';
 import { GiSchoolBag } from "react-icons/gi";
 import { TbCardsFilled } from "react-icons/tb";
 import { RxCardStackPlus } from "react-icons/rx";
-import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { MdOutlinePlaylistAdd, MdOutlineAddTask } from "react-icons/md";
 import { FiCheck } from "react-icons/fi";
+import { FaArrowRight } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 
 import { useRouter } from 'next/navigation';
 import { Tooltip } from "@nextui-org/react";
@@ -389,7 +391,7 @@ export default function Quiz() {
             (option) => option.option === selectedOption && option.isCorrect
         );
         setUserAnswer(selectedOption);
-        setFeedback(isCorrect ? "Correct!" : "Wrong!");
+        setFeedback(isCorrect ? "Correto!" : "Errado!");
         setFeedbackColor(isCorrect ? "green" : "red");
     
         // Update score if the answer is correct
@@ -421,6 +423,7 @@ export default function Quiz() {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setUserAnswer(null);
         setFeedback('');
+        setFeedbackColor("gray");
     };
      
     function handleKeyPress(event) {
@@ -431,7 +434,7 @@ export default function Quiz() {
 
 
 return (
-<div>
+<div id="firstletter">
 
     <div className="flex flex-row gap-8 items-center w-full p-3 px-5"> 
         <FluencyInput
@@ -442,7 +445,7 @@ return (
         />
         {role === 'teacher' && <FluencyButton className="w-full" onClick={openCreateQuiz}>Create Quizz <RxCardStackPlus className="ml-2 w-6 h-auto" /></FluencyButton>}
     </div>
-
+    
     <div className="flex flex-col items-start gap-2 w-full">
         {filteredDecks.map(deck => (
             <div key={deck.id} className="px-4 w-full">
@@ -452,8 +455,8 @@ return (
                     {role === 'teacher' && (
                     <div className="flex flex-row items-center gap-2">
                         <Tooltip content="Editar deck" className="bg-fluency-blue-600 p-1 rounded-md font-medium text-sm text-white"><p><FiEdit onClick={() => openEditQuiz(deck)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
-                        <Tooltip content="Deletar deck" className="bg-fluency-red-600 p-1 rounded-md font-medium text-sm text-white"><p><MdDeleteSweep onClick={() => handleDeleteDeck(deck.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
                         <Tooltip content="Adicionar como tarefa" className="bg-fluency-yellow-600 p-1 rounded-md font-medium text-sm text-white"><p><GiSchoolBag onClick={() => openStudentModal(deck.id)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
+                        {role === 'admin' &&  <Tooltip content="Deletar deck" className="bg-fluency-red-600 p-1 rounded-md font-medium text-sm text-white"><p><MdDeleteSweep onClick={() => handleDeleteDeck(deck.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>}
                     </div>
                     )}
                 </div>
@@ -467,17 +470,16 @@ return (
             <div className="fixed inset-0 transition-opacity">
                 <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full max-w-md p-5">
-            <div className="timer-bar" style={{ width: `${(remainingTime / 60) * 100}%` }}></div>
-                <div className="flex flex-col items-center justify-center">
-                    <FluencyCloseButton onClick={closePlayQuiz} />
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-max">
+            <div className="timer-bar fixed bg-fluency-green-600 top-0" style={{ width: `${(remainingTime / 60) * 100}%` }}></div>  
+                <div className="flex flex-col items-center justify-center p-10">
                     {currentQuestionIndex < questions.length ? (
                         <div>
-                            <h3 className="text-lg leading-6 font-medium mb-2">Question {currentQuestionIndex + 1}</h3>
-                            <p>{questions[currentQuestionIndex].questionTitle}</p>
-                            <ul>
+                            <h3 className="text-2xl leading-6 font-semibold mb-4">Pergunta {currentQuestionIndex + 1}</h3>
+                            <p className="text-lg font-semibold">{questions[currentQuestionIndex].questionTitle}</p>
+                            <ul className="flex flex-col gap-2 items-start ml-3">
                                 {questions[currentQuestionIndex].options.map((option, index) => (
-                                    <li key={index}>
+                                    <li className="flex flex-row gap-1" key={index}>
                                         <input
                                             type="radio"
                                             id={option.option}
@@ -490,14 +492,19 @@ return (
                                     </li>
                                 ))}
                             </ul>
-                            <p style={{ color: feedbackColor }}>{feedback}</p>
-                            <FluencyButton onClick={goToNextQuestion}>Next</FluencyButton>
+                            <p className="flex flex-col justify-center items-center p-2 m-2 mt-3 rounded-md font-bold text-white" style={{ backgroundColor: feedbackColor }}>{feedback}</p>
+                            <div className="flex flex-row gap-2 justify-center pt-4">
+                                <FluencyButton variant="warning" onClick={closePlayQuiz}>Fechar <IoClose className="w-6 h-auto" /></FluencyButton>
+                                <FluencyButton variant="confirm" onClick={goToNextQuestion}>Próxima <FaArrowRight className="w-6 h-auto" /></FluencyButton>
+                            </div>
                         </div>
                     ) : (
                         <div>
-                            <h3 className="text-lg leading-6 font-medium mb-2">Quiz Completed</h3>
-                            <p>Pontuação: {score}</p>
-                            <FluencyButton onClick={closePlayQuiz}>Close</FluencyButton>
+                            <h3 className="text-xl leading-6 font-bold mb-4">Quiz completo!</h3>
+                            <div className="flex flex-col gap-2 p-3 items-center">
+                                <p>Pontuação: {score}</p>
+                                <FluencyButton variant="warning" onClick={closePlayQuiz}>Fechar <IoClose className="w-6 h-auto" /></FluencyButton>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -663,13 +670,15 @@ return (
             </div>
             <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-full p-5">
                 <FluencyCloseButton onClick={closeStudentModal} />
-                <h2 className="text-lg font-semibold mb-4">Lista de Estudantes</h2>
-                {students.map(student => (
-                    <div key={student.id} className="flex items-center justify-between p-2 mb-2 bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-gray-900 hover:dark:bg-fluency-gray-900 rounded-md">
-                        <p>{student.name}</p>
-                        <FluencyButton onClick={() => handleAddDeckAsTask(student.id, selectedDeck)}>Adicionar como tarefa</FluencyButton>
-                    </div>
-                ))}
+                <div className="flex flex-col p-4 w-full">
+                    <h2 className="text-lg font-semibold mb-4">Lista dos seus Alunos</h2>
+                    {students.map(student => (
+                        <div key={student.id} className="flex items-center justify-between p-2 px-4 mb-2 bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-gray-900 hover:dark:bg-fluency-gray-900 rounded-md">
+                            <p>{student.name}</p>
+                            <FluencyButton variant="warning" onClick={() => handleAddDeckAsTask(student.id, selectedDeck)}>Adicionar como tarefa <MdOutlineAddTask className='w-auto h-6 ml-2' /> </FluencyButton>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     </div>)}

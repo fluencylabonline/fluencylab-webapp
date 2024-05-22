@@ -1,26 +1,17 @@
-.timer-bar {
-    height: 10px;
-    transition: width 1s linear;
-}
+/*<div className="checkbox-wrapper-11">
+    <input id="02-11" type="checkbox" name="r" value="2" checked={task.done} onChange={(e) => handleTaskStatusChange('Task', index, e.target.checked)}/>
+    <label htmlFor="02-11">{task.link ? (
+      <Link href={task.link}>
+        <span className='font-semibold'>{task.task}</span>
+      </Link>
+      ) : (
+      <span className='font-semibold'>{task.task}</span>)}</label>
+  </div>
 
-#firstletter{
-        text-transform: capitalize;
-    
-}
-
-
-
-/*
-
-<div className="checkbox-wrapper-11">
-      <input id="02-11" type="checkbox" name="r" value="2" />
-      <label htmlFor="02-11">To-do</label>
-      </div>
-
-
+      */
 .checkbox-wrapper-11 {
     --text: #414856;
-    --check: #4F29F0;
+    --check: #1ce25e;
     --disabled: #C3C8DE;
     --border-radius: 10px;
     border-radius: var(--border-radius);
@@ -47,8 +38,8 @@
     position: absolute;
   }
   .checkbox-wrapper-11 label::before {
-    height: 2px;
-    width: 8px;
+    height: 3px;
+    width: 16px;
     left: -27px;
     background: var(--check);
     border-radius: 2px;
@@ -78,7 +69,7 @@
   .checkbox-wrapper-11 input[type=checkbox]::before, .checkbox-wrapper-11 input[type=checkbox]::after {
     content: "";
     position: absolute;
-    height: 2px;
+    height: 3px;
     top: auto;
     background: var(--check);
     border-radius: 2px;
@@ -155,6 +146,8 @@
       width: 100%;
       left: -2px;
       padding-left: 0;
+      height: 5%;
+      color: black;
     }
   }
   @-webkit-keyframes check-01-11 {
@@ -196,8 +189,8 @@
       transform: rotate(45deg);
     }
     100% {
-      width: 5px;
-      top: 8px;
+      width: 11px;
+      top: 12px;
       transform: rotate(45deg);
     }
   }
@@ -240,8 +233,8 @@
       transform: rotate(-45deg);
     }
     100% {
-      width: 10px;
-      top: 8px;
+      width: 20px;
+      top: 12px;
       transform: rotate(-45deg);
     }
   }
@@ -271,5 +264,3 @@
       box-shadow: 0 -15px 0 0px #4F29F0, 14px -8px 0 0px #4F29F0, 14px 8px 0 0px #4F29F0, 0 15px 0 0px #4F29F0, -14px 8px 0 0px #4F29F0, -14px -8px 0 0px #4F29F0;
     }
   }
-
-  */
