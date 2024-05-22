@@ -1,14 +1,28 @@
 'use client';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
+
 import FluencyInput from "@/app/ui/Components/Input/input";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
-import { doc, setDoc, collection, getDocs, updateDoc, deleteDoc } from "firebase/firestore"; 
+import { doc, setDoc, collection, getDocs, updateDoc, deleteDoc, query, where, getDoc } from "firebase/firestore"; 
 import { db } from "@/app/firebase";
 import './quizstyle.css';
 
+import { FiEdit } from "react-icons/fi";
+import { MdDeleteSweep } from 'react-icons/md';
+import { GiSchoolBag } from "react-icons/gi";
+import { TbCardsFilled } from "react-icons/tb";
+import { RxCardStackPlus } from "react-icons/rx";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { FiCheck } from "react-icons/fi";
+
+import { useRouter } from 'next/navigation';
+import { Tooltip } from "@nextui-org/react";
+import {toast, Toaster} from "react-hot-toast";
+
 export default function Quiz() {
+    const router = useRouter();
     const { data: session } = useSession();
     const role = session?.user?.role;
 
@@ -17,10 +31,14 @@ export default function Quiz() {
     const [questionTitle, setQuestionTitle] = useState('');
     const [questionOption, setQuestionOption] = useState('');
     const [options, setOptions] = useState([]);
+    const optionInputRef = useRef(null);
     const [correctOptionIndex, setCorrectOptionIndex] = useState(-1);
     const [decks, setDecks] = useState([]);
     const [selectedDeck, setSelectedDeck] = useState(null);
     const [editQuiz, setEditQuizz] = useState(false);
+
+    const [students, setStudents] = useState([]);
+    const [showStudentModal, setShowStudentModal] = useState(false);
 
     const [playQuiz, setPlayQuiz] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -34,6 +52,14 @@ export default function Quiz() {
     const [createQuiz, setCreateQuizz] = useState(false);
     const [questions, setQuestions] = useState([]);
 
+    const [searchQuery, setSearchQuery] = useState('');
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+    const filteredDecks = decks.filter((deck) =>
+        deck.deckTitle.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    
     useEffect(() => {
         async function fetchDecks() {
             const decksCollection = collection(db, "Quizzes");
@@ -44,12 +70,46 @@ export default function Quiz() {
         fetchDecks();
     }, []);
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const openPlay = params.get('openplay');
+        const deckName = params.get('deckname');
+        if (openPlay === 'true' && deckName) {
+            const selectedDeck = decks.find(deck => deck.deckTitle === deckName);
+            if (selectedDeck) {
+                openPlayQuiz(selectedDeck); // Open quiz player if 'openplay' is true in URL and deck is found
+            }
+        }
+    }, [decks]);
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            if (session) {
+                const usersRef = collection(db, 'users');
+                const q = query(usersRef, where('role', '==', 'student'), where('professorId', '==', session.user.id));
+                const querySnapshot = await getDocs(q);
+                const fetchedStudents = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedStudents.push({ id: doc.id, ...doc.data() });
+                });
+                setStudents(fetchedStudents);
+            }
+        };
+    
+        fetchStudents();
+    }, [session]);
+
     function openCreateQuiz() {
         setCreateQuizz(true);
     }
 
     function closeCreateQuiz() {
         setCreateQuizz(false);
+        setDeckTitle('');
+        setDeckDescription('');
+        setQuestions([]);
+        setQuestionTitle('')
+        setOptions([]);
     }
 
     function openEditQuiz(deck) {
@@ -77,6 +137,12 @@ export default function Quiz() {
         setRemainingTime(60); // Reset timer for each question
         setPlayQuiz(true);
         startTimer(); // Start the timer when modal opens
+        
+        // Update URL parameters
+        const params = new URLSearchParams();
+        params.set('deckname', deck.deckTitle);
+        params.set('openplay', 'true');
+        router.replace(`?${params.toString()}`);
     }
     
     function closePlayQuiz() {
@@ -86,28 +152,111 @@ export default function Quiz() {
         setCurrentQuestionIndex(0);
         setUserAnswer(null);
         setFeedback('');
+        
+        // Update URL parameters
+        const params = new URLSearchParams();
+        params.set('deckname', '');
+        params.set('openplay', 'false');
+        router.replace(`?${params.toString()}`);
     }
 
+    function openStudentModal(deckId) {
+        setShowStudentModal(true);
+        setSelectedDeck(decks.find(deck => deck.id === deckId));
+    }
+    
+
+    function closeStudentModal() {
+        setShowStudentModal(false);
+    }
+    
+    async function handleAddDeckAsTask(studentId, deck) {
+        try {
+            const studentDocRef = doc(db, 'users', studentId);
+            const studentDocSnapshot = await getDoc(studentDocRef);
+            const studentData = studentDocSnapshot.data();
+            
+            if (!studentData || !studentData.tasks) {
+                toast.error('Erro ao adicionar tarefa.');
+                return;
+            }
+            
+            const tasksArray = studentData.tasks.Task || [];
+            const taskExists = tasksArray.some(task => task.task === `Revisar a aula de ${deck.deckTitle}`);
+            
+            if (taskExists) {
+                toast.error('Tarefa já adicionada!');
+                return;
+            }
+            
+            const deckLink = `student-dashboard/pratica/quizz?deckname=${encodeURIComponent(deck.deckTitle)}&openplay=true`;
+            const newTask = { task: `Revisar a aula de ${deck.deckTitle}`, link: deckLink, done: false };
+            tasksArray.push(newTask);
+            
+            await updateDoc(studentDocRef, {
+                tasks: { Task: tasksArray }
+            });
+            
+            toast.success('Tarefa adicionada com sucesso!');
+        } catch (error) {
+            console.error('Erro ao adicionar tarefa:', error);
+            toast.error('Erro ao adicionar tarefa.');
+        }
+    }
+    
+
     function addOption() {
+        if(!questionTitle){
+            toast.error("Adicione um título à essa pergunta.");
+            return null;
+        }
         if (questionOption.trim() !== '') {
             setOptions([...options, { option: questionOption, isCorrect: false }]);
             setQuestionOption('');
+            optionInputRef.current.focus();
         }
     }
 
+    function deleteOptioninCreation(index) {
+        const updatedOptions = [...options];
+        updatedOptions.splice(index, 1);
+        setOptions(updatedOptions);
+    }
+
     function finishQuestion() {
+        if (options.length < 2) {
+            toast.error("Adicione pelo menos 2 alternativas!");
+            return null
+        }
+        if(!deckDescription && !deckTitle){
+            toast.error("Adicione título e descrição!");
+            return null
+        }
+        if (correctOptionIndex === -1) {
+            toast.error("Selecione a alternativa correta!");
+            return;
+        }
         if (questionTitle.trim() !== '' && options.length > 0) {
             setQuestions([...questions, { questionTitle, options }]);
             setQuestionTitle('');
             setOptions([]);
             setCorrectOptionIndex(-1);
-        }
+            toast.success("Pergunta adicionada");
+        } else {
+            toast.error("Preencha a pergunta e alternativas");
+        } 
     }
 
     async function handleCreateQuiz() {
         try {
             if (!deckTitle) {
+                toast.error("Preencha o título do deck...");
                 console.error("Deck title is required");
+                return;
+            }
+
+            if (questions.length < 4) {
+                toast.error("Adicione pelo menos 4 perguntas antes de criar o quiz.");
                 return;
             }
 
@@ -117,6 +266,7 @@ export default function Quiz() {
                 deckDescription: deckDescription,
                 questions: questions,
             });
+            toast.success("Deck criado com sucesso!");
 
             // Reset state after successful creation
             setDeckTitle('');
@@ -139,6 +289,7 @@ export default function Quiz() {
     async function handleSaveEditQuiz() {
         try {
             if (!deckTitle || !selectedDeck) {
+                toast.error("Preencha o título e descrição do deck...")
                 console.error("Deck title and selected deck are required");
                 return;
             }
@@ -169,6 +320,7 @@ export default function Quiz() {
             const snapshot = await getDocs(collection(db, "Quizzes"));
             const decksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDecks(decksData);
+            toast.error("Deck deletado")
         } catch (error) {
             console.error("Error deleting deck: ", error);
         }
@@ -274,24 +426,46 @@ export default function Quiz() {
     };
 
     const updateScoreInLocalStorage = (deckId, score) => {
-        const scores = JSON.parse(localStorage.getItem("quizScores")) || {};
-        scores[deckId] = score;
-        localStorage.setItem("quizScores", JSON.stringify(scores));
+        if (typeof window !== 'undefined') {
+            const scores = JSON.parse(localStorage.getItem("quizScores")) || {};
+            scores[deckId] = score;
+            localStorage.setItem("quizScores", JSON.stringify(scores));
+        }
     };
-    
+     
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            addOption();
+        }
+    }
+
 
 return (
 <div>
-    <FluencyInput />
-    {role === 'teacher' && <FluencyButton onClick={openCreateQuiz}>Create Quizz</FluencyButton>}
-    <div>
-        {decks.map(deck => (
-            <div key={deck.id}>
-                <div className="flex flex-row gap-2">
-                    <p onClick={() => openPlayQuiz(deck)} className="cursor-pointer">{deck.deckTitle}</p>
-                    <FluencyButton onClick={() => openEditQuiz(deck)}>Edit</FluencyButton>
-                    <FluencyButton onClick={() => handleDeleteDeck(deck.id)}>Delete</FluencyButton>
-                    <p>Score: {scores[deck.id] || 0}</p>
+
+    <div className="flex flex-row gap-8 items-center w-full p-3 px-5"> 
+        <FluencyInput
+            placeholder="Procurar por deck"
+            className="w-full"
+            value={searchQuery}
+            onChange={handleSearchChange}
+        />
+        {role === 'teacher' && <FluencyButton className="w-full" onClick={openCreateQuiz}>Create Quizz <RxCardStackPlus className="ml-2 w-6 h-auto" /></FluencyButton>}
+    </div>
+
+    <div className="flex flex-col items-start gap-2 w-full">
+        {filteredDecks.map(deck => (
+            <div key={deck.id} className="px-4 w-full">
+                <div className="bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 rounded-md cursor-pointer flex flex-row items-center justify-between gap-2">
+                    <p onClick={() => openPlayQuiz(deck)} className="cursor-pointer font-bold p-2 ml-2 flex flex-row gap-1 items-center"><TbCardsFilled className="w-6 h-auto" /> {deck.deckTitle}</p>                     
+                    <p className="text-center font-semibold">Pontuação: {scores[deck.id] || 0}</p>
+                    {role === 'teacher' && (
+                    <div className="flex flex-row items-center gap-2">
+                        <Tooltip content="Editar deck" className="bg-fluency-blue-600 p-1 rounded-md font-medium text-sm text-white"><p><FiEdit onClick={() => openEditQuiz(deck)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
+                        <Tooltip content="Deletar deck" className="bg-fluency-red-600 p-1 rounded-md font-medium text-sm text-white"><p><MdDeleteSweep onClick={() => handleDeleteDeck(deck.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
+                        <Tooltip content="Adicionar como tarefa" className="bg-fluency-yellow-600 p-1 rounded-md font-medium text-sm text-white"><p><GiSchoolBag onClick={() => openStudentModal(deck.id)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
+                    </div>
+                    )}
                 </div>
             </div>
         ))}
@@ -332,7 +506,7 @@ return (
                     ) : (
                         <div>
                             <h3 className="text-lg leading-6 font-medium mb-2">Quiz Completed</h3>
-                            <p>Your score: {score}</p>
+                            <p>Pontuação: {score}</p>
                             <FluencyButton onClick={closePlayQuiz}>Close</FluencyButton>
                         </div>
                     )}
@@ -350,59 +524,74 @@ return (
             <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-full p-5">
                 <div className="flex flex-col items-center justify-center">
                     <FluencyCloseButton onClick={closeEditQuiz} />
-                    <h3 className="text-lg leading-6 font-medium mb-2">Edit Quiz</h3>
-                    <div className="mt-2 flex flex-col items-center gap-3 p-4">
-                        <FluencyInput value={deckTitle} onChange={(e) => setDeckTitle(e.target.value)} placeholder="Título do deck" />
-                        <FluencyInput value={deckDescription} onChange={(e) => setDeckDescription(e.target.value)} placeholder="Descrição" />
-                        {questions.map((question, qIndex) => (
-                            <div key={qIndex} className="flex flex-col gap-2 mb-4">
-                                <FluencyInput value={question.questionTitle} onChange={(e) => handleQuestionChange(qIndex, e.target.value)} placeholder="Pergunta aqui" />
-                                <ul>
-                                    {question.options.map((option, oIndex) => (
-                                        <li key={oIndex} className="flex items-center gap-2">
-                                            <input
-                                                type="checkbox"
-                                                checked={option.isCorrect}
-                                                onChange={() => handleOptionCorrectChange(qIndex, oIndex)}
-                                            />
-                                            <FluencyInput value={option.option} onChange={(e) => handleOptionEditChange(qIndex, oIndex, e.target.value)} />
-                                            <FluencyButton onClick={() => deleteOption(qIndex, oIndex)}>Delete Option</FluencyButton>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <div className="flex flex-row gap-1">
-                                    <FluencyInput value={questionOption} onChange={(e) => setQuestionOption(e.target.value)} placeholder="Nova alternativa" />
-                                    <FluencyButton onClick={() => addOptionToQuestion(qIndex)}>Add Option</FluencyButton>
+                    <h3 className="text-lg leading-6 font-medium mb-2">Editar Quiz</h3>
+                    <div className="mt-2 lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-start gap-3 p-2 w-full">
+                        
+                        <div className="flex flex-col justify-between w-max h-[70vh] items-center">
+                            <div>
+                                <p>Título</p>
+                                <FluencyInput value={deckTitle} onChange={(e) => setDeckTitle(e.target.value)} placeholder="Título do deck" />
+                                <p>Descrição</p>
+                                <FluencyInput value={deckDescription} onChange={(e) => setDeckDescription(e.target.value)} placeholder="Descrição" />
+                                
+                                <p>Título da pergunta</p>
+                                <FluencyInput value={questionTitle} onChange={(e) => setQuestionTitle(e.target.value)} placeholder="Pergunta aqui" />
+                                    <p>Opções</p>
+                                    <div className="flex flex-row gap-1">
+                                        <FluencyInput value={questionOption} onChange={(e) => setQuestionOption(e.target.value)} placeholder="Alternativa" />
+                                    </div>
+                                    <div className="flex flex-row gap-1 items-center justify-center my-2">
+                                        <FluencyButton className="flex flex-row items-center gap-1" onClick={addOption}>Adicionar <MdOutlinePlaylistAdd className="w-6 h-auto" /></FluencyButton>
+                                        <FluencyButton className="flex flex-row items-center gap-1" variant="confirm" onClick={addQuestionToEdit}>Finalizar <FiCheck className="w-6 h-auto"/></FluencyButton>
+                                    </div>
+                                    <ul>
+                                        {options.map((option, index) => (
+                                            <li key={index}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={index === correctOptionIndex}
+                                                    onChange={() => handleOptionChange(index)}
+                                                />
+                                                <label>{option.option}</label>
+                                            </li>
+                                        ))}
+                                    </ul>    
                                 </div>
-                                <FluencyButton onClick={() => deleteQuestion(qIndex)}>Delete Question</FluencyButton>
-                            </div>
-                        ))}
-                        <div>
-                            <FluencyInput value={questionTitle} onChange={(e) => setQuestionTitle(e.target.value)} placeholder="Pergunta aqui" />
-                            <p>Opções</p>
-                            <div className="flex flex-row gap-1">
-                                <FluencyInput value={questionOption} onChange={(e) => setQuestionOption(e.target.value)} placeholder="Alternativa" />
-                                <FluencyButton onClick={addOption}>Add</FluencyButton>
-                            </div>
-                            <ul>
-                                {options.map((option, index) => (
-                                    <li key={index}>
-                                        <input
-                                            type="checkbox"
-                                            checked={index === correctOptionIndex}
-                                            onChange={() => handleOptionChange(index)}
-                                        />
-                                        <label>{option.option}</label>
-                                    </li>
-                                ))}
-                            </ul>
-                            <FluencyButton variant="confirm" onClick={addQuestionToEdit}>Add Question</FluencyButton>
                         </div>
-                        <div className="flex justify-center">
-                            <FluencyButton variant='confirm' onClick={handleSaveEditQuiz}>Salvar</FluencyButton>
-                            <FluencyButton variant='gray' onClick={closeEditQuiz}>Cancelar</FluencyButton>
+
+                        <div className="w-full h-[70vh] overflow-hidden overflow-y-scroll rounded-lg">
+                            <p>Alternativas</p>
+                            {questions.map((question, qIndex) => (
+                                <div key={qIndex} className="flex flex-col items-center gap-2 mb-4 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md">
+                                    <FluencyInput value={question.questionTitle} onChange={(e) => handleQuestionChange(qIndex, e.target.value)} placeholder="Pergunta aqui" />
+                                    <ul className="flex flex-col gap-1 w-full">
+                                        {question.options.map((option, oIndex) => (
+                                            <li key={oIndex} className="flex items-center gap-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={option.isCorrect}
+                                                    onChange={() => handleOptionCorrectChange(qIndex, oIndex)}
+                                                />
+                                                <FluencyInput className="h-8" value={option.option} onChange={(e) => handleOptionEditChange(qIndex, oIndex, e.target.value)} />
+                                                <Tooltip content="Deletar alternativa" className="bg-fluency-red-600 p-1 rounded-md font-medium text-sm text-white"><p><MdDeleteSweep onClick={() => deleteOption(qIndex, oIndex)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <div className="flex flex-row items-center gap-1 w-full">
+                                        <FluencyInput className="h-8" value={questionOption} onChange={(e) => setQuestionOption(e.target.value)} placeholder="Nova alternativa" />
+                                        <FluencyButton className="h-8" onClick={() => addOptionToQuestion(qIndex)}>Adicionar <MdOutlinePlaylistAdd className="w-6 h-auto" /></FluencyButton>
+                                    </div>
+                                    <FluencyButton variant="danger" onClick={() => deleteQuestion(qIndex)}>Deletar Pergunta</FluencyButton>
+                                </div>
+                            ))}
                         </div>
                     </div>
+
+                    <div className="flex justify-center mt-6">
+                        <FluencyButton variant='confirm' onClick={handleSaveEditQuiz}>Salvar</FluencyButton>
+                        <FluencyButton variant='gray' onClick={closeEditQuiz}>Cancelar</FluencyButton>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -418,35 +607,43 @@ return (
                 <div className="flex flex-col items-center justify-center">
                     <FluencyCloseButton onClick={closeCreateQuiz} />
                     <h3 className="text-lg leading-6 font-medium mb-2">Criar um Quiz</h3>
-                    <div className="mt-2 flex flex-col items-center gap-3 p-4">
-                        <FluencyInput value={deckTitle} onChange={(e) => setDeckTitle(e.target.value)} placeholder="Título do deck" />
-                        <FluencyInput value={deckDescription} onChange={(e) => setDeckDescription(e.target.value)} placeholder="Descrição" />
-                        <div>
-                            <FluencyInput value={questionTitle} onChange={(e) => setQuestionTitle(e.target.value)} placeholder="Pergunta aqui" />
-                            <p>Opções</p>
-                            <div className="flex flex-row gap-1">
-                                <FluencyInput value={questionOption} onChange={(e) => setQuestionOption(e.target.value)} placeholder="Alternativa" />
-                                <FluencyButton onClick={addOption}>Add</FluencyButton>
+                    <div className="mt-2 lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-start justify-around gap-3 p-4 w-full">
+                        <div className="w-full">
+                            <FluencyInput value={deckTitle} onChange={(e) => setDeckTitle(e.target.value)} placeholder="Título do deck" />
+                            <FluencyInput value={deckDescription} onChange={(e) => setDeckDescription(e.target.value)} placeholder="Descrição" />
+                            <div>
+                                <FluencyInput className="w-full" value={questionTitle} onChange={(e) => setQuestionTitle(e.target.value)} placeholder="Pergunta aqui" />
+                                <p>Opções</p>
+                                <div className="flex flex-col gap-1">
+                                    <FluencyInput ref={optionInputRef} value={questionOption} onKeyPress={handleKeyPress} onChange={(e) => setQuestionOption(e.target.value)} placeholder="Alternativa" />
+                                    <div className="flex flex-row items-center justify-center gap-1 w-full">
+                                    <FluencyButton className="flex flex-row items-center gap-1" onClick={addOption}>Adicionar <MdOutlinePlaylistAdd className="w-6 h-auto" /></FluencyButton>
+                                    <FluencyButton className="flex flex-row items-center gap-1" variant="confirm" onClick={finishQuestion}>Finalizar <FiCheck className="w-6 h-auto"/></FluencyButton>
+                                    </div>
+                                </div>
+                                <ul className="py-2 flex flex-col gap-1 items-start h-[25vh] overflow-hidden overflow-y-scroll">
+                                    {options.map((option, index) => (
+                                        <li className="bg-fluency-gray-400 text-black dark:text-white p-1 px-2 rounded-md flex flex-row gap-1 items-center w-full" key={index}>
+                                            <input
+                                                type="checkbox"
+                                                checked={index === correctOptionIndex}
+                                                onChange={() => handleOptionChange(index)}
+                                            />
+                                            <label className="flex flex-row gap-1 items-center justify-between w-full">
+                                                {option.option}
+                                                <Tooltip content="Deletar alternativa" className="bg-fluency-red-600 p-1 rounded-md font-medium text-sm text-white"><p><MdDeleteSweep onClick={() => deleteOptioninCreation(index)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>
+                                                </label>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                            <ul>
-                                {options.map((option, index) => (
-                                    <li key={index}>
-                                        <input
-                                            type="checkbox"
-                                            checked={index === correctOptionIndex}
-                                            onChange={() => handleOptionChange(index)}
-                                        />
-                                        <label>{option.option}</label>
-                                    </li>
-                                ))}
-                            </ul>
-                            <FluencyButton variant="confirm" onClick={finishQuestion}>Finalizar</FluencyButton>
                         </div>
-                        <div className="flex flex-col items-center gap-3 p-4">
-                            <h4 className="text-md leading-6 font-medium mb-2">Perguntas Adicionadas</h4>
-                            <ul>
+
+                        <div className="flex flex-col items-center gap-3 w-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md">
+                            <h4 className="text-md leading-6 font-medium">Perguntas Adicionadas</h4>
+                            <ul className="flex flex-col gap-1 w-full h-[56vh] overflow-hidden overflow-y-scroll">
                                 {questions.map((question, index) => (
-                                    <li key={index}>
+                                    <li key={index} className="bg-gray-200 dark:bg-gray-800 p-1 rounded-md">
                                         <strong>{question.questionTitle}</strong>
                                         <ul>
                                             {question.options.map((option, i) => (
@@ -457,14 +654,36 @@ return (
                                 ))}
                             </ul>
                         </div>
-                        <div className="flex justify-center">
-                            <FluencyButton variant='confirm' onClick={handleCreateQuiz}>Criar Quizz</FluencyButton>
-                            <FluencyButton variant='gray' onClick={closeCreateQuiz}>Cancelar</FluencyButton>
-                        </div>
+                    </div>
+
+                    <div className="flex justify-center mt-4">
+                        <FluencyButton variant='confirm' onClick={handleCreateQuiz}>Criar Quizz</FluencyButton>
+                        <FluencyButton variant='gray' onClick={closeCreateQuiz}>Cancelar</FluencyButton>
                     </div>
                 </div>
             </div>
         </div>
     </div>}
+
+    {showStudentModal && (
+    <div className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen p-5">
+            <div className="fixed inset-0 transition-opacity">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-full p-5">
+                <FluencyCloseButton onClick={closeStudentModal} />
+                <h2 className="text-lg font-semibold mb-4">Lista de Estudantes</h2>
+                {students.map(student => (
+                    <div key={student.id} className="flex items-center justify-between p-2 mb-2 bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-gray-900 hover:dark:bg-fluency-gray-900 rounded-md">
+                        <p>{student.name}</p>
+                        <FluencyButton onClick={() => handleAddDeckAsTask(student.id, selectedDeck)}>Adicionar como tarefa</FluencyButton>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>)}
+
+    <Toaster />
 </div>
 );}

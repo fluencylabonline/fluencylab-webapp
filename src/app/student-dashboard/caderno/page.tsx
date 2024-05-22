@@ -237,60 +237,6 @@ function Caderno() {
             fetchTasks();
           }, [id]);
 
-
-        const handleAddTask = async (day: string, task: string, done: boolean) => {
-          try {
-              const studentDocRef = doc(db, `users/${id}`);
-              await updateDoc(studentDocRef, {
-                  [`tasks.${day}`]: arrayUnion({ task, done })
-              });
-              setTasks((prevTasks: { [x: string]: any; }) => ({
-                  ...prevTasks,
-                  [day]: [...(prevTasks[day] || []), { task, done }]
-              }));
-              toast.success('Tarefa Adicionada!', {
-                position: "top-center",
-              });
-            } catch (error) {
-                console.error('Error adding task:', error);
-            }
-        };
-        
-
-        const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>, day: string) => {
-          if (event.key === 'Enter' && event.currentTarget.value.trim() !== '') {
-              const enteredTask = event.currentTarget.value.trim();
-              const taskIdSeparatorIndex = enteredTask.indexOf(':');
-              if (taskIdSeparatorIndex !== -1) {
-                  // Extract task ID and task description
-                  const taskId = enteredTask.slice(0, taskIdSeparatorIndex).trim();
-                  const taskDescription = enteredTask.slice(taskIdSeparatorIndex + 1).trim();
-      
-                  // Check if task ID is valid and task exists
-                  if (tasks && tasks[day]) {
-                      const taskIndex = tasks[day].findIndex((task: any) => task.task === taskId);
-                      if (taskIndex !== -1) {
-                          // Toggle task completion status
-                          const updatedTasks = [...tasks[day]];
-                          updatedTasks[taskIndex].done = !updatedTasks[taskIndex].done;
-      
-                          // Update task in Firestore and local state
-                          handleTaskStatusChange(day, taskIndex, updatedTasks[taskIndex].done);
-                      } else {
-                          // If task ID doesn't exist, add a new task
-                          handleAddTask(day, enteredTask, false);
-                      }
-                  }
-              } else {
-                  // If no task ID is provided, add a new task
-                  handleAddTask(day, enteredTask, false);
-              }
-      
-              // Clear input field after adding or updating task
-              event.currentTarget.value = '';
-          }
-        };
-
         const handleTaskStatusChange = async (day: string, index: number, done: boolean) => {
           try {
               const updatedTasks = [...tasks[day]];
@@ -318,67 +264,6 @@ function Caderno() {
               console.error('Error updating task status:', error);
           }
       };
-
-      const handleDeleteTask = async (day: string, index: number) => {
-        try {
-            const updatedTasks = [...tasks[day]];
-            updatedTasks.splice(index, 1);
-    
-            const studentDocRef = doc(db, `users/${id}`);
-            await updateDoc(studentDocRef, {
-                [`tasks.${day}`]: updatedTasks
-            });
-    
-            setTasks((prevTasks: { [x: string]: any }) => ({
-                ...prevTasks,
-                [day]: updatedTasks
-            }));
-    
-            toast.error('Tarefa deletada!', {
-                position: "top-center",
-            });
-        } catch (error) {
-            console.error('Error deleting task:', error);
-            toast.error('Erro ao deletar tarefa!', {
-                position: "top-center",
-            });
-        }
-    };
-
-    const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
-    const openDeleteConfirmationModal = () => {
-        setIsDeleteConfirmationModalOpen(true);
-    };
-    
-    const closeDeleteConfirmationModal = () => {
-        setIsDeleteConfirmationModalOpen(false);
-    };
-
-    const handleDeleteAllTasksConfirmation = () => {
-      handleDeleteAllTasks();
-      closeDeleteConfirmationModal();
-  };
-    
-    const handleDeleteAllTasks = async () => {
-      try {
-          const studentDocRef = doc(db, `users/${id}`);
-          await updateDoc(studentDocRef, {
-              tasks: {}
-          });
-  
-          setTasks({});
-          
-          toast.error('Todas as tarefas excluídas!', {
-              position: "top-center",
-          });
-      } catch (error) {
-          console.error('Error deleting all tasks:', error);
-          toast.error('Erro ao excluir todas as tarefas!', {
-              position: "top-center",
-          });
-      }
-  };
-      
 
   const [isInstrucoesOpen, setIsInstrucoesOpen] = useState(false);
   const openInstrucoes = () => {
@@ -550,34 +435,7 @@ return (
           </div>
       )}
 
-    {isDeleteConfirmationModalOpen && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="fade-in fade-out fixed inset-0 transition-opacity duration-200 ease-in-out">
-                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-
-                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                    <div className="flex flex-col">
-                        <FluencyCloseButton onClick={closeDeleteConfirmationModal}/>
-                        <div className="mt-3 flex flex-col gap-3 p-4">
-                            <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                                Tem certeza que deseja excluir todas as tarefas?
-                            </h3>
-                            <div className="flex justify-center">
-                                <FluencyButton variant='danger' onClick={handleDeleteAllTasksConfirmation}>
-                                    Sim, excluir
-                                </FluencyButton>
-                                <FluencyButton variant='gray' onClick={closeDeleteConfirmationModal}>
-                                    Não, cancelar
-                                </FluencyButton>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )}
+    
           <div className='fade-in fade-out p-3 h-[92vh] min-w-screen overflow-y-scroll'>
             <div className="gap-3 h-full lg:flex lg:flex-row md:flex md:flex-col flex flex-col">
 
@@ -656,7 +514,12 @@ return (
                                 </svg>
                               </span>
                             </label>
-                            <span className='font-semibold'>{task.task}</span>
+                            {task.link ? (
+                            <Link href={task.link}>
+                                <span className='font-semibold'>{task.task}</span>
+                            </Link>
+                                ) : (
+                            <span className='font-semibold'>{task.task}</span>)}
                           </div>
                       </div>))}
                     </div>
