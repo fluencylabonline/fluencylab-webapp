@@ -12,33 +12,38 @@
       }
     
       h1,
-      h2,
+      h2
+      {
+        line-height: 1.1;
+      }
+
       h3,
       h4,
       h5,
-      h6 {
-        line-height: 1.1;
+      h6
+      {
+        line-height: 1.5;
       }
     
       h1{
-        font-size: 2rem;
-        font-weight: 600;
+        font-size: 2.2rem;
+        font-weight: 900;
       }
       h2{
-        font-size: 1.5rem;
+        font-size: 1.7rem;
         font-weight: 600;
       }
       h3{
         font-size: 1.125rem;
       }
       h4{
-        font-size: 1.123rem;
+        font-size: 1.375rem;
       }
       h5{
-        font-size: 1rem;
+        font-size: 2rem;
       }
       h6{
-        font-size: 1rem;
+        font-size: 3rem;
       }
   
       code {
@@ -82,7 +87,7 @@
     
       hr {
         border: none;
-        border-top: 2px solid rgba(#0D0D0D, 0.1);
+        border-top: 3px solid rgba(#7e7575, 0.3);
         margin: 2rem 0;
       }
   

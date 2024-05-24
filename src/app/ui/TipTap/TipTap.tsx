@@ -3,9 +3,8 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 
 //Firebase
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, updateDoc } from "firebase/firestore";
 import { db } from "@/app/firebase";
-
 
 import { toast, Toaster } from 'react-hot-toast';
 //Icons
@@ -34,6 +33,8 @@ import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { VscWholeWord } from 'react-icons/vsc';
 import { PiNotebookBold } from 'react-icons/pi';
+import { LuClipboardPaste } from 'react-icons/lu';
+import FluencyCloseButton from '../Components/ModalComponents/closeModal';
 
 type PopoversProps = {
   editor: Editor;
@@ -44,17 +45,9 @@ function Popovers({ editor }: PopoversProps) {
   return (
       <BubbleMenu className="Popover" editor={editor}>
           <button
-            onClick={() => editor.chain().focus().setColor('#000000').run()}
-            className={editor.isActive('textStyle', { color: '#000000' }) ? 'is-active' : ''}
-            data-testid="setRed"
-            >        
-            <div className='w-5 h-5 p-2 rounded-full bg-fluency-gray-800 hover:bg-fluency-gray-900 duration-300 ease-in-out transition-all'></div>
-          </button>
-
-          <button
             onClick={() => editor.chain().focus().setColor('#21B5DE').run()}
             className={editor.isActive('textStyle', { color: '#0047AB' }) ? 'is-active' : ''}
-            data-testid="setRed"
+            data-testid="setBlue"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-blue-500 hover:bg-fluency-blue-600 duration-300 ease-in-out transition-all'></div>
           </button>
@@ -62,7 +55,7 @@ function Popovers({ editor }: PopoversProps) {
           <button
             onClick={() => editor.chain().focus().setColor('#FFBF00').run()}
             className={editor.isActive('textStyle', { color: '#FFBF00' }) ? 'is-active' : ''}
-            data-testid="setRed"
+            data-testid="setYellow"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-yellow-500 hover:bg-fluency-yellow-600 duration-300 ease-in-out transition-all'></div>
           </button>
@@ -70,7 +63,7 @@ function Popovers({ editor }: PopoversProps) {
           <button
             onClick={() => editor.chain().focus().setColor('#228B22').run()}
             className={editor.isActive('textStyle', { color: '#228B22' }) ? 'is-active' : ''}
-            data-testid="setRed"
+            data-testid="setGreen"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-green-500 hover:bg-fluency-green-600 duration-300 ease-in-out transition-all'></div>
           </button>
@@ -86,17 +79,9 @@ function Popovers({ editor }: PopoversProps) {
           <button
             onClick={() => editor.chain().focus().setColor('#FFA500').run()}
             className={editor.isActive('textStyle', { color: '#FFA500' }) ? 'is-active' : ''}
-            data-testid="setRed"
+            data-testid="setOrange"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out transition-all'></div>
-          </button>
-
-          <button
-            onClick={() => editor.chain().focus().setColor('#FFFFFF').run()}
-            className={editor.isActive('textStyle', { color: '#000000' }) ? 'is-active' : ''}
-            data-testid="setRed"
-            >        
-            <div className='w-5 h-5 p-2 rounded-full bg-fluency-gray-100 hover:bg-fluency-gray-200 duration-300 ease-in-out transition-all'></div>
           </button>
       </BubbleMenu>
   )
@@ -111,6 +96,37 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
   const notebookID = params.get('notebook');
   const studentID = params.get('student');
+
+
+  const [workbooks, setWorkbooks] = useState(false);
+  function openWorkbook(){
+    setWorkbooks(true)
+  }
+
+  function closeWorkbook(){
+    setWorkbooks(false)
+  }
+
+  const [lessonDocs, setLessonDocs] = useState<any[]>([]); // Store the fetched documents
+  const [selectedDoc, setSelectedDoc] = useState<any>(null); // Store the selected document
+
+  // Function to fetch all documents from Firestore
+  const fetchDocs = async () => {
+    try {
+      const lessonsRef = collection(db, 'Notebooks', 'TheBasics', 'Lessons');
+      const lessonsSnapshot = await getDocs(lessonsRef);
+      const fetchedLessonDocs = lessonsSnapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+      setLessonDocs(fetchedLessonDocs);
+    } catch (error) {
+      console.error('Error fetching documents: ', error);
+    }
+  };
+
+  // Effect to fetch documents from Firestore on component mount
+  useEffect(() => {
+    fetchDocs();
+  }, []);
+
 
   const [description, setDescription] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
@@ -173,13 +189,15 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       }),
       Highlight,
       Color,
-      TextStyle,
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
             1: "Coloque um título...",
             2: "Coloque um subtítulo...",
-            3: "Destaque a informação...",
+            3: '/',
+            4: '/',
+            5: '/',
+            6: '/',
           };
       
           if (node.type.name === "heading") {
@@ -197,7 +215,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     editorProps: {
       attributes: {
         class:
-          "lg:min-w-[794px] md:max-w-[700px] max-w-[320px] min-h-screen p-16 border-[0.5px] border-[#cfcfcf] dark:border-fluency-gray-300 outline-none bg-white dark:bg-fluency-gray-900",
+          "lg:min-w-[794px] md:max-w-[700px] max-w-[380px] min-h-screen p-16 border-[0.5px] border-[#cfcfcf] dark:border-fluency-gray-300 outline-none bg-white dark:bg-fluency-gray-900",
       },
     },
     autofocus: true,
@@ -234,6 +252,12 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       top: document.body.scrollHeight,
       behavior: "smooth"
     });
+  };
+
+  const pasteContentFromFirestore = (content: string) => {
+    if (editor) {
+      editor.chain().focus().insertContent(content).run();
+    }
   };
 
   return (
@@ -281,35 +305,44 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
         </div>
 
         <div className="fixed top-44 right-2">
-          <Popover placement="bottom" showArrow offset={10}>
-            <PopoverTrigger>
-                <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
-                  <PiNotebookBold className="w-6 h-auto"/>
-                </Button>      
-            </PopoverTrigger>
-            <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-pages-dark border border-fluency-gray-500 p-3 rounded-md">
-              {(titleProps) => (
-                <div className="px-1 py-2 w-full">
-                  <div>
-                    <ul>
-                      <li>Apostila1</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <ul>
-                      <li>Apostila2</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <ul>
-                      <li>Apostila3</li>
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
+            <Button onClick={openWorkbook} className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+              <PiNotebookBold className="w-6 h-auto"/>
+            </Button>      
         </div>
+
+        {workbooks && 
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen">
+                    
+                    <div className="fixed inset-0 transition-opacity">
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                        <div className="flex flex-col items-center justify-center">
+                            
+                            <FluencyCloseButton onClick={closeWorkbook}/>
+                            
+                              <h3 className="text-lg leading-6 font-medium  mb-2">
+                                  Apostilas                         
+                              </h3>
+                              <div className="mt-2 flex flex-col items-center gap-3 p-4">
+                                <ul>
+                                  {lessonDocs.map(doc => (
+                                    <li key={doc.id}>
+                                      {doc.data.title} {/* Assuming there's a 'title' field in your documents */}
+                                      <button onClick={() => pasteContentFromFirestore(doc.data.content)}>
+                                        Paste
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
 
         <Toaster />
     </div>

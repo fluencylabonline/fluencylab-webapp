@@ -66,7 +66,7 @@ const NotebookEditor = () => {
     return <DocumentAnimation /> ;}
 
   return (
-    <div className='px-6 py-4'>
+    <div className='lg:px-6 lg:py-4 md:px-6 md:py-4 px-2 py-1'>
         <Tiptap
         content={content}
         onChange={(newContent: string) => handleContentChange(newContent)}

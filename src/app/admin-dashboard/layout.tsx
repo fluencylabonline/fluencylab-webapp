@@ -87,6 +87,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       path: "/admin-dashboard/certificados",
       icon: <PiCertificateBold  className="h-6 w-6"/>,
     },
+    {
+      name: "Apostilas",
+      path: "/admin-dashboard/apostilas",
+      icon: <PiCertificateBold  className="h-6 w-6"/>,
+    },
   ];
 
   const router = useRouter();

@@ -28,15 +28,15 @@ type Props = {
 };
 
 const Toolbar = ({ editor, isTyping, addImage }: Props) => {
-  const [selectedFontSize, setSelectedFontSize] = useState("16");
+  const [selectedFontSize, setSelectedFontSize] = useState("18");
   const [selectedFontFamily, setSelectedFontFamily] = useState('QuickSand');
-
+  const newSize = '';
   if (!editor) {
     return null;
   }
   
   const handleFontSizeChange = (event: { target: { value: any; }; }) => {
-    const newSize = event.target.value;
+   // const newSize = event.target.value;
     setSelectedFontSize(newSize);
     editor.chain().focus().setFontSize(`${newSize}px`).run();
   };
@@ -112,51 +112,27 @@ const increaseFontSize = () => {
       <p>|</p>
 
       <div className="lg:block md:block hidden">
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Título H1"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <LuHeading1 className="w-5 h-auto" />
-        </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Título H1"
+            color="primary"
+            placement="bottom"
+          >
+          <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <LuHeading1 className="w-5 h-auto" />
+          </button>
+        </Tooltip>
 
-
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Título H2"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <LuHeading2 className="w-5 h-auto" />
-        </button>
-      </Tooltip>
-      
-      
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Título H3"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <LuHeading3 className="w-5 h-auto" />
-        </button>
-      </Tooltip>
-
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Texto normal"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().setParagraph().run() && editor.chain().focus().setFontSize('16px').run()} className={editor.isActive('paragraph') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <PiTextTBold className="w-5 h-auto" />
-        </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Título H2"
+            color="primary"
+            placement="bottom"
+          >
+          <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <LuHeading2 className="w-5 h-auto" />
+          </button>
+        </Tooltip>
       </div>
 
       <Dropdown>
@@ -168,161 +144,96 @@ const increaseFontSize = () => {
             <PiTextTBold className="w-5 h-auto" />
           </Button>
         </DropdownTrigger>
-          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
-              <PiTextTBold className="w-5 h-auto" />
-            </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-300 rounded-md" aria-label="Static Actions">
+            <DropdownItem onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <LuHeading1 className="w-5 h-auto" />
             </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+            <DropdownItem onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <LuHeading2 className="w-5 h-auto" />
             </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
-              <LuHeading3 className="w-5 h-auto" />
-            </DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'p-2 px-2 text-md text-fluency-blue-500 font-bold' : 'p-2 px-2 text-md text-fluency-gray-800 hover:text-fluency-blue-500 duration-300 ease-in-out'}>18</DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()} className={editor.isActive('heading', { level: 4 }) ? 'p-2 px-2 text-md text-fluency-blue-500 font-bold' : 'p-2 px-2 text-md text-fluency-gray-800 hover:text-fluency-blue-500 duration-300 ease-in-out'}>22</DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()} className={editor.isActive('heading', { level: 5 }) ? 'p-2 px-2 text-md text-fluency-blue-500 font-bold' : 'p-2 px-2 text-md text-fluency-gray-800 hover:text-fluency-blue-500 duration-300 ease-in-out'}>32</DropdownItem>
+            <DropdownItem onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()} className={editor.isActive('heading', { level: 6 }) ? 'p-2 px-2 text-md text-fluency-blue-500 font-bold' : 'p-2 px-2 text-md text-fluency-gray-800 hover:text-fluency-blue-500 duration-300 ease-in-out'}>48</DropdownItem>
         </DropdownMenu>
       </Dropdown>
 
       <p>|</p>
 
       <div className="lg:flex lg:flex-row md:flex md:flex-row items-center gap-2 hidden">
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Fonte"
-          color="primary"
-          placement="bottom"
-          >
-          <div>
-            <select
-              value={selectedFontFamily}
-              onChange={(e) => {
-                const newFontFamily = e.target.value;
-                setSelectedFontFamily(newFontFamily);
-                editor.chain().focus().setFontFamily(newFontFamily).run();
-              }}
-              className={editor.isActive('fontfamily') ? 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 rounded-md p-1 px-2 text-sm font-semibold' : 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md p-1 px-2 text-sm'}
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Fonte"
+            color="primary"
+            placement="bottom"
             >
-              <option value="QuickSand">QuickSand</option>
-              <option value="Inter">Inter</option>
-              <option value="Monospace">Monospace</option>
-              <option value="Arial">Arial</option>
-            </select>
-          </div>
-      </Tooltip>
-
-
-        <div className="flex flex-row gap-2 items-center justify-center w-min">
-          <Tooltip
-                className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-                content="Diminuir fonte"
-                color="primary"
-                placement="bottom"
+            <div>
+              <select
+                value={selectedFontFamily}
+                onChange={(e) => {
+                  const newFontFamily = e.target.value;
+                  setSelectedFontFamily(newFontFamily);
+                  editor.chain().focus().setFontFamily(newFontFamily).run();
+                }}
+                className={editor.isActive('fontfamily') ? 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 rounded-md p-1 px-2 text-sm font-semibold' : 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md p-1 px-2 text-sm'}
               >
-            <button onClick={decreaseFontSize} className="text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all p-1 px-2 rounded-md font-bold text-xl">
-              -</button>
-          </Tooltip>  
-                    
-            <select
-              value={selectedFontSize}
-              onChange={handleFontSizeChange}
-              className={editor.isActive('fontsize') ? 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md appearance-none p-1 px-2 text-md' : 'appearance-none outline-none text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md p-1 px-2 text-md'}>
-              {[8, 10, 12, 14, 16, 18, 20, 22, 28, 36, 42, 48].map((size) => (
-                <option key={size} value={size}>{size}</option>
-              ))}
-            </select>
+                <option value="QuickSand">QuickSand</option>
+                <option value="Inter">Inter</option>
+                <option value="Monospace">Monospace</option>
+                <option value="Arial">Arial</option>
+              </select>
+            </div>
+        </Tooltip>
 
-          <Tooltip
-                className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-                content="Aumentar fonte"
-                color="primary"
-                placement="bottom"
-              >
-            <button onClick={increaseFontSize} className="text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all p-1 px-2 rounded-md font-bold text-xl">
-              +</button>
-          </Tooltip>
-        </div>
+        <Dropdown>
+          <DropdownTrigger>
+            <Button variant="bordered" className={editor.isActive('paragraph') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+              <PiTextTBold className="w-5 h-auto" />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu className="bg-fluency-pages-light dark:bg-fluency-gray-500 p-2 rounded-md font-bold">
+            <DropdownItem><button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'p-1 text-md text-fluency-blue-500 font-bold' : 'font-semibold p-1 text-md text-fluency-gray-800 dark:text-white hover:text-fluency-blue-500 duration-300 ease-in-out'}>18</button></DropdownItem>
+            <DropdownItem><button onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()} className={editor.isActive('heading', { level: 4 }) ? 'p-1 text-md text-fluency-blue-500 font-bold' : 'font-semibold p-1 text-md text-fluency-gray-800 dark:text-white hover:text-fluency-blue-500 duration-300 ease-in-out'}>22</button></DropdownItem>
+            <DropdownItem><button onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()} className={editor.isActive('heading', { level: 5 }) ? 'p-1 text-md text-fluency-blue-500 font-bold' : 'font-semibold p-1 text-md text-fluency-gray-800 dark:text-white hover:text-fluency-blue-500 duration-300 ease-in-out'}>32</button></DropdownItem>
+            <DropdownItem><button onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()} className={editor.isActive('heading', { level: 6 }) ? 'p-1 text-md text-fluency-blue-500 font-bold' : 'font-semibold p-1 text-md text-fluency-gray-800 dark:text-white hover:text-fluency-blue-500 duration-300 ease-in-out'}>48</button></DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
-
-      <Dropdown>
-        <DropdownTrigger>
-          <Button 
-            variant="bordered" 
-            className="lg:hidden md:hidden block"
-          >
-            <RiFontSansSerif  className="w-5 h-auto" />
-          </Button>
-        </DropdownTrigger>
-          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-md hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
-              <div className="flex flex-row gap-2 items-center justify-center w-min">
-                <Tooltip
-                      className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-                      content="Diminuir fonte"
-                      color="primary"
-                      placement="bottom"
-                    >
-                  <button onClick={decreaseFontSize} className="text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all p-1 px-2 rounded-md font-bold text-xl">
-                    -</button>
-                </Tooltip>  
-                          
-                  <select
-                    value={selectedFontSize}
-                    onChange={handleFontSizeChange}
-                    className={editor.isActive('fontsize') ? 'text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md appearance-none p-1 px-2 text-md' : 'appearance-none outline-none text-fluency-gray-500 dark:text-fluency-gray-100 bg-fluency-blue-100 dark:bg-fluency-blue-900 font-semibold rounded-md p-1 px-2 text-md'}>
-                    {[8, 10, 12, 14, 16, 18, 20, 22, 28, 36, 42, 48].map((size) => (
-                      <option key={size} value={size}>{size}</option>
-                    ))}
-                  </select>
-
-                <Tooltip
-                      className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-                      content="Aumentar fonte"
-                      color="primary"
-                      placement="bottom"
-                    >
-                  <button onClick={increaseFontSize} className="text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all p-1 px-2 rounded-md font-bold text-xl">
-                    +</button>
-                </Tooltip>
-              </div>            
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
 
 
       <div className="lg:block md:block hidden">
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Negrito (Ctrl + B)"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <PiTextBBold className="w-5 h-auto" />
-        </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Negrito (Ctrl + B)"
+            color="primary"
+            placement="bottom"
+          >
+          <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <PiTextBBold className="w-5 h-auto" />
+          </button>
+        </Tooltip>
 
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Itálico (Ctrl + I)"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <FaItalic  className="w-4 h-auto" />
-        </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Itálico (Ctrl + I)"
+            color="primary"
+            placement="bottom"
+          >
+          <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <FaItalic  className="w-4 h-auto" />
+          </button>
+        </Tooltip>
 
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Marcador"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={editor.isActive('highlight') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-        <LuHighlighter className="w-5 h-auto" />
-        </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Marcador"
+            color="primary"
+            placement="bottom"
+          >
+          <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={editor.isActive('highlight') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <LuHighlighter className="w-5 h-auto" />
+          </button>
+        </Tooltip>
       </div>
 
       <Dropdown>
@@ -334,7 +245,7 @@ const increaseFontSize = () => {
             <FaFont className="w-4 h-auto" />
           </Button>
         </DropdownTrigger>
-          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
+          <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-md hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
             <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <PiTextBBold className="w-5 h-auto" />
             </DropdownItem>
@@ -350,52 +261,49 @@ const increaseFontSize = () => {
       <p>|</p>
 
       <div className="lg:block md:block hidden">
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Alinhar à esquerda (Ctrl + L)"
-          color="primary"
-          placement="bottom"
-        >
-          <button onClick={() => editor.chain().focus().setTextAlign('left').run()} className={editor.isActive({ textAlign: 'left' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-          <PiTextAlignLeft className="w-5 h-auto" />
-          </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Alinhar à esquerda (Ctrl + L)"
+            color="primary"
+            placement="bottom"
+          >
+            <button onClick={() => editor.chain().focus().setTextAlign('left').run()} className={editor.isActive({ textAlign: 'left' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <PiTextAlignLeft className="w-5 h-auto" />
+            </button>
+        </Tooltip>
 
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Alinhar ao centro (Ctrl + E)"
+            color="primary"
+            placement="bottom"
+          >
+            <button onClick={() => editor.chain().focus().setTextAlign('center').run()} className={editor.isActive({ textAlign: 'center' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <PiTextAlignCenter className="w-5 h-auto" />
+            </button>
+        </Tooltip>
 
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Alinhar ao centro (Ctrl + E)"
-          color="primary"
-          placement="bottom"
-        >
-          <button onClick={() => editor.chain().focus().setTextAlign('center').run()} className={editor.isActive({ textAlign: 'center' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-          <PiTextAlignCenter className="w-5 h-auto" />
-          </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Alinhar à direita (Ctrl + R)"
+            color="primary"
+            placement="bottom"
+          >
+            <button onClick={() => editor.chain().focus().setTextAlign('right').run()} className={editor.isActive({ textAlign: 'right' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <PiTextAlignRight className="w-5 h-auto" />
+            </button>
+        </Tooltip>
 
-
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Alinhar à direita (Ctrl + R)"
-          color="primary"
-          placement="bottom"
-        >
-          <button onClick={() => editor.chain().focus().setTextAlign('right').run()} className={editor.isActive({ textAlign: 'right' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-          <PiTextAlignRight className="w-5 h-auto" />
-          </button>
-      </Tooltip>
-
-
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Justificar texto (Ctrl + J)"
-          color="primary"
-          placement="bottom"
-        >
-          <button onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-          <PiTextAlignJustify className="w-5 h-auto" />
-          </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Justificar texto (Ctrl + J)"
+            color="primary"
+            placement="bottom"
+          >
+            <button onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <PiTextAlignJustify className="w-5 h-auto" />
+            </button>
+        </Tooltip>
       </div>
 
       <Dropdown>
@@ -408,14 +316,14 @@ const increaseFontSize = () => {
           </Button>
         </DropdownTrigger>
           <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
-              <PiTextAlignJustify className="w-5 h-auto" />
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('left').run()} className={editor.isActive({ textAlign: 'left' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignLeft className="w-5 h-auto" />
             </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
-              <PiTextAlignJustify className="w-5 h-auto" />
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('center').run()} className={editor.isActive({ textAlign: 'center' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignCenter className="w-5 h-auto" />
             </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
-              <PiTextAlignJustify className="w-5 h-auto" />
+            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('right').run()} className={editor.isActive({ textAlign: 'right' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+              <PiTextAlignRight className="w-5 h-auto" />
             </DropdownItem>
             <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <PiTextAlignJustify className="w-5 h-auto" />
@@ -426,42 +334,42 @@ const increaseFontSize = () => {
       <p>|</p>
 
       <div className="lg:block md:block hidden">
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Adicionar imagem com link"
-          color="primary"
-          placement="bottom"
-        >
-          <button onClick={addImage} className={editor.isActive('image', {  }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-            <IoImage className="w-5 h-auto" />
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Adicionar imagem com link"
+            color="primary"
+            placement="bottom"
+          >
+            <button onClick={addImage} className={editor.isActive('image', {  }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+              <IoImage className="w-5 h-auto" />
+            </button>
+        </Tooltip>
+
+
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Destacar texto"
+            color="primary"
+            placement="bottom"
+          >
+          <button
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            className={editor.isActive({ CodeBlock: 'codebloc' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <AiOutlineBlock className="w-5 h-auto" />
           </button>
-      </Tooltip>
+        </Tooltip>
 
-
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Destacar texto"
-          color="primary"
-          placement="bottom"
-        >
-        <button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive({ CodeBlock: 'codebloc' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-          <AiOutlineBlock className="w-5 h-auto" />
-        </button>
-      </Tooltip>
-
-      <Tooltip
-          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-          content="Criar linha horizontal"
-          color="primary"
-          placement="bottom"
-        >
-        <button onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className={editor.isActive({ rule: 'rule' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-          <GoHorizontalRule className="w-6 h-auto"/>
-        </button>
-      </Tooltip>
+        <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Criar linha horizontal"
+            color="primary"
+            placement="bottom"
+          >
+          <button onClick={() => editor.chain().focus().setHorizontalRule().run()}
+            className={editor.isActive({ rule: 'rule' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <GoHorizontalRule className="w-6 h-auto"/>
+          </button>
+        </Tooltip>
       </div>
       
       <Dropdown>
@@ -474,18 +382,17 @@ const increaseFontSize = () => {
           </Button>
         </DropdownTrigger>
           <DropdownMenu className="p-3 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600" aria-label="Static Actions">
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+            <DropdownItem onClick={() => editor.chain().focus().setHorizontalRule().run()} className={editor.isActive({ rule: 'rule' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <GoHorizontalRule className="w-6 h-auto"/>
             </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+            <DropdownItem onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive({ CodeBlock: 'codebloc' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <AiOutlineBlock className="w-5 h-auto" />
             </DropdownItem>
-            <DropdownItem onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
+            <DropdownItem onClick={addImage} className={editor.isActive('image', {  }) ? 'p-2 px-2 text-md text-fluency-blue-500' : 'p-2 px-2 text-md text-fluency-gray-100'}>
               <IoImage className="w-5 h-auto" />
             </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-
       </div>
   );
 };
