@@ -95,30 +95,9 @@ function Popovers({ editor }: PopoversProps) {
 
 
 const Tiptap = ({ onChange, content, isTyping }: any) => {
-  const handleChange = (newContent: string) => {
-    onChange(newContent);
-  };
-
-  const [realtimeContent, setRealtimeContent] = useState<string>(content);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const notebookID = params.get('notebook');
-    const studentID = params.get('student');
-
-    const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
-    const unsubscribe = onSnapshot(notebookRef, (doc) => {
-      if (doc.exists()) {
-        const { content: updatedContent } = doc.data();
-        setRealtimeContent(updatedContent);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [content]);
-
-
-
+  const params = new URLSearchParams(window.location.search);
+  const notebookID = params.get('notebook');
+  const studentID = params.get('student');
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
     setWorkbooks(true)
@@ -170,7 +149,46 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
 
   const [description, setDescription] = useState<string>('');
-  
+  const [newDescription, setNewDescription] = useState<string>('');
+  const [realtimeContent, setRealtimeContent] = useState<string>(content);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const notebookID = params.get('notebook');
+    const studentID = params.get('student');
+
+    const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
+    const unsubscribe = onSnapshot(notebookRef, (doc) => {
+      if (doc.exists()) {
+        const { content: updatedContent } = doc.data();
+        setRealtimeContent(updatedContent);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [content]);
+
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewDescription(event.target.value);
+  };
+
+  const handleUpdateDescription = async () => {
+    try {
+      await updateDoc(doc(db, `users/${studentID}/Notebooks/${notebookID}`), {
+        description: newDescription,
+      });
+      setDescription(newDescription);
+      toast.success('Descrição atualizada!', {
+        position: 'top-center',
+      });
+    } catch (error) {
+      console.error('Error updating description: ', error);
+      toast.error('Erro ao atualizar descrição!', {
+        position: 'top-center',
+      });
+    }
+  };
+
 
   const CustomDocument = Document.extend({
     content: 'heading block*',
@@ -223,7 +241,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     autofocus: true,
     content: realtimeContent,
     onUpdate: ({ editor }) => {
-      handleChange(editor.getHTML());
+      onChange(editor.getHTML());
     },
   }) 
 
@@ -297,6 +315,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                     Atualizar a Descrição
                   </p>
                   <div className="mt-2 flex flex-col gap-2 w-full">
+                  <FluencyInput className="w-full" defaultValue={description} placeholder="Descrição da aula" onChange={handleDescriptionChange} />
+                  <FluencyButton variant="confirm" onClick={handleUpdateDescription} className="w-full">Salvar</FluencyButton>
                   </div>
                 </div>
               )}
