@@ -377,3 +377,5 @@ export default function Certificado() {
     </div>
   );
 }
+
+InnerForm.displayName = 'InnerForm';
