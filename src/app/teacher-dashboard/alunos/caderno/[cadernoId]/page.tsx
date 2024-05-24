@@ -161,6 +161,18 @@ export default function Caderno(){
         handleCloseModalDescription(); // Close the modal after creating the notebook
     };
     
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedNotebookId, setSelectedNotebookId] = useState('');
+
+    const handleOpenDeleteModal = (notebookId: string) => {
+        setSelectedNotebookId(notebookId);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleCloseDeleteModal = () => {
+        setSelectedNotebookId('');
+        setIsDeleteModalOpen(false);
+    };
 
     //Deleting a Notebook
     const deleteNotebook = async (notebookId: string) => {
@@ -201,7 +213,7 @@ export default function Caderno(){
         }
     });
 
-    const createReviewTask = async (notebookTitle: string) => {
+    const createReviewTask = async (notebookTitle: string, notebookId: string) => {
         try {
           const studentDocRef = doc(db, `users/${id}`);
           const studentDocSnapshot = await getDoc(studentDocRef);
@@ -213,7 +225,7 @@ export default function Caderno(){
       
           const tasksArray = studentData.tasks?.Task || []; // Get the tasks array or initialize it if null
           const taskExists = tasksArray.some((task: { task: string; }) => task.task === `Revisar a aula de ${notebookTitle}`);
-      
+
           if (taskExists) {
             toast.error('Tarefa já adicionada!', {
                 position: "top-center",
@@ -221,7 +233,9 @@ export default function Caderno(){
             return;
           }
       
-          const newTask = { task: `Revisar a aula de ${notebookTitle}`, done: false };
+          const notebookLink = `/student-dashboard/caderno/aula/${encodeURIComponent(studentData.name)}/?notebook=${notebookId}&student=${id}`;
+        
+          const newTask = { task: `Revisar a aula de ${notebookTitle}`, done: false, link: notebookLink }; // Include link in the task object
           tasksArray.push(newTask);
       
           await updateDoc(studentDocRef, {
@@ -361,9 +375,8 @@ export default function Caderno(){
                                 </div>
                             </Link>
                             <div className='flex flex-row gap-2 items-center'>
-                                <p><MdDeleteSweep onClick={() => deleteNotebook(notebook.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
-                                <p><GiSchoolBag onClick={() => createReviewTask(notebook.description)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
-                                <p><BsFilePdfFill className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><MdDeleteSweep onClick={() => handleOpenDeleteModal(notebook.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><GiSchoolBag onClick={() => createReviewTask(notebook.description, notebook.id)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
                             </div>
                         </li>
                     ))}
@@ -446,6 +459,30 @@ export default function Caderno(){
                     </div>
                 </div>
             </div>}
+
+        {isDeleteModalOpen && (
+        <div className="fixed z-50 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="fixed inset-0 transition-opacity">
+                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                    <div className="flex flex-col">
+                        <FluencyCloseButton onClick={handleCloseDeleteModal}/>
+                        <div className="mt-3 flex flex-col gap-3 p-4">
+                            <h3 className="text-center text-lg leading-6 font-bold mb-2">
+                                Tem certeza que deseja excluir este caderno?
+                            </h3>
+                            <div className="flex justify-center">
+                                <FluencyButton variant='danger' onClick={() => { deleteNotebook(selectedNotebookId); handleCloseDeleteModal(); }}>Sim, excluir</FluencyButton>
+                                <FluencyButton variant='gray' onClick={handleCloseDeleteModal}>Não, cancelar</FluencyButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )}
 
 
         </div>

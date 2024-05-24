@@ -53,20 +53,20 @@ const DinamicaAulas = () => {
 
     const handleFinishLesson = async () => {
         const updatedLessonStatus = { ...lessonFinished };
-
+    
         if (userId) {
-            // Toggle lesson status
-            updatedLessonStatus[courseName] = !updatedLessonStatus[courseName];
-
+            // Toggle lesson status for the current step
+            updatedLessonStatus[`${courseName}-${currentStep}`] = !updatedLessonStatus[`${courseName}-${currentStep}`];
+    
             // Update Firestore document
             await updateDoc(doc(db, 'users', userId), { courses: updatedLessonStatus });
-
+    
             // Set state to reflect changes
             setLessonFinished(updatedLessonStatus);
-
+    
             toast.success(
-                `Você marcou a lição de ${courseName} como ${
-                    updatedLessonStatus[courseName] ? 'concluída' : 'não concluída'
+                `Você marcou a lição de ${courseName} - ${currentStep} como ${
+                    updatedLessonStatus[`${courseName}-${currentStep}`] ? 'concluída' : 'não concluída'
                 }`,
                 {
                     position: 'top-center',
@@ -75,6 +75,7 @@ const DinamicaAulas = () => {
             );
         }
     };
+    
 
     const handleNextStep = () => {
         setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
@@ -100,7 +101,7 @@ const DinamicaAulas = () => {
 
                     <div className="flex flex-row gap-2 justify-around mt-4">
                         <FluencyButton variant="confirm" onClick={handleFinishLesson}>
-                            {lessonFinished['dinamicaaulas'] ? 'Lição finalizada' : 'Finalizar lição'}
+                            {lessonFinished[`${courseName}-${currentStep}`] ? 'Lição finalizada' : 'Finalizar lição'}
                             <MdDone className="w-4 h-auto ml-2" />
                         </FluencyButton>
                         <div className='flex flex-row gap-2'>

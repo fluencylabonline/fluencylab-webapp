@@ -4,31 +4,32 @@
         "Description": "Aqui você vai entender qual nosso objetivo com cada aluno. Um pouco da nossa ideia de aulas e da plataforma FluencyLab.",
         "Duration": "10min",
         "lessonFinished": "",
-        "page": "primeirospassos"
+        "page": "primeirospassos",
+        "totalSteps": 1
     },
     {
         "Name": "2. Dinâmica de aulas",
         "Description": "Vamos aprender sobre a dinâmica de aulas do nosso curso. Como você pode ter um bom relacionamento com seus alunos e quais critérios precisa usar em algumas situações.",
-        "Duration": "",
-        "DoneOrNot": "",
+        "Duration": "15min",
         "CourseID": "dinamicasdasaulas",
-        "page": "dinamicaaulas"
+        "page": "dinamicaaulas",
+        "totalSteps": 3
     },
     {
         "Name": "3. Nivelamento",
         "Description": "O nivelamento pode ser um motivo de dúvida para muitos profesores. Como ele funciona na nossa escola e como pode fazer um e usar no seu planejamento vai ser explicado aqui.",
-        "Duration": "",
-        "DoneOrNot": "",
+        "Duration": "15min",
         "CourseID": "nivelamento",
-        "page": "nivelamento"
+        "page": "nivelamento",
+        "totalSteps": 3
     },
     {
         "Name": "4. Ferramentas e Métodos",
         "Description": "Aqui vamos aprender onde podemos encontrar os materiais das aulas, quais ferramentas temos disponíveis e sugestões e dicas de métodos que podem ser de ajuda durante as aulas.",
-        "Duration": "",
-        "DoneOrNot": "",
+        "Duration": "20min",
         "CourseID": "ferramentasemetodos",
-        "page": "ferramentas"
+        "page": "ferramentas",
+        "totalSteps": 4
     }
 ]
 

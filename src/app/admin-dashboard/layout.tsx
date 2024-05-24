@@ -13,6 +13,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
+import { LuBookCopy } from 'react-icons/lu';
 
 interface ISidebarItem {
   name: string;
@@ -90,7 +91,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "Apostilas",
       path: "/admin-dashboard/apostilas",
-      icon: <PiCertificateBold  className="h-6 w-6"/>,
+      icon: <LuBookCopy  className="h-6 w-6"/>,
     },
   ];
 

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { auth, db } from "@/app/firebase";
 import { FaKey, FaRegCircleUser, FaUser } from "react-icons/fa6";
@@ -97,6 +97,7 @@ export default function CreateAluno(){
                 frequencia: frequencia,
                 diaAula: selectedDays,
                 comecouEm: comecouEm,
+                tasks: {}
             });
     
             // Create a new 'Notebooks' collection inside the user's document
@@ -110,11 +111,29 @@ export default function CreateAluno(){
                 description: 'Um caderno de exemplo',
                 createdAt: serverTimestamp(),
                 studentName: userName,
-
             });
     
             console.log("Notebook added with ID: ", notebookDocRef.id);
     
+            // Add tasks to the student's document
+            const handleAddTask = async (day: string, task: string, done: boolean) => {
+                try {
+                    const studentDocRef = doc(db, `users/${user.uid}`);
+                    await updateDoc(studentDocRef, {
+                        [`tasks.${day}`]: arrayUnion({ task, done })
+                    });
+                    toast.success('Tarefa Adicionada!', {
+                        position: "top-center",
+                    });
+                } catch (error) {
+                    console.error('Error adding task:', error);
+                }
+            };
+
+            // Example of adding tasks (this can be customized as needed)
+            await handleAddTask('Task', 'Coloque uma foto de perfil', false);
+            await handleAddTask('Task', 'Troque sua senha', false);
+            
             // Reset form fields after successful sign-up
             setName('');
             setUserName('');
