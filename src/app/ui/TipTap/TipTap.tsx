@@ -99,9 +99,24 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     onChange(newContent);
   };
 
-  const params = new URLSearchParams(window.location.search);
-  const notebookID = params.get('notebook');
-  const studentID = params.get('student');
+  const [realtimeContent, setRealtimeContent] = useState<string>(content);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const notebookID = params.get('notebook');
+    const studentID = params.get('student');
+
+    const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
+    const unsubscribe = onSnapshot(notebookRef, (doc) => {
+      if (doc.exists()) {
+        const { content: updatedContent } = doc.data();
+        setRealtimeContent(updatedContent);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [content]);
+
 
 
   const [workbooks, setWorkbooks] = useState(false);
@@ -155,46 +170,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
 
   const [description, setDescription] = useState<string>('');
-  const [newDescription, setNewDescription] = useState<string>('');
-  useEffect(() => {
-    const fetchNotebookContent = () => {
-      try {
-        const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
-        const unsubscribe = onSnapshot(notebookRef, (notebookDoc) => {
-          if (notebookDoc.exists()) {
-            setDescription(notebookDoc.data().description);
-          }
-        });
-        return () => unsubscribe(); // Cleanup the listener on unmount
-      } catch (error) {
-        console.error('Error fetching notebook content: ', error);
-      }
-    };
   
-    fetchNotebookContent();
-  }, [studentID, notebookID]);
-
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewDescription(event.target.value);
-  };
-
-  const handleUpdateDescription = async () => {
-    try {
-      await updateDoc(doc(db, `users/${studentID}/Notebooks/${notebookID}`), {
-        description: newDescription,
-      });
-      setDescription(newDescription);
-      toast.success('Descrição atualizada!', {
-        position: 'top-center',
-      });
-    } catch (error) {
-      console.error('Error updating description: ', error);
-      toast.error('Erro ao atualizar descrição!', {
-        position: 'top-center',
-      });
-    }
-  };
-
 
   const CustomDocument = Document.extend({
     content: 'heading block*',
@@ -245,7 +221,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       },
     },
     autofocus: true,
-    content: content,
+    content: realtimeContent,
     onUpdate: ({ editor }) => {
       handleChange(editor.getHTML());
     },
@@ -321,8 +297,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                     Atualizar a Descrição
                   </p>
                   <div className="mt-2 flex flex-col gap-2 w-full">
-                  <FluencyInput className="w-full" defaultValue={description} placeholder="Descrição da aula" onChange={handleDescriptionChange} />
-                  <FluencyButton variant="confirm" onClick={handleUpdateDescription} className="w-full">Salvar</FluencyButton>
                   </div>
                 </div>
               )}
