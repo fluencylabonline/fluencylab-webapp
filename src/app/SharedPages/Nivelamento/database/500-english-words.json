@@ -1,0 +1,126 @@
+[
+    {
+      "english": "the",
+      "correct": "o/a",
+      "translations": ["o/a", "em", "sobre", "para"]
+    },
+    {
+      "english": "of",
+      "correct": "de",
+      "translations": ["de", "por", "com", "sobre"]
+    },
+    {
+      "english": "to",
+      "correct": "para",
+      "translations": ["para", "em", "de", "com"]
+    },
+    {
+      "english": "and",
+      "correct": "e",
+      "translations": ["e", "mas", "ou", "por"]
+    },
+    {
+      "english": "a",
+      "correct": "um/uma",
+      "translations": ["um/uma", "o/a", "em", "por"]
+    },
+    {
+      "english": "in",
+      "correct": "em",
+      "translations": ["em", "de", "para", "com"]
+    },
+    {
+      "english": "is",
+      "correct": "é",
+      "translations": ["é", "está", "fica", "por"]
+    },
+    {
+      "english": "it",
+      "correct": "ele/ela/isso",
+      "translations": ["ele/ela/isso", "eu", "você", "nós"]
+    },
+    {
+      "english": "you",
+      "correct": "você",
+      "translations": ["você", "eu", "ele/ela", "nós"]
+    },
+    {
+      "english": "that",
+      "correct": "aquele/aquela",
+      "translations": ["aquele/aquela", "isso", "este/esta", "ele/ela"]
+    },
+    {
+      "english": "he",
+      "correct": "ele",
+      "translations": ["ele", "ela", "você", "nós"]
+    },
+    {
+      "english": "was",
+      "correct": "era/estava",
+      "translations": ["era/estava", "foi/esteve", "será/estará", "ser/estar"]
+    },
+    {
+      "english": "for",
+      "correct": "para/por",
+      "translations": ["para/por", "com", "em", "de"]
+    },
+    {
+      "english": "on",
+      "correct": "em/sobre",
+      "translations": ["em/sobre", "por", "para", "com"]
+    },
+    {
+      "english": "are",
+      "correct": "são/estão",
+      "translations": ["são/estão", "meus", "eram/estavam", "coisas"]
+    },
+    {
+      "english": "with",
+      "correct": "com",
+      "translations": ["com", "para", "em", "por"]
+    },
+    {
+      "english": "as",
+      "correct": "como",
+      "translations": ["como", "por", "em", "para"]
+    },
+    {
+      "english": "I",
+      "correct": "eu",
+      "translations": ["eu", "você", "ele/ela", "nós"]
+    },
+    {
+      "english": "his",
+      "correct": "seu",
+      "translations": ["seu", "dele", "meu", "nosso"]
+    },
+    {
+      "english": "they",
+      "correct": "eles/elas",
+      "translations": ["eles/elas", "ele/ela", "nós", "você"]
+    },
+    {
+      "english": "be",
+      "correct": "ser/estar",
+      "translations": ["ser/estar", "será/estará", "foi/esteve", "vermelho"]
+    },
+    {
+      "english": "at",
+      "correct": "em/a",
+      "translations": ["em/a", "para", "com", "por"]
+    },
+    {
+      "english": "one",
+      "correct": "um/uma",
+      "translations": ["um/uma", "dois/duas", "três", "quatro"]
+    },
+    {
+      "english": "have",
+      "correct": "ter",
+      "translations": ["ter", "haver", "ser", "estar"]
+    },
+    {
+      "english": "this",
+      "correct": "este/esta",
+      "translations": ["este/esta", "esse/essa", "aquele/aquela", "ele/ela"]
+    }]

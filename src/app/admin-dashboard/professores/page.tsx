@@ -211,13 +211,16 @@ export default function Professors() {
     }
   };
   
+  const [alunos, setAlunos] = useState<AlunoProps[]>([]);
+  const renderAlunos = (alunos: { [key: string]: AlunoProps } | null | undefined) => {
+    // Check if alunos is undefined or null
+    if (!alunos) return ''; // Or any default value you prefer when alunos is not available
   
-  const renderAlunos = (alunos: { [key: string]: AlunoProps }) => {
+    // Map over the values of alunos and join their names with a comma
     return Object.values(alunos).map((aluno) => aluno.name).join(', ');
   };
 
   // Fetch Alunos
-  const [alunos, setAlunos] = useState<AlunoProps[]>([]);
   useEffect(() => {
     const fetchAlunos = async () => {
       try {
@@ -362,7 +365,7 @@ export default function Professors() {
                 </TableCell>
               <TableCell>{professor.salario}</TableCell>
               <TableCell>{renderAlunos(professor.alunos)}</TableCell>
-              <TableCell>{Object.keys(professor.alunos).length}</TableCell>
+              <TableCell>{professor.alunos ? Object.keys(professor.alunos).length : 0}</TableCell>
               <TableCell className='flex flex-col items-center'>
                 {renderPaymentStatus(professor.payments)}
               </TableCell>

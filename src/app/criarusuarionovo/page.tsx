@@ -14,9 +14,9 @@ export default function CriarUsuarioNovo() {
     const [coordenador, setCoordenador] = useState(false);
     const [aluno, setAluno] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+    
     const handlePasswordSubmit = (password: string) => {
-        if (password === "123456789") {
+        if (password === "123") {
             setIsAuthenticated(true);
             toast.success('Bem-vindo');
         } else {

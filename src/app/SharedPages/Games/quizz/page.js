@@ -190,7 +190,7 @@ export default function Quiz() {
                 return;
             }
             
-            const deckLink = `student-dashboard/pratica/quizz?deckname=${encodeURIComponent(deck.deckTitle)}&openplay=true`;
+            const deckLink = `/student-dashboard/pratica/quizz?deckname=${encodeURIComponent(deck.deckTitle)}&openplay=true`;
             const newTask = { task: `Revisar a aula de ${deck.deckTitle}`, link: deckLink, done: false };
             tasksArray.push(newTask);
             

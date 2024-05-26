@@ -4,7 +4,7 @@ import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyInput from "@/app/ui/Components/Input/input";
 import { DocumentData, addDoc, collection } from "firebase/firestore";
 import { db } from "@/app/firebase";
-
+import { v4 as uuidv4 } from 'uuid';
 //Pages
 import FirstSteps from './firststeps';
 import TheBasics from './thebasics';
@@ -15,6 +15,7 @@ interface Notebook {
     workbook: string;
     content: string;
     unit: string;
+    docID: string;
 }
 
 export default function ApostilasCreation() {
@@ -39,6 +40,7 @@ export default function ApostilasCreation() {
     async function createNotebook() {
         try {
             const newNotebook: Notebook = {
+                docID: uuidv4(), // Generate a random ID
                 title: nomeLicao,
                 workbook: workbook,
                 content: '',
@@ -119,6 +121,7 @@ export default function ApostilasCreation() {
         </select>
 
         <select onChange={(e) => setUnit(e.target.value)} value={unit}>
+            <option value="">Selecione uma unidade</option>
             <option value="one">1</option>
             <option value="two">2</option>
             <option value="three">3</option>

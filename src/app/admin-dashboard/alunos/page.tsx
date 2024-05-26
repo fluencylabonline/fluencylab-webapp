@@ -18,6 +18,7 @@ import { TbPigMoney } from 'react-icons/tb';
 import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
@@ -31,6 +32,7 @@ interface Aluno {
   mensalidade: number;
   idioma: string;
   payments: any;
+  studentMail: string;
 }
 
 interface Professor {
@@ -59,6 +61,7 @@ export default function Students() {
             mensalidade: doc.data().mensalidade,
             idioma: doc.data().idioma,
             payments: doc.data().payments,
+            studentMail: doc.data().email,
           };
           updatedAlunos.push(aluno);
         });
@@ -80,17 +83,18 @@ export default function Students() {
   const renderPaymentStatus = (payments: any) => {
     if (!payments) return (
       <Tooltip
-          className='text-xs font-bold bg-fluency-green-200 rounded-md p-1'
-          content="Sem informações de pagamento para esse mês"
-        >
-          <span className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
-            <RiErrorWarningLine className='text-fluency-yellow-500'/>
-          </span>
-        </Tooltip>
+        className='text-xs font-bold bg-fluency-green-200 rounded-md p-1'
+        content="Sem informações de pagamento para esse mês"
+      >
+        <span className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
+          <RiErrorWarningLine className='text-fluency-yellow-500'/>
+        </span>
+      </Tooltip>
     );
-
+  
     const yearPayments = payments[selectedYear] || {};
-    const status = yearPayments[selectedMonth];
+    const monthData = yearPayments[selectedMonth] || {};
+    const status = monthData.status || 'notPaid';
   
     if (status === 'paid') {
       return (
@@ -116,6 +120,7 @@ export default function Students() {
       );
     }
   };
+  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string>('');
@@ -157,12 +162,14 @@ export default function Students() {
       });
     }
   };
-
   
-  const confirmPayment = async (userId: string, date: Date, selectedMonth: string) => {
+  const confirmPayment = async (userId: string, date: Date, selectedMonth: string, paymentKey: string, mensalidade: number) => {
     try {
       // Get the year from the selected date
       const year = date.getFullYear();
+  
+      // Generate a random key
+      const newPaymentKey = uuidv4();
   
       // Create a reference to the user's document
       const userRef = doc(db, 'users', userId);
@@ -180,19 +187,46 @@ export default function Students() {
         const yearPayments = currentPayments[year] || {};
   
         // Check the current payment status for the selected month
-        const currentStatus = yearPayments[selectedMonth];
+        const currentStatus = yearPayments[selectedMonth] ? yearPayments[selectedMonth].status : 'notPaid';
   
         // Determine the new status
         const newStatus = currentStatus === 'paid' ? 'notPaid' : 'paid';
   
         // Update the payment status for the selected month
-        yearPayments[selectedMonth] = newStatus;
+        yearPayments[selectedMonth] = {
+          status: newStatus,
+          paymentKey: newStatus === 'paid' ? newPaymentKey : paymentKey,
+          mensalidade: mensalidade, // Store the mensalidade value
+        };
   
         // Update the payments data in the user's document
         await setDoc(userRef, { payments: { ...currentPayments, [year]: yearPayments } }, { merge: true });
   
+        // Update component state to trigger re-render
+        setAlunos((prevAlunos) => {
+          // Find the index of the updated aluno in the array
+          const updatedIndex = prevAlunos.findIndex((aluno) => aluno.id === userId);
+  
+          // Create a copy of the aluno with updated payments data
+          const updatedAluno = {
+            ...prevAlunos[updatedIndex],
+            payments: {
+              ...prevAlunos[updatedIndex].payments,
+              [year]: yearPayments, // Update payments for the selected year
+            },
+          };
+  
+          // Create a new array with the updated aluno at the correct index
+          return [
+            ...prevAlunos.slice(0, updatedIndex),
+            updatedAluno,
+            ...prevAlunos.slice(updatedIndex + 1),
+          ];
+        });
+  
         // Show appropriate toast message based on the new status
         const toastMessage = newStatus === 'paid' ? 'Pagamento registrado!' : 'Pagamento retirado!';
+        console.log(paymentKey)
         const toastType = newStatus === 'paid' ? 'success' : 'error';
         toast[toastType](toastMessage, {
           position: 'top-center',
@@ -207,6 +241,8 @@ export default function Students() {
       });
     }
   };
+  
+  
   
   //Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -284,6 +320,46 @@ export default function Students() {
   };
   
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const handleOnClick = async (studentMail: string, selectedMonth: string, paymentStatus: string, studentName: string, studentEmail: string, paymentKey: string, paymentKeyProp: string, mensalidade: number, selectedYear: number) => {
+    try {
+      const response = await toast.promise(
+        fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            studentMail,
+            selectedMonth,
+            paymentStatus,
+            studentName,
+            studentEmail,
+            paymentKey,
+            paymentKeyProp,
+            mensalidade,
+            selectedYear
+          }),
+        }),
+        {
+          loading: 'Enviando comprovante...',
+          success: 'Comprovante enviado!',
+          error: 'Erro ao enviar comprovante!',
+        }
+      );
+  
+      // If response.ok is true, the promise resolves successfully
+      // Otherwise, it throws an error and the error message will be displayed
+    } catch (error) {
+      console.error('Error sending reminder email:', error);
+      toast.error('Erro ao enviar email de cobrança!', {
+        position: 'top-center',
+      });
+    }
+  };
+  
+
+const totalStudents = alunos.length;
+const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensalidade), 0);
 
   return (
     <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
@@ -325,7 +401,7 @@ export default function Students() {
           <option value={selectedYear}>2024</option>
         </select>
       </div>
-      <Table>
+      <Table aria-label='Table' >
         <TableHeader>
         <TableColumn>Nome</TableColumn>
           <TableColumn>Professor</TableColumn>
@@ -358,12 +434,12 @@ export default function Students() {
                   </Tooltip>
                   <Tooltip className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1' content="Enviar comprovante">
                     <span className="hover:text-fluency-blue-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
-                      <RiMailSendFill />
-                    </span>
+                    <RiMailSendFill onClick={() => handleOnClick(aluno.studentMail, selectedMonth, aluno.payments[selectedYear]?.[selectedMonth] || 'notPaid', aluno.name, aluno.studentMail, aluno.payments[selectedYear]?.['paymentKey'] || '', aluno.payments?.[selectedYear]?.[selectedMonth]?.paymentKey || '', aluno.mensalidade, selectedYear)} />
+                    </span>                                        
                   </Tooltip>
                   <Tooltip className='text-xs font-bold bg-fluency-green-200 rounded-md p-1' content="Confirmar ou retirar pagamento">
                     <span className="hover:text-fluency-green-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
-                    <TbPigMoney onClick={() => confirmPayment(aluno.id, new Date(), selectedMonth)} />
+                    <TbPigMoney onClick={() => confirmPayment(aluno.id, new Date(), selectedMonth, aluno.payments?.[selectedYear]?.[selectedMonth]?.paymentKey || '', aluno.mensalidade)} />
                     </span>
                   </Tooltip>
                 </div>
@@ -372,7 +448,6 @@ export default function Students() {
           ))}
         </TableBody>
       </Table>
-
           {isModalOpen && (
             <div className="fixed z-50 inset-0 overflow-y-auto">
               <div className="flex items-center justify-center min-h-screen">
