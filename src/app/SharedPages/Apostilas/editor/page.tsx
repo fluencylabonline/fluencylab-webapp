@@ -1,12 +1,8 @@
 'use client'
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 //Firebase
-import {   
-  getDoc,
-  doc,
-  setDoc,} from 'firebase/firestore';
+import { getDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
 //TipTap
@@ -14,17 +10,13 @@ import Tiptap from './TipTap'
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 const NotebookEditor = () => {
-  const params = new URLSearchParams(window.location.search);
-  const workbook = params.get('workbook');
-  const lesson = params.get('lesson');
-
-  const [content, setContent] = useState<string>('')
+  const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
   useEffect(() => {
-    const fetchNotebookContent = async () => {
+    const fetchNotebookContent = async (lesson: string) => {
       try {
         setLoading(true); // Set loading to true when fetching content
         const notebookDoc = await getDoc(doc(db, `Notebooks/First Steps/Lessons/${lesson}`));
@@ -38,8 +30,14 @@ const NotebookEditor = () => {
       }
     };
 
-    fetchNotebookContent();
-  }, [lesson]); // Update content when notebookID changes
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const lesson = params.get('lesson');
+      if (lesson) {
+        fetchNotebookContent(lesson);
+      }
+    }
+  }, []); // Empty dependency array ensures this runs once after the initial render
 
   const handleContentChange = async (newContent: string) => {
     if (!isTyping) {
@@ -55,19 +53,23 @@ const NotebookEditor = () => {
     }, 3000);
 
     try {
-      await setDoc(doc(db, `Notebooks/First Steps/Lessons/${lesson}`), { content: newContent }, { merge: true });
-      
+      const params = new URLSearchParams(window.location.search);
+      const lesson = params.get('lesson');
+      if (lesson) {
+        await setDoc(doc(db, `Notebooks/First Steps/Lessons/${lesson}`), { content: newContent }, { merge: true });
+      }
     } catch (error) {
       console.error('Error saving notebook content: ', error);
     }
   };
 
   if (loading) {
-    return <DocumentAnimation /> ;}
+    return <DocumentAnimation />;
+  }
 
   return (
     <div className='lg:px-6 lg:py-4 md:px-6 md:py-4 px-2 py-1'>
-        <Tiptap
+      <Tiptap
         content={content}
         onChange={(newContent: string) => handleContentChange(newContent)}
         isTyping={isTyping}
