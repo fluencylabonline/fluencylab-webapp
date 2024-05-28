@@ -20,9 +20,8 @@ export default function Header({ isCollapsed, toggleSidebar, isMobile }: HeaderP
     const cleanedPathname = pathname.replace(`/${baseDashboardPath}`, 'Home');
     const segments = cleanedPathname.split('/').filter(segment => segment !== '');
 
-    // Function to capitalize the first letter of a string
     const capitalizeFirstLetter = (str: string) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     };
 
     // Function to construct the full path for a given segment
