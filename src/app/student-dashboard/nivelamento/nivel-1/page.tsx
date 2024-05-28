@@ -15,15 +15,13 @@ export default function One(){
 
     return(
         <div>
-            {/*TEACHER PAGE*/}
             {session?.user.role === 'teacher' && (
                 <div>
-                    Teacher,show all teacher's students and their scores
+                    Teacher show all teachers students and their scores
                 </div>
             )}
 
 
-            {/*STUDENT PAGE*/}
             {session?.user.role === 'student' && (
                 <div className="flex flex-wrap justify-center gap-3 p-10">
                     <Link href={"nivel-1/vocabulario"}>
@@ -56,11 +54,9 @@ export default function One(){
                 </div>
             )}
 
-
-            {/*ADMIN PAGE*/}
             {session?.user.role === 'admin' && (
                 <div>
-                    Admin,show all students and their scores
+                    Admin show all students and their scores
                 </div>
             )}
 

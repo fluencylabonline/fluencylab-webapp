@@ -81,7 +81,7 @@ export default function Quiz() {
                 openPlayQuiz(selectedDeck); // Open quiz player if 'openplay' is true in URL and deck is found
             }
         }
-    }, [decks]);
+    }, [decks, openPlayQuiz]);
 
     useEffect(() => {
         const fetchStudents = async () => {

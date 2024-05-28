@@ -7,7 +7,7 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google/generative-ai";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { db } from "@/app/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { TbDeviceDesktopAnalytics } from "react-icons/tb";
@@ -40,12 +40,32 @@ export default function Home() {
     provideRandomTopic();
   }, []);
 
+  const saveInFirebase = useCallback(
+    async (userText: string, analysis: string, score: string) => {
+      if (session && session.user) {
+        const userId = session.user.id;
+        const scoreData = {
+          userText: userText,
+          score: score,
+          timestamp: serverTimestamp(),
+          analysis: analysis,
+        };
+        try {
+          await addDoc(collection(db, "users", userId, "nivelamento", "nivel2", "escrita"), scoreData);
+          console.log("Dados salvos com sucesso!");
+        } catch (error) {
+          console.error("Erro ao salvar os dados: ", error);
+        }
+      }
+    },
+    [session]
+  );
+
   useEffect(() => {
     if (score && data) {
-      saveInFirebase(data); // Pass the user text as an argument
+      saveInFirebase(userInput, data, score);
     }
-  }, [score, data]);
-  
+  }, [score, data, userInput, saveInFirebase]);
 
   const runChat = async (prompt: string) => {
     const genAI = new GoogleGenerativeAI(API_KEY);
@@ -112,33 +132,14 @@ export default function Home() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const prompt = (event.target as HTMLFormElement)?.prompt?.value || "";
+    setUserInput(prompt);
     runChat(prompt);
-    saveInFirebase(prompt);
   };
   
   const provideRandomTopic = () => {
     const randomTopic = getRandomTopic();
     setTopic(randomTopic);
   };
-
-  const saveInFirebase = async (userText: string) => {
-    if (session && session.user) {
-      const userId = session.user.id;
-      const scoreData = {
-        userText: userText,
-        score: score,
-        timestamp: serverTimestamp(),
-        analysis: data,
-      };
-      try {
-        await addDoc(collection(db, "users", userId, "nivelamento", "nivel2", "escrita"), scoreData);
-        console.log("Dados salvos com sucesso!");
-      } catch (error) {
-        console.error("Erro ao salvar os dados: ", error);
-      }
-    }
-  };
-  
 
   return (
     <main className="text-fluency-text-light dark:text-fluency-text-dark flex h-[90vh] flex-row overflow-y-hidden items-start justify-around p-6 w-full gap-2">
