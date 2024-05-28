@@ -9,12 +9,14 @@ import { v4 as uuidv4 } from 'uuid';
 import FirstSteps from './firststeps';
 import TheBasics from './thebasics';
 import AllYouNeedToKnow from './allyouneedtoknow';
+import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
+import { toast, Toaster } from "react-hot-toast";
 
 interface Notebook {
     title: string;
     workbook: string;
     content: string;
-    unit: string;
+    unit: number;
     docID: string;
 }
 
@@ -23,9 +25,9 @@ export default function ApostilasCreation() {
     const [notebooks, setNotebooks] = useState<Notebook[]>([]);
     const [nomeLicao, setNomeLicao] = useState('');
     const [workbook, setWorkbook] = useState('');
-    const [unit, setUnit] = useState('');
+    const [unit, setUnit] = useState<number>(0);
     
-    const [firststeps, setFirststeps] = useState(false);
+    const [firststeps, setFirststeps] = useState(true);
     const [thebasics, setThebasics] = useState(false);
     const [allyouneedtoknow, setAllyouneedtoknow] = useState(false);
 
@@ -40,7 +42,7 @@ export default function ApostilasCreation() {
     async function createNotebook() {
         try {
             const newNotebook: Notebook = {
-                docID: uuidv4(), // Generate a random ID
+                docID: uuidv4(),
                 title: nomeLicao,
                 workbook: workbook,
                 content: '',
@@ -49,6 +51,9 @@ export default function ApostilasCreation() {
             await addDoc(collection(db, `Notebooks/${workbook}/Lessons`), newNotebook);
             setNotebooks([...notebooks, newNotebook]);
             closeModalLicao();
+            toast.success('Lição criada com sucesso!', {
+                position: "top-center",
+            });
         } catch (error) {
             console.error('Error creating notebook:', error);
         }
@@ -106,38 +111,61 @@ export default function ApostilasCreation() {
             <AllYouNeedToKnow />
         </div>}
 
+
     {criarLicao && 
-    <div>
-        <FluencyInput 
-            placeholder="Nome da Lição" 
-            onChange={(e) => setNomeLicao(e.target.value)}
-            value={nomeLicao}
-        />
-        <select onChange={(e) => setWorkbook(e.target.value)} value={workbook}>
-            <option value="">Selecione uma categoria</option>
-            <option value="First Steps">First Steps</option>
-            <option value="The Basics">The Basics</option>
-            <option value="All you need to know">All you need to know</option>
-        </select>
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen">
+                    
+                    <div className="fixed inset-0 transition-opacity">
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
 
-        <select onChange={(e) => setUnit(e.target.value)} value={unit}>
-            <option value="">Selecione uma unidade</option>
-            <option value="one">1</option>
-            <option value="two">2</option>
-            <option value="three">3</option>
-            <option value="four">4</option>
-            <option value="five">5</option>
-            <option value="six">6</option>
-            <option value="seven">7</option>
-            <option value="eight">8</option>
-            <option value="nine">9</option>
-            <option value="ten">10</option>
-        </select>
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                        <div className="flex flex-col items-center justify-center">
+                            
+                            <FluencyCloseButton onClick={closeModalLicao}/>
+                            
+                              <h3 className="text-lg leading-6 font-medium  mb-2">
+                                 Criar uma lição                      
+                              </h3>
 
-        <button onClick={createNotebook}>Criar</button>
-        <button onClick={closeModalLicao}>Fechar</button>
-    </div>}
-            
+                              <div className="mt-2 flex flex-col items-center gap-3 p-4">
+                              <FluencyInput 
+                                    placeholder="Nome da Lição" 
+                                    onChange={(e) => setNomeLicao(e.target.value)}
+                                    value={nomeLicao}
+                                />
+                                <select onChange={(e) => setWorkbook(e.target.value)} value={workbook} className="ease-in-out duration-300 w-full px-2 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
+>
+                                    <option value="">Selecione uma categoria</option>
+                                    <option value="First Steps">First Steps</option>
+                                    <option value="The Basics">The Basics</option>
+                                    <option value="All you need to know">All you need to know</option>
+                                </select>
+
+                                <select onChange={(e) => setUnit(parseInt(e.target.value, 10))} value={unit} className="ease-in-out duration-300 w-full px-2 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800">
+                                    <option value="">Selecione uma unidade</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                                <div className="flex justify-center">
+                                  <FluencyButton variant='confirm' onClick={createNotebook}>Criar</FluencyButton>
+                                  <FluencyButton variant='gray' onClick={closeModalLicao}>Cancelar</FluencyButton>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+       <Toaster />
   </div>
 );
 }

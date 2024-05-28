@@ -94,7 +94,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
               {menuItems.map((item: ISidebarItem, index: number) => (
                 <div
                   key={index}
-                  className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === item.path ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}                   
+                  className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === item.path ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400 bg-fluency-blue-200 dark:bg-fluency-blue-500 rounded-md px-4' : ' hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}                   
                   onClick={() => handleItemClick(item.path)}
                 >
                   {item.icon}

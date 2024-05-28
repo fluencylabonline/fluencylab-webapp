@@ -10,6 +10,7 @@
     "email": "email dev --dir src/emails"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.11.4",
     "@headlessui/react": "^2.0.3",
     "@nextui-org/dropdown": "^2.1.23",
     "@nextui-org/react": "^2.3.6",

@@ -3,23 +3,25 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { toast, Toaster } from 'react-hot-toast';
+
+// Next Imports
 import { useSession } from 'next-auth/react';
+
+// Firebase
 import { doc, setDoc, updateDoc, getDoc, collection } from 'firebase/firestore';
 import { db } from '@/app/firebase';
-import Dinamica1 from './dinamica1';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { MdDone } from 'react-icons/md';
-import Dinamica2 from './dinamica2';
-import Dinamica3 from './dinamica3';
+import { FaArrowRight } from 'react-icons/fa6';
+import PrimeirosPassos1 from './primeirospassos1';
 
-const DinamicaAulas = () => {
+const CursoDetails = () => {
     const { data: session } = useSession();
-    const userId = session?.user.id;
+    const userId = session?.user.id
     const [lessonFinished, setLessonFinished] = useState<{ [key: string]: boolean }>({});
     const [scrollProgress, setScrollProgress] = useState(0);
+    const courseName = 'primeirospassos'; // Define the course name
     const [currentStep, setCurrentStep] = useState(1);
-    const totalSteps = 3; // Total number of steps
-    const courseName = 'dinamicaaulas'; // Define the course name
+    const totalSteps = 1; // Total number of steps
 
     useEffect(() => {
         const handleScroll = () => {
@@ -29,13 +31,14 @@ const DinamicaAulas = () => {
             const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
             setScrollProgress(scrollPercent);
         };
-
+    
         window.addEventListener('scroll', handleScroll);
-
+    
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [session]);
+    
 
     useEffect(() => {
         const fetchUserLessonStatus = async () => {
@@ -75,7 +78,6 @@ const DinamicaAulas = () => {
             );
         }
     };
-    
 
     const handleNextStep = () => {
         setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
@@ -86,44 +88,31 @@ const DinamicaAulas = () => {
     };
 
     return (
-        <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md mt-2 flex flex-col items-center h-full text-lg mx-4">
+        <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md mt-2 flex flex-col items-center h-full text-lg mx-4'>
             <div className="progress-container sticky z-[9999] top-0 h-2 w-full bg-fluency-gray-300 rounded-tl-md rounded-tr-md">
                 <div className="progress-bar rounded-tl-md rounded-tr-md h-full bg-fluency-green-500" style={{ width: `${scrollProgress}%` }}></div>
             </div>
 
-            <div className="p-6 px-32 mt-4 text-justify">
-                <p className="text-3xl font-bold py-2">Dinâmica de Aulas</p>
+            <div className='p-6 px-32 mt-4 text-justify'>
 
-                <div className="flex flex-col gap-4">
-                    {currentStep === 1 && <Dinamica1 />}
-                    {currentStep === 2 && <Dinamica2 />}
-                    {currentStep === 3 && <Dinamica3 />}
+                <p className='text-3xl font-bold py-2'>Primeiros Passos</p>
 
+                <div className='flex flex-col gap-4'>
+                    {currentStep === 1 && <PrimeirosPassos1 />}
+                    
                     <div className="flex flex-row gap-2 justify-around mt-4">
                         <FluencyButton variant="confirm" onClick={handleFinishLesson}>
-                            {lessonFinished[`${courseName}-${currentStep}`] ? 'Lição finalizada' : 'Finalizar lição'}
+                            {lessonFinished[`${courseName}-${currentStep}`] ? 'Lição já finalizada' : 'Finalizar lição'}
                             <MdDone className="w-4 h-auto ml-2" />
                         </FluencyButton>
-                        <div className='flex flex-row gap-2'>
-                            {currentStep > 1 && (
-                            <FluencyButton onClick={handlePreviousStep}>
-                                <FaArrowLeft className="w-4 h-auto mr-2" /> Anterior
-                            </FluencyButton>
-                            )}
-                            {currentStep < totalSteps && (
-                            <FluencyButton onClick={handleNextStep}>
+                        <Link href={'dinamica%20de%20aulas'}>
+                            <FluencyButton variant='warning'>
                                 Próxima <FaArrowRight className="w-4 h-auto ml-2" />
                             </FluencyButton>
-                            )}{currentStep === totalSteps && (
-                            <Link href={'nivelamento'}>
-                                <FluencyButton>
-                                    Próxima lição <FaArrowRight className="w-4 h-auto ml-2" />
-                                </FluencyButton>
-                            </Link>
-                            )}
-                        </div>
+                        </Link>
                     </div>
                 </div>
+                
             </div>
 
             <Toaster />
@@ -131,4 +120,4 @@ const DinamicaAulas = () => {
     );
 };
 
-export default DinamicaAulas;
+export default CursoDetails;

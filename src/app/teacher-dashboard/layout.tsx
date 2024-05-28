@@ -13,7 +13,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 import { PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
-import { LuGamepad2 } from 'react-icons/lu';
+import { LuBookCopy, LuGamepad2 } from 'react-icons/lu';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 
 interface ISidebarItem {

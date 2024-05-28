@@ -2,15 +2,19 @@
 import { useEffect, useState } from "react";
 import { DocumentData, QuerySnapshot, collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase";
+import Link from "next/link";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
 interface LessonDoc {
     id: string;
     data: DocumentData;
-    unit: string;
+    unit: number;
+    title: string;
+    workbook: string;
   }
   
   interface GroupedLessonDocs {
-    unit: string;
+    unit: number;
     docs: LessonDoc[];
   }
   
@@ -24,7 +28,9 @@ export default function AllYouNeedToKnow(){
         const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
           id: doc.id,
           data: doc.data(),
-          unit: doc.data().unit || 'Uncategorized', // Assuming there's a 'unit' field in your documents
+          unit: doc.data().unit || 'Uncategorized',
+          title: doc.data().title,
+          workbook: doc.data().workbook,
         }));
   
         // Group documents by unit
@@ -39,9 +45,10 @@ export default function AllYouNeedToKnow(){
   
         // Transform grouped object into an array
         const groupedLessonDocs: GroupedLessonDocs[] = Object.keys(groupedByUnit).map(unit => ({
-          unit,
+          unit: parseInt(unit, 10),
           docs: groupedByUnit[unit],
         }));
+        
   
         setLessonDocs(groupedLessonDocs);
       } catch (error) {
@@ -54,15 +61,20 @@ export default function AllYouNeedToKnow(){
   
 
     return(
-        <div>
+        <div className="flex flex-col items-start gap-1">
             {lessonDocs.map((group, index) => (
                 <div key={index}>
-                    <h2>Unit: {group.unit}</h2>
-                    {group.docs.map((lesson, lessonIndex) => (
-                    <div key={lessonIndex}>
-                        <h3>{lesson.data.title}</h3>
+                  <Accordion>
+                  <AccordionItem key={index} aria-label={group.unit.toString()} title={"Unidade " + group.unit.toString()}>
+                      <div className="flex flex-row gap-2 items-center">
+                      {group.docs.map((lesson, lessonIndex) => (
+                    <div className="flex flex-col items-center justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 rounded-sm" key={lessonIndex}>
+                        <Link key={lesson.id} href={{ pathname: `apostilas/${encodeURIComponent(lesson.title)}`, query: { workbook: lesson.workbook, lesson: lesson.id }}} ><p className="font-bold hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{lesson.data.title}</p></Link>
                     </div>
                     ))}
+                      </div>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
             ))}
         </div>

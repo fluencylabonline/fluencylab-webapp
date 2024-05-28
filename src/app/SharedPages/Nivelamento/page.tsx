@@ -13,7 +13,7 @@ export default function CursoParaProfessores() {
     const router = useRouter();
     const { data: session } = useSession();
     const handleCardClick = () => {
-        router.push(`nivelamento/levels/level1/vocabulario`);
+        router.push(`nivelamento/nivel-1/vocabulario`);
     };
 
 

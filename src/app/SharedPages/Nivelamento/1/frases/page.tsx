@@ -2,6 +2,13 @@
 import { useState, useEffect } from "react";
 import wordsData from "../../database/sentences-test-english.json";
 import { IoMdArrowRoundForward } from "react-icons/io";
+import FluencyButton from "@/app/ui/Components/Button/button";
+import { FaArrowRight } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "@/app/firebase";
+import { toast, Toaster } from "react-hot-toast";
 
 interface Word {
   phrase: string;
@@ -10,12 +17,16 @@ interface Word {
 }
 
 const Level2: React.FC = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const totalPossiblePoints = 5;
   const [quizWords, setQuizWords] = useState<Word[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedTranslation, setSelectedTranslation] = useState("");
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
-
+  const [progressColor, setProgressColor] = useState("bg-fluency-orange-500");
+  
   useEffect(() => {
     const wordEntries = Object.entries(wordsData) as [string, Word][];
     const selectedWords: Word[] = [];
@@ -29,12 +40,20 @@ const Level2: React.FC = () => {
     setQuizWords(selectedWords);
   }, []);
 
-  const handleAnswerSelection = (translation: string) => {
-    setSelectedTranslation(translation);
-    if (translation === quizWords[currentQuestionIndex].correct_translation) {
+  const handleAnswerSelection = (correct_translation: string) => {
+    setSelectedTranslation(correct_translation);
+    if (correct_translation === quizWords[currentQuestionIndex].correct_translation) {
       setScore((prevScore) => prevScore + 1);
+      setProgressColor("bg-fluency-green-500");
+    } else {
+      setProgressColor("bg-fluency-red-500");
     }
     setAnswered(true);
+
+    // Revert the progress bar color back to original after 2 seconds
+    setTimeout(() => {
+      setProgressColor("bg-fluency-orange-500");
+    }, 2000);
   };
 
   const handleNextQuestion = () => {
@@ -43,16 +62,45 @@ const Level2: React.FC = () => {
     setAnswered(false);
   };
 
+  const handleNextLevel = async () => {
+    if (session && session.user) {
+      const userId = session.user.id;
+      const scoreData = {
+        pontos: finalScore,
+        data: new Date().toISOString(),
+      };
+
+      try {
+        // Adding a new document with an auto-generated ID
+        await addDoc(collection(db, "users", userId, "nivelamento", "nivel1", "frases"), scoreData);
+        toast.success("Pontuação salva com sucesso!");
+        router.push(`verdadeiro-e-falso`);
+      } catch (error) {
+        toast.error("Erro ao salvar a pontuação");
+        console.error("Erro ao salvar a pontuação: ", error);
+      }
+    }
+  };
+
   if (quizWords.length === 0) {
     return <div>Loading...</div>;
   }
 
   const currentWord = quizWords[currentQuestionIndex];
   const allWordsAnswered = currentQuestionIndex === quizWords.length - 1 && answered;
+  const finalScore = (score / quizWords.length) * totalPossiblePoints;
+  const progressPercentage = ((currentQuestionIndex + 1) / quizWords.length) * 100;
 
-  return (
-    <div className="h-[90vh] overflow-y-hidden flex flex-col items-center justify-around">
-      <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-20 rounded-md w-max h-max">
+return (
+  <div className="h-[90vh] overflow-y-hidden flex flex-col items-center justify-around">
+    <div className="flex flex-col items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md w-[30rem] h-[25rem]">
+      <div className="w-full bg-fluency-gray-200 h-2.5 overflow-hidden dark:bg-gray-700 rounded-tl-md rounded-tr-md">
+        <div
+            className={`${progressColor} h-2.5 transition-all duration-500`}
+            style={{ width: `${progressPercentage}%` }}
+          ></div>
+        </div>
+        <div className="p-10 mt-4">
         <div>Pontos: {score}</div>
         <h2 className="text-xl font-medium flex flex-row gap-1 items-center">Qual a tradução de: <p className="font-bold text-fluency-orange-500">{currentWord.phrase}</p></h2>
         <div className="flex flex-col items-stretch gap-1 p-6 w-full">
@@ -71,23 +119,24 @@ const Level2: React.FC = () => {
           ))}
         </div>
 
-        <div className="flex flex-col items-center justify-center w-full gap-2">
-          {selectedTranslation !== "" && (
-            <div className={`p-2 px-4 rounded-md ${selectedTranslation === currentWord.correct_translation ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-              {selectedTranslation === currentWord.correct_translation ? "Correto!" : "Incorreto!"}
+        <div className="flex flex-col items-center justify-center w-full gap-2 mt-2">
+              {allWordsAnswered ? (
+              <div>
+                <div className="hidden">Pontuação Final: {finalScore}</div>
+                <FluencyButton variant="confirm" onClick={handleNextLevel}>
+                  Próxima Lição
+                  <FaArrowRight className="w-4 h-auto ml-2" />
+                </FluencyButton>
+              </div>
+              ):(
+                <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-2 rounded-md px-3" onClick={handleNextQuestion} disabled={selectedTranslation === "" || allWordsAnswered}>
+                Próxima <IoMdArrowRoundForward />
+              </button>
+              )}
             </div>
-          )}
-          <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-2 rounded-md px-3" onClick={handleNextQuestion} disabled={selectedTranslation === "" || allWordsAnswered}>
-            Próxima <IoMdArrowRoundForward />
-          </button>
         </div>
       </div>
-
-      {allWordsAnswered && (
-        <div>
-          <div className="hidden">Pontuação Final: {score}</div>
-        </div>
-      )}
+     <Toaster />
     </div>
   );
 };
