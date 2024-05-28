@@ -105,7 +105,7 @@ const CursoDetails = () => {
                             {lessonFinished[`${courseName}-${currentStep}`] ? 'Lição já finalizada' : 'Finalizar lição'}
                             <MdDone className="w-4 h-auto ml-2" />
                         </FluencyButton>
-                        <Link href={'dinamica%20de%20aulas'}>
+                        <Link href={'dinamica-de-aulas'}>
                             <FluencyButton variant='warning'>
                                 Próxima <FaArrowRight className="w-4 h-auto ml-2" />
                             </FluencyButton>

@@ -5,7 +5,7 @@
         "Duration": "10min",
         "lessonFinished": "",
         "page": "primeirospassos",
-        "link": "primeiros%20passos",
+        "link": "primeiros-passos",
         "totalSteps": 1
     },
     {
@@ -14,7 +14,7 @@
         "Duration": "15min",
         "CourseID": "dinamicasdasaulas",
         "page": "dinamicaaulas",
-        "link": "dinamica%20de%20aulas",
+        "link": "dinamica-de-aulas",
         "totalSteps": 3
     },
     {

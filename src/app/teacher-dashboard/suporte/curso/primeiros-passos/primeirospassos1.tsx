@@ -10,7 +10,7 @@ export default function PrimeirosPassos1(){
                     <p>Nossa ideia é fazer com que os alunos aproveitem bem cada aula e sintam que tem suporte para continuar estudando durante a semana. Nossos alunos são muito variados e tem necessidades muito diferentes. Por isso, é muito importante sempre manter uma boa conversa sobre o que eles acham do curso, o que eles aproveitam e o que não aproveitam.</p>
 
                     <div className='w-full lg:flex lg:flex-row md:flex md:flex-col flex flex-col gap-1 justify-between items-start my-4 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-900'>
-                        <p className='w-fit p-6'>Para não te entediar muito, preparamos um vídeo curto com informações importantes. Fique a vontade para tirar suas dúvidas. "um vídeo sobre a escola, porque os alunos nos procuram e uma ideia básica da nossa dinamica de aulas e relação com os alunos."</p>
+                        <p className='w-fit p-6'>Para não te entediar muito, preparamos um vídeo curto com informações importantes. Fique a vontade para tirar suas dúvidas. um vídeo sobre a escola, porque os alunos nos procuram e uma ideia básica da nossa dinamica de aulas e relação com os alunos.</p>
                         <iframe className='w-full rounded-md' width="720" height="275" src="https://www.youtube.com/embed/1MCTUAXHM_I" title="Nivelamento" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
                     </div>
 
