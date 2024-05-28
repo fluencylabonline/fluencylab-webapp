@@ -129,7 +129,7 @@ export default function Quiz() {
         setQuestions([]);
     }
 
-    const openPlayQuiz = useCallback((deck) => {
+    function openPlayQuiz(deck) {
         setSelectedDeck(deck);
         setQuestions(deck.questions);
         setCurrentQuestionIndex(0);
@@ -138,13 +138,13 @@ export default function Quiz() {
         setRemainingTime(60); // Reset timer for each question
         setPlayQuiz(true);
         startTimer(); // Start the timer when modal opens
-
+        
         // Update URL parameters
         const params = new URLSearchParams();
         params.set('deckname', deck.deckTitle);
         params.set('openplay', 'true');
         router.replace(`?${params.toString()}`);
-    }, [startTimer, router]);
+    }
     
     function closePlayQuiz() {
         setPlayQuiz(false);
