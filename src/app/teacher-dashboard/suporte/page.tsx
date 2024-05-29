@@ -9,6 +9,7 @@ export default function Suporte(){
     <div className="lg:flex lg:flex-row md:flex md:flex-grid sm:flex sm:flex-grid justify-center mt-2 gap-2 p-4">
 
         <div id="apostilas" className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+        <Link href={"suporte/apostilas"}> 
             <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-blue-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-blue-500 transition-all duration-300 group-hover:bg-fluency-blue-400">
@@ -29,6 +30,7 @@ export default function Suporte(){
                     </p>
                 </div>
             </div>
+        </Link>
         </div>
 
         <div id="apoio" className="hidden mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
@@ -69,8 +71,10 @@ export default function Suporte(){
             </div>
         </div>
 
+        
         <div id="guidelines" className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
-            <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:scale-[10]"></span>
+        <Link href={"suporte/guidelines"}> 
+        <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:bg-fluency-green-400">
                     <svg viewBox="0 0 1920 1920" id="Flat" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
@@ -89,10 +93,12 @@ export default function Suporte(){
                     </p>
                 </div>
             </div>
+        </Link>
         </div>
-
+        
 
         <div id="dicas" className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+        <Link href={"suporte/curso"}> 
             <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-fluency-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
             <div className="relative z-10 mx-auto max-w-md">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-yellow-500 transition-all duration-300 group-hover:bg-fluency-yellow-400">
@@ -112,6 +118,7 @@ export default function Suporte(){
                     </p>
                 </div>
             </div>
+        </Link>
         </div>
 
     </div>

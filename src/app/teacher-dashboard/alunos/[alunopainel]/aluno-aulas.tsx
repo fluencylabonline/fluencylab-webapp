@@ -315,7 +315,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
 
     
     return (
-        <div className='p-1 w-max'>
+        <div className='w-max h-[30vh] overflow-y-auto'>
             {students.map((student) => (
                 <div key={student.id}>
                     <p className='font-semibold text-xl pb-2 justify-center flex'>Aulas de {currentMonth}</p>
@@ -324,7 +324,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                         .map((classDate, index) => (
                             <div key={index} className="flex flex-row gap-2 items-center justify-end p-1">
                                 <div className="group cursor-pointer relative inline-block text-center">
-                                    <p className={`flex flex-row font-semibold gap-1 p-1 px-2 text-sm rounded-lg ${classDate.status === 'Feita' ? 'text-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-blue-600' : classDate.status === 'Atrasada' ? 'text-fluency-red-600' : '' }`}>
+                                    <p className={`flex flex-row font-semibold gap-1 px-2 text-sm rounded-lg ${classDate.status === 'Feita' ? 'text-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-blue-600' : classDate.status === 'Atrasada' ? 'text-fluency-red-600' : '' }`}>
                                         {`${weekdays[classDate.date.getDay()]} - ${classDate.date.getDate()}`}
                                     </p>
                                     <div className={`opacity-0 transition-all duration-500 ease-in-out w-28 text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 bottom-full -left-1/2 ml-14 px-3 pointer-events-none  ${classDate.status === 'Feita' ? 'text-fluency-text-dark bg-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-text-dark bg-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-text-dark bg-fluency-blue-500' : classDate.status === 'Atrasada' ? 'text-fluency-text-dark bg-fluency-red-500' : '' }`}>

@@ -12,8 +12,9 @@ import { CiCircleQuestion } from 'react-icons/ci';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import { Tooltip } from '@nextui-org/react';
+import { Card, Skeleton, Tooltip } from '@nextui-org/react';
 import FluencyInput from '@/app/ui/Components/Input/input';
+import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 interface Aluno {
     overdueClassesCount: number;
@@ -32,8 +33,9 @@ interface Aluno {
     diaAula?: string[];
     profilePicUrl?: string;
     frequencia: number;
-    classDatesWithStatus: { date: Date; status: string }[]; // Add this property
-}
+    classDatesWithStatus: { date: Date; status: string }[];
+    status: string;
+}   
 
 
 interface ClassData {
@@ -233,6 +235,7 @@ function Alunos(){
                         overdueClassesCount: overdueClassesCount,
                         classDatesWithStatus: classDatesWithStatus,
                         profilePicUrl: url,
+                        status: userData.status,
                     };
                 } catch (error) {
                     console.error('Error fetching profile picture for student:', error);
@@ -451,21 +454,50 @@ function Alunos(){
                 />
                 <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
                 <div className='flex flex-col gap-3 lg:items-start md:items-start items-center'>
-                    {filteredStudents.length === 0 && <div className='font-bold p-1 text-xl'>Sem alunos para mostrar ainda...</div>}
+                    {filteredStudents.length === 0 && <div className='fade-in fade-out w-screen min-h-screen bg-fluency-bg-light dark:bg-fluency-bg-dark z-50'>
+                        <iframe className='w-auto h-auto absolute top-[40%] left-[40%]' src="https://lottie.host/embed/0642876f-5984-458c-965d-837bd42ddb72/mrsk5b9kjh.json"></iframe>
+                    </div>}
                     {filteredStudents.map((student) => (
-                        <div className="bg-fluency-blue-200 dark:bg-fluency-pages-dark lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
-                            <div className='bg-fluency-blue-100 dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-start justify-between rounded-lg gap-2'>
+                        <div className="bg-fluency-blue-200 dark:bg-fluency-pages-dark w-full lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
+                            <div className='bg-fluency-blue-100 dark:bg-fluency-gray-500 w-full p-3 px-4 flex flex-col items-start justify-between rounded-lg gap-2'>
                                     <div className='flex flex-row items-start gap-4'>
                                         <div key={student.id}>
                                             {student.profilePicUrl ? (
-                                                <img src={student.profilePicUrl} alt="Profile"  className='w-[4rem] h-[4rem] object-cover rounded-full'/>
-                                            ) : (
                                                 <div className="cursor-pointer relative inline-block">
-                                                    <FaUserCircle className='text-[4rem] object-cover rounded-full' />
-                                                    <Tooltip className='bg-fluency-yellow-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Sem foto de perfil">
-                                                        <span className="absolute top-0 right-0 w-4 h-4 bg-fluency-yellow-500 border-2 border-white rounded-full animate-pulse"></span>
+                                                {student.status === 'online' ? (
+                                                    <>
+                                                    <img src={student.profilePicUrl} alt="Profile"  className='w-[6rem] h-[6rem] object-cover rounded-full'/>
+                                                    <Tooltip className='bg-fluency-green-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Online">
+                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-green-500 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
+                                                    </>
+                                                ):(
+                                                    <>
+                                                    <img src={student.profilePicUrl} alt="Profile"  className='w-[6rem] h-[6rem] object-cover rounded-full'/>
+                                                    <Tooltip className='bg-fluency-red-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Offline">
+                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-red-500 border-2 border-white rounded-full"></span>
+                                                    </Tooltip>
+                                                    </>
+                                                )}  
                                                 </div>
+                                            ) : (
+                                            <div className="cursor-pointer relative inline-block">
+                                                {student.status === 'online' ? (
+                                                    <>
+                                                    <FaUserCircle className='text-[5rem] object-cover rounded-full' />
+                                                    <Tooltip className='bg-fluency-green-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Online">
+                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-green-500 border-2 border-white rounded-full"></span>
+                                                    </Tooltip>
+                                                    </>
+                                                ):(
+                                                    <>
+                                                    <FaUserCircle className='text-[5rem] object-cover rounded-full' />
+                                                    <Tooltip className='bg-fluency-red-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Offline">
+                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-red-500 border-2 border-white rounded-full"></span>
+                                                    </Tooltip>
+                                                    </>
+                                                )}  
+                                            </div>
                                             )}
                                         </div>
                                         <div>
@@ -473,16 +505,16 @@ function Alunos(){
                                             <p className='font-medium text-xs'>{student.number}</p>
                                             <p className="font-medium text-xs">Dias de aula:
                                                 {student.diaAula?.map((dia) => (
-                                                <span key={dia}>{dia}, </span>
+                                                <span className='ml-1' key={dia}>{dia}, </span>
                                                 ))}
                                             </p>                                        
                                     </div>
                                     </div>
                                     <div className='flex font-medium flex-col items-center w-full'>
-                                        <p className='text-md font-semibold'>Aulas feitas: <span>{student.doneClassesCount}</span></p>
-                                        <p className='text-md cursor-pointer font-semibold p-1 rounded-md hover:text-fluency-blue-600 hover:dark:bg-fluency-gray-600 hover:dark:text-fluency-blue-300 hover:bg-fluency-blue-100 transition-all duration-300 ease-in-out' onClick={() => retrieveOverdueClasses(student.id)}>Aulas em atraso: <span>{student.overdueClassesCount}</span></p>
+                                        <p className='text-lg font-semibold'>Aulas feitas: <span>{student.doneClassesCount}</span></p>
+                                        <p className='text-lg cursor-pointer font-semibold p-1 rounded-md hover:text-fluency-blue-600 hover:dark:bg-fluency-gray-600 hover:dark:text-fluency-blue-300 hover:bg-fluency-blue-100 transition-all duration-300 ease-in-out' onClick={() => retrieveOverdueClasses(student.id)}>Aulas em atraso: <span>{student.overdueClassesCount}</span></p>
                                     </div>  
-                                    <div className="flex flex-row items-center justify-around w-full gap-2 mt-2">
+                                    <div className="flex flex-row items-center justify-center w-full gap-2 mb-4">
                                         <Link href={{ pathname: `alunos/caderno/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
                                             <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
                                                 Caderno 
@@ -496,7 +528,7 @@ function Alunos(){
                                     </div>
                             </div>
 
-                            <div className="bg-fluency-blue-100 dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-center rounded-lg gap-2">
+                            <div className="bg-fluency-blue-100 dark:bg-fluency-gray-500 p-2 px-4 flex flex-col items-center rounded-lg gap-2 w-full">
                                 <div className='flex flex-row justify-around w-full items-center gap-3'>
                                     
                                     <CiCircleQuestion className='text-transparent'/>

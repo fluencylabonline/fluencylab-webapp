@@ -260,50 +260,9 @@ function Perfil() {
           </div>
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
-              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Professores FluencyLab:</h1>
-              <Accordion>
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="1" aria-label="Manual do Professor" title="Manual do Professor">
-                  <p className='my-2'>Manual do Professor</p>
-                    <ul className='ml-2 list-disc'>
-                        <li>Planejamento de aulas personalizado, levando em consideração as necessidades e objetivos específicos do aluno.</li>
-                        <li>Utilização de recursos adequados para aulas virtuais, como plataformas de videochamada e materiais interativos.</li>
-                        <li>Fornecimento de feedback contínuo ao aluno, destacando pontos fortes e áreas de melhoria.</li>
-                        <li>Estabelecimento de metas realistas e mensuráveis para o progresso do aluno.</li>
-                        <li>Adaptação do conteúdo e atividades de acordo com o nível de proficiência e interesse do aluno.</li>
-                        <li>Estímulo à participação ativa do aluno durante as aulas, por meio de exercícios de conversação, leitura e escrita.</li>
-                        <li>Promoção de um ambiente de aprendizagem positivo e encorajador, incentivando o aluno a se expressar e praticar o idioma.</li>
-                        <li>Disponibilidade para esclarecer dúvidas e fornecer suporte adicional fora das aulas, por meio de e-mail ou mensagens.</li>
-                        <li>Acompanhamento regular do progresso do aluno e ajuste das estratégias de ensino, se necessário.</li>
-                        <li>Manutenção de uma comunicação clara e eficaz com o aluno e/ou responsáveis, para fornecer informações e atualizações sobre o desenvolvimento do aluno.</li>
-                    </ul>
-                  <p className='my-2'>Esses critérios ajudarão a garantir a eficácia e qualidade das aulas de idioma online individual.</p>
-                </AccordionItem>
-
-                <AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Material de Apoio" title="Material de Apoio">
-                  <p className='my-2'>Material de Apoio</p>
-                    <ul className='ml-2 list-disc'>
-                        <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
-                        <li>Conflitos de horário inesperados que impossibilitem a participação do aluno.</li>
-                        <li>Questões de saúde ou emergências pessoais que tornem inviável a participação do aluno na aula.</li>
-                        <li>Ausência do aluno sem aviso prévio ou justificativa adequada.</li>
-                    </ul>
-                  <p className='my-2'>É importante que o professor avalie cada caso individualmente e se comunique com o aluno para encontrar a melhor solução para ambas as partes.</p>
-                  <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
-                </AccordionItem>
-
-                <AccordionItem className='font-semibold hidden' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Contrato" title="Contrato">
-                  <p className='my-2'>Contrato</p>
-                    <ul className='ml-2 list-disc'>
-                        <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
-                        <li>Conflitos de horário inesperados que impossibilitem a participação do aluno.</li>
-                        <li>Questões de saúde ou emergências pessoais que tornem inviável a participação do aluno na aula.</li>
-                        <li>Ausência do aluno sem aviso prévio ou justificativa adequada.</li>
-                    </ul>
-                  <p className='my-2'>É importante que o professor avalie cada caso individualmente e se comunique com o aluno para encontrar a melhor solução para ambas as partes.</p>
-                  <p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
-                </AccordionItem>
-
-              </Accordion>
+              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
+              <p>Sem notificações para mostrar</p>
+              {/**need ideias here */}
             </div>
                  
         </div>
@@ -390,7 +349,7 @@ function Perfil() {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                placeholder={session?.user.link}
+                                placeholder={session?.user.email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required/>
                                 <div className="flex justify-center">
@@ -410,3 +369,49 @@ function Perfil() {
 }
 
 export default Perfil;
+
+
+
+/*<Accordion>
+<AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="1" aria-label="Manual do Professor" title="Manual do Professor">
+<p className='my-2'>Manual do Professor</p>
+  <ul className='ml-2 list-disc'>
+      <li>Planejamento de aulas personalizado, levando em consideração as necessidades e objetivos específicos do aluno.</li>
+      <li>Utilização de recursos adequados para aulas virtuais, como plataformas de videochamada e materiais interativos.</li>
+      <li>Fornecimento de feedback contínuo ao aluno, destacando pontos fortes e áreas de melhoria.</li>
+      <li>Estabelecimento de metas realistas e mensuráveis para o progresso do aluno.</li>
+      <li>Adaptação do conteúdo e atividades de acordo com o nível de proficiência e interesse do aluno.</li>
+      <li>Estímulo à participação ativa do aluno durante as aulas, por meio de exercícios de conversação, leitura e escrita.</li>
+      <li>Promoção de um ambiente de aprendizagem positivo e encorajador, incentivando o aluno a se expressar e praticar o idioma.</li>
+      <li>Disponibilidade para esclarecer dúvidas e fornecer suporte adicional fora das aulas, por meio de e-mail ou mensagens.</li>
+      <li>Acompanhamento regular do progresso do aluno e ajuste das estratégias de ensino, se necessário.</li>
+      <li>Manutenção de uma comunicação clara e eficaz com o aluno e/ou responsáveis, para fornecer informações e atualizações sobre o desenvolvimento do aluno.</li>
+  </ul>
+<p className='my-2'>Esses critérios ajudarão a garantir a eficácia e qualidade das aulas de idioma online individual.</p>
+</AccordionItem>
+
+<AccordionItem className='font-semibold' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="2" aria-label="Material de Apoio" title="Material de Apoio">
+<p className='my-2'>Material de Apoio</p>
+  <ul className='ml-2 list-disc'>
+      <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
+      <li>Conflitos de horário inesperados que impossibilitem a participação do aluno.</li>
+      <li>Questões de saúde ou emergências pessoais que tornem inviável a participação do aluno na aula.</li>
+      <li>Ausência do aluno sem aviso prévio ou justificativa adequada.</li>
+  </ul>
+<p className='my-2'>É importante que o professor avalie cada caso individualmente e se comunique com o aluno para encontrar a melhor solução para ambas as partes.</p>
+<p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
+</AccordionItem>
+
+<AccordionItem className='font-semibold hidden' indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack /> )} key="3" aria-label="Contrato" title="Contrato">
+<p className='my-2'>Contrato</p>
+  <ul className='ml-2 list-disc'>
+      <li>Problemas técnicos de conexão que impeçam a realização da aula de forma satisfatória.</li>
+      <li>Conflitos de horário inesperados que impossibilitem a participação do aluno.</li>
+      <li>Questões de saúde ou emergências pessoais que tornem inviável a participação do aluno na aula.</li>
+      <li>Ausência do aluno sem aviso prévio ou justificativa adequada.</li>
+  </ul>
+<p className='my-2'>É importante que o professor avalie cada caso individualmente e se comunique com o aluno para encontrar a melhor solução para ambas as partes.</p>
+<p className='my-2'>Lembre-se que é responsabilidade do aluno comparecer à aula, mas também muitas semanas sem estudar podem desmotivar o aluno a ponto de desistir do curso.</p>
+</AccordionItem>
+
+</Accordion>*/

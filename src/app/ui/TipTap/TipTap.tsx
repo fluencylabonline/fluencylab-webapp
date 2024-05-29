@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { useSession } from "next-auth/react";
 
 //Firebase
 import { collection, doc, getDoc, getDocs, query, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
@@ -96,6 +97,7 @@ function Popovers({ editor }: PopoversProps) {
 
 const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
+  const { data: session } = useSession();
   const notebookID = params.get('notebook');
   const studentID = params.get('student');
   const [workbooks, setWorkbooks] = useState(false);
@@ -301,6 +303,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           <FaArrowUp />
         </button>
 
+        {session?.user.role != 'student' && (
+        <div>
         <div className="fixed top-32 right-2">
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
@@ -385,7 +389,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                     </div>
                 </div>
             </div>}
-
+            </div>
+          )}
 
         <Toaster />
     </div>

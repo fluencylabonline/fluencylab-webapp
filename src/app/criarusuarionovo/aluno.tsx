@@ -110,7 +110,7 @@ export default function CreateAluno(){
                 student: user.uid,
                 description: 'Um caderno de exemplo',
                 createdAt: serverTimestamp(),
-                studentName: userName,
+                studentName: name,
             });
     
             console.log("Notebook added with ID: ", notebookDocRef.id);

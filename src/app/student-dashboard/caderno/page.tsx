@@ -86,38 +86,6 @@ function Caderno() {
     const [materials, setMaterials] = useState<any[]>([]);
     const storage = getStorage();
 
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
-    
-      const file = files[0];
-    
-      // Generate a unique filename (you can use UUID or any other method)
-      const fileName = `alunosmateriais/${id}/materiais/archives/${file.name}`;
-    
-      // Create a reference to the storage location
-      const storageRef = ref(storage, fileName);
-    
-      try {
-        // Upload file to Firebase Storage
-        await uploadBytes(storageRef, file);
-    
-        // Handle success, you can update the database or show a success message here
-        console.log('File uploaded successfully!');
-        fetchMaterialsReal()
-        toast.success('Arquivo salvo!.', {
-          position: "top-center",
-        });
-        fetchMaterialsReal();
-      } catch (error) {
-         // Handle error
-          console.error('Error uploading file:', error);
-          toast.error('Erro ao salvar arquivo!.', {
-            position: "top-center",
-          });
-        }
-      };
-    
     const fetchMaterialsReal = async () => {
       try {
           const materialsRef = ref(storage, `alunosmateriais/${id}/materiais/archives`);
@@ -451,7 +419,7 @@ return (
                   </Link>)}
                 </div>
               
-                <div className='h-full w-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-1 rounded-lg flex flex-col items-center justify-center gap-1'>
+                <div className='hidden h-full w-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-1 rounded-lg flex-col items-center justify-center gap-1'>
                     <div className="rounded-md flex flex-col gap-2 lg:row-span-1 md:row-span-5 sm:row-span-5">  
                     <h1 className="text-xl font-semibold text-center lg:px-12 md:px-4 sm:px-4">Apostilas</h1>
                         <div>
@@ -479,44 +447,6 @@ return (
 
 
               <div className="h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
-                  <div className='w-max lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4'>
-                    <h1 className='p-1 font-semibold text-xl'>Tarefas</h1>
-                    <div className="w-full flex justify-center">
-                        <div className="w-96 bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
-                          <div
-                              className="bg-green-500 text-xs leading-none py-1 text-center font-normal text-white rounded-lg"
-                              style={{ width: `${taskCompletionPercentage}%`, transition: 'width 0.4s linear' }}
-                              >
-                              <p className='pl-2'>{taskCompletionPercentage.toFixed()}%</p>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-
-
-                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
-                    <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>            
-                      {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
-                        <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
-                          <div className='flex flex-row gap-2 items-center'> 
-                          <div className="checkbox-wrapper-11">
-                            <input id="02-11" type="checkbox" name="r" value="2" checked={task.done} onChange={(e) => handleTaskStatusChange('Task', index, e.target.checked)}/>
-                            <label htmlFor="02-11">{task.link ? (
-                              <Link href={task.link}>
-                                <span className='font-semibold'>{task.task}</span>
-                              </Link>
-                              ) : (
-                              <span className='font-semibold'>{task.task}</span>)}</label>
-                          </div>
-                          </div>
-                      </div>))}
-                    </div>
-                  </div>
-              </div>
-
-            </div>
-
-              <div className="lg:w-full md:w-full sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
                     <div className="flex flex-col gap-2 items-center justify-center w-full p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>
@@ -535,8 +465,44 @@ return (
                         ))}
                       </div>
                     </div>
-
                 </div>
+              </div>
+
+            </div>
+
+              <div className="lg:w-full md:w-full sm:w-full full h-full p-3 pr-6 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+                <div className='w-full lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4'>
+                    <h1 className='p-1 font-semibold text-xl'>Tarefas</h1>
+                    <div className="w-full flex justify-center p-1">
+                        <div className="w-full bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
+                          <div
+                              className="w-full bg-green-500 text-xs leading-none py-1 text-center font-normal text-white rounded-lg"
+                              style={{ width: `${taskCompletionPercentage}%`, transition: 'width 0.4s linear' }}
+                              >
+                              <p className='pl-2'>{taskCompletionPercentage.toFixed()}%</p>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[90%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
+                    <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>            
+                      {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
+                        <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
+                          <div className='flex flex-row gap-2 items-center'> 
+                          <div className="checkbox-wrapper-11">
+                            <input id="02-11" type="checkbox" name="r" value="2" checked={task.done} onChange={(e) => handleTaskStatusChange('Task', index, e.target.checked)}/>
+                            <label htmlFor="02-11">{task.link ? (
+                              <Link href={task.link}>
+                                <span className='font-semibold'>{task.task}</span>
+                              </Link>
+                              ) : (
+                              <span className='font-semibold'>{task.task}</span>)}</label>
+                          </div>
+                          </div>
+                      </div>))}
+                    </div>
+                  </div>
               </div>
 
             </div>
