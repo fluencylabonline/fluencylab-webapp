@@ -1,27 +1,22 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
-
+import { useRouter } from 'next/navigation';
+import { collection, doc, getDocs, getDoc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore"; 
+import { db } from "@/app/firebase";
 import FluencyInput from "@/app/ui/Components/Input/input";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
-import { doc, setDoc, collection, getDocs, updateDoc, deleteDoc, query, where, getDoc } from "firebase/firestore"; 
-import { db } from "@/app/firebase";
+import { toast, Toaster } from "react-hot-toast";
+import { Tooltip } from "@nextui-org/react";
 import './quizstyle.css';
-
-import { FiEdit } from "react-icons/fi";
-import { MdDeleteSweep } from 'react-icons/md';
+import { FiEdit, FiCheck } from "react-icons/fi";
+import { MdDeleteSweep, MdOutlinePlaylistAdd, MdOutlineAddTask } from 'react-icons/md';
 import { GiSchoolBag } from "react-icons/gi";
 import { TbCardsFilled } from "react-icons/tb";
 import { RxCardStackPlus } from "react-icons/rx";
-import { MdOutlinePlaylistAdd, MdOutlineAddTask } from "react-icons/md";
-import { FiCheck } from "react-icons/fi";
 import { FaArrowRight } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
-
-import { useRouter } from 'next/navigation';
-import { Tooltip } from "@nextui-org/react";
-import {toast, Toaster} from "react-hot-toast";
 
 export default function Quiz() {
     const router = useRouter();
@@ -38,29 +33,57 @@ export default function Quiz() {
     const [decks, setDecks] = useState([]);
     const [selectedDeck, setSelectedDeck] = useState(null);
     const [editQuiz, setEditQuizz] = useState(false);
-
     const [students, setStudents] = useState([]);
     const [showStudentModal, setShowStudentModal] = useState(false);
-
     const [playQuiz, setPlayQuiz] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState(null);
     const [feedback, setFeedback] = useState('');
     const [feedbackColor, setFeedbackColor] = useState('');
-    const [remainingTime, setRemainingTime] = useState(60); // Initial time in seconds (1 minute)
+    const [remainingTime, setRemainingTime] = useState(60);
     const [score, setScore] = useState(0);
-
     const [createQuiz, setCreateQuizz] = useState(false);
     const [questions, setQuestions] = useState([]);
-
     const [searchQuery, setSearchQuery] = useState('');
+
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
+
     const filteredDecks = decks.filter((deck) =>
         deck.deckTitle.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    
+
+    const startTimer = useCallback(() => {
+        let timer = setInterval(() => {
+            setRemainingTime((prevTime) => {
+                if (prevTime === 0) {
+                    clearInterval(timer);
+                    goToNextQuestion();
+                    return 60;
+                } else {
+                    return prevTime - 1;
+                }
+            });
+        }, 1000);
+    }, []);
+
+    const openPlayQuiz = useCallback((deck) => {
+        setSelectedDeck(deck);
+        setQuestions(deck.questions);
+        setCurrentQuestionIndex(0);
+        setUserAnswer(null);
+        setFeedback('');
+        setRemainingTime(60);
+        setPlayQuiz(true);
+        startTimer();
+
+        const params = new URLSearchParams();
+        params.set('deckname', deck.deckTitle);
+        params.set('openplay', 'true');
+        router.replace(`?${params.toString()}`);
+    }, [router, startTimer]);
+
     useEffect(() => {
         async function fetchDecks() {
             const decksCollection = collection(db, "Quizzes");
@@ -78,7 +101,7 @@ export default function Quiz() {
         if (openPlay === 'true' && deckName) {
             const selectedDeck = decks.find(deck => deck.deckTitle === deckName);
             if (selectedDeck) {
-                openPlayQuiz(selectedDeck); // Open quiz player if 'openplay' is true in URL and deck is found
+                openPlayQuiz(selectedDeck);
             }
         }
     }, [decks, openPlayQuiz]);
@@ -96,142 +119,121 @@ export default function Quiz() {
                 setStudents(fetchedStudents);
             }
         };
-    
         fetchStudents();
     }, [session]);
 
-    function openCreateQuiz() {
-        setCreateQuizz(true);
-    }
-
-    function closeCreateQuiz() {
-        setCreateQuizz(false);
-        setDeckTitle('');
-        setDeckDescription('');
-        setQuestions([]);
-        setQuestionTitle('')
-        setOptions([]);
-    }
-
-    function openEditQuiz(deck) {
-        setSelectedDeck(deck);
-        setDeckTitle(deck.deckTitle);
-        setDeckDescription(deck.deckDescription);
-        setQuestions(deck.questions);
-        setEditQuizz(true);
-    }
-
-    function closeEditQuiz() {
-        setEditQuizz(false);
-        setSelectedDeck(null);
-        setDeckTitle('');
-        setDeckDescription('');
-        setQuestions([]);
-    }
-
-    function openPlayQuiz(deck) {
-        setSelectedDeck(deck);
-        setQuestions(deck.questions);
-        setCurrentQuestionIndex(0);
-        setUserAnswer(null);
-        setFeedback('');
-        setRemainingTime(60); // Reset timer for each question
-        setPlayQuiz(true);
-        startTimer(); // Start the timer when modal opens
-        
-        // Update URL parameters
-        const params = new URLSearchParams();
-        params.set('deckname', deck.deckTitle);
-        params.set('openplay', 'true');
-        router.replace(`?${params.toString()}`);
-    }
-    
-    function closePlayQuiz() {
+    const closePlayQuiz = () => {
         setPlayQuiz(false);
         setSelectedDeck(null);
         setQuestions([]);
         setCurrentQuestionIndex(0);
         setUserAnswer(null);
         setFeedback('');
-        
-        // Update URL parameters
+
         const params = new URLSearchParams();
         params.set('deckname', '');
         params.set('openplay', 'false');
         router.replace(`?${params.toString()}`);
-    }
+    };
 
-    function openStudentModal(deckId) {
+    const openCreateQuiz = () => {
+        setCreateQuizz(true);
+    };
+
+    const closeCreateQuiz = () => {
+        setCreateQuizz(false);
+        setDeckTitle('');
+        setDeckDescription('');
+        setQuestions([]);
+        setQuestionTitle('')
+        setOptions([]);
+    };
+
+    const openEditQuiz = (deck) => {
+        setSelectedDeck(deck);
+        setDeckTitle(deck.deckTitle);
+        setDeckDescription(deck.deckDescription);
+        setQuestions(deck.questions);
+        setEditQuizz(true);
+    };
+
+    const closeEditQuiz = () => {
+        setEditQuizz(false);
+        setSelectedDeck(null);
+        setDeckTitle('');
+        setDeckDescription('');
+        setQuestions([]);
+    };
+
+    const openStudentModal = (deckId) => {
         setShowStudentModal(true);
         setSelectedDeck(decks.find(deck => deck.id === deckId));
-    }
-    
+    };
 
-    function closeStudentModal() {
+    const closeStudentModal = () => {
         setShowStudentModal(false);
-    }
-    
-    async function handleAddDeckAsTask(studentId, deck) {
+    };
+
+    const handleAddDeckAsTask = async (studentId, deck) => {
         try {
             const studentDocRef = doc(db, 'users', studentId);
             const studentDocSnapshot = await getDoc(studentDocRef);
             const studentData = studentDocSnapshot.data();
-            
+
             if (!studentData || !studentData.tasks) {
                 toast.error('Erro ao adicionar tarefa.');
                 return;
             }
-            
+
             const tasksArray = studentData.tasks.Task || [];
             const taskExists = tasksArray.some(task => task.task === `Revisar a aula de ${deck.deckTitle}`);
-            
+
             if (taskExists) {
                 toast.error('Tarefa já adicionada!');
                 return;
             }
-            
+
             const deckLink = `/student-dashboard/pratica/quizz?deckname=${encodeURIComponent(deck.deckTitle)}&openplay=true`;
             const newTask = { task: `Revisar a aula de ${deck.deckTitle}`, link: deckLink, done: false };
             tasksArray.push(newTask);
-            
+
             await updateDoc(studentDocRef, {
                 tasks: { Task: tasksArray }
             });
-            
+
             toast.success('Tarefa adicionada com sucesso!');
         } catch (error) {
             console.error('Erro ao adicionar tarefa:', error);
             toast.error('Erro ao adicionar tarefa.');
         }
-    }
-    
+    };
 
-    function addOption() {
-        if(!questionTitle){
+    const addOption = () => {
+        if (!questionTitle) {
             toast.error("Adicione um título à essa pergunta.");
-            return null;
+            return;
         }
         if (questionOption.trim() !== '') {
             setOptions([...options, { option: questionOption, isCorrect: false }]);
             setQuestionOption('');
             optionInputRef.current.focus();
         }
-    }
+    };
 
-    function deleteOptioninCreation(index) {
+    const deleteOptioninCreation = (index) => {
         const updatedOptions = [...options];
         updatedOptions.splice(index, 1);
         setOptions(updatedOptions);
-    }
+    };
 
-    function finishQuestion() {
+    const finishQuestion = () => {
         if (options.length < 2) {
             toast.error("Adicione pelo menos 2 alternativas!");
-            return null
+            return;
         }
-        if(!deckDescription && !deckTitle){
+        if (!deckDescription && !deckTitle) {
             toast.error("Adicione título e descrição!");
-            return null
+            return;
         }
         if (correctOptionIndex === -1) {
             toast.error("Selecione a alternativa correta!");
@@ -244,11 +246,11 @@ export default function Quiz() {
             setCorrectOptionIndex(-1);
             toast.success("Pergunta adicionada");
         } else {
-            toast.error("Preencha a pergunta e alternativas");
-        } 
-    }
+            toast.error("Preencha a pergunta e adicione alternativas");
+        }
+    };
 
-    async function handleCreateQuiz() {
+    const handleCreateQuiz = async () => {
         try {
             if (!deckTitle) {
                 toast.error("Preencha o título do deck...");
@@ -269,7 +271,6 @@ export default function Quiz() {
             });
             toast.success("Deck criado com sucesso!");
 
-            // Reset state after successful creation
             setDeckTitle('');
             setDeckDescription('');
             setQuestionTitle('');
@@ -278,19 +279,18 @@ export default function Quiz() {
             setQuestions([]);
             setCreateQuizz(false);
 
-            // Refresh decks list
             const snapshot = await getDocs(collection(db, "Quizzes"));
             const decksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDecks(decksData);
         } catch (error) {
             console.error("Error creating quiz: ", error);
         }
-    }
+    };
 
-    async function handleSaveEditQuiz() {
+    const handleSaveEditQuiz = async () => {
         try {
             if (!deckTitle || !selectedDeck) {
-                toast.error("Preencha o título e descrição do deck...")
+                toast.error("Preencha o título e descrição do deck...");
                 console.error("Deck title and selected deck are required");
                 return;
             }
@@ -302,30 +302,27 @@ export default function Quiz() {
                 questions: questions,
             });
 
-            // Reset state after successful editing
             closeEditQuiz();
 
-            // Refresh decks list
             const snapshot = await getDocs(collection(db, "Quizzes"));
             const decksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDecks(decksData);
         } catch (error) {
             console.error("Error updating quiz: ", error);
         }
-    }
+    };
 
-    async function handleDeleteDeck(deckId) {
+    const handleDeleteDeck = async (deckId) => {
         try {
             await deleteDoc(doc(db, "Quizzes", deckId));
-            // Refresh decks list
             const snapshot = await getDocs(collection(db, "Quizzes"));
             const decksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDecks(decksData);
-            toast.error("Deck deletado")
+            toast.error("Deck deletado");
         } catch (error) {
             console.error("Error deleting deck: ", error);
         }
-    }
+    };
 
     const handleOptionChange = (index) => {
         setCorrectOptionIndex(index);
@@ -393,44 +390,28 @@ export default function Quiz() {
         setUserAnswer(selectedOption);
         setFeedback(isCorrect ? "Correto!" : "Errado!");
         setFeedbackColor(isCorrect ? "green" : "red");
-    
-        // Update score if the answer is correct
+
         if (isCorrect) {
             setScore((prevScore) => prevScore + 1);
         }
-    
-        // Move to next question after 1 minute
+
         setTimeout(() => {
             goToNextQuestion();
         }, 60000);
-    };    
-
-    const startTimer = () => {
-        let timer = setInterval(() => {
-            setRemainingTime((prevTime) => {
-                if (prevTime === 0) {
-                    clearInterval(timer);
-                    goToNextQuestion(); // Move to next question when time's up
-                    return 60; // Reset time for next question
-                } else {
-                    return prevTime - 1; // Decrease remaining time by 1 second
-                }
-            });
-        }, 1000); // Update every second
     };
-    
+
     const goToNextQuestion = () => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setUserAnswer(null);
         setFeedback('');
         setFeedbackColor("gray");
     };
-     
-    function handleKeyPress(event) {
+
+    const handleKeyPress = (event) => {
         if (event.key === "Enter") {
             addOption();
         }
-    }
+    };
 
 
 return (
