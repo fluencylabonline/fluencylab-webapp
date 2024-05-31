@@ -53,7 +53,7 @@ function GoogleCalendarPage() {
       )}
 
       <iframe
-        src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3JWoI62j4eRaQpdj2FvO-QU8PkP2DjKxtF0UZ1MfSI8wHIZS33Tbpeb6UKQmIrYHDbhA3mOn3C?gv=true"
+        src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2i5UIf7z6ksWscY7-ALyW44Dsnj8hEISZDyF5jat-hQ5Tn2fddqtNMxlEtLOqVW_UKUdXreg9P?gv=true"
         style={{ border: '0', transition: 'opacity 0.5s ease', opacity: iframeLoaded ? 1 : 0 }}
         className={`w-full h-[98vh] overflow-x-hidden`}
         title="Google Calendar Appointment Scheduling"

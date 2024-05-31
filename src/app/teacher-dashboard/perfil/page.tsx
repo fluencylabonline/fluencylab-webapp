@@ -1,12 +1,12 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 //Firebase
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, DocumentData, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
-import { ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage';
 import { storage } from '@/app/firebase';
-import { signOut, sendPasswordResetEmail } from 'firebase/auth';
+import { signOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 
 //Components Imports
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -119,6 +119,44 @@ function Perfil() {
       fetchUserInfo()
   }, [session]);
 
+  const [profileData, setProfileData] = useState<DocumentData | null>(null);
+    const handleProfilePictureChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files && e.target.files[0]; // Ensure file exists before accessing
+    
+        if (file && session?.user.id) {
+          const storage = getStorage();
+          const storageRef = ref(storage, `profilePictures/${session?.user.id}`);
+    
+          try {
+            // Upload the new profile picture
+            await uploadBytes(storageRef, file);
+    
+            // Get the download URL of the uploaded picture
+            const downloadURL = await getDownloadURL(storageRef);
+    
+            // Update the user's profile with the new picture URL
+            if (auth.currentUser) { // Ensure auth.currentUser is not null
+              await updateProfile(auth.currentUser, {
+                photoURL: downloadURL,
+              });
+            }
+    
+            // Update the profile data state if needed
+            if (profileData) {
+              toast.success('Foto atualizada!', {
+                position: 'top-center',
+              });
+              setProfileData((prevData: any) => ({
+                ...prevData!,
+                photoURL: downloadURL,
+              }));
+            }
+          } catch (error) {
+            console.error('Error uploading profile picture:', error);
+          }
+        }
+      };
+
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const openEditModal = () => {
@@ -208,6 +246,7 @@ function Perfil() {
                     className="absolute w-full h-full opacity-0"
                     type="file"
                     accept="image/*"
+                    onChange={handleProfilePictureChange}
                   />
                  {profilePictureURL ? (
                     <img

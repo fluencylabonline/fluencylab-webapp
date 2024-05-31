@@ -1,14 +1,3 @@
-/*<div className="checkbox-wrapper-11">
-    <input id="02-11" type="checkbox" name="r" value="2" checked={task.done} onChange={(e) => handleTaskStatusChange('Task', index, e.target.checked)}/>
-    <label htmlFor="02-11">{task.link ? (
-      <Link href={task.link}>
-        <span className='font-semibold'>{task.task}</span>
-      </Link>
-      ) : (
-      <span className='font-semibold'>{task.task}</span>)}</label>
-  </div>
-
-      */
 .checkbox-wrapper-11 {
     --text: #414856;
     --check: #1ce25e;

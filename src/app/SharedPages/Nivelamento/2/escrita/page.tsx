@@ -62,7 +62,7 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (score && data) {
+    if (score && data && userInput) {
       saveInFirebase(userInput, data, score);
     }
   }, [score, data, userInput, saveInFirebase]);
@@ -112,7 +112,7 @@ export default function Home() {
       ],
     });
 
-    const instruction = "Please analyze the following text and provide a score from 1 to 5 (decimals permitted) based on its quality: grammar, vocabulary, ortography and use of natural language, make small comments on each. At the end show Final Score like this: **Final Score: 5.0**; **Final Score: 4.7**; **Final Score: 2.3**";
+    const instruction = `Please analyze the following text and provide a score from 1 to 5 (decimals permitted) based on its quality: grammar, vocabulary, orthography, use of the provided topic: "${topic}", and use of natural language. Make small comments on each, showing the errors. At the end, show Final Score like this: **Final Score: 5.0**; **Final Score: 4.7**; **Final Score: 2.3**`;
     const fullPrompt = `${instruction}\n\nText: ${prompt}`;
 
     const result = await chat.sendMessage(fullPrompt);
@@ -161,7 +161,6 @@ export default function Home() {
       <div className="min-h-[85vh] max-h-[85vh] w-[50%] overflow-y-scroll bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
         <h1 className="text-xl font-bold p-3">Análise do seu texto:</h1>
         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 rounded-md" dangerouslySetInnerHTML={{ __html: data }} />
-        <p className="font-bold text-lg">Final score: {score}</p>
       </div>
       <Toaster />
     </main>

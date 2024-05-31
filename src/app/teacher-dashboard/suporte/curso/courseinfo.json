@@ -23,6 +23,7 @@
         "Duration": "15min",
         "CourseID": "nivelamento",
         "page": "nivelamento",
+        "link": "nivelamento",
         "totalSteps": 3
     },
     {
@@ -30,6 +31,7 @@
         "Description": "Aqui vamos aprender onde podemos encontrar os materiais das aulas, quais ferramentas temos disponíveis e sugestões e dicas de métodos que podem ser de ajuda durante as aulas.",
         "Duration": "20min",
         "CourseID": "ferramentasemetodos",
+        "link": "ferramentas-e-métodos",
         "page": "ferramentas",
         "totalSteps": 4
     }

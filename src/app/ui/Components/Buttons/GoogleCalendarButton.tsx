@@ -48,7 +48,7 @@ const GoogleCalendarButton = () => {
             <div className="z-[100] w-11/12 h-[75vh] relative bg-fluency-text-dark rounded-lg px-4 pt-5 pb-4">
               {/* Google Calendar Scheduling Button */}
               <iframe
-                src='https://calendar.google.com/calendar/appointments/schedules/AcZssZ3JWoI62j4eRaQpdj2FvO-QU8PkP2DjKxtF0UZ1MfSI8wHIZS33Tbpeb6UKQmIrYHDbhA3mOn3C?gv=true'
+                src='https://calendar.google.com/calendar/appointments/schedules/AcZssZ2i5UIf7z6ksWscY7-ALyW44Dsnj8hEISZDyF5jat-hQ5Tn2fddqtNMxlEtLOqVW_UKUdXreg9P?gv=true'
                 className="w-full h-[70vh]"></iframe>
               <button
                 onClick={closeModal}

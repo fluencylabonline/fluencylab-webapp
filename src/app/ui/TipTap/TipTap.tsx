@@ -12,6 +12,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import './styles.scss'
 
 //Imports
+import Link from '@tiptap/extension-link'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -232,7 +233,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           return '/'
         },
       }),
-
     ],
     editorProps: {
       attributes: {
@@ -284,7 +284,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center'>
-      <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage}/>
+      <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} />
       <EditorContent editor={editor} />
       <Popovers editor={editor} />
 

@@ -10,6 +10,7 @@
     "email": "email dev --dir src/emails"
   },
   "dependencies": {
+    "@docuseal/react": "^1.0.38",
     "@google/generative-ai": "^0.11.4",
     "@headlessui/react": "^2.0.3",
     "@nextui-org/dropdown": "^2.1.23",
@@ -26,12 +27,14 @@
     "@tiptap/extension-font-family": "^2.3.2",
     "@tiptap/extension-highlight": "^2.3.2",
     "@tiptap/extension-image": "^2.3.2",
+    "@tiptap/extension-link": "^2.4.0",
     "@tiptap/extension-list-item": "^2.3.2",
     "@tiptap/extension-placeholder": "^2.3.2",
     "@tiptap/extension-text-align": "^2.3.2",
     "@tiptap/extension-text-style": "^2.3.2",
     "@tiptap/react": "^2.3.2",
     "@tiptap/starter-kit": "^2.3.2",
+    "axios": "^1.7.2",
     "firebase": "^10.11.1",
     "firebase-tools": "^13.8.1",
     "framer-motion": "^11.1.9",
@@ -51,6 +54,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

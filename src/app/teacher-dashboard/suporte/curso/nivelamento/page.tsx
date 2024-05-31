@@ -16,7 +16,7 @@ const Nivelamento = () => {
     const userId = session?.user.id
     const [lessonFinished, setLessonFinished] = useState<{ [key: string]: boolean }>({});
     const [scrollProgress, setScrollProgress] = useState(0);
-    const courseName = 'nivelamento'; // Define the course name
+    const courseName = 'nivelamento';
 
     useEffect(() => {
         const handleScroll = () => {

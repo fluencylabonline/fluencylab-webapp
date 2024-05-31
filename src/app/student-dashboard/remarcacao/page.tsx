@@ -32,7 +32,7 @@ export default function Remarcacao(){
             <iframe
                 src={calendarLink}
                 style={{ border: '0', transition: 'opacity 0.5s ease'}}
-                className={`w-full h-[92vh] overflow-x-hidden`}
+                className={`w-full h-[92vh] overflow-x-hidden dark:bg-gray-400 rounded-md text-black dark:text-white`}
                 title="Google Calendar Appointment Scheduling"
             ></iframe>
         </div>

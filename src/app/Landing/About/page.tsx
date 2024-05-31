@@ -29,7 +29,7 @@ export default function About(){
                     <Image className="h-auto w-20" src={About2} alt="FluencyLab" />
                 </div>
                 <h6 className="mb-3 text-xl font-bold leading-5 text-fluency-text-light dark:text-fluency-text-dark">Material didático</h6>
-                <p className="mb-3 text-sm text-fluency-gray-400 dark:text-fluency-gray-200"> Quando começa a fazer aula com a gente nossos professores vão te preparar para conseguir se comunicar dos níveis mais básicos até onde você quiser chegar logo nas primeiras semanas. </p>
+                <p className="mb-3 text-sm text-fluency-gray-400 dark:text-fluency-gray-200"> Nosso material é feito pensando nas suas necessidades específicas. Ele é sempre testado antes de ser usado em aula. E além disso, foi planejado com muito cuidado para que a sua aula seja o mais dinâmica possível. </p>
             </div>
 
             {/* ABOUT 3 */}
@@ -38,7 +38,7 @@ export default function About(){
                     <Image className="h-auto w-25" src={About3} alt="FluencyLab" />
                 </div>
                 <h6 className="mb-3 text-xl font-bold leading-5 text-fluency-text-light dark:text-fluency-text-dark">Aulas personalizadas</h6>
-                <p className="mb-3 text-sm text-fluency-gray-400 dark:text-fluency-gray-200"> Quando começa a fazer aula com a gente nossos professores vão te preparar para conseguir se comunicar dos níveis mais básicos até onde você quiser chegar logo nas primeiras semanas. </p>
+                <p className="mb-3 text-sm text-fluency-gray-400 dark:text-fluency-gray-200"> Cada aluno tem um tipo de aula diferente com a gente. Se necessário preparamos até material novo se isso for o que você precisa. Então não se preocupa. Aqui é o seu lugar! </p>
             </div>
         </div>
     </div>

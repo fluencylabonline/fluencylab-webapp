@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { type Editor } from "@tiptap/react";
 
 //NextReactImports
@@ -11,14 +11,16 @@ import './styles.scss'
 
 import { FaRedoAlt, FaUndoAlt } from "react-icons/fa";
 import { LuHeading1, LuHeading2,LuHeading3 } from "react-icons/lu";
-import { FaFont, FaItalic } from "react-icons/fa6";
+import { FaFont, FaItalic, FaLink, FaLinkSlash } from "react-icons/fa6";
 import { LuHighlighter } from "react-icons/lu";
 import { PiTextBBold, PiTextAlignCenter, PiTextAlignJustify, PiTextAlignLeft, PiTextAlignRight, PiTextTBold } from "react-icons/pi";
 import { IoImage } from "react-icons/io5";
 import { GoHorizontalRule } from "react-icons/go";
 import { AiOutlineBlock } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { RiFontSansSerif } from "react-icons/ri";
+import FluencyInput from "../Components/Input/input";
+import FluencyButton from "../Components/Button/button";
+import FluencyCloseButton from "../Components/ModalComponents/closeModal";
 
 type Props = {
   editor: Editor | null;
@@ -27,40 +29,69 @@ type Props = {
   addImage: any;
 };
 
+type AddLinkBoxProps = {
+  editor: Editor;
+  setModal: (state: boolean) => void;
+};
+
+export const AddLinkBox = ({ editor, setModal }: AddLinkBoxProps) => {
+  const [input, setInput] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (input) {
+      let url = input;
+      if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        url = `http://${url}`;
+      }
+      editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+      setInput("");
+      setModal(false);
+    }
+  };
+
+  return (
+    <div className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen">
+            
+            <div className="fixed inset-0 transition-opacity">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max mx-72 h-full p-4">
+                <div className="flex flex-col items-center justify-center p-3">
+                    
+                    <FluencyCloseButton onClick={() => setModal(false)}/>
+                    
+                      <h3 className="text-xl leading-6 font-medium mb-2">
+                          Adicionar link                         
+                      </h3>
+
+                    <form className="flex flex-col gap-2 items-center justify-center w-max p-3" onSubmit={handleSubmit}>
+                      <FluencyInput placeholder="Insira o link" value={input} onChange={handleChange}/>
+                      <FluencyButton variant="confirm" type="submit">Adicionar</FluencyButton>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+  );
+};
+
+
+
 const Toolbar = ({ editor, isTyping, addImage }: Props) => {
-  const [selectedFontSize, setSelectedFontSize] = useState("18");
   const [selectedFontFamily, setSelectedFontFamily] = useState('QuickSand');
-  const newSize = '';
+  const [modal, setModal] = useState(false);
   if (!editor) {
     return null;
   }
-  
-  const handleFontSizeChange = (event: { target: { value: any; }; }) => {
-   // const newSize = event.target.value;
-    setSelectedFontSize(newSize);
-    editor.chain().focus().setFontSize(`${newSize}px`).run();
-  };
-  
-  const decreaseFontSize = () => {
-    let newSize = parseInt(selectedFontSize, 10) - 2; // Decrease font size by 2
-    if (newSize < 8) {
-        newSize = 8; // Ensure minimum font size is 8
-    }
-    setSelectedFontSize(`${newSize}`);
-    editor.chain().focus().setFontSize(`${newSize}px`).run();
-};
 
-const increaseFontSize = () => {
-    let newSize = parseInt(selectedFontSize, 10) + 2; // Increase font size by 2
-    if (newSize > 48) {
-        newSize = 48; // Ensure maximum font size is 48
-    }
-    setSelectedFontSize(`${newSize}`);
-    editor.chain().focus().setFontSize(`${newSize}px`).run();
-};
-
-
-  
   return (
     <div className='sticky top-0 z-50 flex flex-row flex-wrap items-center justify-center gap-2 w-full rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
       
@@ -370,6 +401,37 @@ const increaseFontSize = () => {
             <GoHorizontalRule className="w-6 h-auto"/>
           </button>
         </Tooltip>
+
+        
+          {editor.isActive("link") ? (
+            <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Remover link"
+            color="primary">
+            <button
+              className={editor.isActive({ unlink: 'unlink' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}
+              title="Remove link"
+              onClick={() => editor.chain().focus().unsetLink().run()}
+            >
+              <FaLinkSlash />
+            </button>
+            </Tooltip>
+          ) : (
+            <Tooltip 
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Adicionar link"
+            color="primary">
+            <button 
+              className={editor.isActive({ link: 'link' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}
+              title="add a link" onClick={() => setModal(true)}>
+              <FaLink />
+            </button>
+            </Tooltip>
+          )}
+          {modal && (
+            <AddLinkBox editor={editor} setModal={setModal} />
+          )}
+
       </div>
       
       <Dropdown>
