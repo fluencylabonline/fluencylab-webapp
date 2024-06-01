@@ -346,7 +346,7 @@ export default function Caderno(){
                         onChange={(e) => setSearchQuery(e.target.value)}/>
                        <div className='flex flex-row gap-2 items-center justify-center'>
                         <FluencyButton variant='confirm' className='min-w-max' onClick={handleOpenModalDescription}>Começar aula</FluencyButton>
-                        <FluencyButton variant='warning' className='min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
+                        <FluencyButton variant='warning' className='hidden min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
                        </div>
                         <div className="flex min-w-max">  
                             <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">

@@ -99,8 +99,8 @@ const Validation = () => {
             
       <div className='flex flex-row w-full justify-between items-center px-2'>
             <Link href="/">
-              <button className="dark:invert text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 ease-in-out duration-300 flex justify-center">
-                <BsArrowLeft className='lg:w-9 lg:h-9 w-9 h-9' />
+              <button className="dark:invert text-fluency-text-light dark:text-fluency-text-dark flex justify-center">
+                <BsArrowLeft className='lg:w-9 lg:h-9 w-9 h-9 hover:text-fluency-blue-500 ease-in-out duration-300' />
               </button>
             </Link>
 
@@ -119,13 +119,13 @@ const Validation = () => {
       )}
 
       {certificateData && (
-        <div className='infocertificados'>
+        <div className='infocertificados dark:text-black'>
 
           <div>
             <Image src={Logo} alt="FluencyLab Marca" className='w-30 h-30'/>
           </div>
 
-          <h2>Informações sobre Certificado</h2>
+          <h2 className='text-x'>Informações sobre Certificado</h2>
           <div className='infonome'>
             <p><strong>Nome:</strong> {certificateData.studentName}</p>
             <p><strong>Curso:</strong> {certificateData.course}</p>

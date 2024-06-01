@@ -45,6 +45,7 @@ export default function Quiz() {
     const [createQuiz, setCreateQuizz] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [userScores, setUserScores] = useState({});
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
@@ -53,6 +54,26 @@ export default function Quiz() {
     const filteredDecks = decks.filter((deck) =>
         deck.deckTitle.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    useEffect(() => {
+        if (session) {
+            fetchUserScores();
+        }
+    }, [session]);
+
+    const fetchUserScores = async () => {
+        try {
+            const userDocRef = doc(db, 'users', session.user.id);
+            const userDocSnapshot = await getDoc(userDocRef);
+            if (userDocSnapshot.exists()) {
+                const userData = userDocSnapshot.data();
+                setUserScores(userData.quizzes || {});
+            }
+        } catch (error) {
+            console.error('Erro ao buscar pontuações:', error);
+            toast.error('Erro ao buscar pontuações.');
+        }
+    };
 
     const startTimer = useCallback(() => {
         let timer = setInterval(() => {
@@ -401,10 +422,38 @@ export default function Quiz() {
     };
 
     const goToNextQuestion = () => {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setUserAnswer(null);
-        setFeedback('');
-        setFeedbackColor("gray");
+        if (currentQuestionIndex < questions.length - 1) {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+            setUserAnswer(null);
+            setFeedback('');
+            setRemainingTime(60);
+        } else {
+            handleFinishQuiz();
+        }
+    };
+
+    const handleFinishQuiz = async () => {
+        closePlayQuiz();
+        if (session) {
+            try {
+                const userDocRef = doc(db, 'users', session.user.id);
+                const userDocSnapshot = await getDoc(userDocRef);
+                const userData = userDocSnapshot.data();
+
+                const userQuizzes = userData.quizzes || {};
+                userQuizzes[selectedDeck.deckTitle] = score;
+
+                await updateDoc(userDocRef, {
+                    quizzes: userQuizzes
+                });
+
+                toast.success('Pontuação salva com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar pontuação:', error);
+                toast.error('Erro ao salvar pontuação.');
+            }
+        }
+        setScore(0);
     };
 
     const handleKeyPress = (event) => {
@@ -432,7 +481,7 @@ return (
             <div key={deck.id} className="px-4 w-full">
                 <div className="bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 rounded-md cursor-pointer flex flex-row items-center justify-between gap-2">
                     <p onClick={() => openPlayQuiz(deck)} className="cursor-pointer font-bold p-2 ml-2 flex flex-row gap-1 items-center"><TbCardsFilled className="w-6 h-auto" /> {deck.deckTitle}</p>                     
-                    <p className="text-center font-semibold">Pontuação: {score[deck.id] || 0}</p>
+                    <p className="text-center font-semibold">Pontuação: {userScores[deck.deckTitle] || 0}</p>
                     {role === 'teacher' && (
                     <div className="flex flex-row items-center gap-2">
                         <Tooltip content="Editar deck" className="bg-fluency-blue-600 p-1 rounded-md font-medium text-sm text-white"><p><FiEdit onClick={() => openEditQuiz(deck)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p></Tooltip>

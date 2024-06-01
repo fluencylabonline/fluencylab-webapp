@@ -323,7 +323,7 @@ export default function Students() {
   const handleOnClick = async (studentMail: string, selectedMonth: string, paymentStatus: string, studentName: string, studentEmail: string, paymentKey: string, paymentKeyProp: string, mensalidade: number, selectedYear: number) => {
     try {
       const response = await toast.promise(
-        fetch('/api/login', {
+        fetch('/api/emails/receipts', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

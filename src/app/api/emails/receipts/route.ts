@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { Comprovante } from '@/email/login';
+import { Receipts } from '@/email/receipts';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         from: 'financeiro@fluencylab.online',
         to: studentMail,
         subject: emailSubject,
-        react: Comprovante({ selectedMonth: translatedMonth, studentName, paymentKeyProp, selectedYear, mensalidade }),
+        react: Receipts({ selectedMonth: translatedMonth, studentName, paymentKeyProp, selectedYear, mensalidade }),
       });
 
     return new Response(JSON.stringify({ data: results }), {

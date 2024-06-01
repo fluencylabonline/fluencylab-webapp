@@ -31,6 +31,7 @@ import { VscWholeWord } from 'react-icons/vsc';
 import { PiNotebookBold } from 'react-icons/pi';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
+import { useSession } from 'next-auth/react';
 
 type PopoversProps = {
   editor: Editor;
@@ -188,6 +189,9 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     content: 'heading block*',
   })
 
+  const { data: session } = useSession();
+  const [editable, setEditable] = useState(false)
+
   const editor = useEditor({
     extensions: [
       CustomDocument,
@@ -232,13 +236,19 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       },
     },
     autofocus: true,
+    editable,
     content: realtimeContent,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
   }) 
 
-  
+  useEffect(() => {
+    if (session?.user.role === 'admin') {
+      setEditable(true)
+    }
+    editor?.setEditable(editable)
+  }, [editable])
 
   const addImage = () => {
     const url = window.prompt('URL');
@@ -247,7 +257,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       editor.chain().focus().setImage({ src: url }).run();
     }
   };
-  
+
   if (!editor) {
     return null;
   }
@@ -275,7 +285,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center'>
-      <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage}/>
+      {session?.user.role === 'admin' && <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage}/>}
       <EditorContent editor={editor} />
       <Popovers editor={editor} />
 
@@ -294,6 +304,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           <FaArrowUp />
         </button>
 
+        {session?.user.role === 'admin' &&
         <div className="fixed top-32 right-2">
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
@@ -315,70 +326,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
               )}
             </PopoverContent>
           </Popover>
-        </div>
-
-        <div className="fixed top-44 right-2">
-            <Button onClick={openWorkbook} className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
-              <PiNotebookBold className="w-6 h-auto"/>
-            </Button>      
-        </div>
-
-        {workbooks && 
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-72 h-full p-4">
-                        <div className="flex flex-col items-center justify-center">
-                            
-                            <FluencyCloseButton onClick={closeWorkbook}/>
-                            
-                              <h3 className="text-2xl leading-6 font-medium  mb-2">
-                                  Apostilas                         
-                              </h3>
-                              <Accordion>
-                                <AccordionItem
-                                className='font-semibold w-full text-xl'
-                                key={1}
-                                aria-label="The Basics"
-                                title="The Basics"
-                                indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
-                                >
-                                <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-400 dark:bg-fluency-gray-700">
-                                  <p className='font-bold text-xl'>The Basics</p>   
-                                  <Accordion>
-                                    {lessonDocs.map((group, index) => (
-                                      <AccordionItem
-                                        className='font-semibold w-full text-xl'
-                                        key={index}
-                                        aria-label={`Unidade ${index + 1}`}
-                                        title={`Unidade ${index + 1}`}
-                                        indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
-                                      >
-                                        <ul>
-                                          {group.docs.map(doc => (
-                                            <li className='flex flex-row gap-2 justify-between items-center' key={doc.id}>
-                                              <p className='text-lg font-bold'>{doc.data.title}</p>
-                                              <button className='p-1 px-5 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-black dark:text-white font-semibold rounded-md' onClick={() => pasteContentFromFirestore(doc.data.content)}>
-                                                Colar
-                                              </button>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      </AccordionItem>
-                                    ))}
-                                  </Accordion>
-                                </div>
-                                </AccordionItem>
-                              </Accordion>
-                        </div>
-                    </div>
-                </div>
-            </div>}
-
+        </div>}
 
         <Toaster />
     </div>

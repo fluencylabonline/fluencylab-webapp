@@ -1,6 +1,5 @@
 'use client';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
 //Firebase
 import { doc, DocumentData, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
@@ -82,7 +81,6 @@ function Perfil() {
                     setProfilePictureURL(url);
                 })
                 .catch((error) => {
-                    console.error('Error fetching profile picture URL:', error);
                     setProfilePictureURL(null);
                 });
         }
@@ -219,10 +217,14 @@ function Perfil() {
                   <p><strong>Login:</strong> {userName}</p>
 
                   <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-2 justify-center">
-                        <FluencyButton variant='danger' onClick={openResetPassword}>Redefinir senha</FluencyButton>  
-                    </div>
+                  <FluencyButton variant='danger' onClick={openResetPassword}>Redefinir senha</FluencyButton>  
+                  </div>
                 </div>
-            </div>  
+            </div> 
+            
+            <div className="lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-row lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
+              Lembretes {/*Regras*/} 
+            </div> 
           </div>
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>

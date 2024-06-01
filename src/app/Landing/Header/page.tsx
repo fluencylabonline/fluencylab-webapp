@@ -88,15 +88,15 @@ return(
                         >
                         <span className="sr-only">Open main menu</span>
                             <div className="relative cursor-pointer group focus:outline-none">
-                                <div className='flex flex-col justify-between w-5 h-5 transform transition-all duration-300 origin-center'>
-                                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 w-8 rounded transform origin-left transition-all duration-300 delay-150'></div>
-                                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 w-8 rounded transform transition-all duration-300'></div>
-                                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 w-8 rounded transform origin-left transition-all duration-300 delay-150'></div>
+                                <div className='flex flex-col justify-between w-6 h-6 transform transition-all duration-300 origin-center'>
+                                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 hover:dark:bg-fluency-blue-500 h-1 w-9 rounded transform origin-left transition-all duration-300 delay-150'></div>
+                                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 hover:dark:bg-fluency-red-500 h-1 w-9 rounded transform origin-left transition-all duration-300 delay-150'></div>
+                                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 hover:dark:bg-fluency-yellow-500 h-1 w-9 rounded transform origin-left transition-all duration-300 delay-150'></div>
                                 </div>
                             </div>
                         </button>
                     </div>
-                    <div className="hidden lg:flex lg:gap-x-12">
+                    <div className="hidden lg:flex lg:gap-x-12">          
                         {navigation.map((item) => (
                         <a id='navbarheader' key={item.name} href={item.href} className="font-semibold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
                             {item.name}
@@ -132,9 +132,9 @@ return(
                             <span className="sr-only">Close menu</span>
                             <div className="relative cursor-pointer group focus:outline-none">
                                 <div className='flex flex-col justify-between w-5 h-5 transform transition-all duration-300 origin-center translate-x-0'>
-                                <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1.5 rounded transform origin-left rotate-[42deg] w-6 -translate-y-4 transition-all duration-300 delay-150'></div>
+                                <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 rounded transform origin-left rotate-[45deg] w-6 -translate-y-4 transition-all duration-300 delay-150'></div>
                                 <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 w-7 rounded transform opacity-0 translate-x-0 transition-all duration-300'></div>
-                                <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1.5 rounded transform origin-left -rotate-[42deg] w-6 transition-all duration-300 delay-150'></div>
+                                <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 rounded transform origin-left -rotate-[45deg] w-6 transition-all duration-300 delay-150'></div>
                                 </div>
                             </div>
                         </button>

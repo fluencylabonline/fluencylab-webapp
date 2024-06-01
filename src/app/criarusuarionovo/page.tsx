@@ -8,24 +8,36 @@ import PasswordModal from './PasswordModal';
 import { ToggleDarkMode } from '../ui/Components/Buttons/ToggleDarkMode';
 import { BsArrowLeft } from 'react-icons/bs';
 import Link from 'next/link';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/app/firebase'; // Adjust the path to your Firebase configuration
 
 export default function CriarUsuarioNovo() {
     const [professor, setProfessor] = useState(false);
     const [coordenador, setCoordenador] = useState(false);
     const [aluno, setAluno] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    
-    const handlePasswordSubmit = (password: string) => {
-        if (password === "123") {
-            setIsAuthenticated(true);
-            toast.success('Bem-vindo');
-        } else {
-            console.log('Senha incorreta');
+
+    const handleLoginSubmit = async (login: string, password: string) => {
+        try {
+            const q = query(collection(db, 'criarUsuario'), where('login', '==', login), where('password', '==', password));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                setIsAuthenticated(true);
+                toast.success('Bem-vindo');
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error('Erro ao verificar login:', error);
+            toast.error('Erro ao verificar login.');
+            return false;
         }
     };
 
     if (!isAuthenticated) {
-        return <PasswordModal onPasswordSubmit={handlePasswordSubmit} />;
+        return <PasswordModal onLoginSubmit={handleLoginSubmit} />;
     }
 
     return (
