@@ -11,6 +11,11 @@ import ReactToPrint from 'react-to-print';
 import LogoOnline from '../../../../public/images/brand/logo-online.png';
 import Image from 'next/image';
 import './pagina.css';
+import { IoLanguage } from 'react-icons/io5';
+import { BsCalendarDate } from 'react-icons/bs';
+import { TbCircleLetterA, TbNumber123 } from 'react-icons/tb';
+import { MdOutlineDateRange } from 'react-icons/md';
+import { GoNumber } from 'react-icons/go';
 
 interface FormData {
   studentName: string;
@@ -59,7 +64,7 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({ formData }
           <div className='w-[80%] text-center text-[5rem] p-4'>
             <p className={`${myFont.className} antialiased`}>{formData.studentName}</p>
           </div>
-          <div className='w-[85%] text-center text-[1.2rem]'>
+          <div className='w-[85%] text-center text-[2.3rem]'>
           <p>
               por ter completado o curso de {formData.course} realizado de {formatDate(formData.startDate)} até {formatDate(formData.endDate)}, 
               com carga horária total de {formData.hours} horas através da plataforma fluencylab.me
@@ -68,36 +73,44 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({ formData }
         </div>
 
         <div className='flex flex-col items-center justify-center gap-1 relative bottom-12'>
-          <p>{formData.teacher}</p>
-          <p>Coordenador de Curso</p>
+          <p className='text-[2rem]'>{formData.teacher}</p>
+          <p className='text-2xl font-bold'>Coordenador de Curso</p>
         </div>
       </div>
 
-      <div id='pagina2' className='w-full h-screen flex flex-col items-start justify-between bg-fluency-gray-100 p-12'>
-        <h1 className='text-[3rem] font-bold'>Registro de Conclusão de Curso</h1>
-        <div className='flex flex-row justify-around w-full text-xl'>
-          <p>Aluno: {formData.studentName}</p>
-          <p>Curso: {formData.course}</p>
+      <div id='pagina2' className='w-full h-screen flex flex-col items-start justify-between bg-fluency-gray-100 p-[5rem]'>
+        <h1 className='text-[5rem] font-bold'>Registro de Conclusão de Curso</h1>
+        <div className='flex flex-row items-start justify-between w-full p-3 rounded-md'>
+          <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Aluno: </p> <span className='text-[2.5rem]'>{formData.studentName}</span></div>
+          <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Curso: </p> <span className='text-[2.5rem]'>{formData.course}</span></div>
         </div>
 
-        <div className='flex flex-row justify-around w-full text-xl'>
-          <div>
-            <p>Período: {formData.startDate} - {formData.endDate}</p>
-            <p>Média Final: {formData.grade}</p>
+        <div className='flex flex-row items-start justify-between w-full p-3 rounded-md'>
+          <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Período: </p> <span className='text-[2.5rem]'>{formData.startDate} - {formData.endDate}</span></div>
+          <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Média Final: </p> <span className='text-[2.5rem]'>{formData.grade}</span></div>
+        </div>
+
+        <div className='flex flex-col items-start gap-2 p-3 text-wrap w-max'>
+             <p className='font-bold text-[3rem]'>Conteúdo: </p> <span className='text-[2rem] w-[40%]'>{formData.topics}</span>
+        </div>
+
+        <div className='flex flex-col gap-2 justify-around w-max  p-3 rounded-md'>
+        <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Carga Horária: </p> <span className='text-[2.5rem]'>{formData.hours}</span></div>
+        <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Frequência: </p> <span className='text-[2.5rem]'>{formData.frequency}</span></div>
+        </div>
+
+        <div className='flex flex-row justify-between w-full p-3 rounded-md'>
+          <div className='flex flex-col items-start gap-2'>
+          <div className='flex flex-row items-center gap-2 p-3'><p className='font-bold text-[3rem] mr-2'>Validação: </p> <span className='text-[2.5rem]'>{formData.validationCode}</span></div>
+            <p className='text-xl'>Acesse: www.fluencylab.me/u/validation</p>
           </div>
-          <div>
-            Conteúdo: {formData.topics}
+          <div className='flex flex-col items-start gap-2 relative right-[5rem] bottom-[5rem]' >
+          <p className='font-bold text-3xl'>Registro:</p>
+          <p>MATHEUS DE SOUZA FERNANDES</p>
+          <p>COORDENADOR DE CURSO</p>
+          <p>FLUENCY LAB</p>
+          <p>CNPJ - 47.603.142/0001-07</p>
           </div>
-        </div>
-
-        <div className='flex flex-row justify-around w-full text-xl'>
-          <p>Carga Horária: {formData.hours}</p>
-          <p>Frequência: {formData.frequency}</p>
-        </div>
-
-        <div className='flex flex-row justify-around w-full text-xl'>
-          <div>Validação: {formData.validationCode}</div>
-          <div>Registro: {formData.validationCode}</div>
         </div>
       </div>
     </div>
@@ -227,7 +240,7 @@ export default function Certificado() {
 
               <div className="flex">
                 <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                  <IoLanguage />
                 </div>
                 <select
                   name='course'
@@ -248,7 +261,7 @@ export default function Certificado() {
               <h1>Período de Curso</h1>
               <div className="flex">
                 <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                <BsCalendarDate />
                 </div>
                 <input
                   type="date"
@@ -263,7 +276,7 @@ export default function Certificado() {
 
               <div className="flex">
                 <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                <BsCalendarDate />
                 </div>
                 <input
                   type="date"
@@ -278,7 +291,7 @@ export default function Certificado() {
 
               <div className="flex items-center gap-2">
                 <div className="w-11 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                <TbNumber123 />
                 </div>
                 <input
                   type="text"
@@ -298,7 +311,7 @@ export default function Certificado() {
               <h1>Médias do Aluno:</h1>
               <div className="flex">
                 <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                <TbCircleLetterA />
                 </div>
                 <input
                   type="number"
@@ -313,7 +326,7 @@ export default function Certificado() {
 
               <div className="flex">
                 <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                <MdOutlineDateRange />
                 </div>
                 <input
                   type="number"
@@ -328,7 +341,7 @@ export default function Certificado() {
 
               <div className="flex">
                 <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                  <FaUser />
+                <GoNumber />
                 </div>
                 <input
                   type="number"

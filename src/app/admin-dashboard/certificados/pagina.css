@@ -4,3 +4,10 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+#pagina2{
+    background-image: url(../../../../public//images//certificado//certificate.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

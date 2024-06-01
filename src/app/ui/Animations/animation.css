@@ -1,0 +1,21 @@
+/* TransitionAnimation.css */
+
+.text-container {
+    position: absolute;
+    bottom: 90px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    color: #000;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .text-container.fade-in {
+    opacity: 1;
+  }
+  
+  .text-container.fade-out {
+    opacity: 0;
+  }
+  
