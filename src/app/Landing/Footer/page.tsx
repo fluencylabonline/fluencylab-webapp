@@ -11,6 +11,8 @@ import { IoLogoWhatsapp } from "react-icons/io5";
 import { FaThreads } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa6";
 
+import { SocialIcon } from 'react-social-icons'
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -100,14 +102,9 @@ function Footer(){
               <div className="space-y-3 flex flex-col items-center font-bold">
                 <div className="uppercase dark:text-gray-50">Redes Sociais</div>
                   <div className="flex justify-center gap-2">
-                      <a href='https://api.whatsapp.com/send/?phone=5549936182324' target="_blank" rel="noopener noreferrer">
-                      <IoLogoWhatsapp className="text-fluency-green-500 w-9 h-9 hover:text-fluency-green-600 ease-in-out duration-300" /></a>
-
-                      <a href="https://www.threads.net/@fluency.lab" target="_blank" rel="noopener noreferrer">
-                      <FaThreads className="text-fluency-gray-300 w-9 h-9 hover:text-fluency-gray-900 ease-in-out duration-300" /></a>
-
-                      <a href="https://www.instagram.com/fluency.lab/" target="_blank" rel="noopener noreferrer">
-                      <FaInstagram className="text-fluency-purple-500 w-9 h-9 hover:text-fluency-purple-600 ease-in-out duration-300" /></a>
+                      <SocialIcon style={{ width: '40px', height: '40px' }} url="https://api.whatsapp.com/send/?phone=5549999535791" />
+                      <SocialIcon style={{ width: '40px', height: '40px' }} url="https://www.threads.net/@fluency.lab" />
+                      <SocialIcon style={{ width: '40px', height: '40px' }} url="https://www.instagram.com/fluency.lab/" />
                   </div>
               </div>
 

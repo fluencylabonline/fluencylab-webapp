@@ -13,7 +13,7 @@ import Image from 'next/image';
 import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot  } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { IoIosCheckbox } from 'react-icons/io';
-import { MdFolderDelete, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
+import { MdFolderDelete, MdOutlineIndeterminateCheckBox, MdPersonRemove } from 'react-icons/md';
 import { TbPigMoney } from 'react-icons/tb';
 import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
@@ -22,6 +22,8 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ProfessorProps {
   id: string;
@@ -30,6 +32,8 @@ interface ProfessorProps {
   salario: number;
   payments: any;
   alunos: { [key: string]: AlunoProps };
+  email: string; 
+  status: string;
 }
 
 interface AlunoProps {
@@ -57,6 +61,8 @@ export default function Professors() {
             salario: doc.data().salario,
             payments: doc.data().payments,
             alunos: doc.data().alunos,
+            email: doc.data().email,
+            status: doc.data().status,
           };
           updatedProfessores.push(professor);
         });
@@ -167,17 +173,19 @@ export default function Professors() {
   };
 
   
-  const confirmPayment = async (userId: string, date: Date, selectedMonth: string) => {
+  const confirmPayment = async (userId: string, date: Date, selectedMonth: string, paymentKey: string) => {
     try {
       const year = date.getFullYear();
       const userRef = doc(db, 'users', userId);
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
+      
   
       if (userData) {
         const currentPayments = userData.payments || {};
         const yearPayments = currentPayments[year] || {};
         const currentStatus = yearPayments[selectedMonth]?.status || 'notPaid'; // Default to 'notPaid' if status is not found
+        const newPaymentKey = uuidv4();
         const newStatus = currentStatus === 'paid' ? 'notPaid' : 'paid';
         
         // Retrieve the current salary and quantity of students
@@ -188,7 +196,8 @@ export default function Professors() {
         yearPayments[selectedMonth] = {
           status: newStatus,
           salary: newSalary,
-          quantityOfStudents: quantityOfStudents
+          quantityOfStudents: quantityOfStudents,
+          paymentKey: newStatus === 'paid' ? newPaymentKey : paymentKey,
         };
   
         await setDoc(userRef, { 
@@ -220,6 +229,7 @@ export default function Professors() {
     return Object.values(alunos).map((aluno) => aluno.name).join(', ');
   };
 
+
   // Fetch Alunos
   useEffect(() => {
     const fetchAlunos = async () => {
@@ -241,63 +251,113 @@ export default function Professors() {
   }, []);
 
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
-  const [editModal, setEditModal] = useState(false);
+  const [editModal, setEditModal] = useState<boolean>(false);
   const [selectedProfessorId, setSelectedProfessorId] = useState<string>('');
-  const [newSalary, setNewSalary] = useState<number>(0);
+  const [newSalary, setNewSalary] = useState<number | "">(0);
+  const [selectedProfessor, setSelectedProfessor] = useState<ProfessorProps | null>(null);
+  const [selectedUserProfilePic, setSelectedUserProfilePic] = useState<string | null>(null);
 
-  const openEditModal = (professorId: string) => {
-    setSelectedProfessorId(professorId);
+  const openEditModal = async (professorId: string) => {
     const professor = professores.find(prof => prof.id === professorId);
     if (professor) {
-      setSelectedStudents(Object.keys(professor.alunos));
+      setSelectedProfessor(professor);
+      setSelectedStudents(Object.keys(professor.alunos || {}));
       setNewSalary(professor.salario);
+      setSelectedProfessorId(professorId); // Add this line to update the selectedProfessorId state
     }
     setEditModal(true);
+
+    try {
+      const userRef = doc(db, 'users', professorId);
+      const userSnapshot = await getDoc(userRef);
+      const userData = userSnapshot.data();
+      
+      if (userData) {
+
+        // Fetch profile picture URL from Firebase Storage
+        const storage = getStorage();
+        const profilePicRef = ref(storage, `profilePictures/${professorId}`);
+        
+        getDownloadURL(profilePicRef)
+          .then((url: React.SetStateAction<string | null>) => {
+            setSelectedUserProfilePic(url);
+          })
+          .catch((error) => {
+            console.error('Error fetching profile picture URL:', error);
+            setSelectedUserProfilePic(null);
+          });
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setSelectedUserProfilePic(null);
+    }
   };
 
   const closeEditModal = () => {
     setEditModal(false);
-    setSelectedStudents([]);
+    setSelectedProfessor(null);
     setNewSalary(0);
+    setSelectedStudents([]);
   };
-
-  const handleStudentSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    if (!selectedStudents.includes(value)) {
+  
+  const handleStudentSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value && !selectedStudents.includes(value)) {
       setSelectedStudents([...selectedStudents, value]);
     }
   };
 
-  const handleSalaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewSalary(Number(event.target.value));
+  const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewSalary(Number(e.target.value));
   };
 
   const saveChanges = async () => {
+    // Ensure that selectedProfessorId is not empty
     if (selectedProfessorId) {
-      const professorRef = doc(db, 'users', selectedProfessorId);
-      const professorSnapshot = await getDoc(professorRef);
-      const professorData = professorSnapshot.data();
-      if (professorData) {
-        const updatedAlunos: { [key: string]: AlunoProps } = {};
-        selectedStudents.forEach(studentId => {
-          const student = alunos.find(aluno => aluno.id === studentId);
-          if (student) {
-            updatedAlunos[studentId] = student;
-          }
-        });
-
-        await setDoc(professorRef, {
-          alunos: updatedAlunos,
-          salario: newSalary,
-        }, { merge: true });
-
-        toast.success('Changes saved successfully!', {
+      try {
+        // Retrieve the reference to the selected professor's document in the Firestore database
+        const professorRef = doc(db, 'users', selectedProfessorId);
+        
+        // Retrieve the professor's data from the database
+        const professorSnapshot = await getDoc(professorRef);
+        const professorData = professorSnapshot.data();
+  
+        // Ensure that professorData is not null
+        if (professorData) {
+          // Create a copy of the selected professor object
+          const updatedAlunos: { [key: string]: AlunoProps } = {};
+          selectedStudents.forEach(studentId => {
+            const student = alunos.find(aluno => aluno.id === studentId);
+            if (student) {
+              updatedAlunos[studentId] = student;
+            }
+          });
+  
+          // Update the salary of the selected professor with the new value
+          professorData.salario = newSalary;
+          professorData.alunos = updatedAlunos;
+  
+          // Update the document in the Firestore database with the new professor data
+          await setDoc(professorRef, professorData, { merge: true });
+  
+          // Show a success toast message
+          toast.success('Changes saved successfully!', {
+            position: 'top-center',
+          });
+  
+          // Close the modal
+          closeEditModal();
+        }
+      } catch (error) {
+        console.error('Error saving changes:', error);
+        // Show an error toast message if an error occurs
+        toast.error('Error saving changes. Please try again later.', {
           position: 'top-center',
         });
-        closeEditModal();
       }
     }
   };
+  
 
   const [isRemoveConfirmationOpen, setIsRemoveConfirmationOpen] = useState(false);
   const [selectedStudentIdToRemove, setSelectedStudentIdToRemove] = useState('');
@@ -313,7 +373,6 @@ export default function Professors() {
     setIsRemoveConfirmationOpen(false);
   };
   
-
   return (
     <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
       <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
@@ -348,7 +407,7 @@ export default function Professors() {
         </select>
       </div>
 
-      <Table>
+      <Table aria-label="Label for accessibility">
         <TableHeader>
         <TableColumn>Nome</TableColumn>
           <TableColumn>Salário</TableColumn>
@@ -383,7 +442,7 @@ export default function Professors() {
                   </Tooltip>
                   <Tooltip className='text-xs font-bold bg-fluency-green-200 rounded-md p-1' content="Confirmar ou retirar pagamento">
                     <span className="hover:text-fluency-green-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
-                    <TbPigMoney onClick={() => confirmPayment(professor.id, new Date(), selectedMonth)} />
+                    <TbPigMoney onClick={() => confirmPayment(professor.id, new Date(), selectedMonth, professor.payments?.[selectedYear]?.[selectedMonth]?.paymentKey || '')} />
                     </span>
                   </Tooltip>
                 </div>
@@ -419,79 +478,83 @@ export default function Professors() {
 
 
       {/*MODAL TO EDIT TEACHER'S INFORMATION*/}
-      {editModal && (
+      {editModal && selectedProfessor && selectedProfessor.id && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
-              
-              <div className="fixed inset-0 transition-opacity">
-                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-              </div>
-
-              <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                  <div className="flex flex-col items-center">
-                      <FluencyCloseButton onClick={closeEditModal} />
-    
-                      <div className="mt-2 flex flex-col gap-3 p-4"> 
-                      <h3 className="text-lg leading-6 font-medium mb-2">
-                          Atualizar Informações do Aluno
-                      </h3>
-
-                      <div>
-                        <div className='bg-fluency-gray-100 dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-full rounded-xl p-3 flex flex-row items-center gap-3'>
-                            <div className="relative inline-block">
-                              <div className='bg-gray-300 w-14 h-14 rounded-full flex items-center justify-center mx-auto'>
-                                <FaUserCircle className='icon w-14 h-14 rounded-full'/>
-                              </div>
-                              <span className="absolute animate-pulse top-0 center-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
-                            </div>
-                          
-                          <div className='flex flex-col text-left'>
-                            <p className='text-md'>Professor Name</p>
-                            <p className='text-xs font-normal'>Professor E-mail</p>
-                          </div>
+            <div className="fixed inset-0 transition-opacity">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+              <div className="flex flex-col items-center">
+                <FluencyCloseButton onClick={closeEditModal} />
+                <div className="mt-2 flex flex-col gap-3 p-4">
+                  <h3 className="text-lg leading-6 font-medium mb-2">
+                    Atualizar Informações do Professor
+                  </h3>
+                  <div>
+                    <div className='bg-fluency-gray-100 dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-full rounded-xl p-3 flex flex-row items-center gap-3'>
+                      <div className="relative inline-block">
+                        <div className='bg-gray-300 w-14 h-14 rounded-full flex items-center justify-center mx-auto'>
+                          {selectedUserProfilePic ? (
+                            <img src={selectedUserProfilePic} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
+                          ) : (
+                            <FaUserCircle className='icon w-14 h-14 rounded-full'/>
+                          )}
                         </div>
+                        {selectedProfessor.status === 'online' ? (
+                          <span className="absolute top-0 center-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
+                        ):(
+                          <span className="absolute top-0 center-0 w-4 h-4 bg-fluency-red-700 border-2 border-white rounded-full"></span>
+                        )}
                       </div>
-
-
-                      <div className="mb-4">
-                        <label className="block font-bold mb-2">Salário</label>
-                        <input
-                          type="number"
-                          value={newSalary}
-                          onChange={handleSalaryChange}
-                          className="bg-gray-200 p-2 rounded w-full"
-                        />
+                      <div className='flex flex-col text-left'>
+                        <p className='text-md'>{selectedProfessor.name}</p>
+                        <p className='text-xs font-normal'>{selectedProfessor.email}</p>
                       </div>
-
-                      <div className="mb-4">
-                            <label className="block font-bold mb-2">Alunos</label>
-                            <select className="bg-gray-200 p-2 rounded w-full" onChange={handleStudentSelection}>
-                              <option value="">Selecione um aluno</option>
-                              {alunos.map((aluno) => (
-                                <option key={aluno.id} value={aluno.id}>{aluno.name}</option>
-                              ))}
-                            </select>
-                          <ul>
-                            {selectedStudents.map(studentId => (
-                              <li key={studentId}>
-                                {alunos.find(aluno => aluno.id === studentId)?.name}
-                                <button onClick={() => removeStudent(studentId)}>Remover</button>
-                              </li>
-                            ))}
-                          </ul>
-                      </div>
-                      
-
-                      <div className="flex flex-row justify-center">                            
-                        <FluencyButton variant='confirm' onClick={saveChanges}>Salvar</FluencyButton>
-                        <FluencyButton variant='gray' onClick={closeEditModal}>Cancelar</FluencyButton>
-                      </div>
-                      </div>
+                    </div>
                   </div>
+                  <div className="mb-4">
+                    <label className="block font-bold mb-2">Salário</label>
+                    <input
+                      type="number"
+                      value={newSalary || ''}
+                      onChange={handleSalaryChange}
+                      className="bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded w-full"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block font-bold mb-2">Alunos</label>
+                    <select className="bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded w-full" onChange={handleStudentSelection}>
+                      <option value="">Selecione um aluno</option>
+                      {alunos.map((aluno) => (
+                        <option key={aluno.id} value={aluno.id}>{aluno.name}</option>
+                      ))}
+                    </select>
+                    <div className='p-2'>
+                      <p>Lista:</p>
+                        <ul className='ml-2 flex flex-col gap-1'>
+                          {selectedStudents.map(studentId => (
+                            
+                            <li className='text-black dark:text-white font-semibold rounded-md flex flex-row items-center gap-2' key={studentId}>
+                              {alunos.find(aluno => aluno.id === studentId)?.name}
+                              <button className='bg-fluency-red-500 p-1 rounded-md' onClick={() => removeStudent(studentId)}><MdPersonRemove /></button>
+                            </li>
+                            
+                          ))}
+                        </ul>
+                    </div>
+                  </div>
+                  <div className="flex flex-row justify-center">
+                    <FluencyButton variant='confirm' onClick={saveChanges}>Salvar</FluencyButton>
+                    <FluencyButton variant='gray' onClick={closeEditModal}>Cancelar</FluencyButton>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
-      </div>)}
-
+        </div>
+      )}
+      
       {isRemoveConfirmationOpen && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">

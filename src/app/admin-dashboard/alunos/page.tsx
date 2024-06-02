@@ -19,7 +19,7 @@ import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { v4 as uuidv4 } from 'uuid';
-
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
@@ -33,6 +33,7 @@ interface Aluno {
   idioma: string;
   payments: any;
   studentMail: string;
+  status: string;
 }
 
 interface Professor {
@@ -62,6 +63,7 @@ export default function Students() {
             idioma: doc.data().idioma,
             payments: doc.data().payments,
             studentMail: doc.data().email,
+            status: doc.data().status,
           };
           updatedAlunos.push(aluno);
         });
@@ -272,18 +274,33 @@ export default function Students() {
     fetchProfessors();
     }, []);
   
+  // Function to fetch and set user data including the profile picture URL
   const openEditModal = async (aluno: Aluno) => {
     setSelectedAluno(aluno);
     setIsEditModalOpen(true);
     setSelectedLanguages(aluno.idioma ? [aluno.idioma] : []);
     setSelectedProfessor(professors.find(prof => prof.name === aluno.professor) || null);
+
     try {
       const userRef = doc(db, 'users', aluno.id);
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
+      
       if (userData) {
         setSelectedUserEmail(userData.email);
-        setSelectedUserProfilePic(userData.profilePicture);
+
+        // Fetch profile picture URL from Firebase Storage
+        const storage = getStorage();
+        const profilePicRef = ref(storage, `profilePictures/${aluno.id}`);
+        
+        getDownloadURL(profilePicRef)
+          .then((url) => {
+            setSelectedUserProfilePic(url);
+          })
+          .catch((error) => {
+            console.error('Error fetching profile picture URL:', error);
+            setSelectedUserProfilePic(null);
+          });
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -494,12 +511,16 @@ const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensal
                                   <div className="relative inline-block">
                                     <div className='bg-gray-300 w-14 h-14 rounded-full flex items-center justify-center mx-auto'>
                                       {selectedUserProfilePic ? (
-                                        <Image src={selectedUserProfilePic} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
+                                        <img src={selectedUserProfilePic} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
                                       ) : (
                                         <FaUserCircle className='icon w-14 h-14 rounded-full'/>
                                       )}
                                     </div>
-                                    <span className="absolute animate-pulse top-0 center-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
+                                    {selectedAluno.status === 'online' ? (
+                                      <span className="absolute top-0 center-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
+                                    ):(
+                                      <span className="absolute top-0 center-0 w-4 h-4 bg-fluency-red-700 border-2 border-white rounded-full"></span>
+                                    )}
                                   </div>
                                 
                                 <div className='flex flex-col text-left'>

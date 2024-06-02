@@ -49,11 +49,12 @@ const TransitionAnimation = () => {
 
       <div className='min-h-screen flex flex-row justify-around'> 
       <iframe className='w-auto h-auto' src="https://lottie.host/embed/540f2830-c93c-4694-8118-d0bb9aac1062/YPUBvF63A7.json"></iframe>
-      </div>
-
       <div className={`text-container ${fade ? 'fade-in' : 'fade-out'}`}>
         <p className='font-medium text-black dark:text-white '>{sentences[currentSentenceIndex]}</p>
       </div>
+      </div>
+
+      
 
     </div>
   );

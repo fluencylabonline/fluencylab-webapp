@@ -115,7 +115,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   // Function to fetch all documents from Firestore
   const fetchDocs = async () => {
     try {
-      const lessonsRef = collection(db, 'Notebooks', 'The Basics', 'Lessons');
+      const lessonsRef = collection(db, 'Notebooks', 'First Steps', 'Lessons');
       const lessonsSnapshot: QuerySnapshot<DocumentData> = await getDocs(lessonsRef);
       const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
         id: doc.id,

@@ -62,7 +62,7 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                     <div className='flex flex-col items-center'>
                         {profilePictureURL ? (
                             <div className="cursor-pointer relative inline-block">
-                                <img src={profilePictureURL} className="object-cover min-w-14 h-14 rounded-full" alt="Profile" />
+                                <img src={profilePictureURL} className="object-cover min-w-14 max-w-14 h-14 rounded-full" alt="Profile" />
                                 <span className="absolute top-0 right-0 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
                             </div>
                         ) : (

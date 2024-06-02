@@ -15,6 +15,8 @@ import Link from "next/link";
 import { TbBookDownload } from "react-icons/tb";
 import { getDownloadURL, ref } from "firebase/storage";
 
+import { useSession } from 'next-auth/react';
+
 interface Notebook {
     title: string;
     workbook: string;
@@ -24,6 +26,8 @@ interface Notebook {
 }
 
 export default function ApostilasCreation() {
+    const { data: session } = useSession();
+
     const [criarLicao, setCriarLicao] = useState(false);
     const [notebooks, setNotebooks] = useState<Notebook[]>([]);
     const [nomeLicao, setNomeLicao] = useState('');
@@ -116,13 +120,13 @@ export default function ApostilasCreation() {
 
  return (
     <div className="p-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md">
-        <div className="flex flex-row gap-1 items-center p-4"> 
+        <div className="flex flex-row gap-1 items-center py-2"> 
             <FluencyInput 
             className="w-full" 
             placeholder="Procure por uma lição aqui" 
             value={searchTerm}
             onChange={handleSearchTermChange}/>
-            <FluencyButton className="w-full" onClick={openModalLicao}>Criar uma lição</FluencyButton>
+            {session?.user.role === 'admin' && <FluencyButton className="w-full" onClick={openModalLicao}>Criar uma lição</FluencyButton>}
         </div>
 
         <div className="lg:flex lg:flex-row lg:items-center lg:justify-center md:flex md:flex-row md:items-center md:justify-center flex flex-col items-center justify-center p-1 border border-fluency-blue-600 dark:border-fluency-blue-900 rounded-xl">

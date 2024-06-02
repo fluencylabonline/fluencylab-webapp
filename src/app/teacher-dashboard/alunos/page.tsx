@@ -144,7 +144,7 @@ function Alunos(){
       }
     
       const getClassDatesForCurrentMonth = useCallback((diasAula: string[], frequencia: number) => {
-        const daysOfWeek = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+        const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
         
         const targetDayIndexes = diasAula.map(dia => daysOfWeek.indexOf(dia));
         const classDates: Date[] = [];
@@ -468,14 +468,14 @@ function Alunos(){
                                                     <>
                                                     <img src={student.profilePicUrl} alt="Profile"  className='w-[6rem] h-[6rem] object-cover rounded-full'/>
                                                     <Tooltip className='bg-fluency-green-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Online">
-                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-green-500 border-2 border-white rounded-full"></span>
+                                                        <span className="absolute top-0 right-2 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
                                                     </>
                                                 ):(
                                                     <>
                                                     <img src={student.profilePicUrl} alt="Profile"  className='w-[6rem] h-[6rem] object-cover rounded-full'/>
                                                     <Tooltip className='bg-fluency-red-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Offline">
-                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-red-500 border-2 border-white rounded-full"></span>
+                                                        <span className="absolute top-0 right-2 w-4 h-4 bg-fluency-red-700 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
                                                     </>
                                                 )}  
@@ -486,14 +486,14 @@ function Alunos(){
                                                     <>
                                                     <FaUserCircle className='text-[5rem] object-cover rounded-full' />
                                                     <Tooltip className='bg-fluency-green-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Online">
-                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-green-500 border-2 border-white rounded-full"></span>
+                                                        <span className="absolute top-0 right-2 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
                                                     </>
                                                 ):(
                                                     <>
                                                     <FaUserCircle className='text-[5rem] object-cover rounded-full' />
                                                     <Tooltip className='bg-fluency-red-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Offline">
-                                                        <span className="absolute top-0 right-1 w-4 h-4 bg-fluency-red-500 border-2 border-white rounded-full"></span>
+                                                        <span className="absolute top-0 right-2 w-4 h-4 bg-fluency-red-700 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
                                                     </>
                                                 )}  

@@ -10,7 +10,8 @@ import {
     Preview,
     Section,
     Text,
-    Img
+    Img,
+    Column
   } from "@react-email/components";
   import * as React from "react";
   import Logo from '../../public/images/brand/logo.png';
@@ -62,6 +63,16 @@ import {
   
             <Section>
               Nossas redes sociais:
+              <Column>
+                <Link href="https://www.instagram.com/fluency.lab">
+                  <Img
+                    src={`https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/150px-Instagram_logo_2022.svg.png`}
+                    width="32"
+                    height="32"
+                    alt="Slack"
+                  />
+                </Link>
+              </Column>
             </Section>
   
             <Link href="https://fluencylab.online" style={reportLink}>
