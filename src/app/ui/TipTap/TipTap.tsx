@@ -225,7 +225,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       }
     });
 
-    return () => provider.destroy();
   }, [notebookID]);
 
   
@@ -241,6 +240,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       FontSize,
       StarterKit.configure({
         document: false,
+        history: false
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
@@ -269,6 +269,11 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
         },
       }),
     ],
+    content: content,
+    onUpdate: ({ editor }) => {
+      const jsonContent = editor.getJSON();
+      onChange(jsonContent);
+    },
     editorProps: {
       attributes: {
         class:
