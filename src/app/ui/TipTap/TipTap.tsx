@@ -12,7 +12,11 @@ import { toast, Toaster } from 'react-hot-toast';
 import './styles.scss'
 
 //Imports
-import Link from '@tiptap/extension-link'
+import * as Y from 'yjs'
+import { TiptapCollabProvider } from '@hocuspocus/provider'
+import Collaboration from '@tiptap/extension-collaboration'
+
+
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -197,10 +201,41 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     content: 'heading block*',
   })
 
+  const docu = new Y.Doc()
+
+  // Connect to your Collaboration server
+  const provider = new TiptapCollabProvider({
+    name: "TipTap", // Unique document identifier for syncing. This is your document name.
+    appId: 'Q9GWYGKG', // Your Cloud Dashboard AppID or `baseURL` for on-premises
+    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTczNDk0MzgsIm5iZiI6MTcxNzM0OTQzOCwiZXhwIjoxNzE3NDM1ODM4LCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJxOWd3eWdrZyJ9.vCsNwCr7CSPriKPvd6efZ0OQy35xGtxS-J0oEBmS0BI', // Your JWT token
+    document: docu,
+    
+    // The onSynced callback ensures initial content is set only once using editor.setContent(), preventing repetitive content insertion on editor syncs.
+    onSynced() {
+
+      if( !docu.getMap('config').get('initialContentLoaded') && editor ){
+        docu.getMap('config').set('initialContentLoaded', true);
+
+        editor.commands.setContent(`
+        <p>
+          This is a radically reduced version of tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.
+        </p>
+        <p>
+          The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
+        </p>
+        `)
+      }
+
+    }
+  })
+  
   const editor = useEditor({
     extensions: [
       CustomDocument,
       Image,
+      Collaboration.configure({
+        document: docu // Configure Y.Doc for collaboration
+      }),
       TextStyle, 
       FontFamily,
       FontSize,
@@ -241,10 +276,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       },
     },
     autofocus: true,
-    content: realtimeContent,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
   }) 
 
   
