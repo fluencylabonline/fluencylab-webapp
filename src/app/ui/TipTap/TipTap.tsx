@@ -159,17 +159,42 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     const params = new URLSearchParams(window.location.search);
     const notebookID = params.get('notebook');
     const studentID = params.get('student');
-
+  
+    // Reference to the notebook document in Firestore
     const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
+  
+    // Subscribe to real-time updates on the notebook document
     const unsubscribe = onSnapshot(notebookRef, (doc) => {
       if (doc.exists()) {
         const { content: updatedContent } = doc.data();
+        // Update the content state with the updated content from Firestore
         setRealtimeContent(updatedContent);
       }
     });
-
+  
+    // Clean up the subscription when the component unmounts
     return () => unsubscribe();
   }, [content]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Fetch the latest content from Firestore every 3 seconds
+      const params = new URLSearchParams(window.location.search);
+      const notebookID = params.get('notebook');
+      const studentID = params.get('student');
+
+      const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
+      onSnapshot(notebookRef, (doc) => {
+        if (doc.exists()) {
+          const { content: updatedContent } = doc.data();
+          setRealtimeContent(updatedContent);
+        }
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+  
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDescription(event.target.value);
