@@ -203,31 +203,32 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   const docu = new Y.Doc()
 
-  useEffect(() => {
-    if (!notebookID) return;
+  if (!notebookID) return;
+  const provider = new TiptapCollabProvider({
+    name: notebookID, // Document identifier
+    appId: 'Q9GWYGKG', // replace with YOUR_APP_ID from Cloud dashboard
+    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjNiYWM3ZTA4OGZjNjhiY2FlZDJhZDQ3NzdlMTE2NjBhOGYxNDljMmM4NDE0YjIzOTFmM2FlYjgzOWJlNTk2NzQ5MTNjZjY0ZWE4ZTBlOWFlIn0.eyJhdWQiOiIxIiwianRpIjoiM2JhYzdlMDg4ZmM2OGJjYWVkMmFkNDc3N2UxMTY2MGE4ZjE0OWMyYzg0MTRiMjM5MWYzYWViODM5YmU1OTY3NDkxM2NmNjRlYThlMGU5YWUiLCJpYXQiOjE2ODY3MzE3OTksIm5iZiI6MTY4NjczMTc5OSwiZXhwIjoxNzE4MjY3Nzk5LCJzdWIiOiIxNzM0NCIsInNjb3BlcyI6W119.R4Kg6n1zFTG_TZ54BoqDBBHvVO-uLi5bQ5JBFvmdxEuS8X5DpRF8if8aO3CRGVdNsJgt5nSSyM-jE1V1XZTBYMfx6wDQd9qBHUxljbxXN_R6P1ZyxE1qTX7VRzfxZT1bqnS7eZ84jJUs2hKmjJ2QekVi9rJpeo5Yfhw5ZXSiTgWgQSlCVtb4Hg0cRitY7_7GEmEUsvV7CW30mPzZnb0l8RZaYVGGnugxYd6_Jgf1Rx1mCSAwcTZzZLo-mAJ9zp8PlGq3aKhqFX58_q0CSCNBlJMSQJ6iMX6OZ3o-lc06inO-krcStIcs2Y6UryNprK2HYAslS0MSt8BvMUl7M0MihK6VGRggDKj1l6trCBbdVZxUIxv8B9k_XjR-cAW4NZmZ8kKEtBuW-dVVS0MppZtGxykFDJco_FdcE8PuzI8qV5_5v9wFlDF90u_hkALZXjj6o7e_lCEtxAehtz8lYFy-z0P7i9n5Tno5fFg6w', // replace with YOUR_TOKEN
+    document: docu,
+    
+    // The onSynced callback ensures initial content is set only once using editor.setContent(), preventing repetitive content insertion on editor syncs.
+    onSynced() {
 
-    const provider = new TiptapCollabProvider({
-      name: notebookID, // Document identifier
-      appId: 'Q9GWYGKG', // replace with YOUR_APP_ID from Cloud dashboard
-      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjNiYWM3ZTA4OGZjNjhiY2FlZDJhZDQ3NzdlMTE2NjBhOGYxNDljMmM4NDE0YjIzOTFmM2FlYjgzOWJlNTk2NzQ5MTNjZjY0ZWE4ZTBlOWFlIn0.eyJhdWQiOiIxIiwianRpIjoiM2JhYzdlMDg4ZmM2OGJjYWVkMmFkNDc3N2UxMTY2MGE4ZjE0OWMyYzg0MTRiMjM5MWYzYWViODM5YmU1OTY3NDkxM2NmNjRlYThlMGU5YWUiLCJpYXQiOjE2ODY3MzE3OTksIm5iZiI6MTY4NjczMTc5OSwiZXhwIjoxNzE4MjY3Nzk5LCJzdWIiOiIxNzM0NCIsInNjb3BlcyI6W119.R4Kg6n1zFTG_TZ54BoqDBBHvVO-uLi5bQ5JBFvmdxEuS8X5DpRF8if8aO3CRGVdNsJgt5nSSyM-jE1V1XZTBYMfx6wDQd9qBHUxljbxXN_R6P1ZyxE1qTX7VRzfxZT1bqnS7eZ84jJUs2hKmjJ2QekVi9rJpeo5Yfhw5ZXSiTgWgQSlCVtb4Hg0cRitY7_7GEmEUsvV7CW30mPzZnb0l8RZaYVGGnugxYd6_Jgf1Rx1mCSAwcTZzZLo-mAJ9zp8PlGq3aKhqFX58_q0CSCNBlJMSQJ6iMX6OZ3o-lc06inO-krcStIcs2Y6UryNprK2HYAslS0MSt8BvMUl7M0MihK6VGRggDKj1l6trCBbdVZxUIxv8B9k_XjR-cAW4NZmZ8kKEtBuW-dVVS0MppZtGxykFDJco_FdcE8PuzI8qV5_5v9wFlDF90u_hkALZXjj6o7e_lCEtxAehtz8lYFy-z0P7i9n5Tno5fFg6w', // replace with YOUR_TOKEN
-      document: docu,
+      if( !docu.getMap('config').get('initialContentLoaded') && editor ){
+        docu.getMap('config').set('initialContentLoaded', true);
 
-      onSynced() {
-
-        if( !docu.getMap('config').get('initialContentLoaded') && editor ){
-          docu.getMap('config').set('initialContentLoaded', true);
-          editor.commands.setContent(`
-          <p>
-            The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
-          </p>
-          `)
-        }
+        editor.commands.setContent(`
+        <p>
+          This is a radically reduced version of tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.
+        </p>
+        <p>
+          The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
+        </p>
+        `)
       }
-    });
 
-  }, [notebookID]);
+    }
+  })
 
-  
   const editor = useEditor({
     extensions: [
       CustomDocument,
