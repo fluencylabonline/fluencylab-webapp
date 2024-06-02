@@ -270,11 +270,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
         },
       }),
     ],
-    content: content,
-    onUpdate: ({ editor }) => {
-      const jsonContent = editor.getJSON();
-      onChange(jsonContent);
-    },
     editorProps: {
       attributes: {
         class:
