@@ -16,6 +16,7 @@ import * as Y from 'yjs'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 import Collaboration from '@tiptap/extension-collaboration'
 
+import Link from '@tiptap/extension-link'
 
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
