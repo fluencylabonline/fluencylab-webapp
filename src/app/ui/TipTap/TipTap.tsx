@@ -162,9 +162,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const notebookID = params.get('notebook');
-    const studentID = params.get('student');
-
+    const notebookID = params.get('notebook') || ''; // Provide default value
+    const studentID = params.get('student') || ''; // Provide default value
     const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
     const unsubscribe = onSnapshot(notebookRef, (doc) => {
       if (doc.exists()) {
@@ -204,31 +203,31 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   const docu = new Y.Doc()
 
-  // Connect to your Collaboration server
-  const provider = new TiptapCollabProvider({
-    name: "TipTap", // Unique document identifier for syncing. This is your document name.
-    appId: 'Q9GWYGKG', // Your Cloud Dashboard AppID or `baseURL` for on-premises
-    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTczNDk0MzgsIm5iZiI6MTcxNzM0OTQzOCwiZXhwIjoxNzE3NDM1ODM4LCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJxOWd3eWdrZyJ9.vCsNwCr7CSPriKPvd6efZ0OQy35xGtxS-J0oEBmS0BI', // Your JWT token
-    document: docu,
-    
-    // The onSynced callback ensures initial content is set only once using editor.setContent(), preventing repetitive content insertion on editor syncs.
-    onSynced() {
+  useEffect(() => {
+    if (!notebookID) return;
 
-      if( !docu.getMap('config').get('initialContentLoaded') && editor ){
-        docu.getMap('config').set('initialContentLoaded', true);
+    const provider = new TiptapCollabProvider({
+      name: notebookID, // Document identifier
+      appId: 'Q9GWYGKG', // replace with YOUR_APP_ID from Cloud dashboard
+      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjNiYWM3ZTA4OGZjNjhiY2FlZDJhZDQ3NzdlMTE2NjBhOGYxNDljMmM4NDE0YjIzOTFmM2FlYjgzOWJlNTk2NzQ5MTNjZjY0ZWE4ZTBlOWFlIn0.eyJhdWQiOiIxIiwianRpIjoiM2JhYzdlMDg4ZmM2OGJjYWVkMmFkNDc3N2UxMTY2MGE4ZjE0OWMyYzg0MTRiMjM5MWYzYWViODM5YmU1OTY3NDkxM2NmNjRlYThlMGU5YWUiLCJpYXQiOjE2ODY3MzE3OTksIm5iZiI6MTY4NjczMTc5OSwiZXhwIjoxNzE4MjY3Nzk5LCJzdWIiOiIxNzM0NCIsInNjb3BlcyI6W119.R4Kg6n1zFTG_TZ54BoqDBBHvVO-uLi5bQ5JBFvmdxEuS8X5DpRF8if8aO3CRGVdNsJgt5nSSyM-jE1V1XZTBYMfx6wDQd9qBHUxljbxXN_R6P1ZyxE1qTX7VRzfxZT1bqnS7eZ84jJUs2hKmjJ2QekVi9rJpeo5Yfhw5ZXSiTgWgQSlCVtb4Hg0cRitY7_7GEmEUsvV7CW30mPzZnb0l8RZaYVGGnugxYd6_Jgf1Rx1mCSAwcTZzZLo-mAJ9zp8PlGq3aKhqFX58_q0CSCNBlJMSQJ6iMX6OZ3o-lc06inO-krcStIcs2Y6UryNprK2HYAslS0MSt8BvMUl7M0MihK6VGRggDKj1l6trCBbdVZxUIxv8B9k_XjR-cAW4NZmZ8kKEtBuW-dVVS0MppZtGxykFDJco_FdcE8PuzI8qV5_5v9wFlDF90u_hkALZXjj6o7e_lCEtxAehtz8lYFy-z0P7i9n5Tno5fFg6w', // replace with YOUR_TOKEN
+      document: docu,
 
-        editor.commands.setContent(`
-        <p>
-          This is a radically reduced version of tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.
-        </p>
-        <p>
-          The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
-        </p>
-        `)
+      onSynced() {
+
+        if( !docu.getMap('config').get('initialContentLoaded') && editor ){
+          docu.getMap('config').set('initialContentLoaded', true);
+          editor.commands.setContent(`
+          <p>
+            The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
+          </p>
+          `)
+        }
       }
+    });
 
-    }
-  })
+    return () => provider.destroy();
+  }, [notebookID]);
+
   
   const editor = useEditor({
     extensions: [
