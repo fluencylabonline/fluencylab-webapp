@@ -88,41 +88,49 @@ function Perfil() {
 
     const [profileData, setProfileData] = useState<DocumentData | null>(null);
     const handleProfilePictureChange = async (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files && e.target.files[0]; // Ensure file exists before accessing
+      const file = e.target.files && e.target.files[0]; // Ensure file exists before accessing
     
-        if (file && session?.user.id) {
-          const storage = getStorage();
-          const storageRef = ref(storage, `profilePictures/${session?.user.id}`);
+      if (file && session?.user.id) {
+        const storage = getStorage();
+        const storageRef = ref(storage, `profilePictures/${session?.user.id}`);
     
-          try {
+        try {
+          await toast.promise(
             // Upload the new profile picture
-            await uploadBytes(storageRef, file);
-    
-            // Get the download URL of the uploaded picture
-            const downloadURL = await getDownloadURL(storageRef);
-    
-            // Update the user's profile with the new picture URL
-            if (auth.currentUser) { // Ensure auth.currentUser is not null
-              await updateProfile(auth.currentUser, {
-                photoURL: downloadURL,
-              });
+            uploadBytes(storageRef, file),
+            {
+              loading: 'Uploading...',
+              success: 'Profile picture uploaded successfully!',
+              error: 'Error uploading profile picture',
             }
+          );
     
-            // Update the profile data state if needed
-            if (profileData) {
-              toast.success('Foto atualizada!', {
-                position: 'top-center',
-              });
-              setProfileData((prevData: any) => ({
-                ...prevData!,
-                photoURL: downloadURL,
-              }));
-            }
-          } catch (error) {
-            console.error('Error uploading profile picture:', error);
+          // Get the download URL of the uploaded picture
+          const downloadURL = await getDownloadURL(storageRef);
+    
+          // Update the user's profile with the new picture URL
+          if (auth.currentUser) {
+            await updateProfile(auth.currentUser, {
+              photoURL: downloadURL,
+            });
           }
+    
+          // Update the profile data state if needed
+          if (profileData) {
+            toast.success('Foto atualizada!', {
+              position: 'top-center',
+            });
+            setProfileData((prevData: any) => ({
+              ...prevData!,
+              photoURL: downloadURL,
+            }));
+          }
+        } catch (error) {
+          console.error('Error uploading profile picture:', error);
         }
-      };
+      }
+    };
+    
   
       
     const [name, setName] = useState('');

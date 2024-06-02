@@ -32,11 +32,11 @@ const TransitionAnimation = () => {
   }, [isChecked, isLocalStorageAvailable]);
 
   useEffect(() => {
-    const fadeOutTimeout = setTimeout(() => setFade(false), 3000); // 3 seconds to fade out
+    const fadeOutTimeout = setTimeout(() => setFade(false), 2000); // 3 seconds to fade out
     const fadeInTimeout = setTimeout(() => {
       setCurrentSentenceIndex((prevIndex) => (prevIndex + 1) % sentences.length);
       setFade(true);
-    }, 3750); // Wait for 0.5 second after fade out before starting fade in
+    }, 3000); // Wait for 0.5 second after fade out before starting fade in
 
     return () => {
       clearTimeout(fadeOutTimeout);

@@ -83,7 +83,7 @@ export default function SignIn(){
               router.push('/student-dashboard/perfil');
               break;
           }
-        }, 3000);
+        }, 5000);
       } else {
         router.push('/signin');
       }

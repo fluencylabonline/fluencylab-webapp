@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
 import CreateProfessor from './professor';
 import CreateAluno from './aluno';
 import CreateGerencia from './gerencia';
@@ -24,14 +23,12 @@ export default function CriarUsuarioNovo() {
             
             if (!querySnapshot.empty) {
                 setIsAuthenticated(true);
-                toast.success('Bem-vindo');
                 return true;
             } else {
                 return false;
             }
         } catch (error) {
             console.error('Erro ao verificar login:', error);
-            toast.error('Erro ao verificar login.');
             return false;
         }
     };
@@ -97,7 +94,6 @@ export default function CriarUsuarioNovo() {
                     <CreateProfessor />
                 </div>}
             </div>
-            <Toaster />
         </div>
     );
 }
