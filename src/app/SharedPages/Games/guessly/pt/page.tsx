@@ -2,7 +2,7 @@
 import { useState, useEffect, ChangeEvent, KeyboardEvent, useRef } from 'react';
 import { TbPlayerTrackNext } from 'react-icons/tb';
 import '@/app/games/games.css';
-import allWordsDataEnglish from '@/app/games/guessly/en/wordsDataEnglish.json';
+import allWordsDataEnglish from '@/app/games/guessly/pt/wordsDataPorguese.json';
 import Keyboard from '@/app/games/guessly/keyboard-guessly';
 import { CiCircleQuestion } from "react-icons/ci";
 import { IoClose } from 'react-icons/io5';

@@ -1,6 +1,8 @@
 'use client'
 import { ChangeEvent, useState } from 'react';
 import WordleEn from './en/page';
+import WordleSp from './sp/page';
+import WordlePt from './pt/page';
 import { CiCircleQuestion } from 'react-icons/ci';
 import { IoClose } from 'react-icons/io5';
 
@@ -34,42 +36,38 @@ export default function Wordle(){
 
             <div>
                 {selectedLanguage === "english" && <WordleEn />}
+                {selectedLanguage === "portugues" && <WordlePt />}
+                {selectedLanguage === "espanol" && <WordleSp />}
             </div>
-
 
     {isInstrucoesOpen && 
-        <div className="fixed z-[9999] inset-0 overflow-y-hidden text-fluency-text-light  ">
-        <div className="flex items-center justify-center min-h-screen">
-
-                <div className="fade-in fade-out fixed inset-0 transition-opacity duration-200 ease-in-out">
-                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-
-            <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8">                        
-                        
-                    <button onClick={closeInstrucoes} className="absolute top-0 left-0 mt-2 ml-2 ">
-                        <span className="sr-only">Fechar</span>
-                        <IoClose className="w-10 h-10 text-fluency-text-light hover:text-fluency-blue-600 ease-in-out duration-300" />
-                    </button>
-            
-                    <h3 className="text-xl font-bold text-center leading-6 mb-4">
-                        Instruções
-                    </h3>   
-
-                <div className='text-justify flex gap-1 flex-col'>
-                    <span>1. Se não conseguir fazer uma aula, simplesmente não marque como feita até fazer a reposição.</span>
-                    <span>2. Se não for fazer a reposição marque como cancelada.</span>
-                    <span>3. Clique ou passe o mouse em cima de cada data para saber o status de cada uma.</span>
-                    <p className='mt-2 font-semibold'>Cores:</p>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-red-600'>Vermelho</span> são aulas atrasadas que não foram nem canceladas nem feitas</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-green-600'>Verde</span> são as aulas feitas.</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-yellow-600'>Amarelo</span> são as aulas canceladas.</span>
-                    <span className='ml-2 font-medium'><span className='font-semibold text-fluency-blue-600'>Azul</span> são as aulas ainda por fazer.</span>  
-                </div>                                                      
+        <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none transition-opacity duration-300 ${isInstrucoesOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`relative w-auto max-w-md mx-auto my-6 p-6 bg-white dark:bg-fluency-dark-bg shadow-md rounded-xl text-black dark:text-white instructions-enter`}>                <div className="p-6 bg-white dark:bg-fluency-dark-bg shadow-md rounded-xl text-black dark:text-white">
+            <div className="flex justify-between items-center">
+            <h1 className="text-lg font-bold">Instruções</h1>
+            <button
+                className="p-1 transition-colors duration-200 transform rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={closeInstrucoes}
+            >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            </div>
+            <div className="mt-4 text-sm">
+            <strong>Descubra a PALAVRA do dia em 6 tentativas.</strong>
+            <br />
+            Cada tentativa deve ser uma palavra de 5 letras. Use o botão Enter para enviar. Após cada tentativa, a cor dos quadrados mudará de acordo com os seguintes exemplos:
+            <ul className="list-disc list-inside">
+                <li><strong className='text-green-700'>Quando a letra estiver em verde</strong>, a letra está correta e na posição correta.</li>
+                <li><strong className='text-yellow-700'>Quando a letra estiver em amarelo</strong>, a letra está correta, mas na posição errada.</li>
+                <li><strong className='text-stone-700'>Quando a letra estiver em cinza escuro</strong>, a letra está incorreta.</li>
+            </ul>
+            Todo dia há uma nova PALAVRA!
             </div>
         </div>
+        </div>
     </div>}
-
 
         </div>
     )

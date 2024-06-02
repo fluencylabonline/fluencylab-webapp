@@ -20,7 +20,7 @@ export default function CursoParaProfessores() {
     return (
         <div id='background-body' className="mt-12 w-[90vh] h-[70vh] py-4 flex flex-col gap-4 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark text-white rounded-md">
             <div className="flex flex-col items-center justify-center my-4">
-                <p className="font-bold text-[2.5rem] p-4">Bem vindo, {session?.user.name}!</p>
+                <p className="font-bold text-[2rem] p-6">Bem vindo, {session?.user.name}!</p>
                 <p className="px-4 text-center font-semibold text-lg">Vamos fazer um nivelamento e entender melhor como podemos melhorar seu inglês!</p>
                 <p className="w-[90%] text-center text-md p-2 mt-4">Temos 4 habilidades para testar: <br></br> 1 - Vocabulário e Leitura <br></br> 2 - Escrita <br></br> 3 - Audição <br></br> 4 - Compreensão e Fala.</p>
             </div>
