@@ -20,6 +20,9 @@ import { toast, Toaster } from 'react-hot-toast';
 
 //Icons
 import { FaUserCircle } from 'react-icons/fa';
+import { RiErrorWarningLine } from 'react-icons/ri';
+import Link from 'next/link';
+import { GrStatusGood } from 'react-icons/gr';
 
 function Perfil() {
   const handleLogout = async () => {
@@ -145,6 +148,7 @@ function Perfil() {
                   if (docSnap.exists()) {
                       setName(docSnap.data().name);
                       setUserName(docSnap.data().userName);
+                      setContratoFoiAssinado(docSnap.data().ContratoAssinado || { signed: false, logs: [] });
                   } else {
                       console.log("No such document!");
                   }
@@ -186,6 +190,11 @@ function Perfil() {
           toast.error('Erro ao enviar e-mail de redefinição de senha. Por favor, tente novamente mais tarde.');
         });
     };
+
+    const [contratoFoiAssinado, setContratoFoiAssinado] = useState<{ 
+      signed: boolean; 
+      logs: { logID: string; signedAt: string; segundaParteAssinou: boolean }[] 
+  } | null>(null);
 
     return (
     <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
@@ -237,7 +246,15 @@ function Perfil() {
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
               <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-              <p>Sem notificações para mostrar</p>
+              {contratoFoiAssinado?.signed ? (
+                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                    <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato assinado e válido <GrStatusGood className='w-6 h-auto' /></Link>    
+                </div>
+                ) : (
+                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-700 text-white font-bold p-3 items-center justify-between'>
+                  <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato não assinado ainda <RiErrorWarningLine className='w-6 h-auto' /></Link>    
+                </div>
+              )}
             </div>
                  
         </div>

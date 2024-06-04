@@ -97,7 +97,8 @@ export default function CreateAluno(){
                 frequencia: frequencia,
                 diaAula: selectedDays,
                 comecouEm: comecouEm,
-                tasks: {}
+                tasks: {},
+                ContratoAssinado: false,
             });
     
             // Create a new 'Notebooks' collection inside the user's document

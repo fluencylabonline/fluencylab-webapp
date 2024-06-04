@@ -37,6 +37,7 @@
     "@tiptap/react": "^2.3.2",
     "@tiptap/starter-kit": "^2.3.2",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "firebase": "^10.11.1",
     "firebase-tools": "^13.8.1",

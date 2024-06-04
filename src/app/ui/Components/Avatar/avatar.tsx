@@ -71,10 +71,15 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                             </div>
                         )}
                     </div>
-                    <div className='flex flex-col text-left'>
+                    <div className='flex flex-col text-left overflow-hidden'>
                         <p className='text-sm text-nowrap'>{name}</p>
-                        <p className='text-[0.5rem] font-normal'>{email}</p>
-                        <p className='text-xs'>{role?.charAt(0).toUpperCase() + role?.slice(1)}</p>
+                        <p className='text-[70%] font-normal'>{email}</p>
+                        <p className='text-xs'>
+                            {role === 'admin' ? 'Coordenador' : 
+                            role === 'student' ? 'Aluno' :
+                            role === 'teacher' ? 'Professor' :
+                            (role?.charAt(0).toUpperCase() + role?.slice(1))}
+                        </p>
                     </div>
                 </div>
             )}

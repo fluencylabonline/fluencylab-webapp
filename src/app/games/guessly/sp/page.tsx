@@ -323,15 +323,14 @@ const Guessly = () =>{
                       </h3>   
   
                       <div className="mt-4 text-sm">
-                      <strong>Discover the WORD of the day in 6 attempts.</strong>
+                      <strong>Descubra a palavra levando em conta a dica.</strong>
                       <br />
-                      <p>Each attempt must be a 5-letter word. Use the Enter button to submit. After each attempt, the color of the squares will change according to the following examples:</p>
+                      <p>Todas as dicas são em português, mas a palavra que você vai escrever deve ser no idioma selecionado.</p>
                       <ul className="list-disc list-inside">
-                        <li><strong className='text-green-700'>When the letter is green</strong> the letter is correct and in the correct position.</li>
-                        <li><strong className='text-yellow-700'>When the letter is yellow</strong> the letter is correct and in the incorrect position.</li>
-                        <li><strong className='text-stone-700'>When the letter is dark gray</strong> the letter is incorrect.</li>
+                        <li>Você pode pular no máximo duas vezes quando não souber a palavra.</li>
+                        <li>Não tem um limite de quantas vezes pode adivinhar.</li>
+                        <li>O jogo acaba quando o tempo acabar ou quando acertar todas as palavras.</li>
                       </ul>
-                      Every day there is a new WORD!
                     </div>                                                     
               </div>
           </div>

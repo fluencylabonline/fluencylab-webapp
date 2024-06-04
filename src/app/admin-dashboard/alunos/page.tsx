@@ -24,6 +24,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
 import FluencySearch from '@/app/ui/Components/Search/search';
+import Contratos from '../contratos/page';
 
 interface Aluno {
   id: string;
@@ -142,7 +143,7 @@ export default function Students() {
     try {
       // Create references to the user's document in both collections
       const userRef = doc(db, 'users', userId);
-      const pastUserRef = doc(db, 'past-students', userId);
+      const pastUserRef = doc(db, 'past_students', userId);
   
       // Get the user's data from the 'users' collection
       const userSnapshot = await getDoc(userRef);
@@ -378,22 +379,32 @@ export default function Students() {
 const totalStudents = alunos.length;
 const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensalidade), 0);
 
-  return (
-    <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
-      <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
-      <div className='flex flex-row items-center justify-around w-full'>
-          <h3 className='font-semibold text-xl'>
-            Alunos Fluency Lab
-          </h3>
+const [selectedOption, setSelectedOption] = useState('financeiro');
 
-          <FluencySearch 
+  return (
+    <div className="h-screen flex flex-col items-start lg:px-2 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
+
+      <select
+        className='font-bold text-xl outline-none bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark px-5 py-3 rounded-md'
+        value={selectedOption}
+        onChange={(e) => setSelectedOption(e.target.value)}
+      >
+        <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="financeiro">Financeiro</option>
+        <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="juridico">Jurídico</option>
+      </select>
+
+      {selectedOption === 'financeiro' && (
+      <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
+      <div className='flex flex-row items-center justify-around gap-2 w-full'>
+          <FluencyInput 
           value={searchQuery}
-          placeholder='Procurar por nome'
+          placeholder='Procure um aluno por aqui...'
           onChange={(e) => setSearchQuery(e.target.value)}
+          className='w-full'
           />
 
         <select
-          className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark px-5 py-2 rounded-md'
+          className='outline-none flex flex-row justify-center items-center bg-fluency-bg-light dark:bg-fluency-bg-dark dark:text-fluency-gray-100 py-2 rounded-md px-3'
           value={selectedMonth}
           onChange={(e) => handleMonthChange(e.target.value)}
         >
@@ -411,7 +422,7 @@ const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensal
           <option value="December">Dezembro</option>
         </select>
         <select
-          className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark px-4 py-2 rounded-md'
+          className='outline-none flex flex-row justify-center items-center bg-fluency-bg-light dark:bg-fluency-bg-dark dark:text-fluency-gray-100 py-2 rounded-md px-3'
           value={selectedYear}
           onChange={(e) => handleYearChange(parseInt(e.target.value))}
         >
@@ -578,8 +589,13 @@ const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensal
                     </div>
                 </div>
             </div>)}
-
       </div>
+      )}
+
+      {selectedOption === 'juridico' && (
+          <Contratos />
+      )}
+
     <Toaster />
   </div>
   );
