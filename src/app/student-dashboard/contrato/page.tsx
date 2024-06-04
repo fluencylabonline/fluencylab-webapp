@@ -154,6 +154,8 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({contractDat
     );
 });
 
+InnerForm.displayName = 'InnerForm';
+
 export default function ContratoAluno() {
     const { data: session } = useSession();
     const [formData, setFormData] = useState({
