@@ -58,7 +58,7 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                     )}
                 </div>
             ) : (
-                <div className='bg-fluency-blue-200 hover:bg-fluency-blue-300 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-[13.5rem] rounded-xl p-3 flex flex-row items-center gap-2'>
+                <div className='bg-fluency-blue-200 hover:bg-fluency-blue-300 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-[13.7rem] rounded-xl p-2 flex flex-row items-center gap-2'>
                     <div className='flex flex-col items-center'>
                         {profilePictureURL ? (
                             <div className="cursor-pointer relative inline-block">

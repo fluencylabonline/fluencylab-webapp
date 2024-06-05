@@ -32,7 +32,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
    
     const [students, setStudents] = useState<Aluno[]>([]);
     const currentDate = useMemo(() => new Date(), []);
-    const weekdays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const weekdays = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
     const monthsPT = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const months = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
     const currentMonthIndex = currentDate.getMonth();

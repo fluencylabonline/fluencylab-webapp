@@ -6,6 +6,7 @@ import Team4 from '../../../../public/images/avatar/team-4.svg';
 import Team5 from '../../../../public/images/avatar/team-5.svg';
 import Team6 from '../../../../public/images/avatar/team-6.svg';
 import Team7 from '../../../../public/images/avatar/team-7.svg';
+import Team8 from '../../../../public/images/avatar/team-8.svg';
 
 export default function Team(){
 return(
@@ -131,7 +132,7 @@ return(
               <div className="flex flex-col items-center">
                   <Image
                   className="object-cover w-20 h-20 mb-2 rounded-full shadow"
-                  src={Team7}
+                  src={Team8}
                   alt="FluencyLab"
                   />
                 <div className="flex flex-col items-center">

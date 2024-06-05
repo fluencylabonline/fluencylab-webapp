@@ -46,7 +46,7 @@ interface ClassData {
 // Modal Component
 function OverdueClassesModal({ overdueClasses, onClose }: { overdueClasses: ClassData[], onClose: () => void }) {
     const getDayOfWeekInPortuguese = (dayIndex: number) => {
-        const weekdaysPT = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+        const weekdaysPT = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
         return weekdaysPT[dayIndex];
     };
     
@@ -144,7 +144,7 @@ function Alunos(){
       }
     
       const getClassDatesForCurrentMonth = useCallback((diasAula: string[], frequencia: number) => {
-        const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+        const daysOfWeek = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
         
         const targetDayIndexes = diasAula.map(dia => daysOfWeek.indexOf(dia));
         const classDates: Date[] = [];
