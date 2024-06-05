@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, arrayUnion, collection, getDocs } from 'firebase/firestore';
 import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import { db } from '@/app/firebase';
 
@@ -41,7 +41,6 @@ interface Aluno {
     frequencia: number;
     classDatesWithStatus: { date: Date; status: string }[];
 }
-
 
 function AlunoPainel() {
     //TeacherDataFetching
@@ -428,7 +427,7 @@ function AlunoPainel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, tasksCompletedToastShown]);
 
-    
+
 return (
     <div>
       {/*Modais*/}
@@ -517,6 +516,7 @@ return (
             </div>
         </div>
     )}
+
           <div className='fade-in fade-out p-3 h-[92vh] min-w-screen overflow-y-scroll'>
             <div className="gap-3 h-full lg:flex lg:flex-row md:flex md:flex-col flex flex-col">
 

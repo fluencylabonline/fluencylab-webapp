@@ -110,40 +110,53 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     setWorkbooks(false)
   }
 
-  const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocs[]>([]); // Store the fetched documents
+  type GroupedLessonDocsMap = { [key: string]: GroupedLessonDocs[] };
 
-  // Function to fetch all documents from Firestore
+  // Use the above type in useState
+  const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocsMap>({});
+  
   const fetchDocs = async () => {
+    const workbookNames = ['First Steps', 'The Basics', 'All you need to know'];
+    const groupedLessons: GroupedLessonDocsMap = {};
+  
     try {
-      const lessonsRef = collection(db, 'Notebooks', 'First Steps', 'Lessons');
-      const lessonsSnapshot: QuerySnapshot<DocumentData> = await getDocs(lessonsRef);
-      const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        data: doc.data(),
-        unit: doc.data().unit || 'Uncategorized', // Assuming there's a 'unit' field in your documents
-      }));
-
-      // Group documents by unit
-      const groupedByUnit: { [key: string]: LessonDoc[] } = fetchedLessonDocs.reduce((acc: { [key: string]: LessonDoc[] }, doc: LessonDoc) => {
-        const unit = doc.unit;
-        if (!acc[unit]) {
-          acc[unit] = [];
-        }
-        acc[unit].push(doc);
-        return acc;
-      }, {});
-
-      // Transform grouped object into an array
-      const groupedLessonDocs: GroupedLessonDocs[] = Object.keys(groupedByUnit).map(unit => ({
-        unit,
-        docs: groupedByUnit[unit],
-      }));
-
-      setLessonDocs(groupedLessonDocs);
+      for (const workbookName of workbookNames) {
+        const lessonsRef = collection(db, 'Notebooks', workbookName, 'Lessons');
+        const lessonsSnapshot: QuerySnapshot<DocumentData> = await getDocs(lessonsRef);
+        const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          data: doc.data(),
+          unit: doc.data().unit || 'Uncategorized', // Assuming there's a 'unit' field in your documents
+        }));
+  
+        // Group documents by unit
+        const groupedByUnit: { [key: string]: LessonDoc[] } = fetchedLessonDocs.reduce((acc: { [key: string]: LessonDoc[] }, doc: LessonDoc) => {
+          const unit = doc.unit;
+          if (!acc[unit]) {
+            acc[unit] = [];
+          }
+          acc[unit].push(doc);
+          return acc;
+        }, {});
+  
+        // Transform grouped object into an array
+        const groupedLessonDocs: GroupedLessonDocs[] = Object.keys(groupedByUnit).map(unit => ({
+          unit,
+          docs: groupedByUnit[unit],
+        }));
+  
+        groupedLessons[workbookName] = groupedLessonDocs;
+      }
+  
+      setLessonDocs(groupedLessons);
     } catch (error) {
       console.error('Error fetching documents: ', error);
     }
   };
+  
+  
+  
+  
 
   // Effect to fetch documents from Firestore on component mount
   useEffect(() => {
@@ -333,62 +346,64 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
               <PiNotebookBold className="w-6 h-auto"/>
             </Button>      
         </div>
-
         {workbooks && 
             <div className="fixed z-50 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-72 h-full p-4">
-                        <div className="flex flex-col items-center justify-center">
-                            
-                            <FluencyCloseButton onClick={closeWorkbook}/>
-                            
-                              <h3 className="text-2xl leading-6 font-medium  mb-2">
-                                  Apostilas                         
-                              </h3>
-                              <Accordion>
-                                <AccordionItem
-                                className='font-semibold w-full text-xl'
-                                key={1}
-                                aria-label="The Basics"
-                                title="The Basics"
-                                indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
-                                >
-                                <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-400 dark:bg-fluency-gray-700">
-                                  <p className='font-bold text-xl'>The Basics</p>   
-                                  <Accordion>
-                                    {lessonDocs.map((group, index) => (
-                                      <AccordionItem
-                                        className='font-semibold w-full text-xl'
-                                        key={index}
-                                        aria-label={`Unidade ${index + 1}`}
-                                        title={`Unidade ${index + 1}`}
-                                        indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
-                                      >
-                                        <ul>
-                                          {group.docs.map(doc => (
-                                            <li className='flex flex-row gap-2 justify-between items-center' key={doc.id}>
-                                              <p className='text-lg font-bold'>{doc.data.title}</p>
-                                              <button className='p-1 px-5 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-black dark:text-white font-semibold rounded-md' onClick={() => pasteContentFromFirestore(doc.data.content)}>
-                                                Colar
-                                              </button>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      </AccordionItem>
-                                    ))}
-                                  </Accordion>
-                                </div>
-                                </AccordionItem>
-                              </Accordion>
-                        </div>
-                    </div>
+              <div className="flex items-center justify-center min-h-screen">
+                
+                <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                 </div>
+
+                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-72 h-full p-4">
+                  <div className="flex flex-col items-center justify-center">
+                    
+                    <FluencyCloseButton onClick={closeWorkbook}/>
+                    
+                    <h3 className="text-2xl leading-6 font-medium mb-2">
+                      Apostilas                         
+                    </h3>
+                    <Accordion>
+                      {Object.keys(lessonDocs).map((workbookName, workbookIndex) => (
+                        <AccordionItem
+                          className='font-semibold w-full text-xl'
+                          key={workbookIndex}
+                          aria-label={workbookName}
+                          title={workbookName}
+                          indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
+                        >
+                          <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-400 dark:bg-fluency-gray-700">
+                            <p className='font-bold text-xl'>{workbookName}</p>   
+                            <Accordion>
+                              {lessonDocs[workbookName].map((group, groupIndex) => (
+                                <AccordionItem
+                                  className='font-semibold w-full text-xl'
+                                  key={groupIndex}
+                                  aria-label={`Unidade ${groupIndex + 1}`}
+                                  title={`Unidade ${groupIndex + 1}`}
+                                  indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
+                                >
+                                  <ul>
+                                    {group.docs.map(doc => (
+                                      <li className='flex flex-row gap-2 justify-between items-center' key={doc.id}>
+                                        <p className='text-lg font-bold'>{doc.data.title}</p>
+                                        <button className='p-1 px-5 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-black dark:text-white font-semibold rounded-md' onClick={() => pasteContentFromFirestore(doc.data.content)}>
+                                          Colar
+                                        </button>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </AccordionItem>
+                              ))}
+                            </Accordion>
+                          </div>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </div>
+                </div>
+              </div>
             </div>}
+
             </div>
           )}
 

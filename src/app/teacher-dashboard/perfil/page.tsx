@@ -285,11 +285,11 @@ function Perfil() {
                 <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
-                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
-                    <span>Link pendente</span>
+                <div className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
+                    <div>Link pendente</div>
                 ) : (
-                    <span><Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink} >Link registrado</Tooltip></span>
-                )}</p>
+                    <div><Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink} >Link registrado</Tooltip></div>
+                )}</div>
 
                 <div className="mt-4 text-center flex flex-col justify-center">
                   <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
