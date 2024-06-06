@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 
 //Firebase
-import { collection, doc, getDoc, getDocs, query, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
 import { db } from "@/app/firebase";
 
 import { toast, Toaster } from 'react-hot-toast';
@@ -11,6 +11,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import '@/app/ui/TipTap//styles.scss'
 
 //Imports
+import Link from '@tiptap/extension-link'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -23,15 +24,13 @@ import TextStyle from '@tiptap/extension-text-style'
 import FontFamily from '@tiptap/extension-font-family'
 
 import Toolbar from "@/app/ui/TipTap/Toolbar";
-import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem } from '@nextui-org/react';
+import { Popover, PopoverTrigger, PopoverContent, Button } from '@nextui-org/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { VscWholeWord } from 'react-icons/vsc';
-import { PiNotebookBold } from 'react-icons/pi';
-import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
-import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useSession } from 'next-auth/react';
+import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 
 type PopoversProps = {
   editor: Editor;
@@ -46,6 +45,7 @@ interface GroupedLessonDocs {
   unit: string;
   docs: LessonDoc[];
 }
+
 function Popovers({ editor }: PopoversProps) {
 
   return (
@@ -89,6 +89,23 @@ function Popovers({ editor }: PopoversProps) {
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out transition-all'></div>
           </button>
+
+          <button
+            onClick={() => editor.chain().focus().setColor('#FAFAFA').run()}
+            className={editor.isActive('textStyle', { color: '#FAFAFA' }) ? 'is-active' : ''}
+            data-testid="setWhite"
+            >        
+            <div className='w-5 h-5 p-2 rounded-full bg-white hover:bg-gray-300 duration-300 ease-in-out transition-all'></div>
+          </button>
+
+          <button
+            onClick={() => editor.chain().focus().setColor('#013A49').run()}
+            className={editor.isActive('textStyle', { color: '#013A49' }) ? 'is-active' : ''}
+            data-testid="setBlack"
+            >        
+            <div className='w-5 h-5 p-2 rounded-full bg-black hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
+          </button>
+
       </BubbleMenu>
   )
 }
@@ -97,14 +114,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
   const workbook = params.get('workbook');
   const lesson = params.get('lesson');
-  const [workbooks, setWorkbooks] = useState(false);
-  function openWorkbook(){
-    setWorkbooks(true)
-  }
-
-  function closeWorkbook(){
-    setWorkbooks(false)
-  }
 
   const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocs[]>([]); // Store the fetched documents
 
@@ -198,6 +207,9 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       Image,
       TextStyle, 
       FontFamily,
+      Link.configure({
+        openOnClick: true,
+      }),
       StarterKit.configure({
         document: false,
       }),
@@ -275,12 +287,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       top: document.body.scrollHeight,
       behavior: "smooth"
     });
-  };
-
-  const pasteContentFromFirestore = (content: string) => {
-    if (editor) {
-      editor.chain().focus().insertContent(content).run();
-    }
   };
 
   return (

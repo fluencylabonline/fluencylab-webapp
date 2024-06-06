@@ -153,10 +153,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       console.error('Error fetching documents: ', error);
     }
   };
-  
-  
-  
-  
 
   // Effect to fetch documents from Firestore on component mount
   useEffect(() => {
@@ -217,6 +213,9 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       TextStyle, 
       FontFamily,
       FontSize,
+      Link.configure({
+        openOnClick: true,
+      }),
       StarterKit.configure({
         document: false,
       }),
@@ -260,8 +259,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     },
   }) 
 
-  
-
   const addImage = () => {
     const url = window.prompt('URL');
   
@@ -281,7 +278,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     });
   };
 
-  // Scroll to bottom function
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.body.scrollHeight,

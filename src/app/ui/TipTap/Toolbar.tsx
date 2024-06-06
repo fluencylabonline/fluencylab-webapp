@@ -8,9 +8,10 @@ import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@ne
 
 //Icons and Style
 import './styles.scss'
+import Link from '@tiptap/extension-link'
 
 import { FaRedoAlt, FaUndoAlt } from "react-icons/fa";
-import { LuHeading1, LuHeading2,LuHeading3 } from "react-icons/lu";
+import { LuHeading1, LuHeading2 } from "react-icons/lu";
 import { FaFont, FaItalic, FaLink, FaLinkSlash } from "react-icons/fa6";
 import { LuHighlighter } from "react-icons/lu";
 import { PiTextBBold, PiTextAlignCenter, PiTextAlignJustify, PiTextAlignLeft, PiTextAlignRight, PiTextTBold } from "react-icons/pi";
