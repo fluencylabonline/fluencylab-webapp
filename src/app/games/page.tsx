@@ -85,17 +85,6 @@ useEffect(() => {
                 <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">TicTacToe</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
             </div>
 
-            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
-                <Image alt="Wordle" className="w-32 h-auto mt-2" src={WhatAmIImage} />
-                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">What Am I?</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
-            </div>
-
-            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
-                <Image alt="Wordle" className="w-36 h-auto mt-4" src={RollAndTellImage} />
-                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Roll and Tell</span><CiCircleQuestion className="text-2xl font-bold hover:text-fluency-gray-100 hover:dark:text-blue-500 duration-200 ease-in-out cursor-pointer"/></p>
-            </div>
-
-
          </div>
       </div>      
   );

@@ -97,7 +97,6 @@ export default function Professors() {
     const statusData = yearPayments[selectedMonth];
   
     if (!statusData) {
-      // If status data is not found for the selected month and year, display 'Não Pago'
       return (
         <Tooltip
           className='text-xs font-bold bg-fluency-red-200 rounded-md p-1'
@@ -109,7 +108,6 @@ export default function Professors() {
         </Tooltip>
       );
     } else {
-      // Extract status, salary, and quantityOfStudents from statusData object
       const { status, salary, quantityOfStudents } = statusData;
   
       if (status === 'paid') {
@@ -138,7 +136,6 @@ export default function Professors() {
     }
   };
   
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string>('');
   const [selectedUserName, setSelectedUserName] = useState<string>('');
@@ -161,7 +158,7 @@ export default function Professors() {
       const userData = userSnapshot.data();
       await setDoc(pastUserRef, userData);
       await deleteDoc(userRef);
-      toast.error('Aluno deletado!', {
+      toast.error('Professor deletado!', {
         position: 'top-center',
       });
     } catch (error) {
@@ -172,27 +169,23 @@ export default function Professors() {
     }
   };
 
-  
   const confirmPayment = async (userId: string, date: Date, selectedMonth: string, paymentKey: string) => {
     try {
       const year = date.getFullYear();
       const userRef = doc(db, 'users', userId);
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
-      
   
       if (userData) {
         const currentPayments = userData.payments || {};
         const yearPayments = currentPayments[year] || {};
-        const currentStatus = yearPayments[selectedMonth]?.status || 'notPaid'; // Default to 'notPaid' if status is not found
+        const currentStatus = yearPayments[selectedMonth]?.status || 'notPaid';
         const newPaymentKey = uuidv4();
         const newStatus = currentStatus === 'paid' ? 'notPaid' : 'paid';
         
-        // Retrieve the current salary and quantity of students
         const newSalary = userData.salario;
         const quantityOfStudents = Object.keys(userData.alunos).length;
   
-        // Update the payment object to include status, salary, and quantity of students
         yearPayments[selectedMonth] = {
           status: newStatus,
           salary: newSalary,
@@ -222,19 +215,15 @@ export default function Professors() {
   
   const [alunos, setAlunos] = useState<AlunoProps[]>([]);
   const renderAlunos = (alunos: { [key: string]: AlunoProps } | null | undefined) => {
-    // Check if alunos is undefined or null
-    if (!alunos) return ''; // Or any default value you prefer when alunos is not available
-  
-    // Map over the values of alunos and join their names with a comma
+    if (!alunos) return ''; 
     return Object.values(alunos).map((aluno) => aluno.name).join(', ');
   };
 
 
-  // Fetch Alunos
   useEffect(() => {
     const fetchAlunos = async () => {
       try {
-        const q = query(collection(db, 'users'), where('role', '==', 'student'));
+        const q = query(collection(db, 'users'), where('role', '==', 'student'), where('professor', '==', ''), where('professorId', '==', ''));
         const querySnapshot = await getDocs(q);
         const alunoList: AlunoProps[] = querySnapshot.docs.map(doc => ({
           id: doc.id,
@@ -243,12 +232,13 @@ export default function Professors() {
         }));
         setAlunos(alunoList);
       } catch (error) {
-        console.error('Error fetching professors:', error);
+        console.error('Error fetching available students:', error);
       }
     };
-
+  
     fetchAlunos();
   }, []);
+  
 
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [editModal, setEditModal] = useState<boolean>(false);
@@ -263,7 +253,7 @@ export default function Professors() {
       setSelectedProfessor(professor);
       setSelectedStudents(Object.keys(professor.alunos || {}));
       setNewSalary(professor.salario);
-      setSelectedProfessorId(professorId); // Add this line to update the selectedProfessorId state
+      setSelectedProfessorId(professorId); 
     }
     setEditModal(true);
 
@@ -300,31 +290,58 @@ export default function Professors() {
     setSelectedStudents([]);
   };
   
-  const handleStudentSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStudentSelection = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value && !selectedStudents.includes(value)) {
-      setSelectedStudents([...selectedStudents, value]);
+      try {
+        const studentRef = doc(db, 'users', value);
+        const studentSnapshot = await getDoc(studentRef);
+        const studentData = studentSnapshot.data();
+  
+        if (studentData) {
+          const professorRef = doc(db, 'users', selectedProfessorId);
+          const professorSnapshot = await getDoc(professorRef);
+          const professorData = professorSnapshot.data();
+  
+          if (professorData) {
+            const professorName = professorData.name || '';
+  
+            // Update student's professor, professorId, and professorName fields
+            await setDoc(studentRef, {
+              professor: professorName,
+              professorId: selectedProfessorId,
+            }, { merge: true });
+  
+            setSelectedStudents([...selectedStudents, value]);
+            toast.success('Aluno selecionado com sucesso!', {
+              position: 'top-center',
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error selecting student:', error);
+        toast.error('Erro ao selecionar aluno!', {
+          position: 'top-center',
+        });
+      }
     }
   };
+  
+  
 
   const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewSalary(Number(e.target.value));
   };
 
   const saveChanges = async () => {
-    // Ensure that selectedProfessorId is not empty
     if (selectedProfessorId) {
       try {
-        // Retrieve the reference to the selected professor's document in the Firestore database
         const professorRef = doc(db, 'users', selectedProfessorId);
         
-        // Retrieve the professor's data from the database
         const professorSnapshot = await getDoc(professorRef);
         const professorData = professorSnapshot.data();
   
-        // Ensure that professorData is not null
         if (professorData) {
-          // Create a copy of the selected professor object
           const updatedAlunos: { [key: string]: AlunoProps } = {};
           selectedStudents.forEach(studentId => {
             const student = alunos.find(aluno => aluno.id === studentId);
@@ -333,24 +350,19 @@ export default function Professors() {
             }
           });
   
-          // Update the salary of the selected professor with the new value
           professorData.salario = newSalary;
           professorData.alunos = updatedAlunos;
   
-          // Update the document in the Firestore database with the new professor data
           await setDoc(professorRef, professorData, { merge: true });
   
-          // Show a success toast message
-          toast.success('Changes saved successfully!', {
+          toast.success('Modificações salvas!', {
             position: 'top-center',
           });
   
-          // Close the modal
           closeEditModal();
         }
       } catch (error) {
         console.error('Error saving changes:', error);
-        // Show an error toast message if an error occurs
         toast.error('Error saving changes. Please try again later.', {
           position: 'top-center',
         });
@@ -361,14 +373,43 @@ export default function Professors() {
 
   const [isRemoveConfirmationOpen, setIsRemoveConfirmationOpen] = useState(false);
   const [selectedStudentIdToRemove, setSelectedStudentIdToRemove] = useState('');
-  const removeStudent = (studentId: string) => {
-    setSelectedStudentIdToRemove(studentId);
-    setIsRemoveConfirmationOpen(true);
+  const removeStudent = async (studentId: string) => {
+    try {
+      const studentRef = doc(db, 'users', studentId);
+      const studentSnapshot = await getDoc(studentRef);
+      const studentData = studentSnapshot.data();
+  
+      if (studentData) {
+        // Remove student from teacher's list of students
+        const professorId = studentData.professorId || '';
+        const professorRef = doc(db, 'users', professorId);
+        const professorSnapshot = await getDoc(professorRef);
+        const professorData = professorSnapshot.data();
+  
+        if (professorData) {
+          const updatedAlunos = { ...professorData.alunos };
+          delete updatedAlunos[studentId];
+          await setDoc(professorRef, { alunos: updatedAlunos }, { merge: true });
+        }
+  
+        // Update student's professor and professorId fields
+        await setDoc(studentRef, { professor: '', professorId: '' }, { merge: true });
+  
+        toast.success('Aluno removido com sucesso!', {
+          position: 'top-center',
+        });
+      }
+    } catch (error) {
+      console.error('Error removing student:', error);
+      toast.error('Erro ao remover aluno!', {
+        position: 'top-center',
+      });
+    }
   };
+  
   
 
   const confirmRemoveStudent = () => {
-    // Filter out the selected student to be removed
     setSelectedStudents(selectedStudents.filter(id => id !== selectedStudentIdToRemove));
     setIsRemoveConfirmationOpen(false);
   };
@@ -422,7 +463,7 @@ export default function Professors() {
               <TableCell>
                   <span onClick={() => openEditModal(professor.id)} className="cursor-pointer">{professor.name}</span>
                 </TableCell>
-              <TableCell>{professor.salario}</TableCell>
+              <TableCell>R$ {professor.salario}</TableCell>
               <TableCell>{renderAlunos(professor.alunos)}</TableCell>
               <TableCell>{professor.alunos ? Object.keys(professor.alunos).length : 0}</TableCell>
               <TableCell className='flex flex-col items-center'>
@@ -533,14 +574,16 @@ export default function Professors() {
                     <div className='p-2'>
                       <p>Lista:</p>
                         <ul className='ml-2 flex flex-col gap-1'>
-                          {selectedStudents.map(studentId => (
-                            
-                            <li className='text-black dark:text-white font-semibold rounded-md flex flex-row items-center gap-2' key={studentId}>
-                              {alunos.find(aluno => aluno.id === studentId)?.name}
-                              <button className='bg-fluency-red-500 p-1 rounded-md' onClick={() => removeStudent(studentId)}><MdPersonRemove /></button>
-                            </li>
-                            
-                          ))}
+                          {selectedStudents.map(studentId => {
+                            const professor = professores.find(prof => prof.id === selectedProfessorId);
+                            const student = professor?.alunos[studentId];
+                            return (
+                              <li className='text-black dark:text-white font-semibold rounded-md flex flex-row items-center gap-2' key={studentId}>
+                                {student ? student.name : 'Loading...'}
+                                <button className='bg-fluency-red-500 p-1 rounded-md' onClick={() => removeStudent(studentId)}><MdPersonRemove /></button>
+                              </li>
+                            );
+                          })}
                         </ul>
                     </div>
                   </div>

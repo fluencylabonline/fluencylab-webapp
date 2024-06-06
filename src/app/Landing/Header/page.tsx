@@ -23,7 +23,7 @@ import GoogleCalendarButton from '@/app/ui/Components/Buttons/GoogleCalendarButt
 
 const navigation = [
     { name: 'Sobre Nós', href: '#aboutus' },
-    { name: 'Professores', href: '#ourteam' },
+    { name: 'Nosso Time', href: '#ourteam' },
     { name: 'Perguntas Frequentes', href: '#faq' },
     { name: 'Games', href: '/games' },
   ]

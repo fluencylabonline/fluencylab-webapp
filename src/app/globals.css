@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
   height: 1px;

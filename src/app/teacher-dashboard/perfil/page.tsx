@@ -21,6 +21,7 @@ import { useSession } from 'next-auth/react';
 import { toast, Toaster } from 'react-hot-toast';
 
 //Icons
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { FaUserCircle } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { Tooltip } from '@nextui-org/react';
@@ -200,7 +201,7 @@ function Perfil() {
           setIsEditModalOpenTwo(false);
         } catch (error) {
           console.error('Erro ao salvar dados do perfil:', error);
-          toast.error('Erro ao salvar dados do perfil!', {
+          toast.error('Erro ao salvar dados do perfil! Tente colocar o link antes', {
               position: 'top-center',
             });
         }
@@ -286,7 +287,7 @@ function Perfil() {
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
                 <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
                 <div className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
-                    <div>Link pendente</div>
+                    <div className='flex flex-row gap-1 items-center text-fluency-yellow-500'><p className='font-bold'>Link pendende </p><RiErrorWarningLine className='animate-pulse w-6 h-auto' /></div>
                 ) : (
                     <div><Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink} >Link registrado</Tooltip></div>
                 )}</div>

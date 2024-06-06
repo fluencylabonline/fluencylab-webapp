@@ -9,7 +9,6 @@ import {
   TableCell,
   Tooltip
 } from '@nextui-org/react';
-import Image from 'next/image';
 import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot  } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { IoIosCheckbox } from 'react-icons/io';
@@ -23,7 +22,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
-import FluencySearch from '@/app/ui/Components/Search/search';
+import * as XLSX from 'xlsx';
 import Contratos from '../contratos/page';
 
 interface Aluno {
@@ -378,8 +377,29 @@ export default function Students() {
 
 const totalStudents = alunos.length;
 const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensalidade), 0);
-
 const [selectedOption, setSelectedOption] = useState('financeiro');
+
+const [relatorio, setRelatorio] = useState(false)
+function openRelatorio(){
+  setRelatorio(true)
+}
+function closeRelatorio(){
+  setRelatorio(false)
+}
+
+const exportToExcel = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert data to worksheet
+  const ws = XLSX.utils.json_to_sheet(alunos);
+
+  // Add worksheet to workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Students');
+
+  // Generate Excel file and download it
+  XLSX.writeFile(wb, 'students.xlsx');
+};
 
   return (
     <div className="h-screen flex flex-col items-start lg:px-2 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
@@ -403,6 +423,9 @@ const [selectedOption, setSelectedOption] = useState('financeiro');
           className='w-full'
           />
 
+        <FluencyButton variant='confirm' onClick={openRelatorio}>
+          Relatório
+        </FluencyButton>
         <select
           className='outline-none flex flex-row justify-center items-center bg-fluency-bg-light dark:bg-fluency-bg-dark dark:text-fluency-gray-100 py-2 rounded-md px-3'
           value={selectedMonth}
@@ -448,7 +471,7 @@ const [selectedOption, setSelectedOption] = useState('financeiro');
                   <span className="cursor-pointer" onClick={() => openEditModal(aluno)}>{aluno.name}</span>
                 </TableCell>
               <TableCell>{aluno.professor}</TableCell>
-              <TableCell>{aluno.mensalidade}</TableCell>
+              <TableCell>R$ {aluno.mensalidade}</TableCell>
               <TableCell>{aluno.idioma}</TableCell>
               <TableCell className='flex flex-col items-center'>
                 {renderPaymentStatus(aluno.payments)}
@@ -492,6 +515,30 @@ const [selectedOption, setSelectedOption] = useState('financeiro');
                       <div className="flex justify-center">
                         <FluencyButton variant='danger' onClick={() => { transferUser(selectedUserId); closeModal(); }}>Sim, excluir</FluencyButton>
                         <FluencyButton variant='gray' onClick={closeModal}>Não, cancelar</FluencyButton>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>)}
+
+            {relatorio && (
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                  <div className="flex flex-col">
+                    <FluencyCloseButton onClick={closeRelatorio}/>
+                    <div className="mt-3 flex flex-col gap-3 p-4">
+                        <div className='flex flex-col items-start gap-1'>
+                          <p>Total de alunos: <span>{totalStudents}</span></p>
+                          <p>Total mensalidades: <span>R$ {totalMensalidade}</span></p>
+                        </div>
+                      <div className="flex justify-center">
+                        <FluencyButton variant='danger'>Baixar PDF</FluencyButton>
+                        <FluencyButton variant='confirm' onClick={exportToExcel}>Baixar Excel</FluencyButton>
                       </div>
                     </div>
                   </div>

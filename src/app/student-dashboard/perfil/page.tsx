@@ -19,10 +19,11 @@ import { useSession } from 'next-auth/react';
 import { toast, Toaster } from 'react-hot-toast';
 
 //Icons
+import { GrStatusGood } from 'react-icons/gr';
 import { FaUserCircle } from 'react-icons/fa';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import Link from 'next/link';
-import { GrStatusGood } from 'react-icons/gr';
+
 
 function Perfil() {
   const handleLogout = async () => {
