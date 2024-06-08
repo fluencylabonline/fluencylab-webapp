@@ -459,8 +459,8 @@ function Alunos(){
                     </div>}
                     {filteredStudents.map((student) => (
                         <div className="bg-fluency-blue-200 dark:bg-fluency-pages-dark w-full lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
-                            <div className='bg-fluency-blue-100 dark:bg-fluency-gray-500 w-full p-3 px-4 flex flex-col items-start justify-between rounded-lg gap-2'>
-                                    <div className='flex flex-row items-start gap-4'>
+                            <div className='bg-fluency-blue-100 dark:bg-fluency-gray-500 w-full p-3 px-4 flex flex-col items-start justify-between rounded-lg gap-1'>
+                                    <div className='flex flex-row items-start gap-3'>
                                         <div key={student.id}>
                                             {student.profilePicUrl ? (
                                                 <div className="cursor-pointer relative inline-block">
@@ -484,14 +484,14 @@ function Alunos(){
                                             <div className="cursor-pointer relative inline-block">
                                                 {student.status === 'online' ? (
                                                     <>
-                                                    <FaUserCircle className='text-[5rem] object-cover rounded-full' />
+                                                    <FaUserCircle className='text-[5rem] text-fluency-blue-300 dark:text-fluency-pages-dark object-cover rounded-full' />
                                                     <Tooltip className='bg-fluency-green-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Online">
                                                         <span className="absolute top-0 right-2 w-4 h-4 bg-fluency-green-700 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
                                                     </>
                                                 ):(
                                                     <>
-                                                    <FaUserCircle className='text-[5rem] object-cover rounded-full' />
+                                                    <FaUserCircle className='text-[5rem] text-fluency-blue-300 dark:text-fluency-pages-dark object-cover rounded-full' />
                                                     <Tooltip className='bg-fluency-red-500 text-white dark:text-black text-xs font-bold p-1 rounded-md' content="Offline">
                                                         <span className="absolute top-0 right-2 w-4 h-4 bg-fluency-red-700 border-2 border-white rounded-full"></span>
                                                     </Tooltip>
@@ -508,13 +508,13 @@ function Alunos(){
                                                 <span className='ml-1' key={dia}>{dia}, </span>
                                                 ))}
                                             </p>                                        
-                                    </div>
+                                        </div>
                                     </div>
                                     <div className='flex font-medium flex-col items-center w-full'>
                                         <p className='text-lg font-semibold'>Aulas feitas: <span>{student.doneClassesCount}</span></p>
                                         <p className='text-lg cursor-pointer font-semibold p-1 rounded-md hover:text-fluency-blue-600 hover:dark:bg-fluency-gray-600 hover:dark:text-fluency-blue-300 hover:bg-fluency-blue-100 transition-all duration-300 ease-in-out' onClick={() => retrieveOverdueClasses(student.id)}>Aulas em atraso: <span>{student.overdueClassesCount}</span></p>
                                     </div>  
-                                    <div className="flex flex-row items-center justify-center w-full gap-2 mb-4">
+                                    <div className="flex flex-row items-center justify-center w-full gap-2 mt-3 mb-2">
                                         <Link href={{ pathname: `alunos/caderno/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
                                             <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
                                                 Caderno 
@@ -525,6 +525,9 @@ function Alunos(){
                                                 Painel do Aluno 
                                             </button>
                                         </Link>
+                                            <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-orange-500 hover:border-fluency-orange-600 bg-fluency-orange-500 text-fluency-text-dark hover:bg-fluency-orange-600 focus:bg-fluency-orange-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-orange-500 dark:hover:text-white dark:hover:bg-fluency-orange-500 hover:dark:border-fluency-orange-500">
+                                                Nivelamento {/**Criar pagina ainda com botao para enviar nvelamento e para ver resultados */}
+                                            </button>
                                     </div>
                             </div>
 

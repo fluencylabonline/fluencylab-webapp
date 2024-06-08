@@ -9,13 +9,15 @@ import { v4 as uuidv4 } from 'uuid';
 import FirstSteps from './firststeps';
 import TheBasics from './thebasics';
 import AllYouNeedToKnow from './allyouneedtoknow';
+
 import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
 import { toast, Toaster } from "react-hot-toast";
 import Link from "next/link";
 import { TbBookDownload } from "react-icons/tb";
 import { getDownloadURL, ref } from "firebase/storage";
-
 import { useSession } from 'next-auth/react';
+
+import './apostilas.css';
 
 interface Notebook {
     title: string;
@@ -180,10 +182,10 @@ export default function ApostilasCreation() {
         <div>
             <div className="flex flex-row gap-2 items-center p-4">
                 {searchResults.map(notebook => (
-                <div key={notebook.docID} className="flex flex-col items-center break-all justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 rounded-sm">
-                <Link key={notebook.docID} href={{ pathname: `apostilas/${encodeURIComponent(notebook.title)}`, query: { workbook: notebook.workbook, lesson: notebook.docID }}} ><p className="font-bold break-all hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{notebook.title}</p></Link>
+                <div id='apostilas-background'  key={notebook.docID} className="flex flex-col items-center justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 rounded-sm">
+                <Link key={notebook.docID} href={{ pathname: `apostilas/${encodeURIComponent(notebook.title)}`, query: { workbook: notebook.workbook, lesson: notebook.docID }}} ><p className="font-bold hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{notebook.title}</p></Link>
                 </div>
-                ))}
+                ))} 
             </div>
         </div>
         )}

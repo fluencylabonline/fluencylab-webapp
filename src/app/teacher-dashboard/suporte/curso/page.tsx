@@ -69,7 +69,7 @@ export default function CursoParaProfessores() {
                                 <button>{courseCompletion[course.page] === 100 ? 'Concluído' : 'Não concluído'}</button>
                             </div>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div className="w-full bg-gray-400 rounded-full h-2.5 dark:bg-gray-700">
                             <div className="bg-fluency-green-600 h-2.5 rounded-full" style={{ width: `${courseCompletion[course.page] || 0}%` }}></div>
                         </div>
                     </div>

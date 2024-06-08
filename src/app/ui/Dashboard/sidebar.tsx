@@ -30,15 +30,24 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
   const [selectedItem, setSelectedItem] = useState('');
   const { data: session } = useSession();
   const userId = session?.user.id;
+  const userRole = session?.user.role; // Assuming role is available in session.user.role
+
   const handleItemClick = (path: string) => {
     router.push(path);
     setSelectedItem(path);
   };
 
   const handleAvatarClick = () => {
-    router.push('perfil');
+    if (userRole === 'teacher') {
+      router.push('/teacher-dashboard/perfil');
+    } else if (userRole === 'student') {
+      router.push('/student-dashboard/perfil');
+    } else if (userRole === 'admin') {
+      router.push('/admin-dashboard/perfil');
+    } else {
+      router.push('perfil'); // default route if role is not defined or doesn't match
+    }
   };
-
   async function handleLogout() {
     // Sign out the user
     await signOut({ callbackUrl: '/signin' });

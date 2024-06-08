@@ -24,7 +24,8 @@ import { toast, Toaster } from 'react-hot-toast';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { FaUserCircle } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
-import { Tooltip } from '@nextui-org/react';
+import { Link, Tooltip } from '@nextui-org/react';
+import { PiExam } from 'react-icons/pi';
 
 function Perfil() {
   const handleLogout = async () => {
@@ -301,7 +302,16 @@ function Perfil() {
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
               <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-              <p>Sem notificações para mostrar</p>
+              {session?.user.role === 'teacher' ? 
+              (
+              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                  <div className='flex flex-row w-full justify-between items-center'>Curso de Instruções Feito! <PiExam className='w-6 h-auto' /></div>    
+              </div>
+              ):(
+              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                  <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
+              </div>
+              )}
             </div>
                  
         </div>
