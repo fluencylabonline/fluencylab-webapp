@@ -172,12 +172,10 @@ export default function Professors() {
         const newStatus = currentStatus === 'paid' ? 'notPaid' : 'paid';
         
         const newSalary = userData.salario;
-        const quantityOfStudents = Object.keys(userData.alunos).length;
   
         yearPayments[selectedMonth] = {
           status: newStatus,
           salary: newSalary,
-          quantityOfStudents: quantityOfStudents,
           paymentKey: newStatus === 'paid' ? newPaymentKey : paymentKey,
         };
   
