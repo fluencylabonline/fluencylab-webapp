@@ -23,6 +23,7 @@ import { GrStatusGood } from 'react-icons/gr';
 import { FaUserCircle } from 'react-icons/fa';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import Link from 'next/link';
+import { PiExam } from 'react-icons/pi';
 
 
 function Perfil() {
@@ -139,6 +140,8 @@ function Perfil() {
       
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
+    const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
+    //false == nao
 
     useEffect(() => {
       const fetchUserInfo = async () => {
@@ -150,7 +153,8 @@ function Perfil() {
                       setName(docSnap.data().name);
                       setUserName(docSnap.data().userName);
                       setContratoFoiAssinado(docSnap.data().ContratoAssinado || { signed: false, logs: [] });
-                  } else {
+                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+                    } else {
                       console.log("No such document!");
                   }
               } catch (error) {
@@ -256,6 +260,20 @@ function Perfil() {
                   <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato não assinado ainda <RiErrorWarningLine className='w-6 h-auto' /></Link>    
                 </div>
               )}
+
+              {nivelamentoPermitido === false ? 
+              (
+              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                  <div className='flex flex-row w-full justify-between items-center'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+              </div>
+              ):(
+              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                  <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
+              </div>
+              )}
+
+              
+              
             </div>
                  
         </div>

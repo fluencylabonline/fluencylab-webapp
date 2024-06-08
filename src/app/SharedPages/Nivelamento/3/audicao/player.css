@@ -1,0 +1,15 @@
+/* Add this to your CSS file or a style block/component */
+.audio-player {
+    width: 100%;
+    background-color: #149DC6;
+    border-radius: 8px;
+    padding: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+
+
+audio::-webkit-media-controls-panel{
+ background-color: #149DC6;
+}

@@ -40,7 +40,7 @@ export default function NotFound(){
                 </div>
                 
             </div>
-            <Image src={Lost} alt="Lost"/>
+            <Image priority src={Lost} alt="Lost"/>
         </section>
     );
 }

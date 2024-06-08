@@ -34,8 +34,7 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                 .then((url) => {
                     setProfilePictureURL(url);
                 })
-                .catch((error) => {
-                    console.error('Error fetching profile picture URL:', error);
+                .catch(() => {
                     setProfilePictureURL(null);
                 });
         }

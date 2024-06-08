@@ -9,9 +9,12 @@ import {
 } from "@google/generative-ai";
 import { useEffect, useState, useCallback } from "react";
 import { db } from "@/app/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { TbDeviceDesktopAnalytics } from "react-icons/tb";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { IoMdArrowRoundForward } from "react-icons/io";
+import { PiExam } from "react-icons/pi";
 
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
@@ -30,12 +33,38 @@ const getRandomTopic = () => {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [data, setData] = useState<string>("");
-  const [topic, setTopic] = useState<string>("");
   const { data: session } = useSession();
+  
+  const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+          if (session && session.user && session.user.id) {
+              try {
+                  const profile = doc(db, 'users', session.user.id);
+                  const docSnap = await getDoc(profile);
+                  if (docSnap.exists()) {
+                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+                    } else {
+                      console.log("No such document!");
+                  }
+              } catch (error) {
+                  console.error("Error fetching document: ", error);
+              }
+          }
+      };
+
+      fetchUserInfo()
+  }, [session]);
+
+  const [topic, setTopic] = useState<string>("");
   const [score, setScore] = useState<string>("");
   const [userInput, setUserInput] = useState<string>("");
-
+  const [scoreOutput, setScoreOutput] = useState(false);
+  const [isTextAreaDisabled, setIsTextAreaDisabled] = useState(false);
+  const [proceedToNextLesson, setProceedToNextLesson] = useState(false);
+  
   useEffect(() => {
     provideRandomTopic();
   }, []);
@@ -51,7 +80,7 @@ export default function Home() {
           analysis: analysis,
         };
         try {
-          await addDoc(collection(db, "users", userId, "nivelamento", "nivel2", "escrita"), scoreData);
+          await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-2", "Escrita"), scoreData);
           console.log("Dados salvos com sucesso!");
         } catch (error) {
           console.error("Erro ao salvar os dados: ", error);
@@ -112,7 +141,7 @@ export default function Home() {
       ],
     });
 
-    const instruction = `Please analyze the following text and provide a score from 1 to 5 (decimals permitted) based on its quality: grammar, vocabulary, orthography, use of the provided topic: "${topic}", and use of natural language. Make small comments on each, showing the errors. At the end, show Final Score like this: **Final Score: 5.0**; **Final Score: 4.7**; **Final Score: 2.3**`;
+    const instruction = `Por favor, analise o seguinte texto e forneça uma pontuação de 1 a 5 (permitidos decimais) com base em sua qualidade: gramática, vocabulário, ortografia, uso do tópico fornecido: "${topic}", e uso de linguagem natural. Faça pequenos comentários sobre cada um. No final, mostre a pontuação final assim: **Pontuação Final: 5.0**; **Pontuação Final: 4.7**; **Pontuação Final: 2.3**`;
     const fullPrompt = `${instruction}\n\nText: ${prompt}`;
 
     const result = await chat.sendMessage(fullPrompt);
@@ -122,11 +151,16 @@ export default function Home() {
                                       .replace(/\*(.*?)\*/g, "<em>$1</em>")
                                       .replace(/\n\n/g, "<br/><br/>");
 
-    const scoreMatch = responseText.match(/\*\*Final Score: (\d\.\d)\*\*/);
+    const scoreMatch = responseText.match(/\*\*Pontuação Final: (\d\.\d)\*\*/);
     const extractedScore = scoreMatch ? scoreMatch[1] : "";
     setScore(extractedScore);
     setData(formattedData);
     toast.success("Análise concluída");
+
+    if (extractedScore) {
+      setScoreOutput(true);
+      setIsTextAreaDisabled(true);
+    }
   };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -141,8 +175,22 @@ export default function Home() {
     setTopic(randomTopic);
   };
 
-  return (
-    <main className="text-fluency-text-light dark:text-fluency-text-dark flex h-[90vh] flex-row overflow-y-hidden items-start justify-around p-6 w-full gap-2">
+  useEffect(() => {
+    if (proceedToNextLesson) {
+      router.push("/student-dashboard/nivelamento/nivel-3/audicao");
+    }
+  }, [proceedToNextLesson, router]);
+  
+
+return (
+  <main className="text-fluency-text-light dark:text-fluency-text-dark flex h-[90vh] flex-row overflow-y-hidden items-start justify-around p-6 w-full gap-2">
+    {nivelamentoPermitido === false ? 
+    (
+    <div className='w-max h-max relative top-[36%] rounded-md bg-fluency-green-700 text-white font-bold p-6'>
+        <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+    </div>
+    ):(
+    <>
       <form onSubmit={onSubmit} className="min-h-[85vh] max-h-[85vh] w-[50%] bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
         <p className="text-xl font-bold p-3">Seu tema: {topic}</p>
         <p className="mb-2 text-lg font-semibold">Escreva seu texto aqui:</p>
@@ -150,18 +198,25 @@ export default function Home() {
           placeholder="Escreva aqui"
           name="prompt"
           className="w-full min-h-[50vh] max-h-full border-none outline-none p-4 rounded-lg bg-fluency-bg-light dark:bg-fluency-bg-dark"
+          disabled={scoreOutput}
         />
         <div className="w-full flex flex-col items-center p-4">
-          <FluencyButton variant="confirm" type="submit">
-            Analisar <TbDeviceDesktopAnalytics className="w-6 h-auto" />
-          </FluencyButton>
+        {!isTextAreaDisabled ? (
+            <FluencyButton variant="confirm" type="submit">
+              Analisar <TbDeviceDesktopAnalytics className="w-6 h-auto" />
+            </FluencyButton>
+          ) : (
+            <FluencyButton variant="warning" type="button" onClick={() => setProceedToNextLesson(true)}>
+              Próxima Lição <IoMdArrowRoundForward className="w-4 h-auto"/>
+            </FluencyButton>
+          )}
         </div>
       </form>
 
       <div className="min-h-[85vh] max-h-[85vh] w-[50%] overflow-y-scroll bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
         <h1 className="text-xl font-bold p-3">Análise do seu texto:</h1>
         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 rounded-md" dangerouslySetInnerHTML={{ __html: data }} />
-      </div>
+      </div></>)}
       <Toaster />
     </main>
   );

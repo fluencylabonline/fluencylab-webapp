@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -9,18 +9,16 @@ import {
   TableCell,
   Tooltip
 } from '@nextui-org/react';
-import Image from 'next/image';
 import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot  } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { IoIosCheckbox } from 'react-icons/io';
-import { MdFolderDelete, MdOutlineIndeterminateCheckBox, MdPersonRemove } from 'react-icons/md';
+import { MdFolderDelete, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
 import { TbPigMoney } from 'react-icons/tb';
 import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 
 import { Toaster, toast } from 'react-hot-toast';
-import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,7 +29,6 @@ interface ProfessorProps {
   professor: string;
   salario: number;
   payments: any;
-  alunos: { [key: string]: AlunoProps };
   email: string; 
   status: string;
 }
@@ -39,38 +36,29 @@ interface ProfessorProps {
 interface AlunoProps {
   id: string;
   name: string;
-  diaAula: string;
+  professorId: string;
 }
 
 export default function Professors() {
   const [professores, setProfessores] = useState<ProfessorProps[]>([]);
+  const [students, setStudents] = useState<AlunoProps[]>([]);
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const currentDate = new Date();
   const currentMonth = months[currentDate.getMonth()];
   const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth);
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
 
-    useEffect(() => {
-      const unsubscribe = onSnapshot(query(collection(db, 'users'), where('role', '==', 'teacher')), (snapshot) => {
-        const updatedProfessores: ProfessorProps[] = [];
-        snapshot.forEach((doc) => {
-          const professor: ProfessorProps = {
-            id: doc.id,
-            name: doc.data().name,
-            professor: doc.data().professor,
-            salario: doc.data().salario,
-            payments: doc.data().payments,
-            alunos: doc.data().alunos,
-            email: doc.data().email,
-            status: doc.data().status,
-          };
-          updatedProfessores.push(professor);
-        });
-        setProfessores(updatedProfessores);
-      });
-  
-      return () => unsubscribe();
-    }, []);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(query(collection(db, 'users'), where('role', '==', 'teacher')), (snapshot) => {
+      const updatedProfessores: ProfessorProps[] = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as ProfessorProps));
+      setProfessores(updatedProfessores);
+    });
+
+    return () => unsubscribe();
+  }, []);
   
 
   const handleMonthChange = (value: string) => {
@@ -213,47 +201,16 @@ export default function Professors() {
     }
   };
   
-  const [alunos, setAlunos] = useState<AlunoProps[]>([]);
-  const renderAlunos = (alunos: { [key: string]: AlunoProps } | null | undefined) => {
-    if (!alunos) return ''; 
-    return Object.values(alunos).map((aluno) => aluno.name).join(', ');
-  };
-
-
-  useEffect(() => {
-    const fetchAlunos = async () => {
-      try {
-        const q = query(collection(db, 'users'), where('role', '==', 'student'), where('professor', '==', ''), where('professorId', '==', ''));
-        const querySnapshot = await getDocs(q);
-        const alunoList: AlunoProps[] = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          name: doc.data().name,
-          diaAula: doc.data().diaAula,
-        }));
-        setAlunos(alunoList);
-      } catch (error) {
-        console.error('Error fetching available students:', error);
-      }
-    };
-  
-    fetchAlunos();
-  }, []);
-  
-
-  const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [editModal, setEditModal] = useState<boolean>(false);
-  const [selectedProfessorId, setSelectedProfessorId] = useState<string>('');
   const [newSalary, setNewSalary] = useState<number | "">(0);
   const [selectedProfessor, setSelectedProfessor] = useState<ProfessorProps | null>(null);
   const [selectedUserProfilePic, setSelectedUserProfilePic] = useState<string | null>(null);
-
+  
   const openEditModal = async (professorId: string) => {
     const professor = professores.find(prof => prof.id === professorId);
     if (professor) {
       setSelectedProfessor(professor);
-      setSelectedStudents(Object.keys(professor.alunos || {}));
       setNewSalary(professor.salario);
-      setSelectedProfessorId(professorId); 
     }
     setEditModal(true);
 
@@ -264,7 +221,6 @@ export default function Professors() {
       
       if (userData) {
 
-        // Fetch profile picture URL from Firebase Storage
         const storage = getStorage();
         const profilePicRef = ref(storage, `profilePictures/${professorId}`);
         
@@ -281,138 +237,38 @@ export default function Professors() {
       console.error('Error fetching user data:', error);
       setSelectedUserProfilePic(null);
     }
+    try {
+      const q = query(collection(db, 'users'), where('role', '==', 'student'), where('professorId', '==', professorId));
+      const querySnapshot = await getDocs(q);
+      const fetchedStudents = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().name, 
+        professorId: doc.data().professorId,
+      }));
+      setStudents(fetchedStudents);
+      
+    } catch (error) {
+      console.error('Error fetching students:', error);
+    }
+    
   };
 
   const closeEditModal = () => {
     setEditModal(false);
     setSelectedProfessor(null);
     setNewSalary(0);
-    setSelectedStudents([]);
   };
-  
-  const handleStudentSelection = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value && !selectedStudents.includes(value)) {
-      try {
-        const studentRef = doc(db, 'users', value);
-        const studentSnapshot = await getDoc(studentRef);
-        const studentData = studentSnapshot.data();
-  
-        if (studentData) {
-          const professorRef = doc(db, 'users', selectedProfessorId);
-          const professorSnapshot = await getDoc(professorRef);
-          const professorData = professorSnapshot.data();
-  
-          if (professorData) {
-            const professorName = professorData.name || '';
-  
-            // Update student's professor, professorId, and professorName fields
-            await setDoc(studentRef, {
-              professor: professorName,
-              professorId: selectedProfessorId,
-            }, { merge: true });
-  
-            setSelectedStudents([...selectedStudents, value]);
-            toast.success('Aluno selecionado com sucesso!', {
-              position: 'top-center',
-            });
-          }
-        }
-      } catch (error) {
-        console.error('Error selecting student:', error);
-        toast.error('Erro ao selecionar aluno!', {
-          position: 'top-center',
-        });
-      }
-    }
-  };
-  
-  
 
+  const updateProfessorSalary = async (professorId: string, newSalary: number) => {
+    const professorRef = doc(db, 'users', professorId);
+    await setDoc(professorRef, { salario: newSalary }, { merge: true });
+    setEditModal(false);
+  };
+  
   const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewSalary(Number(e.target.value));
   };
-
-  const saveChanges = async () => {
-    if (selectedProfessorId) {
-      try {
-        const professorRef = doc(db, 'users', selectedProfessorId);
-        
-        const professorSnapshot = await getDoc(professorRef);
-        const professorData = professorSnapshot.data();
   
-        if (professorData) {
-          const updatedAlunos: { [key: string]: AlunoProps } = {};
-          selectedStudents.forEach(studentId => {
-            const student = alunos.find(aluno => aluno.id === studentId);
-            if (student) {
-              updatedAlunos[studentId] = student;
-            }
-          });
-  
-          professorData.salario = newSalary;
-          professorData.alunos = updatedAlunos;
-  
-          await setDoc(professorRef, professorData, { merge: true });
-  
-          toast.success('Modificações salvas!', {
-            position: 'top-center',
-          });
-  
-          closeEditModal();
-        }
-      } catch (error) {
-        console.error('Error saving changes:', error);
-        toast.error('Error saving changes. Please try again later.', {
-          position: 'top-center',
-        });
-      }
-    }
-  };
-  
-
-  const [isRemoveConfirmationOpen, setIsRemoveConfirmationOpen] = useState(false);
-  const [selectedStudentIdToRemove, setSelectedStudentIdToRemove] = useState('');
-  const removeStudent = async (studentId: string) => {
-    try {
-      const studentRef = doc(db, 'users', studentId);
-      const studentSnapshot = await getDoc(studentRef);
-      const studentData = studentSnapshot.data();
-  
-      if (studentData) {
-        // Remove student from teacher's list of students
-        const professorId = studentData.professorId || '';
-        const professorRef = doc(db, 'users', professorId);
-        const professorSnapshot = await getDoc(professorRef);
-        const professorData = professorSnapshot.data();
-  
-        if (professorData) {
-          const updatedAlunos = { ...professorData.alunos };
-          delete updatedAlunos[studentId];
-          await setDoc(professorRef, { alunos: updatedAlunos }, { merge: true });
-        }
-  
-        // Update student's professor and professorId fields
-        await setDoc(studentRef, { professor: '', professorId: '' }, { merge: true });
-  
-        toast.success('Aluno removido com sucesso!', {
-          position: 'top-center',
-        });
-      }
-    } catch (error) {
-      console.error('Error removing student:', error);
-      toast.error('Erro ao remover aluno!', {
-        position: 'top-center',
-      });
-    }
-  };
-  
-  
-
-  const confirmRemoveStudent = () => {
-    setSelectedStudents(selectedStudents.filter(id => id !== selectedStudentIdToRemove));
-    setIsRemoveConfirmationOpen(false);
-  };
   
   return (
     <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
@@ -452,8 +308,6 @@ export default function Professors() {
         <TableHeader>
         <TableColumn>Nome</TableColumn>
           <TableColumn>Salário</TableColumn>
-          <TableColumn>Alunos</TableColumn>
-          <TableColumn>Quantidade de Alunos</TableColumn>
           <TableColumn className='flex flex-col items-center justify-center'>Pagamento</TableColumn>
           <TableColumn>Ações</TableColumn>
         </TableHeader>
@@ -464,8 +318,6 @@ export default function Professors() {
                   <span onClick={() => openEditModal(professor.id)} className="cursor-pointer">{professor.name}</span>
                 </TableCell>
               <TableCell>R$ {professor.salario}</TableCell>
-              <TableCell>{renderAlunos(professor.alunos)}</TableCell>
-              <TableCell>{professor.alunos ? Object.keys(professor.alunos).length : 0}</TableCell>
               <TableCell className='flex flex-col items-center'>
                 {renderPaymentStatus(professor.payments)}
               </TableCell>
@@ -516,9 +368,6 @@ export default function Professors() {
           </div>
         </div>)}
 
-
-
-      {/*MODAL TO EDIT TEACHER'S INFORMATION*/}
       {editModal && selectedProfessor && selectedProfessor.id && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
@@ -539,7 +388,7 @@ export default function Professors() {
                           {selectedUserProfilePic ? (
                             <img src={selectedUserProfilePic} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
                           ) : (
-                            <FaUserCircle className='icon w-14 h-14 rounded-full'/>
+                            <FaUserCircle className='icon w-14 h-14 dark:text-fluency-bg-dark rounded-full'/>
                           )}
                         </div>
                         {selectedProfessor.status === 'online' ? (
@@ -556,70 +405,41 @@ export default function Professors() {
                   </div>
                   <div className="mb-4">
                     <label className="block font-bold mb-2">Salário</label>
+                    <div className='flex flex-row gap-1 items-center'>
                     <input
                       type="number"
                       value={newSalary || ''}
                       onChange={handleSalaryChange}
                       className="bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded w-full"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block font-bold mb-2">Alunos</label>
-                    <select className="bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded w-full" onChange={handleStudentSelection}>
-                      <option value="">Selecione um aluno</option>
-                      {alunos.map((aluno) => (
-                        <option key={aluno.id} value={aluno.id}>{aluno.name}</option>
-                      ))}
-                    </select>
-                    <div className='p-2'>
-                      <p>Lista:</p>
-                        <ul className='ml-2 flex flex-col gap-1'>
-                          {selectedStudents.map(studentId => {
-                            const professor = professores.find(prof => prof.id === selectedProfessorId);
-                            const student = professor?.alunos[studentId];
-                            return (
-                              <li className='text-black dark:text-white font-semibold rounded-md flex flex-row items-center gap-2' key={studentId}>
-                                {student ? student.name : 'Loading...'}
-                                <button className='bg-fluency-red-500 p-1 rounded-md' onClick={() => removeStudent(studentId)}><MdPersonRemove /></button>
-                              </li>
-                            );
-                          })}
-                        </ul>
+                    /><FluencyButton
+                    onClick={() => {
+                      updateProfessorSalary(selectedProfessor!.id, newSalary as number);
+                      closeEditModal();
+                    }}
+                  >
+                    Atualizar
+                  </FluencyButton>
                     </div>
                   </div>
-                  <div className="flex flex-row justify-center">
-                    <FluencyButton variant='confirm' onClick={saveChanges}>Salvar</FluencyButton>
-                    <FluencyButton variant='gray' onClick={closeEditModal}>Cancelar</FluencyButton>
+                  <div className="mb-4">
+                    <label className="block font-bold mb-2">Alunos: {students.length}</label>
+                    <ul className='bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded'>
+                      {students.map(student => (
+                        <li key={student.id}>
+                          <span>{student.name}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {isRemoveConfirmationOpen && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 transition-opacity">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-              <div className="flex flex-col">
-                <FluencyCloseButton onClick={() => setIsRemoveConfirmationOpen(false)} />
-                <div className="mt-3 flex flex-col gap-3 p-4">
-                  <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                    Tem certeza que deseja remover este aluno?
-                  </h3>
-                  <div className="flex justify-center">
-                    <FluencyButton variant='danger' onClick={confirmRemoveStudent}>Sim, remover</FluencyButton>
-                    <FluencyButton variant='gray' onClick={() => setIsRemoveConfirmationOpen(false)}>Cancelar</FluencyButton>
+                  <div className="flex flex-row justify-center">
+                    <FluencyButton variant='gray' onClick={closeEditModal}>Fechar</FluencyButton>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>)}
+      
 
       </div>
     <Toaster />

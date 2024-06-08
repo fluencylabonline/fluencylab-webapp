@@ -6,9 +6,10 @@ import FluencyButton from "@/app/ui/Components/Button/button";
 import { FaArrowRight } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import { toast, Toaster } from "react-hot-toast";
+import { PiExam } from "react-icons/pi";
 
 interface Word {
   phrase: string;
@@ -19,6 +20,29 @@ interface Word {
 const Level2: React.FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
+
+  const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+          if (session && session.user && session.user.id) {
+              try {
+                  const profile = doc(db, 'users', session.user.id);
+                  const docSnap = await getDoc(profile);
+                  if (docSnap.exists()) {
+                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+                    } else {
+                      console.log("No such document!");
+                  }
+              } catch (error) {
+                  console.error("Error fetching document: ", error);
+              }
+          }
+      };
+
+      fetchUserInfo()
+  }, [session]);
+
+  
   const totalPossiblePoints = 5;
   const [quizWords, setQuizWords] = useState<Word[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -67,12 +91,12 @@ const Level2: React.FC = () => {
       const userId = session.user.id;
       const scoreData = {
         pontos: finalScore,
-        data: new Date().toISOString(),
+        data: serverTimestamp(),
       };
 
       try {
         // Adding a new document with an auto-generated ID
-        await addDoc(collection(db, "users", userId, "nivelamento", "nivel1", "frases"), scoreData);
+        await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-1", "Frases"), scoreData);
         toast.success("Pontuação salva com sucesso!");
         router.push(`verdadeiro-e-falso`);
       } catch (error) {
@@ -93,6 +117,14 @@ const Level2: React.FC = () => {
 
 return (
   <div className="h-[90vh] overflow-y-hidden flex flex-col items-center justify-around">
+      
+  {nivelamentoPermitido === false ? 
+  (
+  <div className='w-max h-max rounded-md bg-fluency-green-700 text-white font-bold p-6'>
+      <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+  </div>
+  ):(
+  <>
     <div className="flex flex-col items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md w-[30rem] h-[25rem]">
       <div className="w-full bg-fluency-gray-200 h-2.5 overflow-hidden dark:bg-gray-700 rounded-tl-md rounded-tr-md">
         <div
@@ -135,7 +167,7 @@ return (
               )}
             </div>
         </div>
-      </div>
+      </div></>)}
      <Toaster />
     </div>
   );

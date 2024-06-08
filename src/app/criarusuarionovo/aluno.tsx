@@ -99,6 +99,7 @@ export default function CreateAluno(){
                 comecouEm: comecouEm,
                 tasks: {},
                 ContratoAssinado: false,
+                NivelamentoPermitido: true,
             });
     
             // Create a new 'Notebooks' collection inside the user's document

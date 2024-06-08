@@ -9,7 +9,7 @@ import {
   TableCell,
   Tooltip
 } from '@nextui-org/react';
-import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot  } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc  } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { IoIosCheckbox } from 'react-icons/io';
 import { MdFolderDelete, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
@@ -24,16 +24,19 @@ import FluencyInput from '@/app/ui/Components/Input/input';
 import { FaUserCircle } from 'react-icons/fa';
 import * as XLSX from 'xlsx';
 import Contratos from '../contratos/page';
+import { CgRemoveR } from 'react-icons/cg';
 
 interface Aluno {
   id: string;
   name: string;
   professor: string;
+  professorId: string;
   mensalidade: number;
   idioma: string;
   payments: any;
   studentMail: string;
   status: string;
+  diaAula: string;
 }
 
 interface Professor {
@@ -59,11 +62,13 @@ export default function Students() {
             id: doc.id,
             name: doc.data().name,
             professor: doc.data().professor,
+            professorId: doc.data().professorId,
             mensalidade: doc.data().mensalidade,
             idioma: doc.data().idioma,
             payments: doc.data().payments,
             studentMail: doc.data().email,
             status: doc.data().status,
+            diaAula: doc.data().diaAula,
           };
           updatedAlunos.push(aluno);
         });
@@ -140,18 +145,13 @@ export default function Students() {
 
   const transferUser = async (userId: string) => {
     try {
-      // Create references to the user's document in both collections
       const userRef = doc(db, 'users', userId);
       const pastUserRef = doc(db, 'past_students', userId);
   
-      // Get the user's data from the 'users' collection
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
   
-      // Transfer the user's data to the 'past-users' collection
       await setDoc(pastUserRef, userData);
-  
-      // Delete the user's document from the 'users' collection
       await deleteDoc(userRef);
   
       toast.error('Aluno deletado!', {
@@ -167,58 +167,36 @@ export default function Students() {
   
   const confirmPayment = async (userId: string, date: Date, selectedMonth: string, paymentKey: string, mensalidade: number) => {
     try {
-      // Get the year from the selected date
       const year = date.getFullYear();
-  
-      // Generate a random key
       const newPaymentKey = uuidv4();
-  
-      // Create a reference to the user's document
       const userRef = doc(db, 'users', userId);
-  
-      // Get the user's document data
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
   
-      // Check if userData is not undefined
       if (userData) {
-        // Get the current payments data
         const currentPayments = userData.payments || {};
-  
-        // Get the payments for the selected year or initialize an empty object
         const yearPayments = currentPayments[year] || {};
-  
-        // Check the current payment status for the selected month
         const currentStatus = yearPayments[selectedMonth] ? yearPayments[selectedMonth].status : 'notPaid';
-  
-        // Determine the new status
         const newStatus = currentStatus === 'paid' ? 'notPaid' : 'paid';
   
-        // Update the payment status for the selected month
         yearPayments[selectedMonth] = {
           status: newStatus,
           paymentKey: newStatus === 'paid' ? newPaymentKey : paymentKey,
-          mensalidade: mensalidade, // Store the mensalidade value
+          mensalidade: mensalidade,
         };
   
-        // Update the payments data in the user's document
         await setDoc(userRef, { payments: { ...currentPayments, [year]: yearPayments } }, { merge: true });
   
-        // Update component state to trigger re-render
         setAlunos((prevAlunos) => {
-          // Find the index of the updated aluno in the array
           const updatedIndex = prevAlunos.findIndex((aluno) => aluno.id === userId);
-  
-          // Create a copy of the aluno with updated payments data
           const updatedAluno = {
             ...prevAlunos[updatedIndex],
             payments: {
               ...prevAlunos[updatedIndex].payments,
-              [year]: yearPayments, // Update payments for the selected year
+              [year]: yearPayments,
             },
           };
   
-          // Create a new array with the updated aluno at the correct index
           return [
             ...prevAlunos.slice(0, updatedIndex),
             updatedAluno,
@@ -226,7 +204,6 @@ export default function Students() {
           ];
         });
   
-        // Show appropriate toast message based on the new status
         const toastMessage = newStatus === 'paid' ? 'Pagamento registrado!' : 'Pagamento retirado!';
         console.log(paymentKey)
         const toastType = newStatus === 'paid' ? 'success' : 'error';
@@ -244,9 +221,6 @@ export default function Students() {
     }
   };
   
-  
-  
-  //Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedAluno, setSelectedAluno] = useState<Aluno | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(null);
@@ -274,7 +248,6 @@ export default function Students() {
     fetchProfessors();
     }, []);
   
-  // Function to fetch and set user data including the profile picture URL
   const openEditModal = async (aluno: Aluno) => {
     setSelectedAluno(aluno);
     setIsEditModalOpen(true);
@@ -289,7 +262,6 @@ export default function Students() {
       if (userData) {
         setSelectedUserEmail(userData.email);
 
-        // Fetch profile picture URL from Firebase Storage
         const storage = getStorage();
         const profilePicRef = ref(storage, `profilePictures/${aluno.id}`);
         
@@ -325,9 +297,11 @@ export default function Students() {
         mensalidade: selectedAluno.mensalidade,
         idioma: selectedLanguages.length > 0 ? selectedLanguages[0] : null,
         professor: selectedProfessor ? selectedProfessor.name : selectedAluno.professor,
+        professorId: selectedProfessor ? selectedProfessor.id : selectedAluno.professor,
       };
   
       await setDoc(userRef, updatedData, { merge: true });
+
       toast.success('Alterações salvas!', { position: 'top-center' });
       closeEditModal();
     } catch (error) {
@@ -335,6 +309,26 @@ export default function Students() {
       toast.error('Erro ao salvar alterações!', { position: 'top-center' });
     }
   };
+  
+  const removeProfessor = async () => {
+    if (!selectedAluno) return;
+  
+    try {
+      // Clear the professor and professorId fields of the selected student
+      const userRef = doc(db, 'users', selectedAluno.id);
+      await updateDoc(userRef, {
+        professor: '',
+        professorId: ''
+      });
+  
+      toast.success('Professor removido!', { position: 'top-center' });
+      closeEditModal()
+    } catch (error) {
+      console.error('Error removing professor:', error);
+      toast.error('Erro ao remover professor!', { position: 'top-center' });
+    }
+  };
+  
   
   const [searchQuery, setSearchQuery] = useState<string>('');
   const handleOnClick = async (studentMail: string, selectedMonth: string, paymentStatus: string, studentName: string, studentEmail: string, paymentKey: string, paymentKeyProp: string, mensalidade: number, selectedYear: number) => {
@@ -364,8 +358,6 @@ export default function Students() {
         }
       );
   
-      // If response.ok is true, the promise resolves successfully
-      // Otherwise, it throws an error and the error message will be displayed
     } catch (error) {
       console.error('Error sending reminder email:', error);
       toast.error('Erro ao enviar email de cobrança!', {
@@ -388,16 +380,9 @@ function closeRelatorio(){
 }
 
 const exportToExcel = () => {
-  // Create a new workbook
   const wb = XLSX.utils.book_new();
-
-  // Convert data to worksheet
   const ws = XLSX.utils.json_to_sheet(alunos);
-
-  // Add worksheet to workbook
   XLSX.utils.book_append_sheet(wb, ws, 'Students');
-
-  // Generate Excel file and download it
   XLSX.writeFile(wb, 'students.xlsx');
 };
 
@@ -546,7 +531,6 @@ const exportToExcel = () => {
               </div>
             </div>)}
 
-
             {isEditModalOpen && selectedAluno && (
               <div className="fixed z-50 inset-0 overflow-y-auto">
                 <div className="flex items-center justify-center min-h-screen">
@@ -610,7 +594,8 @@ const exportToExcel = () => {
                                 </select>
                             </div>
                             
-                            <div>
+                            {selectedAluno.professor === '' && selectedAluno.professorId === '' ? (
+                              <div>
                                 <p className='text-xs font-semibold'>Professor</p>
                                 <select
                                   value={selectedProfessor ? selectedProfessor.id : ''}
@@ -625,7 +610,16 @@ const exportToExcel = () => {
                                     <option key={prof.id} value={prof.id}>{prof.name}</option>
                                   ))}
                                 </select>
-                            </div>
+                              </div>
+                            ):(
+                              <div>
+                                  <p className='text-xs font-semibold'>Professor Atual</p>
+                                <div className='flex flex-row gap-2 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 px-3 rounded-md'>
+                                  <p>{selectedAluno.professor}</p>
+                                  <button onClick={removeProfessor}><CgRemoveR className='w-4 h-auto text-fluency-red-500 hover:text-fluency-red-700 duration-300 ease-in-out' /></button>
+                                </div>
+                              </div>
+                            )}
 
                             <div className="flex flex-row justify-center">                            
                               <FluencyButton variant='confirm' onClick={saveChanges}>Salvar</FluencyButton>
