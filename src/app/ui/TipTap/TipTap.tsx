@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
 
@@ -116,7 +116,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   function closeWorkbook(){
     setWorkbooks(false)
   }
-  const ydoc = new Y.Doc()
+  const ydoc: Y.Doc = useMemo(() => new Y.Doc(), []);
   const provider = new TiptapCollabProvider({
     name: notebookID, // Unique document identifier for syncing. This is your document name.
     appId: 'q9gwygkg', // Your Cloud Dashboard AppID or `baseURL` for on-premises
