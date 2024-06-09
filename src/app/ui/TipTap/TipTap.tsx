@@ -35,6 +35,14 @@ import { PiNotebookBold } from 'react-icons/pi';
 import FluencyCloseButton from '../Components/ModalComponents/closeModal';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 
+//Realtime
+import Collaboration from '@tiptap/extension-collaboration'
+import { WebrtcProvider } from 'y-webrtc'
+import * as Y from 'yjs'
+
+import { TiptapCollabProvider } from '@hocuspocus/provider'
+
+
 type PopoversProps = {
   editor: Editor;
 }
@@ -99,7 +107,7 @@ function Popovers({ editor }: PopoversProps) {
 const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
   const { data: session } = useSession();
-  const notebookID = params.get('notebook');
+  const notebookID = params.get('notebook') || '';
   const studentID = params.get('student');
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
@@ -109,7 +117,13 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   function closeWorkbook(){
     setWorkbooks(false)
   }
-
+  const ydoc = new Y.Doc()
+  const provider = new TiptapCollabProvider({
+    name: notebookID, // Unique document identifier for syncing. This is your document name.
+    appId: 'q9gwygkg', // Your Cloud Dashboard AppID or `baseURL` for on-premises
+    token: 'notoken', // Your JWT token
+    document: ydoc,
+  })
   type GroupedLessonDocsMap = { [key: string]: GroupedLessonDocs[] };
 
   // Use the above type in useState
@@ -224,6 +238,9 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       }),
       Highlight,
       Color,
+      Collaboration.configure({
+        document: ydoc,
+      }),
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {

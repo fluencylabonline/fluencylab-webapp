@@ -1,4 +1,5 @@
 'use client'
+import ComingSoon from "@/app/ComingSoon/coming-soon";
 import { db } from "@/app/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
@@ -39,7 +40,9 @@ export default function Fala(){
                   <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
               </div>
               ):(
-              <></>
+              <div>
+                    <ComingSoon />
+              </div>
               )
             }
         </div>
