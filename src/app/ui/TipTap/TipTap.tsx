@@ -37,7 +37,6 @@ import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 
 //Realtime
 import Collaboration from '@tiptap/extension-collaboration'
-import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 
 import { TiptapCollabProvider } from '@hocuspocus/provider'
