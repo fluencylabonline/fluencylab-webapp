@@ -120,7 +120,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const provider = new TiptapCollabProvider({
     name: notebookID, // Unique document identifier for syncing. This is your document name.
     appId: 'q9gwygkg', // Your Cloud Dashboard AppID or `baseURL` for on-premises
-    token: 'notoken', // Your JWT token
+    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTc5NjAyNzQsIm5iZiI6MTcxNzk2MDI3NCwiZXhwIjoxNzE4MDQ2Njc0LCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJxOWd3eWdrZyJ9.naJqkLBFzEBd7CJoX0LnHEpsclTYKJUyXMyXIPSn6bI', // Your JWT token
     document: ydoc,
   })
   type GroupedLessonDocsMap = { [key: string]: GroupedLessonDocs[] };
