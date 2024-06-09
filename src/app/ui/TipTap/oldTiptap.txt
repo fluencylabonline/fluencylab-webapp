@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
 
@@ -34,11 +34,6 @@ import { VscWholeWord } from 'react-icons/vsc';
 import { PiNotebookBold } from 'react-icons/pi';
 import FluencyCloseButton from '../Components/ModalComponents/closeModal';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
-
-//Realtime
-import Collaboration from '@tiptap/extension-collaboration'
-import * as Y from 'yjs'
-import { TiptapCollabProvider } from '@hocuspocus/provider'
 
 type PopoversProps = {
   editor: Editor;
@@ -96,22 +91,6 @@ function Popovers({ editor }: PopoversProps) {
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out transition-all'></div>
           </button>
-
-          <button
-            onClick={() => editor.chain().focus().setColor('#FAFAFA').run()}
-            className={editor.isActive('textStyle', { color: '#FAFAFA' }) ? 'is-active' : ''}
-            data-testid="setWhite"
-            >        
-            <div className='w-5 h-5 p-2 rounded-full bg-white hover:bg-gray-300 duration-300 ease-in-out transition-all'></div>
-          </button>
-
-          <button
-            onClick={() => editor.chain().focus().setColor('#013A49').run()}
-            className={editor.isActive('textStyle', { color: '#013A49' }) ? 'is-active' : ''}
-            data-testid="setBlack"
-            >        
-            <div className='w-5 h-5 p-2 rounded-full bg-black hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
-          </button>
       </BubbleMenu>
   )
 }
@@ -120,7 +99,7 @@ function Popovers({ editor }: PopoversProps) {
 const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
   const { data: session } = useSession();
-  const notebookID = params.get('notebook') || '';
+  const notebookID = params.get('notebook');
   const studentID = params.get('student');
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
@@ -130,23 +109,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   function closeWorkbook(){
     setWorkbooks(false)
   }
-
-  //REAL TIME PART
-  const tiptapApiKey = process.env.NEXT_PUBLIC_TIPTAP_API_KEY;
-  const tiptapApiAuth = process.env.NEXT_PUBLIC_TIPTAP_API_AUTH;
-  
-  if (!tiptapApiKey || !tiptapApiAuth) {
-    throw new Error("Tiptap API key or authentication token is missing.");
-  }
-  
-  const ydoc: Y.Doc = useMemo(() => new Y.Doc(), []);
-  const provider = new TiptapCollabProvider({
-    name: notebookID, 
-    appId: tiptapApiKey, 
-    token: tiptapApiAuth,
-    document: ydoc,
-  })
-
 
   type GroupedLessonDocsMap = { [key: string]: GroupedLessonDocs[] };
 
@@ -262,9 +224,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       }),
       Highlight,
       Color,
-      Collaboration.configure({
-        document: ydoc,
-      }),
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
