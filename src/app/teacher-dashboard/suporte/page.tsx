@@ -28,7 +28,7 @@ export default function Suporte(){
             </div>
             <div className="pt-5 text-base font-semibold leading-7">
               <p>
-                <a href="suporte/apostilas" className="text-fluency-blue-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Apostilas &rarr;</a>
+                <a href="suporte/apostilas" className="text-fluency-blue-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Apostilas &rarr;</a>
               </p>
             </div>
           </div>
@@ -56,11 +56,11 @@ export default function Suporte(){
               </svg>
             </span>
             <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-500 transition-all duration-300 group-hover:text-white/90">
-              <p>Aqui você vai encontrar todas as apostilas da FluencyLab, inclusive algumas que ainda estão em construção! Fique sempre atento à atualizações.</p>
+              <p>Aqui vai encontrar alguns lembretes sobre a escola e outros pontos importantes como: pagamentos, material, divulgação e lembretes. Tudo bem resumido!.</p>
             </div>
             <div className="pt-5 text-base font-semibold leading-7">
               <p>
-                <a href="suporte/guidelines" className="text-fluency-green-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Guidelines &rarr;</a>
+                <a href="suporte/guidelines" className="text-fluency-green-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Guidelines &rarr;</a>
               </p>
             </div>
           </div>
@@ -88,11 +88,11 @@ export default function Suporte(){
               </svg>
             </span>
             <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-500 transition-all duration-300 group-hover:text-white/90">
-              <p>Aqui você vai encontrar todas as apostilas da FluencyLab, inclusive algumas que ainda estão em construção! Fique sempre atento à atualizações.</p>
+              <p>Esse é um mini-curso que é interessante que todos os professores façam. São dadas dicas de aula, onde encontrar material e como usar o material existente. Tudo que precisa saber para conseguir fazer aulas ótimas!</p>
             </div>
             <div className="pt-5 text-base font-semibold leading-7">
               <p>
-                <a href="suporte/curso" className="text-fluency-yellow-700 text-3xl font-bold transition-all duration-300 group-hover:text-white">Curso para Professores &rarr;</a>
+                <a href="suporte/curso" className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Curso para Professores &rarr;</a>
               </p>
             </div>
           </div>

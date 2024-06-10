@@ -56,6 +56,36 @@ function Perfil() {
 
     const { data: session } = useSession();
 
+    const [cursoFeito, setCursoFeito] = useState<boolean[]>([]);
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+        if (session?.user.id) {
+          try {
+            const profile = doc(db, 'users', session?.user.id);
+            const docSnap = await getDoc(profile);
+            if (docSnap.exists()) {
+              const userData = docSnap.data();
+              console.log("User Data:", userData);
+              if (userData && userData.courses) {
+                // Convert object values to array of boolean values
+                const coursesArray: boolean[] = Object.values(userData.courses);
+                setCursoFeito(coursesArray);
+              } else {
+                console.log("No courses data found in the user document.");
+              }
+            } else {
+              console.log("No such document!");
+            }
+          } catch (error) {
+            console.error("Error fetching document: ", error);
+          }
+        }
+      };
+    
+      fetchUserInfo();
+    }, [session?.user.id]);
+    
+
     useEffect(() => {
       if (session) {
         const updateUserStatus = async () => {
@@ -302,16 +332,21 @@ function Perfil() {
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
               <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-              {session?.user.role === 'teacher' ? 
-              (
-              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                  <div className='flex flex-row w-full justify-between items-center'>Curso de Instruções Feito! <PiExam className='w-6 h-auto' /></div>    
-              </div>
-              ):(
-              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
-                  <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
-              </div>
-              )}
+                {Array.isArray(cursoFeito) && cursoFeito.length > 0 ? (
+                  <div className={`flex flex-row gap-2 w-full rounded-md ${cursoFeito.every(course => course) ? 'bg-fluency-green-700' : 'bg-fluency-orange-700'} text-white font-bold p-3 items-center justify-between`}>
+                    <div className='flex flex-row w-full justify-between items-center'>
+                      {cursoFeito.every(course => course) ? (
+                        <span className='flex flex-row items-center gap-1 w-full justify-between'>Curso de Instruções Feito! <PiExam className='w-6 h-auto' /></span>
+                      ) : (
+                        <a href="/teacher-dashboard/suporte/curso" className="flex flex-row items-center gap-1 w-full justify-between">
+                          Fazer curso <PiExam className='w-6 h-auto' />
+                        </a>
+                      )}
+                    </div>    
+                  </div>
+                ) : (
+                  <div>No data available</div>
+                )}
             </div>
                  
         </div>

@@ -15,6 +15,9 @@ import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { Card, Skeleton, Tooltip } from '@nextui-org/react';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
+import { TbBook2 } from 'react-icons/tb';
+import { PiExam } from 'react-icons/pi';
+import { LuLayoutPanelTop } from 'react-icons/lu';
 
 interface Aluno {
     overdueClassesCount: number;
@@ -59,7 +62,7 @@ function OverdueClassesModal({ overdueClasses, onClose }: { overdueClasses: Clas
                 <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8">
                     <button onClick={onClose} className="absolute top-0 left-0 mt-2 ml-2 ">
                         <span className="sr-only">Fechar</span>
-                        <IoClose className="w-10 h-10 text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-red-600 ease-in-out duration-300" />
+                        <IoClose className="w-10 h-10 text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-red-600 hover:dark:text-fluency-red-600 ease-in-out duration-300" />
                     </button>
                     <h3 className="text-xl font-bold text-center leading-6 mb-4 text-fluency-red-600">
                         Aulas em Atraso
@@ -514,20 +517,20 @@ function Alunos(){
                                         <p className='text-lg font-semibold'>Aulas feitas: <span>{student.doneClassesCount}</span></p>
                                         <p className='text-lg cursor-pointer font-semibold p-1 rounded-md hover:text-fluency-blue-600 hover:dark:bg-fluency-gray-600 hover:dark:text-fluency-blue-300 hover:bg-fluency-blue-100 transition-all duration-300 ease-in-out' onClick={() => retrieveOverdueClasses(student.id)}>Aulas em atraso: <span>{student.overdueClassesCount}</span></p>
                                     </div>  
-                                    <div className="flex flex-row items-center justify-center w-full gap-2 mt-3 mb-2">
+                                    <div className="flex flex-row items-center justify-center w-full gap-2 mt-5 mb-2">
                                         <Link href={{ pathname: `alunos/caderno/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
-                                            <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
-                                                Caderno 
+                                            <button className="flex flex-row items-center gap-1 font-semibold px-3 py-2 text-center text-md rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
+                                                Caderno <TbBook2 className='w-5 h-auto' />
                                             </button>
                                         </Link>
                                         <Link href={{ pathname: `alunos/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
-                                            <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
-                                                Painel do Aluno 
+                                            <button className="flex flex-row items-center gap-1 font-semibold px-3 py-2 text-center text-md rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
+                                                Painel do Aluno <LuLayoutPanelTop className='w-5 h-auto'/>
                                             </button>
                                         </Link>
                                         <Link href={{ pathname: `alunos/nivelamento/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
-                                            <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-orange-500 hover:border-fluency-orange-600 bg-fluency-orange-500 text-fluency-text-dark hover:bg-fluency-orange-600 focus:bg-fluency-orange-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-orange-500 dark:hover:text-white dark:hover:bg-fluency-orange-500 hover:dark:border-fluency-orange-500">
-                                                Nivelamento
+                                            <button className="flex flex-row items-center gap-1 font-semibold px-3 py-2 text-center text-md rounded-lg border border-fluency-orange-500 hover:border-fluency-orange-600 bg-fluency-orange-500 text-fluency-text-dark hover:bg-fluency-orange-600 focus:bg-fluency-orange-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-orange-500 dark:hover:text-white dark:hover:bg-fluency-orange-500 hover:dark:border-fluency-orange-500">
+                                                Nivelamento <PiExam className='w-5 h-auto'/>
                                             </button>
                                         </Link>
                                     </div>

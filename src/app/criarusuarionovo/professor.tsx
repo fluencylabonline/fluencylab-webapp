@@ -36,7 +36,17 @@ export default function CreateProfessor(){
             email: email,
             role: "teacher",
             link: link,
-            
+            courses: {
+                'primeirospassos-1': false,
+                'dinamicaaulas-1': false,
+                'dinamicaaulas-2': false,
+                'dinamicaaulas-3': false,
+                'ferramentas-1': false,
+                'ferramentas-2': false,
+                'ferramentas-3': false,
+                'ferramentas-4': false,
+                'nivelamento': false,
+              }
         });
 
         // Reset form fields after successful sign-up
