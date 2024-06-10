@@ -525,9 +525,11 @@ function Alunos(){
                                                 Painel do Aluno 
                                             </button>
                                         </Link>
+                                        <Link href={{ pathname: `alunos/nivelamento/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
                                             <button className="font-medium px-3 py-2 text-center text-sm rounded-lg border border-fluency-orange-500 hover:border-fluency-orange-600 bg-fluency-orange-500 text-fluency-text-dark hover:bg-fluency-orange-600 focus:bg-fluency-orange-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-orange-500 dark:hover:text-white dark:hover:bg-fluency-orange-500 hover:dark:border-fluency-orange-500">
-                                                Nivelamento {/**Criar pagina ainda com botao para enviar nvelamento e para ver resultados */}
+                                                Nivelamento
                                             </button>
+                                        </Link>
                                     </div>
                             </div>
 

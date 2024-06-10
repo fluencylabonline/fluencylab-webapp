@@ -7,6 +7,9 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google/generative-ai";
+
+import './escrita.css';
+
 import { useEffect, useState, useCallback } from "react";
 import { db } from "@/app/firebase";
 import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
@@ -15,6 +18,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { IoMdArrowRoundForward } from "react-icons/io";
 import { PiExam } from "react-icons/pi";
+import { BsCircleFill } from "react-icons/bs";
 
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
@@ -64,7 +68,8 @@ export default function Home() {
   const [scoreOutput, setScoreOutput] = useState(false);
   const [isTextAreaDisabled, setIsTextAreaDisabled] = useState(false);
   const [proceedToNextLesson, setProceedToNextLesson] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     provideRandomTopic();
   }, []);
@@ -97,6 +102,7 @@ export default function Home() {
   }, [score, data, userInput, saveInFirebase]);
 
   const runChat = async (prompt: string) => {
+    setLoading(true);
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
@@ -161,6 +167,8 @@ export default function Home() {
       setScoreOutput(true);
       setIsTextAreaDisabled(true);
     }
+
+    setLoading(false);
   };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -202,11 +210,11 @@ return (
         />
         <div className="w-full flex flex-col items-center p-4">
         {!isTextAreaDisabled ? (
-            <FluencyButton variant="confirm" type="submit">
+            <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-3 rounded-md px-4" type="submit">
               Analisar <TbDeviceDesktopAnalytics className="w-6 h-auto" />
-            </FluencyButton>
+            </button>
           ) : (
-            <FluencyButton variant="warning" type="button" onClick={() => setProceedToNextLesson(true)}>
+            <FluencyButton variant="confirm" type="button" onClick={() => setProceedToNextLesson(true)}>
               Próxima Lição <IoMdArrowRoundForward className="w-4 h-auto"/>
             </FluencyButton>
           )}
@@ -215,7 +223,20 @@ return (
 
       <div className="min-h-[85vh] max-h-[85vh] w-[50%] overflow-y-scroll bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
         <h1 className="text-xl font-bold p-3">Análise do seu texto:</h1>
-        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 rounded-md" dangerouslySetInnerHTML={{ __html: data }} />
+        
+        {loading ? ( 
+        <div className="fade-in loader fade-out h-full">
+          <hr />
+          <hr />
+          <hr />
+          <hr />
+        </div>
+      ) : (
+        <>
+          <div className="fade-in min-h-[70vh] bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 rounded-md" dangerouslySetInnerHTML={{ __html: data }} />
+        </>
+      )}
+        
       </div></>)}
       <Toaster />
     </main>

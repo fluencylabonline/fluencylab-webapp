@@ -170,7 +170,6 @@ export default function Professors() {
         const currentStatus = yearPayments[selectedMonth]?.status || 'notPaid';
         const newPaymentKey = uuidv4();
         const newStatus = currentStatus === 'paid' ? 'notPaid' : 'paid';
-        
         const newSalary = userData.salario;
   
         yearPayments[selectedMonth] = {
@@ -273,7 +272,7 @@ export default function Professors() {
       <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
       <div className='flex flex-row items-center justify-around w-full'>
           <h3 className='font-semibold text-xl'>
-            Professores Fluency Lab
+            Professores
           </h3>
         <select
           className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark px-5 py-2 rounded-md'

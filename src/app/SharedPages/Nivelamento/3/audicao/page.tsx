@@ -1,18 +1,29 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, addDoc, collection, serverTimestamp, getDocs, setDoc } from 'firebase/firestore';
 import { toast, Toaster } from 'react-hot-toast';
-import './player.css';
-import FluencyButton from '@/app/ui/Components/Button/button';
-import { TbPencilCheck } from 'react-icons/tb';
-import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
-
+import AudioPlayer from './player';
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { db } from '@/app/firebase';
-import { IoMdArrowRoundForward } from 'react-icons/io';
 import { PiExam } from 'react-icons/pi';
+import FluencyButton from '@/app/ui/Components/Button/button';
+import { IoMdArrowRoundForward } from 'react-icons/io';
+import { TbPencilCheck } from 'react-icons/tb';
+import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
+
+interface NivelamentoDocument {
+    id: string;
+    transcript: string;
+    url: string;
+}
+
+interface WordInput {
+    word: string;
+    isInput: boolean;
+    userAnswer: string;
+    isCorrect: boolean | null;
+}
 
 export default function Audio() {
     const router = useRouter();
@@ -39,71 +50,53 @@ export default function Audio() {
       fetchUserInfo()
   }, [session]);
 
-    const [score, setScore] = useState(0);
-    const [audioUrl, setAudioUrl] = useState<string | null>(null);
-    const [audioFileName, setAudioFileName] = useState<string | null>(null);
-    const [transcript, setTranscript] = useState<string | null>(null);
-    const [wordInputs, setWordInputs] = useState<{ word: string; isInput: boolean; userAnswer: string; isCorrect: boolean | null }[]>([]);
-    const [userAnswers, setUserAnswers] = useState<string[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [inputsDisabled, setInputsDisabled] = useState(false);
+  const [nivelamentoData, setNivelamentoData] = useState<NivelamentoDocument[]>([]);
+  const [randomDocument, setRandomDocument] = useState<NivelamentoDocument | null>(null);
+  const [wordInputs, setWordInputs] = useState<WordInput[]>([]);
+  const [inputsDisabled, setInputsDisabled] = useState(false);
+  const [score, setScore] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const fetchAudioAndTranscript = async () => {
-            try {
-                const storageRef = getStorage();
-                const firestore = getFirestore();
-                const audioRef = ref(storageRef, 'audios');
-
-                const res = await listAll(audioRef);
-                const audioFiles = res.items;
-
-                if (audioFiles.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * audioFiles.length);
-                    const audioFile = audioFiles[randomIndex];
-                    const url = await getDownloadURL(audioFile);
-                    setAudioUrl(url);
-
-                    // Extract audio file name
-                    const audioFileName = audioFile.name;
-                    setAudioFileName(audioFileName);
-
-                    // Fetch transcript from Firestore
-                    const transcriptDocRef = doc(firestore, 'transcriptions', audioFileName);
-                    const transcriptDocSnap = await getDoc(transcriptDocRef);
-                    if (transcriptDocSnap.exists()) {
-                        const transcriptData = transcriptDocSnap.data();
-                        if (transcriptData && transcriptData.transcript) {
-                            const originalTranscript = transcriptData.transcript;
-                            setTranscript(originalTranscript);
-
-                            // Create placeholders for input fields
-                            const words = originalTranscript.split(' ');
-                            const inputIndices = new Set<number>();
-                            while (inputIndices.size < Math.floor(words.length * 0.1)) {
-                                inputIndices.add(Math.floor(Math.random() * words.length));
-                            }
-                            const inputs: { word: string; isInput: boolean; userAnswer: string; isCorrect: boolean | null }[] = [];
-                            words.forEach((word: any, index: number) => {
-                                if (inputIndices.has(index)) {
-                                    inputs.push({ word, isInput: true, userAnswer: '', isCorrect: null });
-                                } else {
-                                    inputs.push({ word, isInput: false, userAnswer: word, isCorrect: null });
-                                }
-                            });
-                            setWordInputs(inputs);
-                        }
-                    } else {
-                        console.log('Transcript not found for', audioFileName);
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching audio and transcript:", error);
-            }
+        const fetchNivelamentoData = async () => {
+            const nivelamentoCollectionRef = collection(db, 'Nivelamento');
+            const nivelamentoSnapshot = await getDocs(nivelamentoCollectionRef);
+            const nivelamentoDocuments: NivelamentoDocument[] = nivelamentoSnapshot.docs.map(doc => {
+                const data = doc.data() as NivelamentoDocument; // Explicitly define the type
+                return {
+                    ...data
+                };
+            });
+            setNivelamentoData(nivelamentoDocuments);
         };
 
-        fetchAudioAndTranscript();
+        fetchNivelamentoData();
     }, []);
+
+    useEffect(() => {
+        if (nivelamentoData.length > 0) {
+            const randomIndex = Math.floor(Math.random() * nivelamentoData.length);
+            setRandomDocument(nivelamentoData[randomIndex]);
+
+            // Create placeholders for input fields
+            const words = nivelamentoData[randomIndex].transcript.split(' ');
+            const inputIndicesSet = new Set<number>();
+            while (inputIndicesSet.size < Math.floor(words.length * 0.2)) { // Replace 20% of words with input fields
+                inputIndicesSet.add(Math.floor(Math.random() * words.length));
+            }
+
+            const inputs: WordInput[] = [];
+            words.forEach((word, index) => {
+                if (inputIndicesSet.has(index)) {
+                    inputs.push({ word, isInput: true, userAnswer: '', isCorrect: null });
+                } else {
+                    inputs.push({ word, isInput: false, userAnswer: word, isCorrect: null });
+                }
+            });
+
+            setWordInputs(inputs);
+        }
+    }, [nivelamentoData]);
 
     const handleInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -131,13 +124,35 @@ export default function Audio() {
         setWordInputs(updatedWordInputs);
         setInputsDisabled(true);
         setScore(score);
-        toast.success(`You got ${score} out of ${wordInputs.filter(input => input.isInput).length} correct!`);
     };
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+
+    const handleNextLevel = async () => {
+        if (!session) {
+            return;
+        }
+    
+        const userId = session.user.id;
+        try {
+            const userRef = doc(db, 'users', userId);
+            await setDoc(userRef, { NivelamentoPermitido: false }, { merge: true });
+            router.push("/student-dashboard/nivelamento");
+        } catch (error) {
+            console.error('Error updating NivelamentoPermitido field:', error);
+        }
+    };
+
+    
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     const confirmModal = () => {
-        closeModal();
+        setIsModalOpen(false);
         checkAnswers();
         handleChecking();
     };
@@ -167,97 +182,83 @@ export default function Audio() {
             }
         }
     }
-    
-    function handleNextLevel(){
-        router.push(`/student-dashboard/nivelamento/nivel-4/fala`);
-    }
 
     return (
         <div className='min-h-[90vh] w-full flex flex-col justify-center items-center px-12 p-8'>
+        <Toaster />
+
+        {nivelamentoPermitido === false ? 
+          (
+          <div className='w-max h-full rounded-md bg-fluency-green-700 text-white font-bold p-6'>
+              <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+          </div>
+          ):(
+           
+            <>
             <Toaster />
-
-            {nivelamentoPermitido === false ? 
-              (
-              <div className='w-max h-full rounded-md bg-fluency-green-700 text-white font-bold p-6'>
-                  <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
-              </div>
-              ):(
-              <>
-                {audioUrl && 
-                <div className='flex flex-col gap-6 items-center w-full h-full'>
-                    <p className='text-xl font-semibold'>Instrução: escute o áudio e complete os espaços com as palavras que faltam. Depois verifique suas respostas.</p>
-
-                    <audio controls className="audio-player">
-                        <source src={audioUrl} type="audio/mpeg" />
-                    </audio>
-
-                <div className='flex flex-col gap-2 items-center justify-center bg-fluency-pages-light dark:bg-fluency-pages-dark p-8 rounded-md text-lg'>
-                    {transcript && 
-                        <p className='text-justify'>
-                            {wordInputs.map((input, index) => (
-                                <span key={index}>
-                                    {input.isInput ? (
-                                        <input
-                                            type="text"
-                                            className={`max-w-[8%] mx-2 font-bold bg-transparent border-fluency-gray-500 dark:border-fluency-gray-100 border-dashed border-b-[1px] outline-none ${input.isCorrect === true ? 'text-green-500' : input.isCorrect === false ? 'text-red-500' : 'text-black dark:text-white'}`}
-                                            value={input.userAnswer}
-                                            onChange={(event) => handleInputChange(index, event)}
-                                            style={{ display: 'inline' }}
-                                            disabled={inputsDisabled}
-                                        />
-                                    ) : (
-                                        `${input.word} `
-                                    )}
-                                </span>
-                            ))}
-                        </p>
-                    }
+            {randomDocument && (
+                <div className='max-w-[80%] text-justify flex flex-col gap-2 items-center justify-center p-8 rounded-md text-lg' key={randomDocument.id}>
+                    <AudioPlayer src={randomDocument.url} />
+                    <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark p-10 rounded-md'>
+                    {wordInputs.map((input, index) => (
+                            <span className='w-full' key={index}>
+                                {input.isInput ? <input
+                                    type="text"
+                                    className={`max-w-[15%] mx-1 font-bold bg-transparent border-fluency-gray-500 dark:border-fluency-gray-100 border-dashed border-b-[1px] outline-none ${input.isCorrect === true ? 'text-green-500' : input.isCorrect === false ? 'text-red-500' : 'text-black dark:text-white'}`}
+                                    value={input.userAnswer}
+                                    onChange={(e) => handleInputChange(index, e)}
+                                    disabled={inputsDisabled}
+                                /> : input.word}
+                                {' '}
+                            </span>
+                    ))}
+                    </div>
                     {inputsDisabled ? (
                         <FluencyButton
-                        className='mt-4 flex flex-row items-center'
-                        variant='warning'
-                        onClick={handleNextLevel}
+                            className='mt-4 flex flex-row items-center'
+                            variant='warning'
+                            onClick={handleNextLevel}
                         >
-                        Próxima Lição <IoMdArrowRoundForward className="w-4 h-auto"/>
+                            Finalizar <IoMdArrowRoundForward className="w-4 h-auto"/>
                         </FluencyButton>
                     ) : (
-                        <FluencyButton
-                        className='mt-4 flex flex-row items-center'
-                        variant='confirm'
-                        onClick={openModal}
+                        <button
+                            className="text-lg text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-2 rounded-md px-3"
+                            onClick={openModal}
                         >
-                        Verificar Respostas <TbPencilCheck className='w-6 h-auto' />
-                        </FluencyButton>
-                    )}                
+                            Verificar Respostas <TbPencilCheck className='w-6 h-auto' />
+                        </button>
+                    )}
                 </div>
-            </div>}
-
+            )}
             {isModalOpen && (
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-              <div className="flex items-center justify-center min-h-screen">
-                <div className="fixed inset-0 transition-opacity">
-                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                  <div className="flex flex-col">
-                    <FluencyCloseButton onClick={closeModal}/>
-                    <div className="mt-3 flex flex-col gap-3 p-4">
-                        <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                        Tem certeza que quer verificar as respostas?                            
-                        </h3>
-                      <div className="flex justify-center">
-                        <FluencyButton variant='confirm' onClick={confirmModal}>Sim, verificar</FluencyButton>
-                        <FluencyButton variant='danger' onClick={closeModal}>Não, cancelar</FluencyButton>
-                      </div>
+                <div className="fixed z-50 inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="fixed inset-0 transition-opacity">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                            <div className="flex flex-col">
+                                <FluencyCloseButton onClick={closeModal}/>
+                                <div className="mt-3 flex flex-col gap-3 p-4">
+                                    <h3 className="text-center text-lg leading-6 font-bold mb-2">
+                                        Tem certeza que quer verificar as respostas?                            
+                                    </h3>
+                                    <div className="flex justify-center">
+                                        <FluencyButton variant='confirm' onClick={confirmModal}>Sim, verificar</FluencyButton>
+                                        <FluencyButton variant='danger' onClick={closeModal}>Não, cancelar</FluencyButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-            </div>)}
-              </>
-              )}
-              
+            )}
+            </>
+            
+          )}
           
-        </div>
-    );
+      
+    </div>
+);
 }

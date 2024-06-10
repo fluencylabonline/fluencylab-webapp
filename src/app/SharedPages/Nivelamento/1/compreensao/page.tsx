@@ -96,7 +96,7 @@ const Compreensao: React.FC = () => {
         // Adding a new document with an auto-generated ID
         await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-1", "Compreensao"), scoreData);
         toast.success("Pontuação salva com sucesso!");
-        router.push(`/nivel-2`);
+        router.push(`/student-dashboard/nivelamento/nivel-2/escrita`);
       } catch (error) {
         toast.error("Erro ao salvar a pontuação");
         console.error("Erro ao salvar a pontuação: ", error);
