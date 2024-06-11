@@ -22,7 +22,6 @@ import { SlNotebook } from "react-icons/sl";
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 
-import './cadernostyle.css';
 
 interface Aluno {
     tasks: {};
@@ -126,17 +125,17 @@ function Caderno() {
     const renderMaterialIcon = (fileName: string) => {
       const fileType = fileName.split('.').pop()?.toLowerCase();
       if (fileType === 'pdf') {
-        return <FaFilePdf className='w-5 h-auto'/>;
+        return <FaFilePdf className='w-4 h-auto'/>;
       } else if (fileType === 'mp3') {
-        return <FaRegFileAudio className='w-5 h-auto'/>;
+        return <FaRegFileAudio className='w-4 h-auto'/>;
       } else if (fileType === 'mp4') {
-        return <FaRegFileVideo className='w-5 h-auto'/>;
+        return <FaRegFileVideo className='w-4 h-auto'/>;
       } else if (fileType === 'txt') {
-        return <FaFileAlt className='w-7 h-auto'/>;
+        return <FaFileAlt className='w-6 h-auto'/>;
       } else if (fileType === 'jpg') {
-        return <FaRegFileImage className='w-5 h-auto'/>        ;
+        return <FaRegFileImage className='w-4 h-auto'/>        ;
       } else if (fileType === 'png') {
-        return <FaRegFileImage className='w-5 h-auto'/>        ;
+        return <FaRegFileImage className='w-4 h-auto'/>        ;
       }
       return null; // Return null if file type is not recognized
     };
@@ -412,7 +411,7 @@ return (
             <div className='flex flex-col gap-3'>
 
               <div className='lg:flex lg:flex-row flex flex-col h-full w-full gap-3 items-strech'>
-                <div className="flex justify-center items-center h-full rounded-md bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 cursor-pointer duration-300 ease-in-out transition-all">
+                <div className="w-full flex justify-center items-center h-full rounded-md bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 cursor-pointer duration-300 ease-in-out transition-all">
                  {studentData && (
                   <Link href={{ pathname: `caderno/${encodeURIComponent(studentData.name)}`, query: { id: id } }} passHref>
                     <h1 className="text-xl flex flex-col gap-1 items-center font-semibold text-center lg:px-12 md:px-4 sm:px-4 sm:py-8">Anotações <SlNotebook className='w-6 h-auto' /></h1>
@@ -446,19 +445,19 @@ return (
               </div>
 
 
-              <div className="h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="w-max h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
-                    <div className="flex flex-col gap-2 items-center justify-center w-full p-2">
+                    <div className="flex flex-col gap-2 items-center justify-center w-full overflow-y-scroll p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>
-                      <div className="flex flex-col rounded-lg gap-2 ustify-start w-full h-80 overflow-y-auto overflow-hidden">
+                      <div className="flex flex-col rounded-lg gap-2 justify-start w-full h-80 overflow-y-scroll overflow-hidden">
                         {materials.map((material, index) => (
-                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark rounded-md p-1 px-4 gap-4 flex flex-row items-center justify-between w-full min-h-16">
+                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark text-sm rounded-md p-1 px-4 gap-4 flex flex-row items-center justify-between w-full">
                             <p className='font-semibold'>{material.name}</p>
-                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-3 px-5 rounded-md flex flex-row gap-6'>
+                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 px-4 rounded-md flex flex-row gap-6'>
                               <p>{renderMaterialIcon(material.name)}</p>
                               <div className='flex flex-row gap-2'>
-                                <p onClick={() => handleDownload(material.url)}><IoCloudDownloadOutline className='w-5 h-auto hover:text-fluency-green-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold'/></p>
-                                <p onClick={() => handleDelete(material.name)}><MdDelete className='w-5 h-auto hover:text-fluency-red-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold' /></p>
+                                <p onClick={() => handleDownload(material.url)}><IoCloudDownloadOutline className='w-4 h-auto hover:text-fluency-green-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold'/></p>
+                                {session?.user.role === 'teacher' && <p onClick={() => handleDelete(material.name)}><MdDelete className='w-4 h-auto hover:text-fluency-red-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold' /></p>}
                               </div>
                             </div>
                           </div>
@@ -486,19 +485,33 @@ return (
                   </div>
 
                   <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[90%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
-                    <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>            
+                    <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>                              
                       {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
                         <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
                           <div className='flex flex-row gap-2 items-center'> 
-                          <div className="checkbox-wrapper-11">
-                            <input id="02-11" type="checkbox" name="r" value="2" checked={task.done} onChange={(e) => handleTaskStatusChange('Task', index, e.target.checked)}/>
+                            <label className="relative flex items-center p-3 rounded-full cursor-pointer" htmlFor="checkbox">
+                              <input 
+                                className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-fluency-gray-500 dark:border-fluency-gray-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-fluency-green-700 checked:bg-fluency-green-700 checked:before:bg-fluency-green-700 hover:before:opacity-10"
+                                id="checkbox"  
+                                type="checkbox"
+                                checked={task.done}
+                                onChange={(e) => handleTaskStatusChange('Task', index, e.target.checked)}/>
+                              <span
+                                className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"
+                                  stroke="currentColor" strokeWidth="1">
+                                  <path fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"></path>
+                                </svg>
+                              </span>
+                            </label>
                             <label htmlFor="02-11">{task.link ? (
                               <Link href={task.link}>
                                 <span className='font-semibold'>{task.task}</span>
                               </Link>
                               ) : (
                               <span className='font-semibold'>{task.task}</span>)}</label>
-                          </div>
                           </div>
                       </div>))}
                     </div>

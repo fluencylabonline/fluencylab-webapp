@@ -98,7 +98,7 @@ return(
                     </div>
                     <div className="hidden lg:flex lg:gap-x-12">          
                         {navigation.map((item) => (
-                        <a id='navbarheader' key={item.name} href={item.href} className="font-semibold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
+                        <a id='navbarheader' key={item.name} href={item.href} className="font-bold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
                             {item.name}
                         </a>
                         ))}
@@ -146,7 +146,7 @@ return(
                                 <a
                                 key={item.name}
                                 href={item.href}
-                                className="-mx-3 block rounded-lg px-3 py-2 text-lg font-semibold leading-7 text-fluency-text-light dark:text-fluency-text-dark ease-in-out duration-300"
+                                className="-mx-3 block rounded-lg px-3 py-2 text-lg font-bold leading-7 text-fluency-text-light dark:text-fluency-text-dark ease-in-out duration-300"
                                 >
                                 {item.name}
                                 </a>

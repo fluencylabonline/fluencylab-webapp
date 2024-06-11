@@ -16,6 +16,9 @@ import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
 import { getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
 
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 interface Notebook {
     studentName: string;
     id: string;
@@ -149,6 +152,43 @@ export default function CadernoID(){
           fetchSlides();
       }, [id, storage]);
   
+      const generatePDF = async (content: string, title: string) => {
+        // Create a temporary element to hold the HTML content
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = content;
+        document.body.appendChild(tempElement);
+    
+        // Use html2canvas to convert the HTML content to a canvas
+        const canvas = await html2canvas(tempElement);
+        const imgData = canvas.toDataURL('image/png');
+    
+        // Create a jsPDF instance with A4 size
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+    
+        // Define margins
+        const marginLeft = 10;
+        const marginTop = 10;
+        const pdfWidth = 210 - 2 * marginLeft;
+        const pdfHeight = 297 - 2 * marginTop;
+    
+        // Get the image properties
+        const imgProps = pdf.getImageProperties(imgData);
+        const imgWidth = pdfWidth;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+    
+        // Add the image to the PDF with margins
+        pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
+        pdf.save(`${title}.pdf`);
+    
+        // Remove the temporary element
+        document.body.removeChild(tempElement);
+    };
+    
+
     return(
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
@@ -184,7 +224,12 @@ export default function CadernoID(){
                                 </div>
                             </Link>
                             <div className='flex flex-row gap-2 items-center'>
-                                <p><BsFilePdfFill className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                            <p>
+                                    <BsFilePdfFill
+                                        className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'
+                                        onClick={() => generatePDF(notebook.content, notebook.title)}
+                                    />
+                                </p>                            
                             </div>
                         </li>
                     ))}
