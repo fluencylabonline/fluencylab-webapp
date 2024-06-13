@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { getDoc, doc, updateDoc, arrayUnion, collection, getDocs } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, arrayUnion, collection, getDocs, onSnapshot } from 'firebase/firestore';
 import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import { db } from '@/app/firebase';
 
@@ -220,19 +220,25 @@ function AlunoPainel() {
           const [tasks, setTasks] = useState<any>({});
           useEffect(() => {
             const fetchTasks = async () => {
-                try {
-                    const studentDocRef = doc(db, `users/${id}`);
-                    const studentDocSnap = await getDoc(studentDocRef);
-                    if (studentDocSnap.exists()) {
-                        const studentData = studentDocSnap.data() as Aluno;
-                        setTasks(studentData.tasks || {});
-                    }
-                } catch (error) {
-                    console.error('Error fetching tasks:', error);
-                }
+              try {
+                const studentDocRef = doc(db, `users/${id}`);
+                const unsubscribe = onSnapshot(studentDocRef, (doc) => {
+                  if (doc.exists()) {
+                    const studentData = doc.data();
+                    setTasks(studentData.tasks || {});
+                  }
+                });
+                return unsubscribe;
+              } catch (error) {
+                console.error('Error fetching tasks:', error);
+              }
             };
-    
-            fetchTasks();
+        
+            const unsubscribe = fetchTasks();
+            // Ensure unsubscribe is a function before calling it
+            if (unsubscribe instanceof Function) {
+              return () => unsubscribe();
+            }
           }, [id]);
 
 
@@ -242,10 +248,6 @@ function AlunoPainel() {
               await updateDoc(studentDocRef, {
                   [`tasks.${day}`]: arrayUnion({ task, done })
               });
-              setTasks((prevTasks: { [x: string]: any; }) => ({
-                  ...prevTasks,
-                  [day]: [...(prevTasks[day] || []), { task, done }]
-              }));
               toast.success('Tarefa Adicionada!', {
                 position: "top-center",
               });
@@ -427,7 +429,44 @@ function AlunoPainel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, tasksCompletedToastShown]);
 
-
+    async function handleTaskModal() {
+      // Add tasks to the student's document
+      const handleAddTask = async (day: string | boolean, task: string | boolean, done: string | boolean) => {
+        try {
+            const studentDocRef = doc(db, `users/${id}`);
+            await updateDoc(studentDocRef, {
+                [`tasks.${day}`]: arrayUnion({ task, done })
+            });
+        } catch (error) {
+            console.error('Error adding task:', error);
+            throw error;
+        }
+      };
+    
+      const tasks = [
+        ['Task', '1º dia - Criar 10 Flashcards usando o conteúdo das páginas 12 e 17. Pode usar o modelo de Flashcards da última página da apostila ou usar o aplicativo Anki ou algum outro que conheça.', false],
+        ['Task', '2º dia - Criar 10 frases com o vocabulário de Revisão da página 19. Use o Gerador de Frases I. Revise os 10 Flashcards.', false],
+        ['Task', '3º dia - Use post-its para escrever o nome das coisas na sua casa e cole eles. Por exemplo: escreva "door" em um post-it e cole na porta. Revise os 10 Flashcards.', false],
+        ['Task', '4º dia - Grave você lendo o texto da página 18 pelo menos 3 vezes. Varie o ritmo da leitura e tente ao máximo ler com empolgação. Depois disso crie 10 Flashcards com base no texto. Revise os 10 Flashcards.', false],
+        ['Task', '5º dia - Use a gravação do texto que você fez para reescrever ele sem consultar. Revise os 10 Flashcards do primeiro dia e do texto.', false],
+        ['Task', '6º dia - Assista ao Vídeo - 01 e pratique as falas do texto. Utilize a técnica do Shadowing.', false]
+      ];
+    
+      const addAllTasks = async () => {
+        for (const [day, task, done] of tasks) {
+          await handleAddTask(day, task, done);
+        }
+      };
+    
+      toast.promise(
+        addAllTasks(),
+        {
+          loading: 'Adicionando todas as tarefas...',
+          success: 'Todas as tarefas foram adicionadas com sucesso!',
+          error: 'Erro ao adicionar todas as tarefas'
+        }
+      );
+    }
 return (
     <div>
       {/*Modais*/}
@@ -551,7 +590,8 @@ return (
                           </div>
                         </div>
                     </div>
-                      <FluencyButton onClick={openDeleteConfirmationModal} className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas as Tarefas</FluencyButton>                
+                      <FluencyButton onClick={openDeleteConfirmationModal} className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas</FluencyButton>                
+                      <FluencyButton className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='warning'>Modelos de Tarefa</FluencyButton>
                   </div>
 
 
