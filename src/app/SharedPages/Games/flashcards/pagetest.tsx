@@ -53,12 +53,7 @@ const FlashCard: FC = () => {
     const [globalDecksPractice, setGlobalDecksPractice] = useState<boolean>(false);
     const [personalDecksPractice, setPersonalDecksPractice] = useState<boolean>(false);
 
-    const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const totalCards = userCards.length;
-
-    const nextCard = () => {
-        setCurrentCardIndex(prevIndex => prevIndex + 1);
-    };
+    const [playedOnce, setPlayedOnce] = useState<boolean>(false);
     
     const openPersonalDecks = () => {
         setPersonalDecks(true)
@@ -130,11 +125,28 @@ const FlashCard: FC = () => {
                     const decksSnapshot = await getDocs(decksQuery);
                     const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id }));
                     setUserDecks(decksData);
+                    
+                    // Check if any card in any deck has nextReviewDate set
+                    let hasPlayedOnce = false;
+                    for (const deck of decksData) {
+                        const cardsQuery = query(collection(db, 'users', session.user.id, 'Decks', deck.id, 'cards'));
+                        const cardsSnapshot = await getDocs(cardsQuery);
+                        const cardsData = cardsSnapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data(),
+                            review: doc.data().review || 0,
+                            nextReviewDate: doc.data().nextReviewDate
+                        }) as Card);
+                        
+                        if (cardsData.some(card => card.reviewCount > 0)) {
+                            hasPlayedOnce = true;
+                        }
+                    }
+                    setPlayedOnce(hasPlayedOnce);
                 }
-
-                } catch (error) {
-                    console.error('Error fetching personal decks:', error);
-                }
+            } catch (error) {
+                console.error('Error fetching personal decks:', error);
+            }
         };
         fetchUserDecks();
     }, [session]);
@@ -295,7 +307,8 @@ const FlashCard: FC = () => {
                         back: card.back,
                         status: 'to_learn',
                         reviewCount: 0,
-                        nextReviewDate: '0'
+                        lastReviewDate: Timestamp.now(),
+                        nextReviewDate: Timestamp.now()
                     });
                 }));
     
@@ -410,40 +423,6 @@ const FlashCard: FC = () => {
             toast.error('Error updating card status.');
         }
     };
-
-    const reviewDeck = async (deckId: string) => {
-        try {
-            if (!session || !session.user || !session.user.id) {
-                throw new Error('User session not found');
-            }
-    
-            // Fetch cards from the selected deck
-            const cardsQuery = query(collection(db, 'users', session.user.id, 'Decks', deckId, 'cards'));
-            const cardsSnapshot = await getDocs(cardsQuery);
-            const cardsData = cardsSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-                review: doc.data().review || 0,
-                nextReviewDate: doc.data().nextReviewDate || new Date().toISOString()
-            }) as Card);
-    
-            // Filter cards that need review today
-            const today = new Date();
-            const cardsToReviewToday = cardsData.filter(card => {
-                if (!card.nextReviewDate || card.nextReviewDate === '0') return false;
-                const cardNextReviewDate = new Date(card.nextReviewDate);
-                return cardNextReviewDate <= today;
-            });
-    
-            // Set the filtered cards for review
-            setUserCards(cardsToReviewToday);
-            setSelectedUserDeck(deckId); // Optionally set selected deck
-        } catch (error) {
-            console.error('Error fetching cards for review:', error);
-            toast.error('Error fetching cards for review.');
-        }
-    };
-    
     
     return (
         <div className="flex flex-row items-center w-full min-h-[90vh] justify-center">
@@ -452,7 +431,7 @@ const FlashCard: FC = () => {
             <div className='flex flex-row gap-2 items-center'>
                 <FluencyButton variant='warning' onClick={openGlobalDecks}>Decks disponíveis</FluencyButton>
                 <FluencyButton variant='gray' onClick={openPersonalDecks}>Decks Pessoais</FluencyButton>
-                {session?.user.role === 'student' && <FluencyButton variant='confirm' onClick={openModal}>Criar deck</FluencyButton>}
+                {session?.user.role === 'teacher' && <FluencyButton variant='confirm' onClick={openModal}>Criar deck</FluencyButton>}
             </div>
             {globalDecksPractice &&
             <div className='flex flex-col items-center'>
@@ -493,16 +472,11 @@ const FlashCard: FC = () => {
             
             {/* Display counts of cards by status */}
             <div className="flex flex-row gap-4">
-                {/* Display counts of cards */}
-                <p>Total Cards: {totalCards}</p>
-                <p>Cards Seen: {currentCardIndex + 1}</p>
-                <p>Cards Left: {totalCards - currentCardIndex - 1}</p>
-
                 <div>
                     <p>Easy Cards: {userCards.filter(card => card.status === 'easy').length}</p>
                     <p>Medium Cards: {userCards.filter(card => card.status === 'medium').length}</p>
                     <p>Hard Cards: {userCards.filter(card => card.status === 'hard').length}</p>
-                    <p>Para estudar: {userCards.filter(card => card.status === 'to_learn').length}</p>
+                    <p>Não vistas: {userCards.filter(card => card.status === 'to_learn').length}</p>
                 </div>
                 
                 {/* Display counts of cards by review count */}
@@ -516,56 +490,41 @@ const FlashCard: FC = () => {
 
                 {/* Display counts of cards by review count */}
                 <div>
-                <p>To Review Today: {userCards.filter(card => {
-                    if (!card.nextReviewDate || card.nextReviewDate === '0') return false; // Handle cases where nextReviewDate might be null
+                <p>Review Today: {userCards.filter(card => {
+                    if (!card.nextReviewDate) return false; // Handle cases where nextReviewDate might be null
                         const today = new Date(); // Current date
                         const cardNextReviewDate = new Date(card.nextReviewDate);
                         return cardNextReviewDate <= today;
                     }).length}
                 </p>
-
-                <p>Still To Review: {userCards.filter(card => {
-                    if (!card.nextReviewDate) return false; // Handle cases where nextReviewDate might be null
-                        const today = new Date(); // Current date
-                        const cardNextReviewDate = new Date(card.nextReviewDate);
-                        return cardNextReviewDate >= today;
-                    }).length}
-                </p>
                 </div>
-            </div>
+                </div>
 
-                {userCards.length > 0 && currentCardIndex < totalCards ? (
-                    <div className="flashcard" onClick={() => setIsFlipped(!isFlipped)} style={{ backgroundColor: isFlipped ? '#65C6E0' : '#65C6E0' }}>
-                        <div className={`flashcard__front font-bold ${isFlipped ? 'flipped' : ''}`}>
-                            {userCards[currentCardIndex].front}
-                        </div>
-                        <div className={`flashcard__back font-bold ${isFlipped ? 'flipped' : 'hidden'}`}>
-                            {userCards[currentCardIndex].back}
-                        </div>
+            {/* Display the current flashcard */}
+            {userCards[currentCard] && (
+                <div className="flashcard" onClick={() => setIsFlipped(!isFlipped)} style={{ backgroundColor: isFlipped ? '#65C6E0' : '#65C6E0' }}>
+                    <div className={`flashcard__front font-bold ${isFlipped ? 'flipped' : ''}`}>
+                        {userCards[currentCard].front}
                     </div>
-                ) : (
-                    <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-3 rounded-md text-lg font-bold text-fluency-yellow-700'>
-                        No cards left to practice or review today  
+                    <div className={`flashcard__back font-bold ${isFlipped ? 'flipped' : 'hidden'}`}>
+                        {userCards[currentCard].back}
                     </div>
-                )}
+                </div>
+            )}
 
-                {/* Display options after flipping the card */}
-                {isFlipped && (
-                    <div className='flex flex-row gap-2 justify-center w-full text-white'>
-                        <button className='bg-fluency-green-500 p-2 px-6 rounded-md font-bold' onClick={() => updateCardStatus(userCards[currentCardIndex].id, 'easy')}>Easy</button>
-                        <button className='bg-fluency-orange-500 p-2 px-6 rounded-md font-bold' onClick={() => updateCardStatus(userCards[currentCardIndex].id, 'medium')}>Medium</button>
-                        <button className='bg-fluency-red-500 p-2 px-6 rounded-md font-bold' onClick={() => updateCardStatus(userCards[currentCardIndex].id, 'hard')}>Hard</button>
-                        {statusMarked && (
-                            <button className='bg-fluency-blue-500 p-2 px-6 rounded-md font-bold' onClick={() => {
-                                nextCard();
+            {/* Display options after flipping the card */}
+            {isFlipped && (
+                <div className='flex flex-row gap-2 justify-center w-full text-white'>
+                        <button className='bg-fluency-green-500 p-2 px-6 rounded-md font-bold' onClick={() => updateCardStatus(userCards[currentCard].id, 'easy')}>Easy</button>
+                        <button className='bg-fluency-orange-500 p-2 px-6 rounded-md font-bold' onClick={() => updateCardStatus(userCards[currentCard].id, 'medium')}>Medium</button>
+                        <button className='bg-fluency-red-500 p-2 px-6 rounded-md font-bold' onClick={() => updateCardStatus(userCards[currentCard].id, 'hard')}>Hard</button>
+                            {statusMarked && <button className='bg-fluency-blue-500 p-2 px-6 rounded-md font-bold' onClick={() => {
+                                setCurrentCard(prevCard => (prevCard + 1) % userCards.length);
                                 setIsFlipped(false);
-                                setStatusMarked(false);
-                            }}>
-                                Next Card
-                            </button>
-                        )}
-                    </div>
-                )}
+                                setStatusMarked(false)
+                            }}><MdArrowForward className='w-6 h-auto' /></button>}
+                        </div>
+                    )}
                     </div>
                 </div>}
             </div>
@@ -617,16 +576,7 @@ const FlashCard: FC = () => {
                                     <li className='flex flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={userDeck.id}>
                                         <p className='font-bold'>{userDeck.name}</p>
                                         <div className='flex flex-row gap-2 items-center'>                                       
-                                        <FluencyButton
-                                            disabled={userCards.filter(card => {
-                                                if (!card.nextReviewDate) return false; // Handle cases where nextReviewDate might be null
-                                                const today = new Date(); // Current date
-                                                const cardNextReviewDate = new Date(card.nextReviewDate);
-                                                return cardNextReviewDate <= today;
-                                            }).length === 0}
-                                            variant="confirm"
-                                            onClick={() => reviewDeck(selectedUserDeck)}
-                                            >Review</FluencyButton>                                       
+                                            <FluencyButton disabled variant='confirm' value={userDeck.name} >Review</FluencyButton>                                       
                                             <FluencyButton className='bg-fluency-blue-500 hover:bg-fluency-blue-600 dark:bg-fluency-blue-700 hoverdark:bg-fluency-blue-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out' 
                                             value={userDeck.name} onClick={() => selectUserDeck(userDeck.id)}>Practice</FluencyButton> 
                                         </div>
