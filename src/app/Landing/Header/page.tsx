@@ -74,10 +74,17 @@ return(
                     <div className="flex lg:flex-1">
                         <a href="#" className="-m-1.5 p-1.5">
                             <span className="sr-only">FluencyLab</span>
+                            {/*
                             <Image
                             className="lg:block md:flex hidden h-10 w-auto hover:contrast-150 ease-in-out duration-300"
                             src={IconLogoDark}
                             alt="FluencyLab"/>
+                            */}
+                            
+                            <video className='lg:block md:flex hidden h-[50px] w-auto hover:contrast-150' controls={false} loop autoPlay>
+                              <source src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-looping-only.webm?alt=media&token=040f0a1f-e733-4cd7-9062-e904c577d2c1" type="video/webm" />
+                            </video>
+
                         </a>
                     </div>
                     <div className="flex lg:hidden">
