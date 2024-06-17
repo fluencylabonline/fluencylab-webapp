@@ -15,6 +15,7 @@ import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 
 //Next Imports
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 //Notification
 import { toast, Toaster } from 'react-hot-toast';
@@ -227,7 +228,6 @@ function Perfil() {
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
               <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-              <p>Sem notificações para mostrar</p>
             </div>
                  
         </div>
