@@ -25,6 +25,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import * as XLSX from 'xlsx';
 import Contratos from '../contratos/page';
 import { CgRemoveR } from 'react-icons/cg';
+import AlunosPassados from './AlunosPassados';
 
 interface Aluno {
   id: string;
@@ -396,6 +397,7 @@ const exportToExcel = () => {
       >
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="financeiro">Financeiro</option>
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="juridico">Jurídico</option>
+        <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="lista">Lista de Alunos</option>
       </select>
 
       {selectedOption === 'financeiro' && (
@@ -635,6 +637,10 @@ const exportToExcel = () => {
 
       {selectedOption === 'juridico' && (
           <Contratos />
+      )}
+
+      {selectedOption === 'lista' && (
+          <AlunosPassados />
       )}
 
     <Toaster />

@@ -517,7 +517,7 @@ function Alunos(){
                                         <p className='text-lg font-semibold'>Aulas feitas: <span>{student.doneClassesCount}</span></p>
                                         <p className='text-lg cursor-pointer font-semibold p-1 rounded-md hover:text-fluency-blue-600 hover:dark:bg-fluency-gray-600 hover:dark:text-fluency-blue-300 hover:bg-fluency-blue-100 transition-all duration-300 ease-in-out' onClick={() => retrieveOverdueClasses(student.id)}>Aulas em atraso: <span>{student.overdueClassesCount}</span></p>
                                     </div>  
-                                    <div className="flex flex-row items-center justify-center w-full gap-2 mt-5 mb-2">
+                                    <div className="lg:flex lg:flex-row md:flex md:flex-col flex flex-col items-center justify-center w-full gap-2 mt-5 mb-2">
                                         <Link href={{ pathname: `alunos/caderno/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
                                             <button className="flex flex-row items-center gap-1 font-semibold px-3 py-2 text-center text-md rounded-lg border border-fluency-yellow-500 hover:border-fluency-yellow-600 bg-fluency-yellow-500 text-fluency-text-dark hover:bg-fluency-yellow-600 focus:bg-fluency-yellow-700 transition-all ease-in-out duration-100 dark:bg-transparent dark:text-fluency-yellow-500 dark:hover:text-white dark:hover:bg-fluency-yellow-500 hover:dark:border-fluency-yellow-500">
                                                 Caderno <TbBook2 className='w-5 h-auto' />
@@ -568,8 +568,9 @@ function Alunos(){
                                 {student.classDatesWithStatus.map((classDate, index) => (
                                     <div key={index} className="flex flex-row gap-2 items-center justify-center">
                                         <div className="group cursor-pointer relative inline-block text-center">
-                                            <p className={`flex flex-row font-semibold gap-1 p-1 px-2 text-sm rounded-lg ${classDate.status === 'Feita' ? 'text-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-blue-600' : classDate.status === 'Atrasada' ? 'text-fluency-red-600' : '' }`}>
-                                                {`${classDate.date.getDate()} de ${monthsPT[classDate.date.getMonth()]} de ${classDate.date.getFullYear()}`}
+                                            <p className={`flex flex-row font-semibold gap-1 p-1 px-2 rounded-lg text-sm ${classDate.status === 'Feita' ? 'text-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-blue-600' : classDate.status === 'Atrasada' ? 'text-fluency-red-600' : '' }`}>
+                                                <span className="md:hidden lg:hidden ">{`${classDate.date.getDate()}/${monthsPT[classDate.date.getMonth()]}`}</span>
+                                                <span className="hidden sm:inline">{`${classDate.date.getDate()} de ${monthsPT[classDate.date.getMonth()]} de ${classDate.date.getFullYear()}`}</span>
                                             </p>
 
                                             <div className={`opacity-0 transition-all duration-500 ease-in-out w-28 text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 bottom-full -left-1/2 ml-14 px-3 pointer-events-none  ${classDate.status === 'Feita' ? 'text-fluency-text-dark bg-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-text-dark bg-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-text-dark bg-fluency-blue-500' : classDate.status === 'Atrasada' ? 'text-fluency-text-dark bg-fluency-red-500' : '' }`}>

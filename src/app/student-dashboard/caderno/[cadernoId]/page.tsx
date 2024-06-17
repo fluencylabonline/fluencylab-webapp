@@ -153,40 +153,45 @@ export default function CadernoID(){
       }, [id, storage]);
   
       const generatePDF = async (content: string, title: string) => {
-        // Create a temporary element to hold the HTML content
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = content;
-        document.body.appendChild(tempElement);
+        try {
+            // Create a temporary element to hold the HTML content
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = content;
+            document.body.appendChild(tempElement);
     
-        // Use html2canvas to convert the HTML content to a canvas
-        const canvas = await html2canvas(tempElement);
-        const imgData = canvas.toDataURL('image/png');
+            // Use html2canvas to convert the HTML content to a canvas
+            const canvas = await html2canvas(tempElement);
     
-        // Create a jsPDF instance with A4 size
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
+            // Create a jsPDF instance with A4 size
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
     
-        // Define margins
-        const marginLeft = 10;
-        const marginTop = 10;
-        const pdfWidth = 210 - 2 * marginLeft;
-        const pdfHeight = 297 - 2 * marginTop;
+            // Get the canvas data as base64-encoded PNG
+            const imgData = canvas.toDataURL('image/png');
     
-        // Get the image properties
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgWidth = pdfWidth;
-        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+            // Define margins and dimensions
+            const marginLeft = 10;
+            const marginTop = 10;
+            const pdfWidth = 210 - 2 * marginLeft;
+            const pdfHeight = 297 - 2 * marginTop;
     
-        // Add the image to the PDF with margins
-        pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
-        pdf.save(`${title}.pdf`);
+            // Add the image to the PDF with margins
+            pdf.addImage(imgData, 'PNG', marginLeft, marginTop, pdfWidth, pdfHeight);
     
-        // Remove the temporary element
-        document.body.removeChild(tempElement);
+            // Save the PDF with the specified title
+            pdf.save(`${title}.pdf`);
+    
+            // Remove the temporary element
+            document.body.removeChild(tempElement);
+        } catch (error) {
+            toast.error("Erro ao gerar PDF")
+            console.error('Error generating PDF:', error);
+        }
     };
+    
     
 
     return(
