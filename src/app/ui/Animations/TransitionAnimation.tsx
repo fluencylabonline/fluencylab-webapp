@@ -53,8 +53,8 @@ const TransitionAnimation = () => {
       <iframe className='w-auto h-auto' src="https://lottie.host/embed/540f2830-c93c-4694-8118-d0bb9aac1062/YPUBvF63A7.json"></iframe>
       */}
 
-      <video className='w-[14%] min-h-screen' controls={false} loop autoPlay>
-        <source src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/animacao%201%20entrada.webm?alt=media&token=c9ea4449-d263-4612-895e-078cd7da26b6" type="video/webm" />
+      <video className='w-[15%] min-h-screen' controls={false} loop autoPlay>
+        <source src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-animation-1.webm?alt=media&token=ab840307-4c27-4dd5-9830-d0bd8aa6f2c8" type="video/webm" />
       </video>
 
       <div className={`text-container ${fade ? 'fade-in' : 'fade-out'}`}>

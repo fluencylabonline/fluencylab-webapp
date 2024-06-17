@@ -72,7 +72,7 @@ return(
                 {/*Desktop*/}
                 <div className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
-                        <a href="#" className="-m-1.5 p-1.5">
+                        <a href="#" className="-m-1.5 p-1.2">
                             <span className="sr-only">FluencyLab</span>
                             {/*
                             <Image
@@ -81,7 +81,7 @@ return(
                             alt="FluencyLab"/>
                             */}
                             
-                            <video className='lg:block md:flex hidden h-[50px] w-auto hover:contrast-150' controls={false} loop autoPlay>
+                            <video className='lg:block md:flex hidden h-[60px] w-auto hover:contrast-150' controls={false} loop autoPlay>
                               <source src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-looping-only.webm?alt=media&token=040f0a1f-e733-4cd7-9062-e904c577d2c1" type="video/webm" />
                             </video>
 
