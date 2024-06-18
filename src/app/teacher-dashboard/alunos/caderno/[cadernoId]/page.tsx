@@ -26,6 +26,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import { IoMdCloudOutline } from 'react-icons/io';
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
+import { HiOutlineDocumentReport } from 'react-icons/hi';
 
 interface Notebook {
     studentName: string;
@@ -35,6 +36,7 @@ interface Notebook {
     createdAt: any;
     student: string;
     content: any;
+    classReport?: string;
 }
 
 interface Aluno {
@@ -335,7 +337,48 @@ export default function Caderno(){
         }
     };
 
-    
+    const [modalNoteId, setModalNoteId] = useState<string | null>(null);
+    const [reportContent, setReportContent] = useState<string>('');
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+    const handleOpenReportModal = (notebookId: string, currentReport: string) => {
+        setModalNoteId(notebookId);
+        setReportContent(currentReport);
+        setIsReportModalOpen(true);
+    };
+
+    const handleCloseReportModal = () => {
+        setModalNoteId(null);
+        setReportContent('');
+        setIsReportModalOpen(false);
+    };
+
+    const handleReportContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setReportContent(e.target.value);
+    };
+
+    const saveReport = async () => {
+        if (modalNoteId) {
+            const notebookRef = doc(db, `users/${id}/Notebooks/${modalNoteId}`);
+            await updateDoc(notebookRef, {
+                classReport: reportContent
+            });
+
+            const updatedNotebooks = notebooks.map((notebook) => {
+                if (notebook.id === modalNoteId) {
+                    return { ...notebook, classReport: reportContent };
+                }
+                return notebook;
+            });
+
+            setNotebooks(updatedNotebooks);
+            handleCloseReportModal();
+            toast.success('Relatório de aula salvo!', {
+                position: "top-center",
+            });
+        }
+    };
+
     return(
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
@@ -377,6 +420,7 @@ export default function Caderno(){
                             <div className='flex flex-row gap-2 items-center'>
                                 <p><MdDeleteSweep onClick={() => handleOpenDeleteModal(notebook.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
                                 <p><GiSchoolBag onClick={() => createReviewTask(notebook.description, notebook.id)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><HiOutlineDocumentReport onClick={() => handleOpenReportModal(notebook.id, notebook.classReport || '')} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
                             </div>
                         </li>
                     ))}
@@ -400,6 +444,35 @@ export default function Caderno(){
             </div>
 
             <Toaster />
+
+            {isReportModalOpen && (
+                <div className="fixed z-50 inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen">
+
+                        <div className="fixed inset-0 transition-opacity">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                        
+                        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-full p-6">
+                            <div className='flex flex-col items-center justify-center p-1 gap-3'>
+                                <h2 className="text-lg font-bold mb-2 p-1">Adicionar Relatório de Aula</h2>
+                                <textarea
+                                    value={reportContent}
+                                    onChange={handleReportContentChange}
+                                    placeholder="Digite o relatório de aula"
+                                    className="dark:bg-fluency-pages-dark w-full p-2 border border-gray-300 rounded-md"
+                                    rows={5}
+                                />
+                                <div className='flex flex-row items-center justify-center gap-2'>
+                                    <FluencyButton variant='confirm' className="py-2" onClick={saveReport}>Salvar</FluencyButton>
+                                    <FluencyButton variant='warning' className="py-2" onClick={handleCloseReportModal}>Cancelar</FluencyButton>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )}
 
             {isModalOpen && 
             <div className="fixed z-50 inset-0 overflow-y-auto">

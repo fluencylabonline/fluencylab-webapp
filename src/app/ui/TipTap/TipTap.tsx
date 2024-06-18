@@ -330,6 +330,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     if (editor) {
       editor.chain().focus().insertContent(content).run();
     }
+    setWorkbooks(false)
   };
 
   return (
@@ -419,7 +420,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                                   title={`Unidade ${groupIndex + 1}`}
                                   indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
                                 >
-                                  <ul>
+                                  <ul className='flex flex-col gap-1'>
                                     {group.docs.map(doc => (
                                       <li className='flex flex-row gap-2 justify-between items-center' key={doc.id}>
                                         <p className='text-lg font-bold'>{doc.data.title}</p>

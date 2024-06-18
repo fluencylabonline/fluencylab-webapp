@@ -82,7 +82,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
                 ):(
                 <div>
                     <Image
-                        className="h-8 w-auto mr-1"
+                        className="h-auto w-40 mr-1"
                         src={Logo}
                         alt="FluencyLab"
                         priority
