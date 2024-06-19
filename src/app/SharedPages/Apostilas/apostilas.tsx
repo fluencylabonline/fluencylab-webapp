@@ -78,12 +78,14 @@ export default function ApostilasCreation() {
             setSearchResults([]);
             return;
         }
-
+    
         const filtered = notebooks.filter(notebook =>
-            notebook.title.toLowerCase().includes(searchTerm.toLowerCase())
+            notebook.title && notebook.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
+        
         setSearchResults(filtered);
     }, [searchTerm, notebooks]);
+    
 
     function handleSearchTermChange(event: React.ChangeEvent<HTMLInputElement>) {
         setSearchTerm(event.target.value);

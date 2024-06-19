@@ -122,6 +122,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const { data: session } = useSession();
   const notebookID = params.get('notebook') || '';
   const studentID = params.get('student');
+
+
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
     setWorkbooks(true)

@@ -733,6 +733,7 @@ const FlashCard: FC = () => {
                                     <select
                                         value={selectedStudentId}
                                         onChange={(e) => setSelectedStudentId(e.target.value)}
+                                        className='p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark px-4'
                                         >
                                         <option value="">Selecione o Aluno</option>
                                         {students.map(student => (

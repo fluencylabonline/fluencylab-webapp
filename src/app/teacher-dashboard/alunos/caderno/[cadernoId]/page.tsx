@@ -85,32 +85,31 @@ export default function Caderno(){
 
     //Notebooks Creation
     const [notebooks, setNotebooks] = useState<Notebook[]>([]);
-    useEffect(() => {
-        const fetchNotebooks = async () => {
-            try {
-                const notebookRef = collection(db, `users/${id}/Notebooks`);
-                const snapshot = await getDocs(notebookRef);
-                const notebookList: Notebook[] = [];
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const notebook: Notebook = {
-                        id: doc.id,
-                        title: data.title || '',
-                        description: data.description || '',
-                        createdAt: data.createdAt || '',
-                        studentName: data.studentName || '',
-                        student: data.student || '',
-                        content: data.content || '',
-                    };
-                    notebookList.push(notebook);
-                });
-                setNotebooks(notebookList);
-            } catch (error) {
-                console.error('Error fetching notebooks:', error);
-            }
-        };
-        
+    const fetchNotebooks = async () => {
+        try {
+            const notebookRef = collection(db, `users/${id}/Notebooks`);
+            const snapshot = await getDocs(notebookRef);
+            const notebookList: Notebook[] = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const notebook: Notebook = {
+                    id: doc.id,
+                    title: data.title || '',
+                    description: data.description || '',
+                    createdAt: data.createdAt || '',
+                    studentName: data.studentName || '',
+                    student: data.student || '',
+                    content: data.content || '',
+                };
+                notebookList.push(notebook);
+            });
+            setNotebooks(notebookList);
+        } catch (error) {
+            console.error('Error fetching notebooks:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchNotebooks();
     }, [id]);
 
@@ -148,14 +147,9 @@ export default function Caderno(){
             toast.success('Caderno novo criado!', {
                 position: "top-center",
             });
-             // Fetch and update notebooks after creation
-             const updatedNotebooks: Notebook[] = [...notebooks];
-             const newNotebook = {
-                 id: notebookRef.id,
-                 ...notebookData,
-             };
-             updatedNotebooks.push(newNotebook);
-             setNotebooks(updatedNotebooks);
+
+            // Fetch and update notebooks after creation
+            await fetchNotebooks();
         } catch (error) {
             console.error('Error creating notebook:', error);
         }
