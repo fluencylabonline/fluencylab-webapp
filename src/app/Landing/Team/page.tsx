@@ -123,8 +123,8 @@ return(
                   alt="FluencyLab"
                   />
                 <div className="flex flex-col items-center">
-                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Anny</p>
-                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professora de Libras</p>
+                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Giulia</p>
+                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professora de Inglês para crianças</p>
                 </div>
               </div>
 

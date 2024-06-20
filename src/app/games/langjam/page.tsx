@@ -67,7 +67,7 @@ const LangJam = () => {
                 <div className='m-5 flex items-center overflow-hidden'>
                     <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark text-zinc-900 dark:text-gray-100 rounded-xl lg:p-0 p-10 flex flex-col justify-center items-center gap-5 w-screen h-max'>
                         <Image
-                            className="h-auto w-auto"
+                            className="h-32 w-auto p-4"
                             src={Logo}
                             alt="FluencyLab"
                             priority

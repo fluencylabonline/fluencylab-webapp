@@ -167,9 +167,14 @@ export default function NivelamentoTeacher() {
     return (
         <div className="p-4 mt-4 flex flex-col items-center w-full">
 
-            <div className="p-4 flex flex-col items-center gap-1">
-                <h2 className="text-xl font-bold">Nível 1 - Conhecimento básico</h2>
-                <ResponsiveContainer width="100%" height={300}>
+        <div className="p-4 flex flex-col items-center gap-1">
+            <h2 className="text-xl font-bold">Nível 1 - Conhecimento básico</h2>
+            <ResponsiveContainer width="100%" height={300}>
+                {mergedNivel1Data.length === 0 ? (
+                    <div className="flex items-center justify-center h-full">
+                        <span>Sem informação para mostrar</span>
+                    </div>
+                ) : (
                     <LineChart data={mergedNivel1Data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="data" />
@@ -187,12 +192,18 @@ export default function NivelamentoTeacher() {
                             />
                         ))}
                     </LineChart>
-                </ResponsiveContainer>
-            </div>
+                )}
+            </ResponsiveContainer>
+        </div>
 
-            <div className="p-4 flex flex-col items-center gap-1">
-                <h2 className="text-xl font-bold">Nível 2- Escrita</h2>
-                <ResponsiveContainer width="100%" height={300}>
+        <div className="p-4 flex flex-col items-center gap-1">
+            <h2 className="text-xl font-bold">Nível 2- Escrita</h2>
+            <ResponsiveContainer width="100%" height={300}>
+                {nivel2Data.length === 0 ? (
+                    <div className="flex items-center justify-center h-full">
+                        <span>Sem informação para mostrar</span>
+                    </div>
+                ) : (
                     <LineChart data={nivel2Data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="timeStamp" />
@@ -201,12 +212,18 @@ export default function NivelamentoTeacher() {
                         <Legend />
                         <Line type="monotone" dataKey="score" name={scoreLabel} stroke="#8884d8" activeDot={{ r: 8 }} />
                     </LineChart>
-                </ResponsiveContainer>
-            </div>
+                )}
+            </ResponsiveContainer>
+        </div>
 
-            <div className="p-4 flex flex-col items-center gap-1">
-                <h2 className="text-xl font-bold">Nível 3 - Audição</h2>
-                <ResponsiveContainer width="100%" height={300}>
+        <div className="p-4 flex flex-col items-center gap-1">
+            <h2 className="text-xl font-bold">Nível 3 - Audição</h2>
+            <ResponsiveContainer width="100%" height={300}>
+                {nivel3Data.length === 0 ? (
+                    <div className="flex items-center justify-center h-full">
+                        <span>Sem informação para mostrar</span>
+                    </div>
+                ) : (
                     <LineChart data={nivel3Data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="data" />
@@ -215,22 +232,22 @@ export default function NivelamentoTeacher() {
                         <Legend />
                         <Line type="monotone" dataKey="pontos" name={pontosLabel} stroke="#82ca9d" activeDot={{ r: 8 }} />
                     </LineChart>
-                </ResponsiveContainer>
-            </div>
-
-            {nivelamentoPermitido === false ? (
-                <>
-                    <FluencyButton className="mt-4" variant="warning">Aguardando Aluno Fazer Nivelamento</FluencyButton>
-                </>
-            ):(
-                <>
-                    <FluencyButton className="mt-4" variant="confirm" onClick={handleNivelamento}>Refazer Nivelamento do Aluno</FluencyButton>
-                </>
-            )}
-
-            
+                )}
+            </ResponsiveContainer>
         </div>
-    );
+
+        {nivelamentoPermitido === false ? (
+            <>
+                <FluencyButton className="mt-4" variant="warning">Aguardando Aluno Fazer Nivelamento</FluencyButton>
+            </>
+        ):(
+            <>
+                <FluencyButton className="mt-4" variant="confirm" onClick={handleNivelamento}>Refazer Nivelamento do Aluno</FluencyButton>
+            </>
+        )}
+
+    </div>
+);
 }
 
 // Utility function to assign different colors to different lines

@@ -10,16 +10,20 @@ import Tiptap from './TipTap'
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 const NotebookEditor = () => {
+  const params = new URLSearchParams(window.location.search);
+  const workbook = params.get('workbook');
+  const lesson = params.get('lesson');
+
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
   useEffect(() => {
-    const fetchNotebookContent = async (lesson: string) => {
+    const fetchNotebookContent = async () => {
       try {
         setLoading(true); // Set loading to true when fetching content
-        const notebookDoc = await getDoc(doc(db, `Notebooks/First Steps/Lessons/${lesson}`));
+        const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
         if (notebookDoc.exists()) {
           setContent(notebookDoc.data().content);
         }
@@ -29,15 +33,8 @@ const NotebookEditor = () => {
         setLoading(false);
       }
     };
-
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const lesson = params.get('lesson');
-      if (lesson) {
-        fetchNotebookContent(lesson);
-      }
-    }
-  }, []); // Empty dependency array ensures this runs once after the initial render
+    fetchNotebookContent()
+  }, [workbook, lesson]); // Empty dependency array ensures this runs once after the initial render
 
   const handleContentChange = async (newContent: string) => {
     if (!isTyping) {
@@ -56,7 +53,7 @@ const NotebookEditor = () => {
       const params = new URLSearchParams(window.location.search);
       const lesson = params.get('lesson');
       if (lesson) {
-        await setDoc(doc(db, `Notebooks/First Steps/Lessons/${lesson}`), { content: newContent }, { merge: true });
+        await setDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`), { content: newContent }, { merge: true });
       }
     } catch (error) {
       console.error('Error saving notebook content: ', error);

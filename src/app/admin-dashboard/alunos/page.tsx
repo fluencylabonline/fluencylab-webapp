@@ -152,12 +152,17 @@ export default function Students() {
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
   
-      await setDoc(pastUserRef, userData);
-      await deleteDoc(userRef);
+      if (userData) {
+        // Add the 'encerrouEm' field with the current date
+        userData.encerrouEm = new Date().toISOString();
   
-      toast.error('Aluno deletado!', {
-        position: 'top-center',
-      });
+        await setDoc(pastUserRef, userData);
+        await deleteDoc(userRef);
+  
+        toast.error('Aluno deletado!', {
+          position: 'top-center',
+        });
+      }
     } catch (error) {
       console.error('Error transferring user to past-users:', error);
       toast.error('Erro ao deletar aluno!', {

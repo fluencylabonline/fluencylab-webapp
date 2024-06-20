@@ -20,14 +20,15 @@ interface Aluno {
     idioma: string;
     payments: any;
     studentMail: string;
-    status: string;
+    comecouEm: string;
+    encerrouEm?: string;
     diaAula: string;
+    status: string;
 }
 
 export default function AlunosPassados() {
     const [alunos, setAlunos] = useState<Aluno[]>([]);
-    const [currentCollection, setCurrentCollection] = useState<string>('users'); // Default to 'users'
-
+    const [currentCollection, setCurrentCollection] = useState<string>('users');
     useEffect(() => {
         const unsubscribe = onSnapshot(getQuery(), (snapshot) => {
             const updatedAlunos: Aluno[] = [];
@@ -41,8 +42,10 @@ export default function AlunosPassados() {
                     idioma: doc.data().idioma,
                     payments: doc.data().payments,
                     studentMail: doc.data().email,
-                    status: doc.data().status,
                     diaAula: doc.data().diaAula,
+                    comecouEm: doc.data().comecouEm,
+                    encerrouEm: doc.data().encerrouEm,
+                    status: currentCollection === 'users' ? 'Ativo' : 'Desativado',  
                 };
                 updatedAlunos.push(aluno);
             });
@@ -52,15 +55,18 @@ export default function AlunosPassados() {
         return () => unsubscribe();
     }, [currentCollection]); // Re-run effect when currentCollection changes
 
-    // Function to generate the Firestore query based on currentCollection
     const getQuery = () => {
         if (currentCollection === 'users') {
             return query(collection(db, 'users'), where('role', '==', 'student'));
         } else if (currentCollection === 'past_students') {
             return query(collection(db, 'past_students'));
         }
-        // Default to users collection
+        
         return query(collection(db, 'users'), where('role', '==', 'student'));
+    };
+
+    const capitalizeFirstLetter = (string: string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     return (
@@ -83,22 +89,24 @@ export default function AlunosPassados() {
             </div>
             <Table>
                 <TableHeader>
-                    <TableColumn>ID</TableColumn>
                     <TableColumn>Nome</TableColumn>
                     <TableColumn>Professor</TableColumn>
                     <TableColumn>Mensalidade</TableColumn>
                     <TableColumn>Idioma</TableColumn>
+                    <TableColumn>Começou em</TableColumn>
+                    <TableColumn>Encerrou em</TableColumn>
                     <TableColumn>Status</TableColumn>
                 </TableHeader>
                 <TableBody>
                     {alunos.map((aluno) => (
                         <TableRow key={aluno.id}>
-                            <TableCell>{aluno.id}</TableCell>
                             <TableCell>{aluno.name}</TableCell>
                             <TableCell>{aluno.professor}</TableCell>
                             <TableCell>{aluno.mensalidade}</TableCell>
-                            <TableCell>{aluno.idioma}</TableCell>
-                            <TableCell>{aluno.status}</TableCell>
+                            <TableCell>{capitalizeFirstLetter(aluno.idioma)}</TableCell>
+                            <TableCell>{aluno.comecouEm}</TableCell>
+                            <TableCell>{aluno.encerrouEm}</TableCell>
+                            <TableCell>{capitalizeFirstLetter(aluno.status)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

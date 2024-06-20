@@ -114,63 +114,9 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
   const workbook = params.get('workbook');
   const lesson = params.get('lesson');
-
-  const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocs[]>([]); // Store the fetched documents
-
-  // Function to fetch all documents from Firestore
-  const fetchDocs = async () => {
-    try {
-      const lessonsRef = collection(db, 'Notebooks', 'The Basics', 'Lessons');
-      const lessonsSnapshot: QuerySnapshot<DocumentData> = await getDocs(lessonsRef);
-      const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        data: doc.data(),
-        unit: doc.data().unit || 'Uncategorized', // Assuming there's a 'unit' field in your documents
-      }));
-
-      // Group documents by unit
-      const groupedByUnit: { [key: string]: LessonDoc[] } = fetchedLessonDocs.reduce((acc: { [key: string]: LessonDoc[] }, doc: LessonDoc) => {
-        const unit = doc.unit;
-        if (!acc[unit]) {
-          acc[unit] = [];
-        }
-        acc[unit].push(doc);
-        return acc;
-      }, {});
-
-      // Transform grouped object into an array
-      const groupedLessonDocs: GroupedLessonDocs[] = Object.keys(groupedByUnit).map(unit => ({
-        unit,
-        docs: groupedByUnit[unit],
-      }));
-
-      setLessonDocs(groupedLessonDocs);
-    } catch (error) {
-      console.error('Error fetching documents: ', error);
-    }
-  };
-
-  // Effect to fetch documents from Firestore on component mount
-  useEffect(() => {
-    fetchDocs();
-  }, []);
-
-
+  
   const [description, setDescription] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
-  const [realtimeContent, setRealtimeContent] = useState<string>(content);
-
-  useEffect(() => {
-    const notebookRef = doc(db, `Notebooks/First Steps/Lessons/${lesson}`);
-    const unsubscribe = onSnapshot(notebookRef, (doc) => {
-      if (doc.exists()) {
-        const { content: updatedContent } = doc.data();
-        setRealtimeContent(updatedContent);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [content]);
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDescription(event.target.value);
@@ -178,7 +124,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   const handleUpdateDescription = async () => {
     try {
-      await updateDoc(doc(db, `Notebooks/First Steps/Lessons/${lesson}`), {
+      await updateDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`), {
         description: newDescription,
       });
       setDescription(newDescription);
@@ -249,7 +195,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     },
     autofocus: true,
     editable,
-    content: realtimeContent,
+    content: content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
