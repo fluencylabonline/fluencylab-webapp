@@ -9,22 +9,25 @@ import {
   TableCell,
   Tooltip
 } from '@nextui-org/react';
+import { v4 as uuidv4 } from 'uuid';
+
 import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc  } from 'firebase/firestore';
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { db } from '@/app/firebase';
+import * as XLSX from 'xlsx';
 import { IoIosCheckbox } from 'react-icons/io';
 import { MdFolderDelete, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
 import { TbPigMoney } from 'react-icons/tb';
 import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
+import { FaUserCircle } from 'react-icons/fa';
+import { CgRemoveR } from 'react-icons/cg';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
-import { v4 as uuidv4 } from 'uuid';
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { Toaster, toast } from 'react-hot-toast';
 import FluencyInput from '@/app/ui/Components/Input/input';
-import { FaUserCircle } from 'react-icons/fa';
-import * as XLSX from 'xlsx';
+
+import { Toaster, toast } from 'react-hot-toast';
+
 import Contratos from '../contratos/page';
-import { CgRemoveR } from 'react-icons/cg';
 import AlunosPassados from './AlunosPassados';
 
 interface Aluno {
@@ -38,6 +41,7 @@ interface Aluno {
   studentMail: string;
   status: string;
   diaAula: string;
+  diaPagamento?: number;
 }
 
 interface Professor {
@@ -70,6 +74,7 @@ export default function Students() {
             studentMail: doc.data().email,
             status: doc.data().status,
             diaAula: doc.data().diaAula,
+            diaPagamento: doc.data().diaPagamento,
           };
           updatedAlunos.push(aluno);
         });
@@ -79,7 +84,6 @@ export default function Students() {
       return () => unsubscribe();
     }, []);
   
-
   const handleMonthChange = (value: string) => {
     setSelectedMonth(value);
   };
@@ -129,7 +133,6 @@ export default function Students() {
     }
   };
   
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string>('');
   const [selectedUserName, setSelectedUserName] = useState<string>('');
@@ -301,6 +304,7 @@ export default function Students() {
       const userRef = doc(db, 'users', selectedAluno.id);
       const updatedData = {
         mensalidade: selectedAluno.mensalidade,
+        diaPagamento: selectedAluno.diaPagamento,
         idioma: selectedLanguages.length > 0 ? selectedLanguages[0] : null,
         professor: selectedProfessor ? selectedProfessor.name : selectedAluno.professor,
         professorId: selectedProfessor ? selectedProfessor.id : selectedAluno.professor,
@@ -320,13 +324,11 @@ export default function Students() {
     if (!selectedAluno) return;
   
     try {
-      // Clear the professor and professorId fields of the selected student
       const userRef = doc(db, 'users', selectedAluno.id);
       await updateDoc(userRef, {
         professor: '',
         professorId: ''
       });
-  
       toast.success('Professor removido!', { position: 'top-center' });
       closeEditModal()
     } catch (error) {
@@ -334,7 +336,6 @@ export default function Students() {
       toast.error('Erro ao remover professor!', { position: 'top-center' });
     }
   };
-  
   
   const [searchQuery, setSearchQuery] = useState<string>('');
   const handleOnClick = async (studentMail: string, selectedMonth: string, paymentStatus: string, studentName: string, studentEmail: string, paymentKey: string, paymentKeyProp: string, mensalidade: number, selectedYear: number) => {
@@ -372,7 +373,6 @@ export default function Students() {
     }
   };
   
-
 const totalStudents = alunos.length;
 const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensalidade), 0);
 const [selectedOption, setSelectedOption] = useState('financeiro');
@@ -449,7 +449,7 @@ const exportToExcel = () => {
         <TableColumn>Nome</TableColumn>
           <TableColumn>Professor</TableColumn>
           <TableColumn>Mensalidade</TableColumn>
-          <TableColumn>Idioma</TableColumn>
+          <TableColumn>Dia de Pagamento</TableColumn>
           <TableColumn className='flex flex-col items-center justify-center'>Pagamento</TableColumn>
           <TableColumn>Ações</TableColumn>
         </TableHeader>
@@ -464,7 +464,7 @@ const exportToExcel = () => {
                 </TableCell>
               <TableCell>{aluno.professor}</TableCell>
               <TableCell>R$ {aluno.mensalidade}</TableCell>
-              <TableCell>{aluno.idioma}</TableCell>
+              <TableCell>Dia: {aluno.diaPagamento}</TableCell>
               <TableCell className='flex flex-col items-center'>
                 {renderPaymentStatus(aluno.payments)}
               </TableCell>
@@ -585,6 +585,15 @@ const exportToExcel = () => {
                                   type="number"
                                   value={selectedAluno.mensalidade}
                                   onChange={(e) => setSelectedAluno({ ...selectedAluno, mensalidade: Number(e.target.value) })}
+                                />
+                            </div>
+
+                            <div>
+                              <p className='text-xs font-semibold'>Dia de Pagamento</p>
+                                <FluencyInput
+                                  type="number"
+                                  value={selectedAluno.diaPagamento}
+                                  onChange={(e) => setSelectedAluno({ ...selectedAluno, diaPagamento: Number(e.target.value) })}
                                 />
                             </div>
 
