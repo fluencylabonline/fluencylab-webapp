@@ -10,17 +10,18 @@ import Tiptap from './TipTap'
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 const NotebookEditor = () => {
-  const params = new URLSearchParams(window.location.search);
-  const workbook = params.get('workbook');
-  const lesson = params.get('lesson');
-
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
-
+  const params = new URLSearchParams(window.location.search);
+  const workbook = params.get('workbook');
+  const lesson = params.get('lesson');
   useEffect(() => {
+    // Fetching data only on the client-side
     const fetchNotebookContent = async () => {
+      
+
       try {
         setLoading(true); // Set loading to true when fetching content
         const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
@@ -33,8 +34,11 @@ const NotebookEditor = () => {
         setLoading(false);
       }
     };
-    fetchNotebookContent()
-  }, [workbook, lesson]); // Empty dependency array ensures this runs once after the initial render
+
+    if (typeof window !== 'undefined') {
+      fetchNotebookContent();
+    }
+  }, []); // Empty dependency array ensures this runs once after the initial render
 
   const handleContentChange = async (newContent: string) => {
     if (!isTyping) {
