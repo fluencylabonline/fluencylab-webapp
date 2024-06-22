@@ -21,22 +21,24 @@ const NotebookEditor = () => {
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
   useEffect(() => {
-    const fetchNotebookContent = async () => {
-      try {
-        setLoading(true); // Set loading to true when fetching content
-        const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
-        if (notebookDoc.exists()) {
-          setContent(notebookDoc.data().content);
+    if (typeof window !== 'undefined') {
+      const fetchNotebookContent = async () => {
+        try {
+          setLoading(true); // Set loading to true when fetching content
+          const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
+          if (notebookDoc.exists()) {
+            setContent(notebookDoc.data().content);
+          }
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching notebook content: ', error);
+          setLoading(false);
         }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching notebook content: ', error);
-        setLoading(false);
+      };
+      
+      if (workbook && lesson) {
+        fetchNotebookContent();
       }
-    };
-    
-    if (workbook && lesson) {
-      fetchNotebookContent();
     }
   }, [workbook, lesson]);
 
