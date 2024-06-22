@@ -10,31 +10,39 @@ import Tiptap from './TipTap';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 const NotebookEditor = () => {
-  const params = new URLSearchParams(window.location.search);
-  const workbook = params.get('workbook');
-  const lesson = params.get('lesson');
-
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
+  const [workbook, setWorkbook] = useState<string | null>(null);
+  const [lesson, setLesson] = useState<string | null>(null);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      setWorkbook(params.get('workbook'));
+      setLesson(params.get('lesson'));
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchNotebookContent = async () => {
-      try {
-        setLoading(true);
-        const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
-        if (notebookDoc.exists()) {
-          setContent(notebookDoc.data().content);
+      if (workbook && lesson) {
+        try {
+          setLoading(true);
+          const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
+          if (notebookDoc.exists()) {
+            setContent(notebookDoc.data().content);
+          }
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching notebook content: ', error);
+          setLoading(false);
         }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching notebook content: ', error);
-        setLoading(false);
       }
     };
-      fetchNotebookContent();
-    
+
+    fetchNotebookContent();
   }, [workbook, lesson]);
 
   const handleContentChange = async (newContent: string) => {
