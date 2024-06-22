@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 
 // Firebase
 import { getDoc, doc, setDoc } from 'firebase/firestore';
@@ -11,10 +10,9 @@ import Tiptap from './TipTap';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 const NotebookEditor = () => {
-  const router = useRouter();
-  const { query } = router;
-  const { workbook, lesson } = query;
-
+  const params = new URLSearchParams(window.location.search);
+  const workbook = params.get('workbook');
+  const lesson = params.get('lesson');
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
