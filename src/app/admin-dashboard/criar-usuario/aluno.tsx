@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useState } from "react";
 
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { auth, db } from "@/app/firebase";
 import { FaKey, FaRegCircleUser, FaUser } from "react-icons/fa6";
-import { TbLanguage, TbLogin2, TbUserEdit } from "react-icons/tb";
+import { TbLanguage, TbUserEdit } from "react-icons/tb";
 import { IoPeopleCircle } from "react-icons/io5";
 import { MdAttachMoney } from "react-icons/md";
 import { LuCalendarClock, LuUserPlus2 } from "react-icons/lu";
@@ -15,8 +15,7 @@ import { RiTimeLine } from "react-icons/ri";
 import notebookContent from './notebookexample.json';
 
 import { toast, Toaster } from 'react-hot-toast';
-import FluencyButton from "../ui/Components/Button/button";
-import Link from "next/link";
+import FluencyButton from "@/app/ui/Components/Button/button";
 
 interface Professor {
     id: string;
@@ -102,6 +101,7 @@ export default function CreateAluno(){
                 NivelamentoPermitido: true,
             });
     
+            /*
             // Create a new 'Notebooks' collection inside the user's document
             const notebooksCollectionRef = collection(doc(db, 'users', user.uid), 'Notebooks');
     
@@ -116,7 +116,8 @@ export default function CreateAluno(){
             });
     
             console.log("Notebook added with ID: ", notebookDocRef.id);
-    
+            */
+
             // Add tasks to the student's document
             const handleAddTask = async (day: string, task: string, done: boolean) => {
                 try {
@@ -391,12 +392,6 @@ export default function CreateAluno(){
                 {isLoading ? 'Cadastrando...' : 'Criar Aluno'}
                 <LuUserPlus2 className="w-6 h-auto" />
             </FluencyButton>
-
-            <Link href={"/signin"}>
-                <FluencyButton variant="warning"> 
-                    Entrar <TbLogin2 className="w-6 h-auto" />
-                </FluencyButton>
-            </Link>
         </div>
 
     <Toaster />

@@ -5,12 +5,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/app/firebase";
 import { FaKey, FaLink, FaRegCircleUser, FaUser } from "react-icons/fa6";
-import { TbLogin2, TbUserEdit } from "react-icons/tb";
+import { TbUserEdit } from "react-icons/tb";
 
 import { toast, Toaster } from 'react-hot-toast';
-import FluencyButton from "../ui/Components/Button/button";
+import FluencyButton from "@/app/ui/Components/Button/button";
 import { LuUserPlus2 } from "react-icons/lu";
-import Link from "next/link";
 
 export default function CreateProfessor(){
     const [isLoading, setIsLoading] = useState(false);
@@ -186,12 +185,6 @@ export default function CreateProfessor(){
                     {isLoading ? 'Cadastrando...' : 'Criar Professor'}
                     <LuUserPlus2 className="w-6 h-auto" />
                 </FluencyButton>
-
-                <Link href={"/signin"}>
-                    <FluencyButton variant="warning"> 
-                        Entrar <TbLogin2 className="w-6 h-auto" />
-                    </FluencyButton>
-                </Link>
             </div>
 
           <Toaster />

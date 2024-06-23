@@ -75,16 +75,6 @@ useEffect(() => {
             </div>
             </Link>
 
-            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
-                <Image alt="Wordle" className="w-32 h-auto mt-2" src={FlagImage} />
-                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">FlashCards</span> </p>
-            </div>
-
-            <div className="w-52 h-60 rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
-                <Image alt="Wordle" className="w-28 h-auto mt-4" src={TicTacToeImage} />
-                <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">TicTacToe</span> </p>
-            </div>
-
          </div>
       </div>      
   );

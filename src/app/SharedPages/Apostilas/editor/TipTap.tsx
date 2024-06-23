@@ -30,7 +30,6 @@ import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { VscWholeWord } from 'react-icons/vsc';
 import { useSession } from 'next-auth/react';
-import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 
 type PopoversProps = {
   editor: Editor;
@@ -105,7 +104,6 @@ function Popovers({ editor }: PopoversProps) {
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-black hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
           </button>
-
       </BubbleMenu>
   )
 }

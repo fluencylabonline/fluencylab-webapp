@@ -14,6 +14,7 @@ import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
 import { LuBookCopy } from 'react-icons/lu';
+import { FiUserPlus } from 'react-icons/fi';
 
 interface ISidebarItem {
   name: string;
@@ -77,6 +78,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Perguntas",
       path: "/admin-dashboard/perguntas",
       icon: <TbMessageQuestion className="h-6 w-6"/>,
+    },
+    {
+      name: "Criar Usuário",
+      path: "/admin-dashboard/criar-usuario",
+      icon: <FiUserPlus className="h-6 w-6"/>,
     },
     {
       name: "Emitir Certificado",
