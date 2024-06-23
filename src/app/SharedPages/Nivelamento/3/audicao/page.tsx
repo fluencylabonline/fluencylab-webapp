@@ -173,6 +173,9 @@ export default function Audio() {
                     // Adding a new document with an auto-generated ID
                     addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-3", "Audicao"), scoreData);
                     toast.success("Pontuação salva com sucesso!");
+                    // Set NivelamentoPermitido to true
+                    const userRef = doc(db, 'users', userId);
+                    setDoc(userRef, { NivelamentoPermitido: true }, { merge: true });
                 } catch (error) {
                     toast.error("Erro ao salvar a pontuação");
                     console.error("Erro ao salvar a pontuação: ", error);

@@ -167,7 +167,7 @@ export default function NivelamentoTeacher() {
     return (
         <div className="p-4 mt-4 flex flex-col items-center w-full">
 
-        <div className="p-4 flex flex-col items-center gap-1">
+        <div className="min-w-full  p-4 flex flex-col items-center gap-1">
             <h2 className="text-xl font-bold">Nível 1 - Conhecimento básico</h2>
             <ResponsiveContainer width="100%" height={300}>
                 {mergedNivel1Data.length === 0 ? (
@@ -196,7 +196,7 @@ export default function NivelamentoTeacher() {
             </ResponsiveContainer>
         </div>
 
-        <div className="p-4 flex flex-col items-center gap-1">
+        <div className="min-w-full p-4 flex flex-col items-center gap-1">
             <h2 className="text-xl font-bold">Nível 2- Escrita</h2>
             <ResponsiveContainer width="100%" height={300}>
                 {nivel2Data.length === 0 ? (
@@ -216,7 +216,7 @@ export default function NivelamentoTeacher() {
             </ResponsiveContainer>
         </div>
 
-        <div className="p-4 flex flex-col items-center gap-1">
+        <div className="min-w-full p-4 flex flex-col items-center gap-1">
             <h2 className="text-xl font-bold">Nível 3 - Audição</h2>
             <ResponsiveContainer width="100%" height={300}>
                 {nivel3Data.length === 0 ? (
