@@ -128,7 +128,7 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({contractDat
                     <div className='p-1'>
                         <p className='font-bold'>Informações do signatário:</p>
                         <p><span className='font-bold'>Nome:</span> {contractData?.name}</p>
-                        <p><span className='font-bold'>CPF:</span> {contractData.cpf}</p>
+                        <p><span className='font-bold'>CPF:</span> {contractData?.cpf}</p>
                         <p><span className='font-bold'>Email:</span> {session?.user.email}</p>
                     </div>
 
@@ -196,32 +196,7 @@ export default function ContratoAluno() {
         };
 
         fetchUserInfo();
-    }, [session]);   
-
-    function isValidCPF(cpf: string): boolean {
-        if (typeof cpf !== 'string') return false;
-    
-        cpf = cpf.replace(/[^\d]+/g, '');
-    
-        if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
-    
-        const cpfArray = cpf.split('');
-    
-        const validator = cpfArray
-            .filter((digit, index, array) => index >= array.length - 2 && digit)
-            .map((el) => +el);
-    
-        const toValidate = (pop: number) => cpfArray
-            .filter((digit, index, array) => index < array.length - pop && digit)
-            .map((el) => +el);
-    
-        const rest = (count: number, pop: number) => (toValidate(pop)
-            .reduce((soma, el, i) => soma + el * (count - i), 0) * 10)
-            % 11
-            % 10;
-    
-        return !(rest(10, 2) !== validator[0] || rest(11, 1) !== validator[1]);
-    }
+    }, [session]);  
     
 
     // Fetch IP and Browser
@@ -253,14 +228,6 @@ export default function ContratoAluno() {
     
         if (!formData.agreedToTerms) {
             toast.error('Você deve concordar com os termos e condições para continuar!', {
-                position: 'top-center',
-                duration: 2000,
-              });
-            return;
-        }
-    
-        if (!isValidCPF(formData.cpf)) {
-            toast.error('CPF inválido!', {
                 position: 'top-center',
                 duration: 2000,
               });
