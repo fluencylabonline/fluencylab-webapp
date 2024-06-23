@@ -71,7 +71,7 @@ const NotebookEditor = () => {
         content={content}
         onChange={(newContent: string) => handleContentChange(newContent)}
         isTyping={isTyping}
-      />
+        />
     </div>
   )
 }
