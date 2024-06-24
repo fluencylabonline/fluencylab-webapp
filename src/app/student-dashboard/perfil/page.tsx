@@ -277,7 +277,7 @@ function Perfil() {
                 </div>
               )}
 
-              {nivelamentoPermitido === false ? 
+              {nivelamentoPermitido === true ? 
               (
               <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
                   <div className='flex flex-row w-full justify-between items-center'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    

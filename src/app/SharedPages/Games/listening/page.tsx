@@ -1,16 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { doc, getDoc, addDoc, collection, serverTimestamp, getDocs, setDoc } from 'firebase/firestore';
+import { doc, getDoc, addDoc, collection, getDocs } from 'firebase/firestore';
 import { toast, Toaster } from 'react-hot-toast';
 import AudioPlayer from './player';
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { db } from '@/app/firebase';
-import { PiExam } from 'react-icons/pi';
 import FluencyButton from '@/app/ui/Components/Button/button';
-import { IoMdArrowRoundForward } from 'react-icons/io';
 import { TbPencilCheck } from 'react-icons/tb';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
+import { IoMdArrowRoundForward } from 'react-icons/io';
 
 interface NivelamentoDocument {
     id: string;
@@ -25,66 +23,39 @@ interface WordInput {
     isCorrect: boolean | null;
 }
 
-export default function Audio() {
-    const router = useRouter();
-    const { data: session } = useSession();
-
-    const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
-    useEffect(() => {
-      const fetchUserInfo = async () => {
-          if (session && session.user && session.user.id) {
-              try {
-                  const profile = doc(db, 'users', session.user.id);
-                  const docSnap = await getDoc(profile);
-                  if (docSnap.exists()) {
-                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
-                    } else {
-                      console.log("No such document!");
-                  }
-              } catch (error) {
-                  console.error("Error fetching document: ", error);
-              }
-          }
-      };
-
-      fetchUserInfo()
-  }, [session]);
-
+export default function Listening(){
+  const { data: session } = useSession();
   const [nivelamentoData, setNivelamentoData] = useState<NivelamentoDocument[]>([]);
   const [randomDocument, setRandomDocument] = useState<NivelamentoDocument | null>(null);
   const [wordInputs, setWordInputs] = useState<WordInput[]>([]);
   const [inputsDisabled, setInputsDisabled] = useState(false);
-  const [score, setScore] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchNivelamentoData = async () => {
-            const nivelamentoCollectionRef = collection(db, 'Nivelamento');
-            const nivelamentoSnapshot = await getDocs(nivelamentoCollectionRef);
-            const nivelamentoDocuments: NivelamentoDocument[] = nivelamentoSnapshot.docs.map(doc => {
-                const data = doc.data() as NivelamentoDocument; // Explicitly define the type
-                return {
-                    ...data
-                };
-            });
-            setNivelamentoData(nivelamentoDocuments);
-        };
+  useEffect(() => {
+    const fetchNivelamentoData = async () => {
+        const nivelamentoCollectionRef = collection(db, 'Nivelamento');
+        const nivelamentoSnapshot = await getDocs(nivelamentoCollectionRef);
+        const nivelamentoDocuments: NivelamentoDocument[] = nivelamentoSnapshot.docs.map(doc => {
+            const data = doc.data() as NivelamentoDocument; // Explicitly define the type
+            return {
+                ...data
+            };
+        });
+        setNivelamentoData(nivelamentoDocuments);
+    };
 
-        fetchNivelamentoData();
+    fetchNivelamentoData();
     }, []);
 
     useEffect(() => {
         if (nivelamentoData.length > 0) {
             const randomIndex = Math.floor(Math.random() * nivelamentoData.length);
             setRandomDocument(nivelamentoData[randomIndex]);
-
-            // Create placeholders for input fields
             const words = nivelamentoData[randomIndex].transcript.split(' ');
             const inputIndicesSet = new Set<number>();
-            while (inputIndicesSet.size < Math.floor(words.length * 0.2)) { // Replace 20% of words with input fields
+            while (inputIndicesSet.size < Math.floor(words.length * 0.2)) {
                 inputIndicesSet.add(Math.floor(Math.random() * words.length));
             }
-
             const inputs: WordInput[] = [];
             words.forEach((word, index) => {
                 if (inputIndicesSet.has(index)) {
@@ -93,7 +64,6 @@ export default function Audio() {
                     inputs.push({ word, isInput: false, userAnswer: word, isCorrect: null });
                 }
             });
-
             setWordInputs(inputs);
         }
     }, [nivelamentoData]);
@@ -107,11 +77,9 @@ export default function Audio() {
 
     const checkAnswers = () => {
         const emptyFields = wordInputs.filter(input => input.isInput && input.userAnswer.trim() === '').length;
-
         if (emptyFields === wordInputs.filter(input => input.isInput).length) {
             return null;
         }
-
         let score = 0;
         const updatedWordInputs = wordInputs.map(input => {
             if (input.isInput) {
@@ -123,25 +91,7 @@ export default function Audio() {
         });
         setWordInputs(updatedWordInputs);
         setInputsDisabled(true);
-        setScore(score);
     };
-
-
-    const handleNextLevel = async () => {
-        if (!session) {
-            return;
-        }
-    
-        const userId = session.user.id;
-        try {
-            const userRef = doc(db, 'users', userId);
-            await setDoc(userRef, { NivelamentoPermitido: false }, { merge: true });
-            router.push("/student-dashboard/nivelamento");
-        } catch (error) {
-            console.error('Error updating NivelamentoPermitido field:', error);
-        }
-    };
-
     
     const openModal = () => {
         setIsModalOpen(true);
@@ -154,51 +104,13 @@ export default function Audio() {
     const confirmModal = () => {
         setIsModalOpen(false);
         checkAnswers();
-        handleChecking();
     };
 
-    function handleChecking() {
-        if (session && session.user) {
-            const userId = session.user.id;
-            const scoreData = {
-                pontos: score,
-                data: serverTimestamp(),
-            };
-    
-            // Check if at least one answer is provided
-            const hasAnswer = wordInputs.some(input => input.isInput && input.userAnswer.trim() !== '');
-    
-            if (hasAnswer) {
-                try {
-                    // Adding a new document with an auto-generated ID
-                    addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-3", "Audicao"), scoreData);
-                    toast.success("Pontuação salva com sucesso!");
-                    // Set NivelamentoPermitido to true
-                    const userRef = doc(db, 'users', userId);
-                    setDoc(userRef, { NivelamentoPermitido: true }, { merge: true });
-                } catch (error) {
-                    toast.error("Erro ao salvar a pontuação");
-                    console.error("Erro ao salvar a pontuação: ", error);
-                }
-            } else {
-                toast.error("Por favor, preencha pelo menos uma resposta antes de salvar.");
-            }
-        }
-    }
-
-    return (
+    return(
         <div className='min-h-[90vh] w-full flex flex-col justify-center items-center px-12 p-8'>
         <Toaster />
 
-        {nivelamentoPermitido === false ? 
-          (
-          <div className='w-max h-full rounded-md bg-fluency-green-700 text-white font-bold p-6'>
-              <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
-          </div>
-          ):(
-           
-            <>
-            <Toaster />
+            <FluencyButton variant='gray'>Adicionar áudio</FluencyButton>
             {randomDocument && (
                 <div className='max-w-[80%] text-justify flex flex-col gap-2 items-center justify-center p-8 rounded-md text-lg' key={randomDocument.id}>
                     <AudioPlayer src={randomDocument.url} />
@@ -217,19 +129,26 @@ export default function Audio() {
                     ))}
                     </div>
                     {inputsDisabled ? (
-                        <FluencyButton
+                        <div className='flex flex-row gap-2 items-center'>
+                            <FluencyButton
+                                className='mt-4 flex flex-row items-center'
+                                variant='warning'
+                            >
+                                Jogar novamente
+                            </FluencyButton>
+                            <FluencyButton
                             className='mt-4 flex flex-row items-center'
-                            variant='warning'
-                            onClick={handleNextLevel}
-                        >
-                            Finalizar <IoMdArrowRoundForward className="w-4 h-auto"/>
-                        </FluencyButton>
+                            variant='confirm'
+                            >
+                                Praticar outro
+                            </FluencyButton>
+                        </div>
                     ) : (
                         <FluencyButton
-                            variant="orange"
+                            variant='orange'
                             onClick={openModal}
                         >
-                            Verificar Respostas <TbPencilCheck className='w-6 h-auto' />
+                            Verificar Respostas <TbPencilCheck className='ml-1 w-5 h-auto' />
                         </FluencyButton>
                     )}
                 </div>
@@ -257,11 +176,6 @@ export default function Audio() {
                     </div>
                 </div>
             )}
-            </>
-            
-          )}
-          
-      
     </div>
-);
+    )
 }
