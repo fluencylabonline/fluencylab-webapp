@@ -218,13 +218,13 @@ const TicTacToe: React.FC = () => {
       {modalIsOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-slate-800 dark:bg-slate-300 bg-opacity-50">
           <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl mb-4">Escreva uma frase usando o verbo: "{board[currentBox as number]}"</h2>
+            <h2 className="text-xl mb-4">Escreva uma frase usando o verbo: {board[currentBox as number]}</h2>
             <form onSubmit={handleSubmit}>
               <textarea
                 className="w-full p-2 border rounded mb-4 outline-none bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                placeholder={`Use o verbo "${board[currentBox as number]}" em uma frase`}
+                placeholder={`Use o verbo ${board[currentBox as number]} em uma frase`}
                 required
               />
               <div className="flex justify-end space-x-4">
