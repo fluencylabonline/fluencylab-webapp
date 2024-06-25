@@ -12,7 +12,7 @@ import TicTacToeImage from '../../../../public/images/games/tictactoe.svg';
 import RollAndTellImage from '../../../../public/images/games/rollandtell.svg';
 import WhatAmIImage from '../../../../public/images/games/whatami.svg';
 import QuizzImage from '../../../../public/images/games/quizz.svg';
-import Listening from '../../../../public/images/games/listening.svg';
+import Listening from '../../../../public/images/games/listening.png';
 
 export default function GamesPro(){
     return(
