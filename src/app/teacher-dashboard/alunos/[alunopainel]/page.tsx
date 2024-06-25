@@ -6,6 +6,7 @@ import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject } f
 import { db } from '@/app/firebase';
 
 import { useSession } from 'next-auth/react';
+import { Accordion, AccordionItem, Tooltip } from '@nextui-org/react';
 
 import { FaFilePdf, FaRegFileAudio, FaRegFileImage, FaRegFileVideo } from "react-icons/fa6";
 
@@ -17,10 +18,21 @@ import { toast } from 'react-hot-toast';
 import { FaFileAlt } from 'react-icons/fa';
 import { IoClose, IoCloudDownloadOutline } from 'react-icons/io5';
 import { MdDelete, MdOutlineAddTask } from 'react-icons/md';
-import { IoMdCloudOutline } from 'react-icons/io';
+import { IoIosAddCircleOutline, IoMdCloudOutline } from 'react-icons/io';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { CiCircleQuestion } from 'react-icons/ci';
+
+interface TasksData {
+  tasksSuggestion1: (string | boolean)[][];
+  tasksSuggestion2: (string | boolean)[][];
+  tasksSuggestion3: (string | boolean)[][];
+  tasksSuggestion4: (string | boolean)[][];
+  tasksSuggestion5: (string | boolean)[][];
+}
+
+import tasksDataJson from './tasksFirstSteps.json';
+const tasksData: TasksData = tasksDataJson as TasksData;
 
 interface Aluno {
     tasks: {};
@@ -154,19 +166,19 @@ function AlunoPainel() {
     const renderMaterialIcon = (fileName: string) => {
       const fileType = fileName.split('.').pop()?.toLowerCase();
       if (fileType === 'pdf') {
-        return <FaFilePdf className='w-5 h-auto'/>;
+        return <FaFilePdf className='w-4 h-auto'/>;
       } else if (fileType === 'mp3') {
-        return <FaRegFileAudio className='w-5 h-auto'/>;
+        return <FaRegFileAudio className='w-4 h-auto'/>;
       } else if (fileType === 'mp4') {
-        return <FaRegFileVideo className='w-5 h-auto'/>;
+        return <FaRegFileVideo className='w-4 h-auto'/>;
       } else if (fileType === 'txt') {
-        return <FaFileAlt className='w-7 h-auto'/>;
+        return <FaFileAlt className='w-6 h-auto'/>;
       } else if (fileType === 'jpg') {
-        return <FaRegFileImage className='w-5 h-auto'/>        ;
+        return <FaRegFileImage className='w-4 h-auto'/>;
       } else if (fileType === 'png') {
-        return <FaRegFileImage className='w-5 h-auto'/>        ;
+        return <FaRegFileImage className='w-4 h-auto'/>;
       }
-      return null; // Return null if file type is not recognized
+      return null;
     };
 
 
@@ -408,7 +420,6 @@ function AlunoPainel() {
 
     useEffect(() => {
         const completionPercentage = calculateTaskCompletionPercentage();
-
         const progressInterval = setInterval(() => {
             setTaskCompletionPercentage((prevPercentage) => {
                 if (prevPercentage >= completionPercentage) {
@@ -418,39 +429,26 @@ function AlunoPainel() {
                             position: 'top-center',
                         });
                         setTasksCompletedToastShown(true); // Update state to prevent duplicate toast
-                    }
-                    return completionPercentage;
-                }
-                return prevPercentage + 1;
+                    } return completionPercentage;
+                } return prevPercentage + 1;
             });
         }, 10);
-
         return () => clearInterval(progressInterval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, tasksCompletedToastShown]);
 
-    async function handleTaskModal() {
-      // Add tasks to the student's document
+    async function handleTaskModal(tasks: (string | boolean)[][]) {
       const handleAddTask = async (day: string | boolean, task: string | boolean, done: string | boolean) => {
         try {
-            const studentDocRef = doc(db, `users/${id}`);
-            await updateDoc(studentDocRef, {
-                [`tasks.${day}`]: arrayUnion({ task, done })
-            });
+          const studentDocRef = doc(db, `users/${id}`);
+          await updateDoc(studentDocRef, {
+            [`tasks.${day}`]: arrayUnion({ task, done })
+          });
         } catch (error) {
-            console.error('Error adding task:', error);
-            throw error;
+          console.error('Error adding task:', error);
+          throw error;
         }
       };
-    
-      const tasks = [
-        ['Task', '1º dia - Criar 10 Flashcards usando o conteúdo das páginas 12 e 17. Pode usar o modelo de Flashcards da última página da apostila ou usar o aplicativo Anki ou algum outro que conheça.', false],
-        ['Task', '2º dia - Criar 10 frases com o vocabulário de Revisão da página 19. Use o Gerador de Frases I. Revise os 10 Flashcards.', false],
-        ['Task', '3º dia - Use post-its para escrever o nome das coisas na sua casa e cole eles. Por exemplo: escreva "door" em um post-it e cole na porta. Revise os 10 Flashcards.', false],
-        ['Task', '4º dia - Grave você lendo o texto da página 18 pelo menos 3 vezes. Varie o ritmo da leitura e tente ao máximo ler com empolgação. Depois disso crie 10 Flashcards com base no texto. Revise os 10 Flashcards.', false],
-        ['Task', '5º dia - Use a gravação do texto que você fez para reescrever ele sem consultar. Revise os 10 Flashcards do primeiro dia e do texto.', false],
-        ['Task', '6º dia - Assista ao Vídeo - 01 e pratique as falas do texto. Utilize a técnica do Shadowing.', false]
-      ];
     
       const addAllTasks = async () => {
         for (const [day, task, done] of tasks) {
@@ -467,6 +465,17 @@ function AlunoPainel() {
         }
       );
     }
+    
+
+    const [isSugestoes, setIsSugestoes] = useState(false);
+    const openSugestoes = () => {
+      setIsSugestoes(true);
+    };
+  
+    const closeSugestoes = () => {
+      setIsSugestoes(false);
+    };  
+
 return (
     <div>
       {/*Modais*/}
@@ -591,7 +600,7 @@ return (
                         </div>
                     </div>
                       <FluencyButton onClick={openDeleteConfirmationModal} className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='danger'>Excluir Todas</FluencyButton>                
-                      <FluencyButton className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='warning'>Modelos de Tarefa</FluencyButton>
+                      <FluencyButton className='w-max p-2 h-8 relative right-0 lg:text-md md:text-sm sm:text-xs' variant='warning' onClick={openSugestoes}>Modelos de Tarefa</FluencyButton>
                   </div>
 
 
@@ -639,7 +648,7 @@ return (
                             </label>
                             <span className='font-semibold'>{task.task}</span>
                           </div>
-                          <MdDelete className='w-5 h-auto hover:text-fluency-red-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold' 
+                          <MdDelete className='min-w-5 h-auto hover:text-fluency-red-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold' 
                             onClick={() => handleDeleteTask('Task', index)} />
                       </div>))}
                     </div>
@@ -655,12 +664,12 @@ return (
                       <div className="flex flex-col rounded-lg gap-2 ustify-start w-full h-80 overflow-y-auto overflow-hidden">
                         {materials.map((material, index) => (
                           <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark rounded-md p-1 px-4 gap-4 flex flex-row items-center justify-between w-full min-h-16">
-                            <p className='font-semibold'>{material.name}</p>
-                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-3 px-5 rounded-md flex flex-row gap-6'>
+                            <p className='font-semibold text-sm'>{material.name}</p>
+                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 px-4 rounded-md flex flex-row gap-2'>
                               <p>{renderMaterialIcon(material.name)}</p>
-                              <div className='flex flex-row gap-2'>
-                                <p onClick={() => handleDownload(material.url)}><IoCloudDownloadOutline className='w-5 h-auto hover:text-fluency-green-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold'/></p>
-                                <p onClick={() => handleDelete(material.name)}><MdDelete className='w-5 h-auto hover:text-fluency-red-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold' /></p>
+                              <div className='flex flex-row gap-1'>
+                                <p onClick={() => handleDownload(material.url)}><IoCloudDownloadOutline className='w-4 h-auto hover:text-fluency-green-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold'/></p>
+                                <p onClick={() => handleDelete(material.name)}><MdDelete className='w-4 h-auto hover:text-fluency-red-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold' /></p>
                               </div>
                             </div>
                           </div>
@@ -685,6 +694,55 @@ return (
             </div>
         </div>
 
+        {isSugestoes && (
+          <div className="fixed z-50 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="fade-in fade-out fixed inset-0 transition-opacity duration-200 ease-in-out">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+              <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-full p-5 m-20">
+                <div className="flex flex-col">
+                  <FluencyCloseButton onClick={closeSugestoes} />
+                  <div className="w-full mt-3 flex flex-col p-4">
+                    <h3 className="text-center text-lg font-bold">
+                      Sugestões
+                    </h3>
+                    <Accordion className='w-full'>
+                      <AccordionItem className='text-lg w-max' key={1} title="First Steps">
+                        {Object.keys(tasksData).map((key) => (
+                          <Tooltip
+                            key={key}
+                            content={(
+                              <div className="p-2 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark rounded-md">
+                                {tasksData[key as keyof TasksData].map((task, index) => (
+                                  <div key={index} className="flex flex-row justify-between items-center w-full">
+                                    <span>{task[1]}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            placement="right"
+                          >
+                            <div className="flex flex-col gap-6 p-1">
+                              <div className="flex flex-row justify-between gap-4 items-center">
+                                <h4 className="text-md font-semibold">Sugestão {key.replace('tasksSuggestion', '')}</h4>
+                                <IoIosAddCircleOutline
+                                  className='w-5 h-auto text-fluency-blue-500 hover:text-fluency-blue-600 duration-300 ease-in-out transition-all cursor-pointer'
+                                  onClick={() => handleTaskModal(tasksData[key as keyof TasksData])} 
+                                />
+                              </div>
+                            </div>
+                          </Tooltip>
+                        ))}
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>)}
+
+      
     </div>
     );
 }
