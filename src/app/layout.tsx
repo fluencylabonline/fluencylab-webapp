@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
-      <meta name="facebook-domain-verification" content="g1muw31ez0tols60duvhf6gv3ntfv" />
+      <meta name="facebook-domain-verification" content="g1muw31ez0tols60duvhrf6gv3ntfv" />
       </head>
       <body className={quicksand.className}>
         <AuthProvider>
