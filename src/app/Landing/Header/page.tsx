@@ -20,7 +20,6 @@ import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import { WhatsAppButton } from '@/app/ui/Components/Buttons/WhatsAppButton';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import GoogleCalendarButton from '@/app/ui/Components/Buttons/GoogleCalendarButton';
-import Head from 'next/head';
 
 const navigation = [
     { name: 'Sobre Nós', href: '#aboutus' },
@@ -68,9 +67,6 @@ export default function Header(){
 return(
   
     <div className="text-fluency-text-light mt-2 mr-3 ml-3 rounded-xl overflow-hidden">
-        <Head>
-        <meta name="facebook-domain-verification" content="byjdeqr1mlr47yl0ptf7xwdrmoa1hc" />
-        </Head>
         {/*Navbar*/}
             <div className="absolute inset-x-0 top-0 z-10">
             <Toaster />

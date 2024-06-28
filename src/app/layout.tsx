@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Head from 'next/head';
 import AuthProvider from './context/AuthProvider'
 import { Quicksand } from "next/font/google";
 import "./globals.css";
@@ -18,9 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <Head>
+      <head>
       <meta name="facebook-domain-verification" content="byjdeqr1mlr47yl0ptf7xwdrmoa1hc" />
-      </Head>
+      </head>
       <body className={quicksand.className}>
         <AuthProvider>
           <main>
