@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark pt-1'>
         <Head>
-          <meta name="facebook-domain-verification" content="g1muw31ez0tols60duvhrf6gv3ntfv" />
+        <meta name="facebook-domain-verification" content="byjdeqr1mlr47yl0ptf7xwdrmoa1hc" />
         </Head>
         <Header />
         <About />
