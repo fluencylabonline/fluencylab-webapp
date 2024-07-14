@@ -31,7 +31,18 @@ interface TasksData {
   tasksSuggestion5: (string | boolean)[][];
 }
 
+interface TasksDataBasics {
+  tasksSuggestion1: (string | boolean)[][];
+  tasksSuggestion2: (string | boolean)[][];
+  tasksSuggestion3: (string | boolean)[][];
+  tasksSuggestion4: (string | boolean)[][];
+  tasksSuggestion5: (string | boolean)[][];
+}
+
 import tasksDataJson from './tasksFirstSteps.json';
+import tasksDataJsonBasics from './taskTheBasics.json';
+
+const tasksDataBasics: TasksDataBasics = tasksDataJsonBasics as TasksDataBasics;
 const tasksData: TasksData = tasksDataJson as TasksData;
 
 interface Aluno {
@@ -707,7 +718,7 @@ return (
                     <h3 className="text-center text-lg font-bold">
                       Sugestões
                     </h3>
-                    <Accordion className='w-full'>
+                    <Accordion className='w-full flex flex-row items-center justify-around'>
                       <AccordionItem className='text-lg w-max' key={1} title="First Steps">
                         {Object.keys(tasksData).map((key) => (
                           <Tooltip
@@ -729,6 +740,34 @@ return (
                                 <IoIosAddCircleOutline
                                   className='w-5 h-auto text-fluency-blue-500 hover:text-fluency-blue-600 duration-300 ease-in-out transition-all cursor-pointer'
                                   onClick={() => handleTaskModal(tasksData[key as keyof TasksData])} 
+                                />
+                              </div>
+                            </div>
+                          </Tooltip>
+                        ))}
+                      </AccordionItem>
+
+                      <AccordionItem className='text-lg w-max' key={1} title="The Basics">
+                        {Object.keys(tasksData).map((key) => (
+                          <Tooltip
+                            key={key}
+                            content={(
+                              <div className="p-2 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark rounded-md">
+                                {tasksData[key as keyof TasksDataBasics].map((task, index) => (
+                                  <div key={index} className="flex flex-row justify-between items-center w-full">
+                                    <span>{task[1]}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            placement="right"
+                          >
+                            <div className="flex flex-col gap-6 p-1">
+                              <div className="flex flex-row justify-between gap-4 items-center">
+                                <h4 className="text-md font-semibold">Sugestão {key.replace('tasksSuggestion', '')}</h4>
+                                <IoIosAddCircleOutline
+                                  className='w-5 h-auto text-fluency-blue-500 hover:text-fluency-blue-600 duration-300 ease-in-out transition-all cursor-pointer'
+                                  onClick={() => handleTaskModal(tasksData[key as keyof TasksDataBasics])} 
                                 />
                               </div>
                             </div>

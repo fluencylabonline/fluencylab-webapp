@@ -44,7 +44,7 @@ export default function CursoParaProfessores() {
 
     <div className='min-h-[90vh] w-full flex flex-col justify-center items-center px-12 p-8'>
 
-        {nivelamentoPermitido === true ? 
+        {nivelamentoPermitido === false ? 
           (
           <div className='w-max h-full rounded-md bg-fluency-green-700 text-white font-bold p-6'>
               <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
