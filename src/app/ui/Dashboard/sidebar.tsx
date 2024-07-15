@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import Image from "next/image"
 import { signOut } from 'next-auth/react';
@@ -23,7 +23,9 @@ import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { db } from '@/app/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { MdOndemandVideo } from 'react-icons/md';
+import Link from 'next/link';
 
 export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: SidebarProps) {
   const router = useRouter();
@@ -48,6 +50,11 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
       router.push('perfil'); // default route if role is not defined or doesn't match
     }
   };
+  
+  const handleAulas = () => {
+    router.push('aulas-gravadas');
+  }
+
   async function handleLogout() {
     // Sign out the user
     await signOut({ callbackUrl: '/signin' });
@@ -73,6 +80,28 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
     }
   }
 
+  const [classes, setClasses] = useState('');
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (session && session.user && session.user.id) {
+        try {
+          const profile = doc(db, 'users', session.user.id);
+          const docSnap = await getDoc(profile);
+          if (docSnap.exists()) {
+            setClasses(docSnap.data().classes);
+          } else {
+            console.log("No such document!");
+          }
+        } catch (error) {
+          console.error("Error fetching document: ", error);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [session]);
+
+  
   return (
     <aside className={`fixed inset-y-0 left-0 bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? 'w-16' : ''}`}>
         <div className="flex flex-col items-center space-y-10 w-full">
@@ -112,8 +141,23 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
               ))}
               
 
-              <div>
+              {classes && (
+                <>
                   {isCollapsed ? (
+                      <div onClick={handleAulas} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
+                        <MdOndemandVideo className='w-6 h-6'/>
+                      </div>
+                  ) : (
+                      <div onClick={handleAulas} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
+                        <MdOndemandVideo className='w-6 h-6'/> Aulas Gravadas
+                      </div>
+                  )}
+                </>
+              )}
+
+
+              <div>
+                {isCollapsed ? (
                   <div className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`} onClick={handleLogout}>
                     <BsFillDoorOpenFill className='w-6 h-6'/>
                   </div>
@@ -123,7 +167,6 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
                   </div>
                 )}
               </div>
-
 
             <div className='fixed bottom-2' onClick={handleAvatarClick}>
               <Avatar isCollapsed={isCollapsed} />

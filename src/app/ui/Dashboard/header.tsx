@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ToggleDarkMode } from '../Components/Buttons/ToggleDarkMode';
@@ -34,6 +34,8 @@ export default function Header({ isCollapsed, toggleSidebar, isMobile }: HeaderP
         return `/${constructedPath}`;
     };
 
+
+
     return (
         <div>
             <header className="w-full mt-1 py-1 lg:pr-2 md:pr-2 pr-0">
@@ -59,6 +61,7 @@ export default function Header({ isCollapsed, toggleSidebar, isMobile }: HeaderP
                                         </span>
                                     </Link>
                                 </li>
+                                
                             ))}
                         </ol>
                     </div>

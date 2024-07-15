@@ -238,7 +238,7 @@ function Perfil() {
         }
   };
   
-  const [resetPassword, setResetPassword] = useState(false);
+    const [resetPassword, setResetPassword] = useState(false);
     const openResetPassword = () => {
       setResetPassword(true);
     };

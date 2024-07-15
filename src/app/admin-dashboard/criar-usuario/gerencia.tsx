@@ -103,7 +103,7 @@ return(
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" 
-                placeholder="johnsmith@fluency.lab" 
+                placeholder="johnsmith@fluencylab.me" 
             />
             </div>
         </div>
