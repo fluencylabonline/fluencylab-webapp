@@ -24,7 +24,7 @@ export default function AulasGravadas(){
                     </svg>
                     </span>
                     <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-100 transition-all duration-300 group-hover:text-white/90">
-                    <p>Aqui são seus primeiros passos com o idioma. Vai aprender tudo sobre o básico e o necessário para ter suas primeiras conversas.</p>
+                    <p>Aqui sao seus primeiros passos com o idioma. Vai aprender tudo sobre o basico e o necessario para ter suas primeiras conversas.</p>
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
@@ -57,12 +57,10 @@ export default function AulasGravadas(){
                     </span>
                     <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-100 transition-all duration-300 group-hover:text-white/90">
                     <p>Em breve...</p>
-                    {/*<p>Esse módulo vai aprofundar ainda mais o que você já sabe e te ajudar a manter conversas mais longas e mais variadas.</p>*/}
-                    
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <div className="text-fluency-green-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Módulo 2</div>
+                        <div className="text-fluency-green-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Modulo 2</div>
                     </p>
                     </div>
                 </div>
@@ -91,11 +89,10 @@ export default function AulasGravadas(){
                     </span>
                     <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-100 transition-all duration-300 group-hover:text-white/90">
                     <p>Em breve...</p>
-                    {/*<p>Esse último módulo é praticamente inteiro em inglês e vai aprender tudo que falta para finalmente se sentir fluente no idioma.</p>*/}
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <div className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Módulo 3</div>
+                        <div className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Modulo 3</div>
                     </p>
                     </div>
                 </div>
