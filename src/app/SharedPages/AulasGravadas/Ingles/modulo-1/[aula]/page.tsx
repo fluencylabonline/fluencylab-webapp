@@ -136,10 +136,10 @@ export default function Aulas() {
                     <FluencyButton>Como usar Flashcards</FluencyButton>
                 )}
                 {activePanel === 'quiz' && (
-                    <>{classData.deckNAME === '' ? "Esta lição não contém deck para prática" : <QuizComponent deckName={'Verbos'} />}</>
+                    <>{classData.deckNAME === '' ? "Esta licao nao contem deck para pratica" : <QuizComponent deckName={'Verbos'} />}</>
                 )}
                 {activePanel === 'listening' && (
-                    <>{classData.audioID === '' ? "Esta lição não contém áudio para prática" : <ListeningComponent audioId={classData.audioID} />}</>
+                    <>{classData.audioID === '' ? "Esta licao nao contem audio para pratica" : <ListeningComponent audioId={classData.audioID} />}</>
                 )}
             </div>
 
@@ -153,7 +153,7 @@ export default function Aulas() {
                                     duration-300 ease-in-out transition-all`}
                         onClick={() => handlePanelClick('video')}
                     >
-                        <BsPersonVideo className='w-6 h-auto'/> Vídeo Aula
+                        <BsPersonVideo className='w-6 h-auto'/> Video Aula
                     </button>
 
                     <button 
