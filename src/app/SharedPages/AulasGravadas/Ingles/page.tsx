@@ -28,7 +28,7 @@ export default function AulasGravadas(){
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="aulas-gravadas/modulo-1" className="text-fluency-blue-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Inglês - Módulo 1 &rarr;</a>
+                        <div className="text-fluency-blue-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Modulo 1</div>
                     </p>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ export default function AulasGravadas(){
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="" className="text-fluency-green-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Inglês - Módulo 2 &rarr;</a>
+                        <div className="text-fluency-green-600 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Módulo 2</div>
                     </p>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ export default function AulasGravadas(){
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
-                        <a href="" className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Inglês - Módulo 3 &rarr;</a>
+                        <div className="text-fluency-yellow-500 text-3xl font-bold transition-all duration-300 group-hover:text-white">Ingles - Módulo 3</div>
                     </p>
                     </div>
                 </div>
