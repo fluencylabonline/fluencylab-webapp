@@ -12,7 +12,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
-import { MdOutlineCollectionsBookmark } from "react-icons/md";
+import { MdOndemandVideo, MdOutlineCollectionsBookmark } from "react-icons/md";
 import { LuBookCopy } from 'react-icons/lu';
 import { FiUserPlus } from 'react-icons/fi';
 
@@ -93,6 +93,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Apostilas",
       path: "/admin-dashboard/apostilas",
       icon: <LuBookCopy  className="h-6 w-6"/>,
+    },
+    {
+      name: "Aulas Gravadas",
+      path: "/admin-dashboard/aulas-gravadas",
+      icon: <MdOndemandVideo className="h-6 w-6"/>,
     },
   ];
 

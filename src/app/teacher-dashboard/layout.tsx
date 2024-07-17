@@ -12,7 +12,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
-import { MdOutlineCollectionsBookmark } from "react-icons/md";
+import { MdOndemandVideo, MdOutlineCollectionsBookmark } from "react-icons/md";
 import { LuBookCopy, LuGamepad2 } from 'react-icons/lu';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 
@@ -83,6 +83,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Prática",
       path: "/teacher-dashboard/pratica",
       icon: <LuGamepad2 className="h-6 w-6"/>,
+    },
+    {
+      name: "Aulas Gravadas",
+      path: "/teacher-dashboard/aulas-gravadas",
+      icon: <MdOndemandVideo className="h-6 w-6"/>,
     },
     {
       name: "Conversas",

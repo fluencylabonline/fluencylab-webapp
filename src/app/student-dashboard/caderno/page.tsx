@@ -451,9 +451,9 @@ return (
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>
                       <div className="flex flex-col rounded-lg gap-2 justify-start w-full h-80 overflow-y-scroll overflow-hidden">
                         {materials.map((material, index) => (
-                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark text-sm rounded-md p-1 px-4 gap-4 flex flex-row items-center justify-between w-full">
+                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark text-sm rounded-md p-1 px-4 gap-4 flex flex-col sm:flex-row items-center justify-between w-full">
                             <p className='font-semibold'>{material.name}</p>
-                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 px-4 rounded-md flex flex-row gap-6'>
+                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 px-4 rounded-md flex flex-row  gap-6'>
                               <p>{renderMaterialIcon(material.name)}</p>
                               <div className='flex flex-row gap-2'>
                                 <p onClick={() => handleDownload(material.url)}><IoCloudDownloadOutline className='w-4 h-auto hover:text-fluency-green-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold'/></p>

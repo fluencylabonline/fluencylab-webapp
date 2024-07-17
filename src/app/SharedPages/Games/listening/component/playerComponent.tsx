@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './AudioPlayer.css';
+import './AudioPlayerComponent.css';
 import { HiVolumeUp } from 'react-icons/hi';
 
 interface AudioPlayerProps {
@@ -119,13 +119,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
         <div className="play-container">
           <div className={`toggle-play ${isPlaying ? 'pause' : 'play'}`} onClick={togglePlay}></div>
         </div>
-        <div className="time text-[#E64E17]">
+        <div className="time text-[#1789e6]">
           <div className="current">{formatTime(currentTime)}</div>
           <div className="divider">/</div>
           <div className="length">{formatTime(duration)}</div>
         </div>
 
-        <div className="speed-controls text-[#E64E17]">
+        <div className="speed-controls text-[#1789e6]">
           <select className='p-2 bg-fluency-bg-dark rounded-md font-bold' id="speedSelect" value={playbackRate} onChange={handleSpeedChange}>
             <option value={0.5}>0.5x</option>
             <option value={1.0}>1x</option>
@@ -136,7 +136,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
 
         <div className="volume-container"> 
           <div className="volume-button">
-            <HiVolumeUp className="volume icono-volumeMedium w-6 h-auto text-[#E64E17]"/>
+            <HiVolumeUp className="volume icono-volumeMedium w-6 h-auto text-[#1789e6]"/>
           </div>
           <div className="volume-slider" onClick={handleVolumeChange}>
             <div className="volume-percentage"></div>

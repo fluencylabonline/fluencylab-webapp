@@ -309,6 +309,8 @@ const FlashCard: FC = () => {
                 console.error('Error reviewing card:', error);
             }
         }
+
+        setIsFlipped(false)
     };
 
     //Send to student
@@ -442,7 +444,7 @@ const FlashCard: FC = () => {
                 
                 {session?.user.role === 'teacher' &&
                 <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
-                {session?.user.role === 'teacher' && <FluencyButton variant='confirm' onClick={openModal}>Criar deck</FluencyButton>}
+                {session?.user.role === 'teacher' && <FluencyButton variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>}
                 {session?.user.role === 'teacher' && 
                 <div className='flex flex-col items-center gap-2 p-2'>
                     Lista de decks
@@ -741,7 +743,7 @@ const FlashCard: FC = () => {
                                         ))}
                                     </select>
                                     <div className="flex justify-center">
-                                        <FluencyButton variant='warning' onClick={confirmDeckAddition}>Sim, quero aprender.</FluencyButton>
+                                        <FluencyButton variant='warning' onClick={confirmDeckAddition}>Sim, quero enviar.</FluencyButton>
                                         <FluencyButton variant='gray' onClick={closeConfirmModal}>Não, cancelar</FluencyButton>
                                     </div>
                                 </div>

@@ -8,6 +8,7 @@ import { signOut } from 'next-auth/react';
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
 import { BsFillDoorOpenFill } from 'react-icons/bs';
+import { MdOndemandVideo } from 'react-icons/md';
 
 interface ISidebarItem {
     name: string;
@@ -39,6 +40,10 @@ type MobileSidebarProps = {
       signOut({ callbackUrl: '/signin' })
     }
 
+    const handleAulas = () => {
+      router.push('aulas-gravadas');
+    }
+    
     return(
         <aside className={`fixed inset-y-0 z-50 left-0 bg-fluency-pages-light dark:bg-fluency-pages-dark transition-all duration-300 ease-in-out w-60 ${isMenuHidden ? 'translate-x-0 shadow-xl shadow-fluency-gray-300 dark:shadow-fluency-gray-500' : '-translate-x-full '}`}>
               <div className="flex justify-center p-4 text-center border-b items-center gap-5 ml-2">
@@ -69,6 +74,9 @@ type MobileSidebarProps = {
                 </div>
               ))}
               
+              <div onClick={handleAulas} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
+                <MdOndemandVideo className='w-6 h-6'/> Aulas Gravadas
+              </div>
 
               <div>
                   <div className={`mt-8 flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`} onClick={handleLogout}>
