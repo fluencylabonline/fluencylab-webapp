@@ -135,47 +135,6 @@ export default function Students() {
     }
   };
   
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState<string>('');
-  const [selectedUserName, setSelectedUserName] = useState<string>('');
-
-  const openModal = (userId: string, userName: string) => {
-    setSelectedUserId(userId);
-    setSelectedUserName(userName);
-    setIsModalOpen(true);
-  };
-  
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const transferUser = async (userId: string) => {
-    try {
-      const userRef = doc(db, 'users', userId);
-      const pastUserRef = doc(db, 'past_students', userId);
-  
-      const userSnapshot = await getDoc(userRef);
-      const userData = userSnapshot.data();
-  
-      if (userData) {
-        // Add the 'encerrouEm' field with the current date
-        userData.encerrouEm = new Date().toISOString();
-  
-        await setDoc(pastUserRef, userData);
-        await deleteDoc(userRef);
-  
-        toast.error('Aluno deletado!', {
-          position: 'top-center',
-        });
-      }
-    } catch (error) {
-      console.error('Error transferring user to past-users:', error);
-      toast.error('Erro ao deletar aluno!', {
-        position: 'top-center',
-      });
-    }
-  };
-  
   const confirmPayment = async (userId: string, date: Date, selectedMonth: string, paymentKey: string, mensalidade: number) => {
     try {
       const year = date.getFullYear();
@@ -236,7 +195,7 @@ export default function Students() {
   const [selectedAluno, setSelectedAluno] = useState<Aluno | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(null);
   const [selectedUserProfilePic, setSelectedUserProfilePic] = useState<string | null>(null);
-  const languages = ['Português', 'Inglês', 'Espanhol', 'Libras', 'Alemão'];
+  const languages = ['Português', 'Ingles', 'Espanhol', 'Libras', 'Alemão'];
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedProfessor, setSelectedProfessor] = useState<Professor | null>(null);
@@ -456,10 +415,10 @@ const exportToExcel = () => {
       <Table aria-label='Table' >
         <TableHeader>
         <TableColumn>Nome</TableColumn>
-          <TableColumn>Professor</TableColumn>
-          <TableColumn>Mensalidade</TableColumn>
-          <TableColumn>Dia de Pagamento</TableColumn>
+          <TableColumn className='text-center'>Mensalidade</TableColumn>
+          <TableColumn className='text-center'>Dia de Pagamento</TableColumn>
           <TableColumn className='flex flex-col items-center justify-center'>Pagamento</TableColumn>
+          <TableColumn>Pagamento para:</TableColumn>
           <TableColumn>Ações</TableColumn>
         </TableHeader>
         <TableBody>
@@ -471,19 +430,16 @@ const exportToExcel = () => {
               <TableCell>
                   <span className="cursor-pointer" onClick={() => openEditModal(aluno)}>{aluno.name}</span>
                 </TableCell>
-              <TableCell>{aluno.professor}</TableCell>
-              <TableCell>R$ {aluno.mensalidade}</TableCell>
-              <TableCell>Dia: {aluno.diaPagamento}</TableCell>
+              <TableCell className='text-center'>R$ {aluno.mensalidade}</TableCell>
+              <TableCell className='text-center'>{aluno.diaPagamento}</TableCell>
               <TableCell className='flex flex-col items-center'>
                 {renderPaymentStatus(aluno.payments)}
               </TableCell>
               <TableCell>
+                {aluno.CNPJ === "55.450.653/0001-64" ? "Deise" : aluno.CNPJ === "47.63.142/0001-07" ? "Matheus" : "Não definido"}
+              </TableCell>
+              <TableCell>
                 <div className="relative flex items-center gap-2">
-                  <Tooltip className='text-xs font-bold bg-fluency-red-200 rounded-md p-1' content="Excluir aluno">
-                  <span className="hover:text-fluency-red-500 duration-300 ease-in-out transition-all text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => openModal(aluno.id, aluno.name)}>
-                      <MdFolderDelete />
-                    </span>
-                  </Tooltip>
                   <Tooltip className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1' content="Enviar comprovante">
                     <span className="hover:text-fluency-blue-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
                     <RiMailSendFill onClick={() => handleOnClick(aluno.studentMail, selectedMonth, aluno.payments[selectedYear]?.[selectedMonth] || 'notPaid', aluno.name, aluno.studentMail, aluno.payments[selectedYear]?.['paymentKey'] || '', aluno.payments?.[selectedYear]?.[selectedMonth]?.paymentKey || '', aluno.mensalidade, selectedYear)} />
@@ -500,29 +456,7 @@ const exportToExcel = () => {
           ))}
         </TableBody>
       </Table>
-          {isModalOpen && (
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-              <div className="flex items-center justify-center min-h-screen">
-                <div className="fixed inset-0 transition-opacity">
-                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                  <div className="flex flex-col">
-                    <FluencyCloseButton onClick={closeModal}/>
-                    <div className="mt-3 flex flex-col gap-3 p-4">
-                        <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                        Tem certeza que deseja excluir o aluno {selectedUserName}?                            
-                        </h3>
-                      <div className="flex justify-center">
-                        <FluencyButton variant='danger' onClick={() => { transferUser(selectedUserId); closeModal(); }}>Sim, excluir</FluencyButton>
-                        <FluencyButton variant='gray' onClick={closeModal}>Não, cancelar</FluencyButton>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>)}
-
+         
             {relatorio && (
             <div className="fixed z-50 inset-0 overflow-y-auto">
               <div className="flex items-center justify-center min-h-screen">

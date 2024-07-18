@@ -18,6 +18,10 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { useSession } from 'next-auth/react';
 
 import './apostilas.css';
+import { MdCardTravel } from "react-icons/md";
+import { IoSchool } from "react-icons/io5";
+import Traveling from "./traveling";
+import Instrumental from "./instrumental";
 
 interface Notebook {
     title: string;
@@ -39,6 +43,8 @@ export default function ApostilasCreation() {
     const [firststeps, setFirststeps] = useState(true);
     const [thebasics, setThebasics] = useState(false);
     const [allyouneedtoknow, setAllyouneedtoknow] = useState(false);
+    const [traveling, setTraveling] = useState(false);
+    const [instrumentalEnglish, setInstrumentalEnglish] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Notebook[]>([]);
@@ -56,7 +62,7 @@ export default function ApostilasCreation() {
     useEffect(() => {
         const fetchNotebooks = async () => {
             const notebooksData: Notebook[] = [];
-            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know'];
+            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
 
             for (const wb of workbookCollections) {
                 const q = query(
@@ -133,13 +139,15 @@ export default function ApostilasCreation() {
             {session?.user.role === 'admin' && <FluencyButton className="w-full" onClick={openModalLicao}>Criar uma lição</FluencyButton>}
         </div>
 
-        <div className="lg:flex lg:flex-row lg:items-center lg:justify-center md:flex md:flex-row md:items-center md:justify-center flex flex-col items-center justify-center p-1 border border-fluency-blue-600 dark:border-fluency-blue-900 rounded-xl">
+        <div className="w-full lg:flex lg:flex-row lg:items-center lg:justify-around md:flex md:flex-row md:items-center md:justify-around flex flex-col items-center justify-around p-4 border border-fluency-blue-600 dark:border-fluency-blue-900 rounded-xl">
             <button onClick={() => {
                 setFirststeps(true);
                 setThebasics(false);
                 setAllyouneedtoknow(false);
+                setTraveling(false);
+                setInstrumentalEnglish(false);
             }} 
-            className="flex flex-row gap-2 items-center px-4 py-2 text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 md:py-3 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-xl md:px-12">
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 First Steps <TbBookDownload onClick={() => handleDownloadWorkbook('01 - First Steps')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
             
@@ -147,8 +155,10 @@ export default function ApostilasCreation() {
                 setFirststeps(false);
                 setThebasics(true);
                 setAllyouneedtoknow(false);
+                setTraveling(false);
+                setInstrumentalEnglish(false);
             }} 
-            className="flex flex-row gap-2 items-center px-4 py-2 mx-4 text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 md:py-3 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-xl md:mx-8 md:px-12">
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 The Basics <TbBookDownload onClick={() => handleDownloadWorkbook('02 - The Basics')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
             
@@ -156,9 +166,33 @@ export default function ApostilasCreation() {
                 setFirststeps(false);
                 setThebasics(false);
                 setAllyouneedtoknow(true);
+                setTraveling(false);
+                setInstrumentalEnglish(false);
             }} 
-            className="flex flex-row gap-2 items-center px-4 py-2 text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 md:py-3 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-xl md:px-12">
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 All you need to know <TbBookDownload onClick={() => handleDownloadWorkbook('All you need to know')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+            </button>
+
+            <button onClick={() => {
+                setFirststeps(false);
+                setThebasics(false);
+                setAllyouneedtoknow(false);
+                setTraveling(true);
+                setInstrumentalEnglish(false);
+            }} 
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
+                Traveling <TbBookDownload  onClick={() => handleDownloadWorkbook('Traveling')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+            </button>
+
+            <button onClick={() => {
+                setFirststeps(false);
+                setThebasics(false);
+                setAllyouneedtoknow(false);
+                setTraveling(false);
+                setInstrumentalEnglish(true);
+            }} 
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
+                Instrumental <TbBookDownload  onClick={() => handleDownloadWorkbook('Instrumental')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
         </div>
         
@@ -178,6 +212,16 @@ export default function ApostilasCreation() {
             {allyouneedtoknow && 
             <div className={allyouneedtoknow ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
                 <AllYouNeedToKnow />
+            </div>}
+
+            {traveling && 
+            <div className={traveling ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
+                <Traveling />
+            </div>}
+
+            {instrumentalEnglish && 
+            <div className={instrumentalEnglish ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
+                <Instrumental />
             </div>}
         </div>
         ) : (

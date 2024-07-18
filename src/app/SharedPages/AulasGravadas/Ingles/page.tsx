@@ -12,7 +12,7 @@ export default function AulasGravadas(){
     return(
         <div className="lg:flex lg:flex-row md:flex md:flex-grid sm:flex sm:flex-grid justify-center mt-6 gap-2 p-4">
 
-            <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+            <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm rounded-lg sm:px-10">
             <Link href="aulas-gravadas/modulo-1">
                 <div>
                 <span className="absolute top-10 z-10 h-20 w-20 rounded-full bg-fluency-blue-500 transition-all duration-300 group-hover:scale-[10]"></span>
@@ -45,15 +45,29 @@ export default function AulasGravadas(){
             />
             </div>
 
-            <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+            <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm rounded-lg sm:px-10">
             <Link href="">
                 <div>
                 <span className="absolute top-10 z-10 h-20 w-20 rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:scale-[10]"></span>
                 <div className="relative z-10 mx-auto max-w-md">
                     <span className="grid h-20 w-20 place-items-center rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:bg-fluency-green-400">
-                    <svg viewBox="0 0 1920 1920" id="Flat" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" className="h-10 w-10 text-white transition-all">
-                        <path d="M960.057 0 112 363.42v715.76c0 390.672 512 670.417 730.572 789.824 27.477 15.038 49.753 27.137 65.018 36.296v.113c16.17 9.725 34.262 14.587 52.467 14.587 18.091 0 36.296-4.862 52.466-14.7 15.265-9.159 37.54-21.258 65.018-36.296 218.572-119.407 730.572-399.152 730.572-789.824V363.42L960.057 0ZM846.982 1272.198 524.27 949.484l80.056-79.943 242.657 242.77 525.343-525.456 80.057 79.944-605.4 605.399Z" fillRule="evenodd"/>
-                    </svg>
+                        <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" 
+	                    width="30px" height="30px" viewBox="0 0 512 512"  xmlSpace="preserve">
+                        <g>
+                            <path className="st0" d="M460.031,129.031h-19.266v93.047h19.266c10.656,0,19.313-8.641,19.313-19.297v-54.438
+                                C479.344,137.688,470.688,129.031,460.031,129.031z"/>
+                            <path className="st0" d="M460.031,352.328h-19.266v93.047h19.266c10.656,0,19.313-8.656,19.313-19.313v-54.438
+                                C479.344,360.969,470.688,352.328,460.031,352.328z"/>
+                            <path className="st0" d="M460.031,240.688h-19.266v93.031h19.266c10.656,0,19.313-8.641,19.313-19.297v-54.438
+                                C479.344,249.344,470.688,240.688,460.031,240.688z"/>
+                            <path className="st0" d="M367.594,92.844h-28.813v157.063c0,5.031-2.844,9.594-7.344,11.828c-4.5,2.203-9.875,1.672-13.844-1.391
+                                l-39.188-30.141l-39.188,30.141c-3.969,3.063-9.328,3.594-13.828,1.391c-4.5-2.234-7.359-6.797-7.359-11.828V92.844H95.781
+                                c-8.25,0-15.578-3.313-21-8.703c-5.406-5.453-8.703-12.766-8.703-21.016s3.297-15.578,8.703-21.016
+                                c5.422-5.391,12.75-8.703,21-8.703h266.031c9.219,0,16.688-7.469,16.688-16.703S371.031,0,361.813,0H95.781
+                                c-17.375,0-33.25,7.094-44.625,18.5c-11.406,11.359-18.5,27.25-18.5,44.625V470.75c0,22.781,18.469,41.25,41.25,41.25h293.688
+                                c31.406,0,56.844-25.438,56.844-56.813V149.656C424.438,118.281,399,92.844,367.594,92.844z"/>
+                        </g>
+                        </svg>
                     </span>
                     <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-100 transition-all duration-300 group-hover:text-white/90">
                     <p>Em breve...</p>
@@ -77,7 +91,7 @@ export default function AulasGravadas(){
             />
             </div>
 
-            <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+            <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm rounded-lg sm:px-10">
             <Link href="">
                 <div>
                 <span className="absolute top-10 z-10 h-20 w-20 rounded-full bg-fluency-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>

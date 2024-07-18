@@ -322,7 +322,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                     {student.classDatesWithStatus
                         .filter((classDate) => classDate.date.getMonth() === currentMonthIndex)
                         .map((classDate, index) => (
-                            <div key={index} className="flex flex-row gap-2 items-center justify-end p-1">
+                            <div key={index} className="flex flex-col sm:flex-row gap-2 items-center justify-end p-1">
                                 <div className="group cursor-pointer relative inline-block text-center">
                                     <p className={`flex flex-row font-semibold gap-1 px-2 text-sm rounded-lg ${classDate.status === 'Feita' ? 'text-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-fluency-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-blue-600' : classDate.status === 'Atrasada' ? 'text-fluency-red-600' : '' }`}>
                                         {`${weekdays[classDate.date.getDay()]} - ${classDate.date.getDate()}`}
@@ -333,6 +333,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                                     </div>
                                 </div>
 
+                                <div className='flex flex-col sm:flex-row gap-2'>
                                 <button
                                     className="flex flex-row gap-1 text-xs items-center py-1 px-2 rounded-lg font-bold bg-fluency-blue-200 hover:bg-fluency-blue-300 transition-all duration-300 ease-in-out hover:dark:bg-fluency-blue-700 dark:bg-fluency-blue-800"
                                     onClick={() => handleDone(student.id, classDate.date)} // Call handleDone function
@@ -343,6 +344,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                                     onClick={() => handleCanceled(student.id, classDate.date)} // Call handleCanceled function
                                 > Cancelar <FaRegCalendarTimes className='icon' />
                                 </button>
+                                </div>
 
                             </div>
                         ))}

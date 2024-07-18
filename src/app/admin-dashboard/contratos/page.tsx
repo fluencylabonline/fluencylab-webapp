@@ -1,14 +1,11 @@
 'use client';
-
 import { SetStateAction, useEffect, useState } from "react";
-import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import FluencyButton from "@/app/ui/Components/Button/button";
 import { FaSignature } from "react-icons/fa6";
 import { MdAutorenew, MdOutlineDoneAll } from "react-icons/md";
-import { AiOutlineUserDelete } from "react-icons/ai";
-import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
 import FluencyInput from "@/app/ui/Components/Input/input";
 import { toast, Toaster } from 'react-hot-toast';
 
@@ -77,16 +74,12 @@ export default function ContratosAdmin() {
         return () => unsubscribe();
     }, []);
 
-        // Filter the list of students based on the selected filter
-        const filteredAlunos = alunos.filter((aluno) => {
-            if (filter === 'all') {
-            return true;
-            } else if (filter === 'signed') {
-            return aluno.ContratoAssinado.signed;
-            } else if (filter === 'notSigned') {
-            return !aluno.ContratoAssinado.signed;
-            }
-        });
+// Filter the list of students based on the selected filter and search query
+const filteredAlunos = alunos.filter((aluno) => {
+    const matchesFilter = filter === 'all' || (filter === 'signed' && aluno.ContratoAssinado.signed) || (filter === 'notSigned' && !aluno.ContratoAssinado.signed);
+    const matchesSearchQuery = aluno.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearchQuery;
+});
 
     const handleFilterChange = (e: { target: { value: SetStateAction<string>; }; }) => {
         setFilter(e.target.value);
@@ -211,22 +204,6 @@ export default function ContratosAdmin() {
     
         return remainingMonths;
     };
-    
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedUserId, setSelectedUserId] = useState<string>('');
-    const [selectedUserName, setSelectedUserName] = useState<string>('');
-  
-    const openModal = (userId: string, userName: string) => {
-      setSelectedUserId(userId);
-      setSelectedUserName(userName);
-      setIsModalOpen(true);
-    };
-    
-    const closeModal = () => {
-      setIsModalOpen(false);
-    };
-
-    
       
     return (
         <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-xl mt-1 lg:p-4 md:p-4 p-2 w-full">
@@ -276,34 +253,11 @@ export default function ContratosAdmin() {
                             ) : (
                                 <FluencyButton variant="confirm" onClick={() => handleAssinar(aluno.id)}><FaSignature className="w-6 h-auto"/> Assinar</FluencyButton>
                             )}
-                            <FluencyButton variant="danger" onClick={() => openModal(aluno.id, aluno.name)}><AiOutlineUserDelete className="w-6 h-auto"/> Desativar Contrato</FluencyButton>
                         </div>
                     </div>
                 </div>
             ))}
 
-        {isModalOpen && (
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                        <div className="flex flex-col">
-                            <FluencyCloseButton onClick={closeModal}/>
-                            <div className="mt-3 flex flex-col gap-3 p-4">
-                                <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                                    Tem certeza que deseja excluir o aluno {selectedUserName}?
-                                </h3>
-                                <div className="flex justify-center">
-                                    <FluencyButton variant='danger' onClick={() => { handleDesativarContrato(selectedUserId); closeModal(); }}>Sim, excluir</FluencyButton>
-                                    <FluencyButton variant='gray' onClick={closeModal}>Não, cancelar</FluencyButton>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>)}
          <Toaster />
         </div>
     );

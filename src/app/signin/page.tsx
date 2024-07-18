@@ -5,7 +5,7 @@ import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { FaKey, FaRegCircleUser } from 'react-icons/fa6';
+import { FaEye, FaEyeSlash, FaKey, FaRegCircleUser } from 'react-icons/fa6';
 import { BsArrowLeft } from 'react-icons/bs';
 
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode'
@@ -17,6 +17,8 @@ export default function SignIn(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [lastUsername, setLastUsername] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
 
   {/*PERSIST DARK MODE*/}
@@ -159,7 +161,7 @@ return(
                       <input
                         id="password"
                         name="password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         autoComplete="current-password"
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -167,6 +169,13 @@ return(
                         placeholder='Sua senha aqui'
                         className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 text-fluency-text-light border-fluency-gray-100 outline-none focus:border-fluency-blue-500 ease-in-out duration-300" 
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="z-10 -ml-6 text-center flex items-center justify-center dark:text-fluency-gray-300"
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
                   </div>
                 </div>
                 <div className="w-full px-3 mb-5 flex flex-col items-center gap-2">

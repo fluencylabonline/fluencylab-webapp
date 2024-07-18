@@ -445,7 +445,7 @@ return (
               </div>
 
 
-              <div className="w-max h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="w-full h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
                     <div className="flex flex-col gap-2 items-center justify-center w-full overflow-y-scroll p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>
@@ -469,8 +469,8 @@ return (
 
             </div>
 
-              <div className="lg:w-full md:w-full sm:w-full full h-full p-3 pr-6 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
-                <div className='w-full lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4'>
+              <div className="lg:w-full md:w-full sm:w-full p-3 pr-6 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+                <div className='w-full lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4 md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4'>
                     <h1 className='p-1 font-semibold text-xl'>Tarefas</h1>
                     <div className="w-full flex justify-center p-1">
                         <div className="w-full bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
@@ -484,7 +484,7 @@ return (
                     </div>
                   </div>
 
-                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[90%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
+                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full max-h-[90%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
                     <div className='p-1 w-full h-max overflow-hidden overflow-y-scroll'>                              
                       {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
                         <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>

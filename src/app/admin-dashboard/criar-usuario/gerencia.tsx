@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/app/firebase";
-import { FaKey, FaRegCircleUser, FaUser } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaKey, FaRegCircleUser, FaUser } from "react-icons/fa6";
 import { TbUserEdit } from "react-icons/tb";
 
 import { toast, Toaster } from 'react-hot-toast';
@@ -18,6 +18,7 @@ export default function CreateGerencia(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userName, setUserName] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleAdminCreating = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -129,16 +130,23 @@ return(
         <div className="w-full px-3 mb-4">
             <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Senha</label>
             <div className="flex">
-            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
-                <FaKey />
-            </div>
-            <input 
-                type="password"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}
-                className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" 
-                placeholder="************" 
-            />
+                <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
+                    <FaKey />
+                </div>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
+                        placeholder="************"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="z-10 -ml-6 text-center flex items-center justify-center dark:text-fluency-gray-300"
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
                 </div>
               </div>
             </div>

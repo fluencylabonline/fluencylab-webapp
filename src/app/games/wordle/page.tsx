@@ -3,8 +3,6 @@ import { ChangeEvent, useState } from 'react';
 import WordleEn from './en/page';
 import WordlePt from './pt/page';
 import WordleSp from './sp/page';
-import { CiCircleQuestion } from 'react-icons/ci';
-import { IoClose } from 'react-icons/io5';
 import Link from 'next/link';
 import { BsArrowLeft } from 'react-icons/bs';
 import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';

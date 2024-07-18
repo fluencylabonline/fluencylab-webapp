@@ -577,7 +577,7 @@ return (
     )}
 
           <div className='fade-in fade-out p-3 h-[92vh] min-w-screen overflow-y-scroll'>
-            <div className="gap-3 h-full lg:flex lg:flex-row md:flex md:flex-col flex flex-col">
+            <div className="h-full lg:flex lg:flex-row lg:gap-3 md:flex md:flex-col md:gap-3 flex flex-col justify-around gap-12">
 
             <div className='flex flex-col gap-3'>
 
@@ -597,11 +597,11 @@ return (
               </div>
 
 
-              <div className="h-full flex flex-col items-center overflow-hidden p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="min-h-[63%] flex flex-col items-center p-3 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                   <div className='lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4  md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4'>
                     <h1 className='p-1 font-semibold text-xl'>Tarefas</h1>
                     <div className="flex justify-center">
-                        <div className="w-72 bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
+                        <div className="lg:w-72 md:w-72 w-52 bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
                           <div
                               className="bg-green-500 text-xs leading-none py-1 text-center font-normal text-white rounded-lg"
                               style={{ width: `${taskCompletionPercentage}%`, transition: 'width 0.4s linear' }}
@@ -615,7 +615,7 @@ return (
                   </div>
 
 
-                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
+                  <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[85%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
                     <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-center items-center gap-2 pb-2'>
                       <input className='lg:w-[26rem] md:w-[22rem] w-[17rem] h-7 border-fluency-gray-100 outline-none focus:border-fluency-red-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-400 dark:text-fluency-gray-100 text-fluency-gray-800 rounded-md p-2' 
                         placeholder='Adicionar Tarefa: Segunda - Treinar a atividade 1.2' id="taskInput"
@@ -636,7 +636,7 @@ return (
                         </div>
                     </div>
 
-                    <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>            
+                    <div className='p-1 w-full min-h-[100%] overflow-hidden overflow-y-scroll'>            
                       {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
                         <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
                           <div className='flex flex-row gap-2 items-center'> 
@@ -668,7 +668,7 @@ return (
 
             </div>
 
-              <div className="lg:w-full md:w-full sm:w-full full h-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
+              <div className="lg:w-full md:w-full sm:w-full px-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg">
                 <div className="flex flex-col justify-between items-center rounded-md w-full h-full">                
                     <div className="flex flex-col gap-2 items-center justify-center w-full p-2">
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>

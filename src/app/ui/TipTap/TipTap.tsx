@@ -336,7 +336,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   };
 
   return (
-    <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center'>
+    <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} />
       <EditorContent editor={editor} />
       <Popovers editor={editor} />

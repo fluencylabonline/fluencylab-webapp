@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/app/firebase";
-import { FaKey, FaLink, FaRegCircleUser, FaUser } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaKey, FaLink, FaRegCircleUser, FaUser } from "react-icons/fa6";
 import { TbUserEdit } from "react-icons/tb";
 
 import { toast, Toaster } from 'react-hot-toast';
@@ -19,6 +19,7 @@ export default function CreateProfessor(){
     const [password, setPassword] = useState('');
     const [userName, setUserName] = useState('');
     const [link, setLink] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleProfessorCreating = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +54,7 @@ export default function CreateProfessor(){
         setUserName('');
         setEmail('');
         setLink('');
+        setPassword('');
 
         // Sign out the user
         await auth.signOut();
@@ -164,13 +166,20 @@ export default function CreateProfessor(){
                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
                             <FaKey />
                         </div>
-                        <input 
-                            type="password"
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" 
-                            placeholder="************" 
-                        />
+                        <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
+                        placeholder="************"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="z-10 -ml-6 text-center flex items-center justify-center dark:text-fluency-gray-300"
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
                         </div>
                     </div>
                     </div>
