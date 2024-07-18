@@ -100,7 +100,7 @@ type MobileSidebarProps = {
               ))}
               
               {classes && (
-              <div onClick={() => {handleAulas; toggleMenu();}} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
+              <div onClick={() => {handleAulas(); toggleMenu();}} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
                 <MdOndemandVideo className='w-6 h-6'/> Aulas Gravadas
               </div>)}
 
