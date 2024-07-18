@@ -31,6 +31,7 @@ import Contratos from '../contratos/page';
 import AlunosPassados from './AlunosPassados';
 
 interface Aluno {
+  CNPJ: string;
   id: string;
   name: string;
   professor: string;
@@ -66,6 +67,7 @@ export default function Students() {
           const aluno: Aluno = {
             id: doc.id,
             name: doc.data().name,
+            CNPJ: doc.data().CNPJ,
             professor: doc.data().professor,
             professorId: doc.data().professorId,
             mensalidade: doc.data().mensalidade,
@@ -296,14 +298,21 @@ export default function Students() {
     setSelectedLanguages([]);
     setSelectedProfessor(null);
   };
+
+  const [selectedCNPJ, setSelectedCNPJ] = useState<string | null>(selectedAluno?.CNPJ || '');
+
+  useEffect(() => {
+    setSelectedCNPJ(selectedAluno?.CNPJ || '');
+  }, [selectedAluno]);
   
   const saveChanges = async () => {
     if (!selectedAluno) return;
-  
+    const CNPJ = selectedAluno.CNPJ || '';
     try {
       const userRef = doc(db, 'users', selectedAluno.id);
       const updatedData = {
         mensalidade: selectedAluno.mensalidade,
+        CNPJ: selectedCNPJ,
         diaPagamento: selectedAluno.diaPagamento,
         idioma: selectedLanguages.length > 0 ? selectedLanguages[0] : null,
         professor: selectedProfessor ? selectedProfessor.name : selectedAluno.professor,
@@ -402,7 +411,7 @@ const exportToExcel = () => {
       >
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="financeiro">Financeiro</option>
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="juridico">Jurídico</option>
-        <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="lista">Lista de Alunos</option>
+        <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="lista">Lista</option>
       </select>
 
       {selectedOption === 'financeiro' && (
@@ -608,6 +617,19 @@ const exportToExcel = () => {
                                     <option key={lang} value={lang}>{lang}</option>
                                   ))}
                                 </select>
+                            </div>
+
+                            <div>
+                              <p className='text-xs font-semibold'>Pagamento para:</p>
+                                <select
+                                  className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
+                                  value={selectedAluno?.CNPJ || ''}
+                                    onChange={(e) => setSelectedAluno({ ...selectedAluno, CNPJ: e.target.value })}
+                                  >
+                                    <option value="">Selecione o CNPJ</option>
+                                    <option value="55.450.653/0001-64">Deise Laiane</option>
+                                    <option value="47.63.142/0001-07">Matheus Fernandes</option>
+                                </select>  
                             </div>
                             
                             {selectedAluno.professor === '' && selectedAluno.professorId === '' ? (

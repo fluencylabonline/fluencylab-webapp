@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import {
     Table,
@@ -10,6 +10,7 @@ import {
     TableRow,
     TableCell,
 } from '@nextui-org/react';
+import { toast, Toaster } from 'react-hot-toast';
 
 interface Aluno {
     id: string;
@@ -24,11 +25,13 @@ interface Aluno {
     encerrouEm?: string;
     diaAula: string;
     status: string;
+    classes: boolean; // Add the classes field to the interface
 }
 
 export default function AlunosPassados() {
     const [alunos, setAlunos] = useState<Aluno[]>([]);
     const [currentCollection, setCurrentCollection] = useState<string>('users');
+    
     useEffect(() => {
         const unsubscribe = onSnapshot(getQuery(), (snapshot) => {
             const updatedAlunos: Aluno[] = [];
@@ -45,7 +48,8 @@ export default function AlunosPassados() {
                     diaAula: doc.data().diaAula,
                     comecouEm: doc.data().comecouEm,
                     encerrouEm: doc.data().encerrouEm,
-                    status: currentCollection === 'users' ? 'Ativo' : 'Desativado',  
+                    status: currentCollection === 'users' ? 'Ativo' : 'Desativado',
+                    classes: doc.data().classes || false, // Assuming classes field exists in Firestore
                 };
                 updatedAlunos.push(aluno);
             });
@@ -67,6 +71,18 @@ export default function AlunosPassados() {
 
     const capitalizeFirstLetter = (string: string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
+    const toggleClassesStatus = async (alunoId: string, currentClasses: boolean) => {
+        const alunoRef = doc(db, 'users', alunoId);
+        await updateDoc(alunoRef, {
+            classes: !currentClasses, // Toggle the classes field
+        });
+
+        // Show toast notification based on currentClasses state
+        toast.success(currentClasses ? 'Desativado' : 'Ativado', {
+            duration: 3000, // Display for 3 seconds
+        });
     };
 
     return (
@@ -96,6 +112,7 @@ export default function AlunosPassados() {
                     <TableColumn>Começou em</TableColumn>
                     <TableColumn>Encerrou em</TableColumn>
                     <TableColumn>Status</TableColumn>
+                    <TableColumn>Gravações</TableColumn>
                 </TableHeader>
                 <TableBody>
                     {alunos.map((aluno) => (
@@ -107,10 +124,17 @@ export default function AlunosPassados() {
                             <TableCell>{aluno.comecouEm}</TableCell>
                             <TableCell>{aluno.encerrouEm}</TableCell>
                             <TableCell>{capitalizeFirstLetter(aluno.status)}</TableCell>
+                            <TableCell>
+                                <button onClick={() => toggleClassesStatus(aluno.id, aluno.classes)}>
+                                    {aluno.classes ? 'Desativar' : 'Ativar'}
+                                </button>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
+
+            <Toaster position="top-center" />
         </div>
     );
 }

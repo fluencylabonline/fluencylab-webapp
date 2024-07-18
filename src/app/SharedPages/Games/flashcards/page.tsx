@@ -536,9 +536,9 @@ const FlashCard: FC = () => {
                             <h2>Seus decks:</h2>
                             <ul className='flex flex-col items-start p-4 gap-2'>
                             {decks.map(deck => (
-                                <li className='flex flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={deck.id}>
+                                <li className='flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={deck.id}>
                                     <p className='font-bold'>{deck.name}</p>
-                                    <div className='flex flex-row gap-6 items-center'>
+                                    <div className='flex flex-col sm:flex-row gap-6 items-center'>
                                         <div className={`flex font-bold text-sm p-1 rounded-md ${
                                             deck.cardsToReviewCount > 0 ? 'text-orange-500' : 'text-green-500'
                                         }`}>
@@ -576,7 +576,7 @@ const FlashCard: FC = () => {
 
                             <ul className='flex flex-col items-start p-4 gap-2'>
                             {otherDecks.map(otherDecks => (
-                                <li className='flex flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={otherDecks.id}>
+                                <li className='flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={otherDecks.id}>
                                     <p className='font-bold'>{otherDecks.name}</p>
                                     <div className='flex flex-row gap-2 items-center'>
                                         <button className='bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hoverdark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out' value={otherDecks.name} onClick={() => openOtherConfirmModal(otherDecks.id)}>Praticar</button>

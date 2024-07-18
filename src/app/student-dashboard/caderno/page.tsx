@@ -451,9 +451,9 @@ return (
                       <h1 className="text-xl font-semibold text-center mb-2">Materiais</h1>
                       <div className="flex flex-col rounded-lg gap-2 justify-start w-full h-80 overflow-y-scroll overflow-hidden">
                         {materials.map((material, index) => (
-                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark text-sm rounded-md p-1 px-4 gap-4 flex flex-col sm:flex-row items-center justify-between w-full">
-                            <p className='font-semibold'>{material.name}</p>
-                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 px-4 rounded-md flex flex-row  gap-6'>
+                          <div key={index} className="bg-fluency-gray-50 dark:bg-fluency-bg-dark text-sm rounded-md p-1 px-2 gap-4 flex flex-col sm:flex-row items-center justify-between w-full">
+                            <p className='font-semibold text-wrap lg:text-base md:text-sm text-xs'>{material.name}</p>
+                            <div className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 px-4 rounded-md flex flex-row gap-6'>
                               <p>{renderMaterialIcon(material.name)}</p>
                               <div className='flex flex-row gap-2'>
                                 <p onClick={() => handleDownload(material.url)}><IoCloudDownloadOutline className='w-4 h-auto hover:text-fluency-green-500 transition-all ease-in-out duration-300 cursor-pointer font-semibold'/></p>
@@ -485,7 +485,7 @@ return (
                   </div>
 
                   <div className='flex flex-col lg:items-start md:items-start sm:items-center w-full h-[90%] mt-1 mb-3 mx-2 p-2 pb-4 rounded-md overflow-hidden overflow-y-scroll bg-fluency-gray-100 dark:bg-fluency-bg-dark'>
-                    <div className='p-1 w-full h-full overflow-hidden overflow-y-scroll'>                              
+                    <div className='p-1 w-full h-max overflow-hidden overflow-y-scroll'>                              
                       {tasks && tasks.Task && tasks.Task.map((task: any, index: number) => (
                         <div key={index} className='flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md'>
                           <div className='flex flex-row gap-2 items-center'> 

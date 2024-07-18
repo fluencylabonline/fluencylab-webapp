@@ -16,6 +16,7 @@ import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import { useSession } from 'next-auth/react';
 import Image from "next/image";
 import QrCode from '../../../../public/images/perfil/cobrar.jpg';
+import QrCode2 from '../../../../public/images/perfil/QRDeise.jpg';
 
 //Notification
 import { toast, Toaster } from 'react-hot-toast';
@@ -139,6 +140,7 @@ function Perfil() {
     };
       
     const [name, setName] = useState('');
+    const [CNPJ, setCNPJ] = useState('');
     const [userName, setUserName] = useState('');
     const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
     //false == nao
@@ -151,6 +153,7 @@ function Perfil() {
                   const docSnap = await getDoc(profile);
                   if (docSnap.exists()) {
                       setName(docSnap.data().name);
+                      setCNPJ(docSnap.data().CNPJ);                      
                       setUserName(docSnap.data().userName);
                       setContratoFoiAssinado(docSnap.data().ContratoAssinado || { signed: false, logs: [] });
                       setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
@@ -244,26 +247,26 @@ function Perfil() {
                 </div>
             </div> 
             
-            {/*
+            
             <div className="lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-col lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
               <p className='flex flex-row justify-center p-1 font-semibold text-lg'>Infomações de Pagamento</p>
               <div className='p-6 flex flex-col gap-4'>
                 <p>Você pode fazer a tranferência para as seguintes chaves PIX ou simplesmente usar o QR Code:</p>
                 <div className='flex flex-row gap-1 w-full justify-around'>
                   <div>
-                    <p>CNPJ: <span className='font-bold'>47.63.142/0001-07</span></p>
-                    <p>E-mail: <span className='font-bold'>fluencylab.online@gmail.com</span></p>
+                    <p>CNPJ: <span className='font-bold'>{CNPJ}</span></p>
+                    <p>Nome: <span className='font-bold'>{CNPJ === '47.63.142/0001-07' ? "Matheus Fernandes" : "Deise Laiane"}</span></p>
                   </div>
                   <div>
-                  <Image
-                    className="object-cover w-24 h-24 mb-2"
-                    src={QrCode}
-                    alt="FluencyLab"
+                    <Image
+                      className="object-cover w-24 h-24 mb-2"
+                      src={CNPJ === '47.63.142/0001-07' ? QrCode : QrCode2}
+                      alt="FluencyLab"
                     />
                   </div>
                 </div>
               </div>
-            </div>*/} 
+            </div>
           </div>
 
             <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>

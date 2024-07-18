@@ -113,7 +113,7 @@ export default function ApostilasCreation() {
 
     async function handleDownloadWorkbook(workbookName: string) {
         try {
-            const workbookRef = ref(storage, `workbooks/${workbookName}.pdf`);
+            const workbookRef = ref(storage, `Workbooks/English/${workbookName}.pdf`);
             const downloadURL = await getDownloadURL(workbookRef);
             window.open(downloadURL, '_blank');
         } catch (error) {
@@ -140,7 +140,7 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(false);
             }} 
             className="flex flex-row gap-2 items-center px-4 py-2 text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 md:py-3 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-xl md:px-12">
-                First Steps <TbBookDownload onClick={() => handleDownloadWorkbook('First Steps')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+                First Steps <TbBookDownload onClick={() => handleDownloadWorkbook('01 - First Steps')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
             
             <button onClick={() => {
@@ -149,7 +149,7 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(false);
             }} 
             className="flex flex-row gap-2 items-center px-4 py-2 mx-4 text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 md:py-3 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-xl md:mx-8 md:px-12">
-                The Basics <TbBookDownload onClick={() => handleDownloadWorkbook('The Basics')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+                The Basics <TbBookDownload onClick={() => handleDownloadWorkbook('02 - The Basics')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
             
             <button onClick={() => {
