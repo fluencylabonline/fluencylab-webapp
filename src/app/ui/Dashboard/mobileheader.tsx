@@ -56,7 +56,7 @@ export default function MobileHeader({ toggleMenu }: MobileHeaderProps) {
                                         </svg>
                                     )}
                                     <Link href={constructPath(index)}>
-                                        <span className="cursor-pointer text-sm font-bold text-fluency-blue-700 dark:text-fluency-text-dark hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500">
+                                        <span className="cursor-pointer text-xs font-bold text-fluency-blue-700 dark:text-fluency-text-dark hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500">
                                             {segment === 'Home' ? <HiHome /> : capitalizeFirstLetter(decodeURIComponent(segment))}
                                         </span>
                                     </Link>

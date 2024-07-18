@@ -1,14 +1,17 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import Image from "next/image"
 import { signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 //IMAGES
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { MdOndemandVideo } from 'react-icons/md';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
 
 interface ISidebarItem {
     name: string;
@@ -43,6 +46,28 @@ type MobileSidebarProps = {
     const handleAulas = () => {
       router.push('aulas-gravadas');
     }
+
+    const { data: session } = useSession();
+    const [classes, setClasses] = useState('');
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+        if (session && session.user && session.user.id) {
+          try {
+            const profile = doc(db, 'users', session.user.id);
+            const docSnap = await getDoc(profile);
+            if (docSnap.exists()) {
+              setClasses(docSnap.data().classes);
+            } else {
+              console.log("No such document!");
+            }
+          } catch (error) {
+            console.error("Error fetching document: ", error);
+          }
+        }
+      };
+  
+      fetchUserInfo();
+    }, [session]);
     
     return(
         <aside className={`fixed inset-y-0 z-50 left-0 bg-fluency-pages-light dark:bg-fluency-pages-dark transition-all duration-300 ease-in-out w-60 ${isMenuHidden ? 'translate-x-0 shadow-xl shadow-fluency-gray-300 dark:shadow-fluency-gray-500' : '-translate-x-full '}`}>
@@ -55,9 +80,9 @@ type MobileSidebarProps = {
                     />
 
                   <div onClick={toggleMenu} className='flex flex-col justify-between w-5 h-5 transform transition-all duration-300 origin-center translate-x-0'>
-                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 rounded transform origin-left -rotate-[42deg] translate-y-[9px] w-5 transition-all duration-300 delay-150'></div>
+                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 rounded transform origin-left -rotate-[42deg] translate-y-[9px] w-4 transition-all duration-300 delay-150'></div>
                     <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 w-7 rounded transform opacity-0 translate-x-0 transition-all duration-300'></div>
-                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 rounded transform origin-left rotate-[42deg] -translate-y-[9px] w-5 transition-all duration-300 delay-150'></div>
+                    <div className='bg-fluency-blue-800 dark:bg-fluency-gray-100 h-1 rounded transform origin-left rotate-[42deg] -translate-y-[9px] w-4 transition-all duration-300 delay-150'></div>
                   </div>
               </div>
               <div className="flex flex-col gap-2 items-center mt-4">
@@ -74,9 +99,10 @@ type MobileSidebarProps = {
                 </div>
               ))}
               
-              <div onClick={handleAulas} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
+              {classes && (
+              <div onClick={() => {handleAulas; toggleMenu();}} className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`}>
                 <MdOndemandVideo className='w-6 h-6'/> Aulas Gravadas
-              </div>
+              </div>)}
 
               <div>
                   <div className={`mt-8 flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`} onClick={handleLogout}>
