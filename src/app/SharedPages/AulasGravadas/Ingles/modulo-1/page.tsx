@@ -366,7 +366,7 @@ export default function ModuloUm() {
                 <div>
                     <FluencyButton onClick={openCreateClass}>Adicionar Aula</FluencyButton>
                 </div>}
-                {session?.user.role === 'student' && <span className="font-bold">{`${doneClasses} de ${totalClasses} aulas concluídas`}</span>}
+                {session?.user.role === 'student' && <span className="font-bold">{`${doneClasses} de ${totalClasses} aulas concluidas`}</span>}
             </div>
 
             <div className="flex flex-row flex-wrap items-center justify-center w-full gap-2">
@@ -397,7 +397,7 @@ export default function ModuloUm() {
                         </Link>
                         {session?.user.role === 'student' && (
                             <div className="flex flex-col gap-1 absolute top-2 right-0">
-                            {!classData.done ? <FluencyButton onClick={() => openMarkAsDoneModal(classData)} variant="confirm" >Marcar como feita!</FluencyButton> : ""}
+                            {!classData.done ? <FluencyButton onClick={() => openMarkAsDoneModal(classData)} variant="confirm" >Marcar como feita</FluencyButton> : ""}
                         </div>)}
 
                         {session?.user.role === 'teacher' && (
@@ -427,15 +427,15 @@ export default function ModuloUm() {
                                 <FluencyCloseButton onClick={closeCreateClass} />
 
                                 <h3 className="text-lg leading-6 font-medium p-2 mb-2">
-                                    Insira as Informações da Aula
+                                    Insira as Informacoes da Aula
                                 </h3>
 
                                 <div className="mt-2 flex flex-row items-start gap-3 p-4">
                                     <div className="flex flex-col items-start gap-2 w-full">
                                         <FluencyInput type="text" placeholder="Nome da Aula" value={className} onChange={(e) => setClassName(e.target.value)} />
-                                        <FluencyInput type="text" placeholder="Número da Aula" value={classNumber} onChange={(e) => setClassNumber(e.target.value)} />
-                                        <FluencyInput type="text" placeholder="Link do Vídeo" value={videoLink} onChange={(e) => setVideoLink(e.target.value)} />
-                                        <FluencyInput type="text" placeholder="ID do Vídeo" value={videoID} onChange={(e) => setVideoID(e.target.value)} />
+                                        <FluencyInput type="text" placeholder="Numero da Aula" value={classNumber} onChange={(e) => setClassNumber(e.target.value)} />
+                                        <FluencyInput type="text" placeholder="Link do Video" value={videoLink} onChange={(e) => setVideoLink(e.target.value)} />
+                                        <FluencyInput type="text" placeholder="ID do Video" value={videoID} onChange={(e) => setVideoID(e.target.value)} />
                                     </div>
 
                                     <div className="flex flex-col items-start gap-2 w-full">
@@ -448,7 +448,7 @@ export default function ModuloUm() {
                                     <div className="flex flex-col items-start gap-2 w-full">
                                         <FluencyInput type="text" placeholder="Audio ID" value={audioID} onChange={(e) => setAudioID(e.target.value)} />
                                         <FluencyInput type="text" placeholder="Deck ID" value={deckNAME} onChange={(e) => setDeckNAME(e.target.value)} />
-                                        <FluencyInput type="text" placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                        <FluencyInput type="text" placeholder="Descricao" value={description} onChange={(e) => setDescription(e.target.value)} />
                                     </div>
                                 </div>
 
@@ -473,7 +473,7 @@ export default function ModuloUm() {
                                 <FluencyCloseButton onClick={closeEditClass} />
 
                                 <h3 className="text-lg leading-6 font-medium p-2 mb-2">
-                                    Editar Informações da Aula
+                                    Editar Informacoes da Aula
                                 </h3>
 
                                 <div className="mt-2 flex flex-col items-center gap-3 p-4">
@@ -489,7 +489,7 @@ export default function ModuloUm() {
                                         <FluencyInput type="text" placeholder="Deck ID" value={deckNAME} onChange={(e) => setDeckNAME(e.target.value)} />
                                         <FluencyInput type="text" placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
                                     <div className="flex justify-center">
-                                        <FluencyButton variant='confirm' onClick={handleEditSubmit}>Salvar Alterações</FluencyButton>
+                                        <FluencyButton variant='confirm' onClick={handleEditSubmit}>Salvar Alteracoes</FluencyButton>
                                         <FluencyButton variant='gray' onClick={closeEditClass}>Cancelar</FluencyButton>
                                     </div>
                                 </div>
@@ -508,11 +508,11 @@ export default function ModuloUm() {
 
                         <div className="flex flex-col items-center bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full p-6">
                             <div className="flex justify-between items-center">
-                                <h3 className="text-lg font-medium text-gray-900">Confirmar Exclusão</h3>
+                                <h3 className="text-lg font-medium text-gray-900">Confirmar Exclusao</h3>
                                 <FluencyCloseButton onClick={closeDeleteConfirmationModal} />
                             </div>
                             <div className="mt-2 flex flex-col items-center text-center">
-                                <p>Tem certeza que deseja excluir a aula "<span className="font-bold">{classToDelete.className}</span>"?</p>
+                                <p>Tem certeza que deseja excluir a aula <span className="font-bold">{classToDelete.className}</span>?</p>
                                 <div className="mt-4 flex gap-2">
                                     <FluencyButton variant="danger" onClick={handleDeleteClass}>Excluir</FluencyButton>
                                     <FluencyButton variant="gray" onClick={closeDeleteConfirmationModal}>Cancelar</FluencyButton>
