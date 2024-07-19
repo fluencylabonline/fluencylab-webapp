@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, updateDoc } from 'firebase/firestore';
 import { toast, Toaster } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { db, storage } from '@/app/firebase'; // Ensure 'db' and 'storage' are correctly imported from your Firebase setup
@@ -8,8 +8,10 @@ import AudioPlayer from './player';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
+import { GiSchoolBag } from "react-icons/gi";
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { MdDelete } from 'react-icons/md';
+import { MdDelete, MdOutlineAddTask } from 'react-icons/md';
+import { Tooltip } from '@nextui-org/react';
 
 interface NivelamentoDocument {
     id: string;
@@ -23,6 +25,11 @@ interface WordInput {
     isInput: boolean;
     userAnswer: string;
     isCorrect: boolean | null;
+}
+
+interface Student {
+    id: string;
+    [key: string]: any;
 }
 
 export default function Listening() {
@@ -297,12 +304,82 @@ export default function Listening() {
         fetchAllAudios();
     }, []);
     
+    const [students, setStudents] = useState<Student[]>([]);
+    useEffect(() => {
+        const fetchStudents = async () => {
+            if (session) {
+                const usersRef = collection(db, 'users');
+                const q = query(usersRef, where('role', '==', 'student'), where('professorId', '==', session.user.id));
+                const querySnapshot = await getDocs(q);
+                const fetchedStudents: Student[] = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedStudents.push({ id: doc.id, ...doc.data() });
+                });
+                
+                setStudents(fetchedStudents);
+            }
+        };
+        fetchStudents();
+    }, [session]);
+
+    const [isSelectModalOpen, setIsSelectModalOpen] = useState(false);
+    const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+    const [selectedAudioForTask, setSelectedAudioForTask] = useState<NivelamentoDocument | null>(null);
+
+    const openSelectModal = (audio: NivelamentoDocument) => {
+        setSelectedAudioForTask(audio);
+        setIsSelectModalOpen(true);
+    };
+    
+    const closeSelectModal = () => {
+        setIsSelectModalOpen(false);
+        setSelectedStudentId(null);
+    };
+    
+    const handleAssignAudio = async () => {
+        if (!selectedStudentId || !selectedAudioForTask) return;
+    
+        try {
+            const studentDocRef = doc(db, 'users', selectedStudentId);
+            const studentDocSnapshot = await getDoc(studentDocRef);
+            const studentData = studentDocSnapshot.data();
+    
+            if (!studentData || !studentData.tasks) {
+                toast.error('Erro ao adicionar tarefa.');
+                return;
+            }
+    
+            const tasksArray = studentData.tasks.Task || [];
+            const taskExists = tasksArray.some((task: { task: string; }) => task.task === `Revisar a aula de ${selectedAudioForTask.name}`);
+    
+            if (taskExists) {
+                toast.error('Tarefa já adicionada!');
+                return;
+            }
+    
+            const deckLink = `/student-dashboard/pratica/listening?id=${encodeURIComponent(selectedAudioForTask.id)}&name=${encodeURIComponent(selectedAudioForTask.name)}`;
+            const newTask = { task: `Treinar o áudio ${selectedAudioForTask.name}`, link: deckLink, done: false };
+            tasksArray.push(newTask);
+    
+            await updateDoc(studentDocRef, {
+                tasks: { Task: tasksArray }
+            });
+    
+            toast.success('Tarefa adicionada com sucesso!');
+            closeSelectModal();
+        } catch (error) {
+            console.error('Erro ao adicionar tarefa:', error);
+            toast.error('Erro ao adicionar tarefa.');
+        }
+    };
+    
+
     return (
         <div className='min-h-[90vh] w-full flex flex-col justify-center items-center px-12 p-8'>
             <Toaster />
 
             <div className='flex flex-row items-start justify-between p-2 w-full gap-2'>
-                <div className='max-w-[80%] text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
+                <div className='max-w-[70%] text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
                     {selectedAudio && <AudioPlayer src={selectedAudio} />}
                     {randomDocument && (
                         <div className='flex flex-col items-center gap-2' key={randomDocument.id}>
@@ -349,24 +426,36 @@ export default function Listening() {
                     )}
                 </div>
 
-                <div className='w-[20%] flex flex-col p-3 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
+                <div className='w-[30%] flex flex-col p-3 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
                     <h3 className='text-lg font-semibold mb-2'>Lista de áudios</h3>
                     <ul className='w-full h-[50vh] flex gap-1 flex-col overflow-hidden overflow-y-scroll'>
                         {nivelamentoData.map((doc) => (
                             <li key={doc.id} className='flex gap-2 items-center justify-between'>
                                 <button
                                     onClick={() => handlePlayAudio(doc)}
-                                    className={`py-1 px-4 w-full text-left font-bold rounded-md border-2 border-transparent focus:outline-none ${selectedAudio === doc.url ? 'bg-[#E64E17]' : 'hover:bg-fluency-gray-200 dark:hover:bg-gray-800'}`}
+                                    className={`py-1 px-4 w-full text-center font-bold rounded-md border-2 border-transparent focus:outline-none ${selectedAudio === doc.url ? 'bg-[#E64E17] text-white' : 'hover:bg-fluency-gray-200 dark:hover:bg-gray-800'}`}
                                 >
                                     {doc.name}
                                 </button>
                                 {session?.user.role === 'teacher' &&
-                                <button
-                                    onClick={() => openDeleteConfirmationModal(doc)}
-                                    className='w-10 text-red-500 hover:text-red-700 focus:outline-none'
-                                >
-                                <MdDelete />
-                                </button>}
+                               <div className='flex flex-row gap-1 items-center'>
+                                     <Tooltip className='px-1 bg-fluency-red-500 text-white font-bold rounded-md' content="Apagar áudio">
+                                        <button
+                                            onClick={() => openDeleteConfirmationModal(doc)}
+                                            className='w-10 text-red-500 hover:text-red-700 focus:outline-none'
+                                            >
+                                            <MdDelete />
+                                        </button>
+                                     </Tooltip>
+
+                                    <Tooltip className='px-1 bg-fluency-orange-500 text-white font-bold rounded-md' content="Enviar como tarefa para aluno">
+                                        <button 
+                                            onClick={() => openSelectModal(doc)}
+                                            className='w-10 text-orange-500 hover:text-orange-700 focus:outline-none'>
+                                            <GiSchoolBag />
+                                        </button>
+                                    </Tooltip>
+                                </div>}
                             </li>
                         ))}
                     </ul>
@@ -457,8 +546,43 @@ export default function Listening() {
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                </div>)}
+
+
+            {isSelectModalOpen && (
+                <div className="fixed z-50 inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="fixed inset-0 transition-opacity">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                            <div className="flex flex-col">
+                                <FluencyCloseButton onClick={closeSelectModal} />
+                                <div className="mt-3 flex flex-col gap-3 p-4">
+                                    <h3 className="text-center text-lg leading-6 font-bold mb-2">
+                                        Enviar áudio como tarefa
+                                    </h3>
+                                    <select
+                                        value={selectedStudentId || ''}
+                                        onChange={(e) => setSelectedStudentId(e.target.value)}
+                                        className='p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark px-4'
+                                    >
+                                        <option value="">Selecione um aluno</option>
+                                        {students.map(student => (
+                                            <option key={student.id} value={student.id}>
+                                                {student.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <div className="flex justify-center">
+                                        <FluencyButton variant='confirm' onClick={handleAssignAudio}>Adicionar</FluencyButton>
+                                        <FluencyButton variant='gray' onClick={closeSelectModal}>Cancelar</FluencyButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>)}
 
         </div>
     );

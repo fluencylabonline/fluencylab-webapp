@@ -91,7 +91,7 @@ export default function Aulas() {
                 {activePanel === 'video' && (
                     <iframe 
                         src={`https://drive.google.com/file/d/${classData.videoID}/preview`} 
-                        allow="autoplay"
+                        frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen
                         id="frame-video">
                     </iframe>
                 )}
@@ -107,13 +107,13 @@ export default function Aulas() {
                     <div className='flex flex-col sm:flex-row gap-4 items-center sm:items-start justify-center w-full h-full'>
                         <iframe 
                             src={`https://drive.google.com/file/d/${classData.videoID}/preview`} 
-                            allow="autoplay"
                             className='w-full h-max'
-                            id="frame-video">
+                            id="frame-video" frameBorder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen>
                         </iframe>
                         <iframe 
                             src={`https://drive.google.com/file/d/${classData.pdfID}/preview`} 
-                            allow="autoplay"
+                            frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen
                             id="frame-pdf">
                         </iframe>
                     </div>

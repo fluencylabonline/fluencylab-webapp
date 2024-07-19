@@ -2,7 +2,7 @@
     {
         "Name": "1. Primeiros Passos",
         "Description": "Aqui você vai entender qual nosso objetivo com cada aluno. Um pouco da nossa ideia de aulas e da plataforma FluencyLab.",
-        "Duration": "10min",
+        "Duration": "5min",
         "lessonFinished": "",
         "page": "primeirospassos",
         "link": "primeiros-passos",
@@ -11,7 +11,7 @@
     {
         "Name": "2. Dinâmica de aulas",
         "Description": "Vamos aprender sobre a dinâmica de aulas do nosso curso. Como você pode ter um bom relacionamento com seus alunos e quais critérios precisa usar em algumas situações.",
-        "Duration": "15min",
+        "Duration": "10min",
         "CourseID": "dinamicasdasaulas",
         "page": "dinamicaaulas",
         "link": "dinamica-de-aulas",
@@ -24,7 +24,7 @@
         "CourseID": "nivelamento",
         "page": "nivelamento",
         "link": "nivelamento",
-        "totalSteps": 3
+        "totalSteps": 1
     },
     {
         "Name": "4. Ferramentas e Métodos",

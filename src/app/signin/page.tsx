@@ -62,6 +62,7 @@ export default function SignIn(){
   
   async function handleSignIn() {
     setIsLoginLoading(true);
+    setShowPassword(false)
     const signInResponse = await signIn('credentials', { email, password, redirect: false });
     setIsLoginLoading(false);
     if (signInResponse?.ok) {
@@ -172,7 +173,7 @@ return(
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="z-10 -ml-6 text-center flex items-center justify-center dark:text-fluency-gray-300"
+                        className="opacity-50 z-10 -ml-6 text-center flex items-center justify-center dark:text-fluency-gray-300"
                     >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>

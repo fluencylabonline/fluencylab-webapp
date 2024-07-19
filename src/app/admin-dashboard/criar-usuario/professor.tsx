@@ -45,7 +45,7 @@ export default function CreateProfessor(){
                 'ferramentas-2': false,
                 'ferramentas-3': false,
                 'ferramentas-4': false,
-                'nivelamento': false,
+                'nivelamento-1': false,
               }
         });
 

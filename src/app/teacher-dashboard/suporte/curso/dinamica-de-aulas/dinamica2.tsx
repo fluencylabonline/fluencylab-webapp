@@ -5,7 +5,7 @@ export default function Dinamica2(){
         <div>
             <div className='mx-2'>
                 <p className='text-2xl font-bold py-2'>O que levar em conta nas aulas</p>
-                <p>É interessante que cada aula e no seu planejamento tenha materiais, métodos e ferramentas que o aluno goste e aproveite mais. Como músicas, trechos de séries ou filmes, livros, jogos ou dinânicas e assim por diante.</p>
+                <p>É interessante que cada aula (e no seu planejamento também) tenha materiais, métodos e ferramentas que o aluno goste e aproveite mais. Como músicas, trechos de séries ou filmes, livros, jogos ou dinânicas e assim por diante.</p>
                 <p>Sempre dê um feedback contínuo para seus alunos, mostre onde ele já melhorou e como ele melhorou. Esses elogios vão ser muito importantes para que ele se sinta motivado e continue progredindo. O ajude a perceber o que ele ainda precisa melhorar. Mantenha um equilíbrio entre a cobrança e os elogios para que o aluno possa continuar motivado. </p>
                 <p>Crie metas realistas para o aluno, ajude ele a atingir cada uma delas progressivamente. Peça feedbacks do aluno para que você possa saber como suas próprias aulas estão, e sempre seja aberto a sugestões e até críticas do aluno. Elas podem tornar suas aulas mais úteis e interessantes. Incentive seu aluno a usar o idioma desde a primeira aula, o ajude a ver onde ele pode usar já no começo, talvez perguntando sobre vocabulário, frases e assim por diante. Seja encorajador, e incentivando o aluno a se expressar e praticar o idioma.</p>
                 <p>Defina alguns dias que pode ficar disponível para tirar dúvidas rápidas do aluno por meio de mensagem, e se a dúvida for complexa anote para a aula seguinte.</p>

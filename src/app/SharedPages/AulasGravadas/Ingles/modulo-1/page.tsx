@@ -34,7 +34,7 @@ interface StudentData {
     id: string;
 }
 
-
+import { GiSchoolBag } from "react-icons/gi";
 
 export default function ModuloUm() {
     const [createClass, setCreateClass] = useState(false);
@@ -402,7 +402,7 @@ export default function ModuloUm() {
 
                         {session?.user.role === 'teacher' && (
                             <div className="flex flex-col gap-1 absolute top-2 right-0">
-                                <FluencyButton variant='confirm' onClick={() => openStudentModal(classData)}>Enviar</FluencyButton>
+                                <FluencyButton variant='confirm' onClick={() => openStudentModal(classData)}>Enviar <GiSchoolBag className="w-4 h-auto" /></FluencyButton>
                             </div>
                         )}
                         {session?.user.role === 'admin' && (

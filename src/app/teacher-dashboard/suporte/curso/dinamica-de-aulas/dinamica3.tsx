@@ -15,7 +15,6 @@ export default function Dinamica3(){
             <div className='mx-2'>
                 <p className='text-xl font-bold py-2 mt-2'>Como marcar o status de cada aula</p>
                 <p>O site tem uma parte onde você vai manter o registro de cada aula. Ele funciona assim:</p>
-                <p>Voce vai marcar a aula...</p>
                 
                 <div className='w-full lg:flex lg:flex-row-reverse md:flex md:flex-col flex flex-col gap-1 justify-between items-start my-4 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-900'>
                     <p className='w-fit p-6'>Um tutorial para ficar bem fácil de entender!</p>
