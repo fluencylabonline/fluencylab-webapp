@@ -18,17 +18,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { IoMdArrowRoundForward } from "react-icons/io";
 import { PiExam } from "react-icons/pi";
-import { BsCircleFill } from "react-icons/bs";
 
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
 
 const topics = [
-  "Discuss the impact of technology on modern society.",
-  "Describe your favorite book and explain why you recommend it.",
-  "Discuss the importance of environmental conservation.",
-  "Explain the concept of cultural diversity and its significance.",
-  "Describe a memorable travel experience and its impact on you.",
+  "My Favorite Food", "A Day in My Life", "My Best Friend", "My Hobbies", "My Family", "A Memorable Vacation", "My School", "A Pet I Would Like to Have", "A Favorite Movie", "My Dream Job", "A Book I Enjoyed", "My Favorite Season", "A Special Celebration", "An Important Person in My Life", "What I Do on Weekends"
 ];
 
 const getRandomTopic = () => {

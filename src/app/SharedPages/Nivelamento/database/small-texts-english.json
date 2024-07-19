@@ -36,19 +36,9 @@
         "correct_answer": "B) Fly a kite"
       },
       {
-        "text": "The cat is:",
-        "options": ["A) Sleeping", "B) Swimming", "C) Dancing", "D) Singing"],
-        "correct_answer": "A) Sleeping"
-      },
-      {
         "text": "At the beach, people like to:",
         "options": ["A) Build sandcastles", "B) Play video games", "C) Cook hamburgers", "D) Sleep"],
         "correct_answer": "A) Build sandcastles"
-      },
-      {
-        "text": "Mark is wearing:",
-        "options": ["A) A jacket", "B) A snowboard", "C) Sunglasses", "D) A backpack"],
-        "correct_answer": "C) Sunglasses"
       },
       {
         "text": "In winter, it snows. What do people do with snow?",

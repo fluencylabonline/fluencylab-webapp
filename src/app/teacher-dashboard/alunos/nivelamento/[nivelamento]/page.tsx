@@ -2,11 +2,10 @@
 import { useEffect, useState } from "react";
 
 import FluencyButton from "@/app/ui/Components/Button/button";
-
 import { db } from "@/app/firebase";
 import { collection, doc, setDoc, getDocs, DocumentData, getDoc } from "firebase/firestore";
-
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
+import LoadingAnimation from "@/app/ui/Animations/LoadingAnimation";
 
 interface NivelData {
     data: string;
@@ -18,7 +17,7 @@ interface MergedNivelData {
     Vocabulario?: string;
     Frases?: string;
     Compreensao?: string;
-    'Verdadeiro-e-Falso'?: string;
+    'Verdadeiro ou Falso'?: string;
 }
 
 interface Nivel2Data {
@@ -28,14 +27,13 @@ interface Nivel2Data {
 
 interface Nivel3Data extends NivelData {}
 
-const nivel1Subcollections: (keyof MergedNivelData)[] = ["Vocabulario", "Frases", "Compreensao", "Verdadeiro-e-Falso"];
+const nivel1Subcollections: (keyof MergedNivelData)[] = ["Vocabulario", "Frases", "Compreensao", "Verdadeiro ou Falso"]; // Updated collection name
 
-// Mapping object for more descriptive labels
 const dataKeyMapping: { [key: string]: string } = {
     Vocabulario: 'Vocabulário',
     Frases: 'Frases',
     Compreensao: 'Compreensão',
-    'Verdadeiro-e-Falso': 'Verdadeiro ou Falso',
+    'Verdadeiro ou Falso': 'Verdadeiro ou Falso', // Updated collection name
 };
 
 const scoreLabel = 'Pontuação';
@@ -45,37 +43,58 @@ export default function NivelamentoTeacher() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
 
-    const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
-    useEffect(() => {
-      const fetchUserInfo = async () => {
-          if (id) {
-              try {
-                  const profile = doc(db, 'users', id);
-                  const docSnap = await getDoc(profile);
-                  if (docSnap.exists()) {
-                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
-                    } else {
-                      console.log("No such document!");
-                  }
-              } catch (error) {
-                  console.error("Error fetching document: ", error);
-              }
-          }
-      };
-
-      fetchUserInfo()
-  }, [id]);
-
+    const [nivelamentoPermitido, setNivelamentoPermitido] = useState<boolean | null>(null);
     const [nivelData, setNivelData] = useState<{ [key: string]: NivelData[] }>({});
     const [mergedNivel1Data, setMergedNivel1Data] = useState<MergedNivelData[]>([]);
     const [nivel2Data, setNivel2Data] = useState<Nivel2Data[]>([]);
     const [nivel3Data, setNivel3Data] = useState<Nivel3Data[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [retryCount, setRetryCount] = useState(0); // Track retry count
+    const maxRetries = 3; // Maximum number of retries
+    const retryDelay = 3000; // Retry delay in milliseconds (3 seconds)
 
     useEffect(() => {
-        if (id) {
-            fetchNivelamentoData(id);
-        }
+        const fetchUserInfo = async () => {
+            if (id) {
+                try {
+                    const profile = doc(db, 'users', id);
+                    const docSnap = await getDoc(profile);
+                    if (docSnap.exists()) {
+                        setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+                    } else {
+                        console.log("No such document!");
+                    }
+                } catch (error) {
+                    console.error("Error fetching document: ", error);
+                }
+            }
+        };
+
+        fetchUserInfo();
     }, [id]);
+
+    useEffect(() => {
+        if (id && nivelamentoPermitido !== null) {
+            setLoading(true); // Set loading to true before fetching data
+            fetchNivelamentoData(id).finally(() => setLoading(false)); // Set loading to false when done
+        }
+    }, [id, nivelamentoPermitido]);
+
+    useEffect(() => {
+        let timeoutId: NodeJS.Timeout | null = null;
+
+        if (loading && retryCount < maxRetries) {
+            timeoutId = setTimeout(() => {
+                setRetryCount(prev => prev + 1);
+                console.log(`Retrying data fetch attempt ${retryCount + 1}`);
+                if (id) fetchNivelamentoData(id); // Retry fetching data only if id is not null
+            }, retryDelay);
+        }
+
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId); // Clean up timeout on component unmount or when retryCount changes
+        };
+    }, [loading, retryCount, id]);
 
     async function fetchNivelamentoData(userId: string) {
         try {
@@ -109,7 +128,7 @@ export default function NivelamentoTeacher() {
             const nivel2DataArray: Nivel2Data[] = [];
             nivel2DocsSnapshot.forEach((doc: DocumentData) => {
                 const timeStamp = formatDate(doc.data().timestamp.toDate()); // Convert Timestamp to formatted string
-                const score = doc.data().score.toString(); // Convert pontos to string
+                const score = doc.data().score.toString(); // Convert score to string
                 nivel2DataArray.push({ timeStamp, score });
             });
             setNivel2Data(nivel2DataArray);
@@ -146,14 +165,13 @@ export default function NivelamentoTeacher() {
     }
 
     function handleNivelamento() {
-        if (!id) {
-            return null;
-        }
-        try {
-            const userRef = doc(db, 'users', id);
-            setDoc(userRef, { NivelamentoPermitido: false }, { merge: true });
-        } catch (error) {
-            console.error('Error updating NivelamentoPermitido field:', error);
+        if (id) {
+            try {
+                const userRef = doc(db, 'users', id);
+                setDoc(userRef, { NivelamentoPermitido: false }, { merge: true });
+            } catch (error) {
+                console.error('Error updating NivelamentoPermitido field:', error);
+            }
         }
     }
 
@@ -164,93 +182,95 @@ export default function NivelamentoTeacher() {
         return `${day}/${month}/${year}`;
     }
 
+
     return (
         <div className="p-4 mt-4 flex flex-col items-center w-full">
-
-        <div className="min-w-full  p-4 flex flex-col items-center gap-1">
-            <h2 className="text-xl font-bold">Nível 1 - Conhecimento básico</h2>
-            <ResponsiveContainer width="100%" height={300}>
-                {mergedNivel1Data.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                        <span>Sem informação para mostrar</span>
+            {loading ? (
+                <div className="flex items-center justify-center min-h-full min-w-full absolute top-[0%]">
+                    <LoadingAnimation />
+                </div>
+            ) : (
+                <>
+                    <div className="min-w-full p-4 flex flex-col items-center gap-1">
+                        <h2 className="text-xl font-bold">Nível 1 - Conhecimento básico</h2>
+                        <ResponsiveContainer width="100%" height={300}>
+                            {mergedNivel1Data.length === 0 ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <span>Sem informação para mostrar</span>
+                                </div>
+                            ) : (
+                                <LineChart data={mergedNivel1Data}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="data" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    {nivel1Subcollections.map(subcollection => (
+                                        <Line
+                                            key={subcollection}
+                                            type="monotone"
+                                            dataKey={subcollection}
+                                            stroke={getColor(subcollection)}
+                                            activeDot={{ r: 8 }}
+                                            name={dataKeyMapping[subcollection]}
+                                        />
+                                    ))}
+                                </LineChart>
+                            )}
+                        </ResponsiveContainer>
                     </div>
-                ) : (
-                    <LineChart data={mergedNivel1Data}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="data" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        {nivel1Subcollections.map(subcollection => (
-                            <Line
-                                key={subcollection}
-                                type="monotone"
-                                dataKey={subcollection}
-                                stroke={getColor(subcollection)}
-                                activeDot={{ r: 8 }}
-                                name={dataKeyMapping[subcollection]}
-                            />
-                        ))}
-                    </LineChart>
-                )}
-            </ResponsiveContainer>
-        </div>
 
-        <div className="min-w-full p-4 flex flex-col items-center gap-1">
-            <h2 className="text-xl font-bold">Nível 2- Escrita</h2>
-            <ResponsiveContainer width="100%" height={300}>
-                {nivel2Data.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                        <span>Sem informação para mostrar</span>
+                    <div className="min-w-full p-4 flex flex-col items-center gap-1">
+                        <h2 className="text-xl font-bold">Nível 2 - Escrita</h2>
+                        <ResponsiveContainer width="100%" height={300}>
+                            {nivel2Data.length === 0 ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <span>Sem informação para mostrar</span>
+                                </div>
+                            ) : (
+                                <LineChart data={nivel2Data}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="timeStamp" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="score" name={scoreLabel} stroke="#8884d8" activeDot={{ r: 8 }} />
+                                </LineChart>
+                            )}
+                        </ResponsiveContainer>
                     </div>
-                ) : (
-                    <LineChart data={nivel2Data}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="timeStamp" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="score" name={scoreLabel} stroke="#8884d8" activeDot={{ r: 8 }} />
-                    </LineChart>
-                )}
-            </ResponsiveContainer>
-        </div>
 
-        <div className="min-w-full p-4 flex flex-col items-center gap-1">
-            <h2 className="text-xl font-bold">Nível 3 - Audição</h2>
-            <ResponsiveContainer width="100%" height={300}>
-                {nivel3Data.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                        <span>Sem informação para mostrar</span>
+                    <div className="min-w-full p-4 flex flex-col items-center gap-1">
+                        <h2 className="text-xl font-bold">Nível 3 - Audição</h2>
+                        <ResponsiveContainer width="100%" height={300}>
+                            {nivel3Data.length === 0 ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <span>Sem informação para mostrar</span>
+                                </div>
+                            ) : (
+                                <LineChart data={nivel3Data}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="data" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="pontos" name={pontosLabel} stroke="#82ca9d" activeDot={{ r: 8 }} />
+                                </LineChart>
+                            )}
+                        </ResponsiveContainer>
                     </div>
-                ) : (
-                    <LineChart data={nivel3Data}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="data" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="pontos" name={pontosLabel} stroke="#82ca9d" activeDot={{ r: 8 }} />
-                    </LineChart>
-                )}
-            </ResponsiveContainer>
+
+                    {nivelamentoPermitido === true ? (
+                        <FluencyButton className="mt-4" variant="warning">Aguardando Aluno Fazer Nivelamento</FluencyButton>
+                    ) : (
+                        <FluencyButton className="mt-4" variant="confirm" onClick={handleNivelamento}>Refazer Nivelamento do Aluno</FluencyButton>
+                    )}
+                </>
+            )}
         </div>
-
-        {nivelamentoPermitido === false ? (
-            <>
-                <FluencyButton className="mt-4" variant="warning">Aguardando Aluno Fazer Nivelamento</FluencyButton>
-            </>
-        ):(
-            <>
-                <FluencyButton className="mt-4" variant="confirm" onClick={handleNivelamento}>Refazer Nivelamento do Aluno</FluencyButton>
-            </>
-        )}
-
-    </div>
-);
+    );
 }
 
-// Utility function to assign different colors to different lines
 function getColor(subcollection: string): string {
     switch (subcollection) {
         case 'Vocabulario':
