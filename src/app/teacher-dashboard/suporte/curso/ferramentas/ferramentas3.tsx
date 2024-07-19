@@ -13,7 +13,7 @@ export default function Ferramentas3(){
                         Shadowing é uma técnica de aprendizagem de línguas que envolve ouvir um áudio ou uma fala e imitá-lo simultaneamente. O objetivo é melhorar a fluência e a pronúncia ao seguir exatamente o que é ouvido, copiando a entonação, ritmo e pronúncia do falante original.
                     </p>
                     <p className='py-2'>
-                        <strong>Por que é Útil?</strong>
+                        <strong>Por que é útil?</strong>
                         <br />
                         - <strong>Melhoria na Pronúncia:</strong> Ao imitar um falante nativo, você pode aprimorar a sua pronúncia e entonação.
                         <br />
@@ -78,11 +78,11 @@ export default function Ferramentas3(){
                         <br />
                         <strong>Os órgãos da fala</strong>
                         <br />
-                        <strong>Língua:</strong> A língua desempenha um papel fundamental na produção dos sons da fala. Ela é responsável por articular os diferentes sons consonantais, como "p", "b", "t", "d", entre outros. Além disso, a língua também é responsável por posicionar-se em diferentes pontos da boca para produzir as vogais.
+                        <strong>Língua:</strong> A língua desempenha um papel fundamental na produção dos sons da fala. Ela é responsável por articular os diferentes sons consonantais, como p, b, t, d, entre outros. Além disso, a língua também é responsável por posicionar-se em diferentes pontos da boca para produzir as vogais.
                         <br />
-                        <strong>Lábios:</strong> Os lábios são utilizados na produção de diversos sons da fala, como os sons das letras "p", "b" e "m". Eles são responsáveis por bloquear e liberar o fluxo de ar para criar diferentes articulações sonoras.
+                        <strong>Lábios:</strong> Os lábios são utilizados na produção de diversos sons da fala, como os sons das letras p, b e m. Eles são responsáveis por bloquear e liberar o fluxo de ar para criar diferentes articulações sonoras.
                         <br />
-                        <strong>Dentes:</strong> Os dentes também desempenham um papel importante na fala, principalmente na produção de alguns sons consonantais, como os sons das letras "t", "d", "s" e "z". Eles são utilizados para restringir o fluxo de ar durante a articulação desses sons.
+                        <strong>Dentes:</strong> Os dentes também desempenham um papel importante na fala, principalmente na produção de alguns sons consonantais, como os sons das letras t, d, s e z. Eles são utilizados para restringir o fluxo de ar durante a articulação desses sons.
                         <br />
                         <strong>Garganta:</strong> A garganta, ou mais especificamente as cordas vocais, é responsável pela produção dos sons vocálicos. Ela regula a passagem do ar e vibra para produzir diferentes tons e frequências.
                         <br />
@@ -91,14 +91,14 @@ export default function Ferramentas3(){
                     <p className='py-2'>
                         <strong>Consoantes</strong>
                         <br />
-                        Consoantes são sons que produzimos ao bloquear ou restringir o fluxo de ar através da boca. Esses sons são feitos quando os órgãos articulatórios, como a língua, os lábios ou a garganta, entram em contato ou se aproximam um do outro. Por exemplo, ao pronunciar a letra "p", bloqueamos o fluxo de ar com os lábios e depois o liberamos. Já ao pronunciar a letra "s", restringimos o fluxo de ar passando-o entre a língua e os dentes. As consoantes nos ajudam a formar diferentes palavras e têm um papel importante na nossa comunicação diária.
+                        Consoantes são sons que produzimos ao bloquear ou restringir o fluxo de ar através da boca. Esses sons são feitos quando os órgãos articulatórios, como a língua, os lábios ou a garganta, entram em contato ou se aproximam um do outro. Por exemplo, ao pronunciar a letra p, bloqueamos o fluxo de ar com os lábios e depois o liberamos. Já ao pronunciar a letra s, restringimos o fluxo de ar passando-o entre a língua e os dentes. As consoantes nos ajudam a formar diferentes palavras e têm um papel importante na nossa comunicação diária.
                     </p>
                     <p className='py-2'>
                         <strong>Vogais</strong>
                         <br />
                         As vogais são sons que produzimos ao deixar o fluxo de ar passar livremente através da boca, sem bloqueá-lo ou restringi-lo. Ao pronunciar vogais, a língua, os lábios e a garganta ficam relaxados e não entram em contato um com o outro. Diferentemente das consoantes, que envolvem bloquear ou restringir o fluxo de ar, as vogais são sons abertos e claros.
                         <br />
-                        Por exemplo, ao pronunciar a vogal "a", a boca fica aberta e a língua fica relaxada no fundo da boca. Ao pronunciar a vogal "e", a boca fica um pouco mais fechada e a língua se move um pouco para a frente. Já ao pronunciar a vogal "i", a boca fica mais fechada e a língua se eleva no palato. Cada vogal tem uma posição diferente da língua e dos lábios, o que resulta em sons distintos.
+                        Por exemplo, ao pronunciar a vogal a, a boca fica aberta e a língua fica relaxada no fundo da boca. Ao pronunciar a vogal e, a boca fica um pouco mais fechada e a língua se move um pouco para a frente. Já ao pronunciar a vogal i, a boca fica mais fechada e a língua se eleva no palato. Cada vogal tem uma posição diferente da língua e dos lábios, o que resulta em sons distintos.
                         <br />
                     </p>
                     <div className="flex flex-col items-center justify-center">
