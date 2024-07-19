@@ -18,6 +18,7 @@ import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 import { TbBook2 } from 'react-icons/tb';
 import { PiExam } from 'react-icons/pi';
 import { LuLayoutPanelTop } from 'react-icons/lu';
+import LoadingAnimation from '@/app/ui/Animations/LoadingAnimation';
 
 interface Aluno {
     overdueClassesCount: number;
@@ -457,8 +458,9 @@ function Alunos(){
                 />
                 <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
                 <div className='flex flex-col gap-3 lg:items-start md:items-start items-center'>
-                    {filteredStudents.length === 0 && <div className='fade-in fade-out w-screen min-h-screen bg-fluency-bg-light dark:bg-fluency-bg-dark z-50'>
-                        <iframe className='w-auto h-auto absolute top-[40%] left-[40%]' src="https://lottie.host/embed/0642876f-5984-458c-965d-837bd42ddb72/mrsk5b9kjh.json"></iframe>
+                    {filteredStudents.length === 0 && 
+                    <div className="flex items-center justify-center h-[70vh] min-w-full z-30">
+                        <LoadingAnimation />
                     </div>}
                     {filteredStudents.map((student) => (
                         <div className="bg-fluency-blue-200 dark:bg-fluency-pages-dark w-full lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
