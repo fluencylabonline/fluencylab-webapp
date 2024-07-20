@@ -40,7 +40,7 @@ import {
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading style={heading}>Olá professor(a), seja bem-vindo à FluencyLab!</Heading>
+            <Heading style={heading}>Olá {userName}, seja bem-vindo à FluencyLab!</Heading>
             <Section style={buttonContainer}>
             <Text style={paragraph}>
             Queremos te receber e passar algumas informações importantes.
@@ -48,7 +48,7 @@ import {
             <Text style={paragraph}>
               Primeiro, seu login e senha para acessar a plataforma em www.fluencylab.me <br/> A senha você pode mudar depois. 
             </Text>
-              <code style={code}>Login: {studentMail} ou {userName}</code>
+              <code style={code}>Login: {studentMail}</code>
               <br/><code style={code}>Senha: seu telefone, 8 últimos dígitos sem o -</code>
   
             </Section>
@@ -156,7 +156,7 @@ import {
     padding: "1px 4px",
     backgroundColor: "#dfe1e4",
     letterSpacing: "-0.3px",
-    fontSize: "10px",
+    fontSize: "13px",
     borderRadius: "4px",
     color: "#3c4149",
   };
