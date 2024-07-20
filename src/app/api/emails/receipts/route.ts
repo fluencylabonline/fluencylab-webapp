@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     let results;
     if (templateType === 'receipts') {
       results = await resend.emails.send({
-        from: 'financeiro@fluencylab.online',
+        from: 'financeiro@fluencylab.me',
         to: studentMail,
         subject: emailSubject,
         react: Receipts({ selectedMonth: translatedMonth, studentName, paymentKeyProp, selectedYear, mensalidade }),
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     
     if (templateType === 'welcome') {
       results = await resend.emails.send({
-        from: 'coordenacao@fluencylab.online',
+        from: 'coordenacao@fluencylab.me',
         to: studentMail,
         subject: userName,
         react: Welcome({ studentName, userName }),
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
     if (templateType === 'welcomeTeacher') {
       results = await resend.emails.send({
-        from: 'coordenacao@fluencylab.online',
+        from: 'coordenacao@fluencylab.me',
         to: studentMail,
         subject: teacherName,
         react: WelcomeTeacher({ studentName, userName, studentMail, teacherName }),
