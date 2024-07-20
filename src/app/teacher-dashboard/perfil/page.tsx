@@ -620,7 +620,7 @@ function Perfil() {
                                 <li className='flex flex-row items-center gap-2 w-full justify-between' key={index}>
                                   <p className='font-semibold'>{time.day} às {time.hour}</p>
                                   <select
-                                    className={`rounded-md font-medium ${time.status?.studentId === 'disponivel' ? "text-fluency-green-500 font-semibold" : "text-black"}`}
+                                    className={`text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-md font-medium ${time.status?.studentId === 'disponivel' ? "text-fluency-green-500 font-semibold" : "text-black"}`}
                                     value={time.status?.studentId || ''}
                                     onChange={(e) => updateTimeSlotStatus(time.id, e.target.value, students.find(student => student.id === e.target.value)?.name || '')}
                                   >
@@ -639,34 +639,34 @@ function Perfil() {
                             </ul>
 
                             {editingTime && (
-                          <div className='flex flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
-                                <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
-                                  <option value="">Selecione um dia</option>
-                                  <option>Segunda</option>
-                                  <option>Terça</option>
-                                  <option>Quarta</option>
-                                  <option>Quinta</option>
-                                  <option>Sexta</option>
-                                  <option>Sábado</option>
-                                  <option>Domingo</option>
-                                </select>
-                                <input 
-                                  type="text" 
-                                  value={hour} 
-                                  onChange={(e) => setHour(e.target.value)} 
-                                  placeholder="Horário" 
-                                  className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark'
-                                />
-                                <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveEditedTimeSlot}>Salvar</button>
-                                <button className='px-2 py-1 rounded-md bg-fluency-red-500 hover:bg-fluency-red-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={() => setEditingTime(null)}>Cancelar</button>
-                              </div>
-                            )}
+                            <div className='flex flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                                  <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
+                                    <option value="">Selecione um dia</option>
+                                    <option>Segunda</option>
+                                    <option>Terça</option>
+                                    <option>Quarta</option>
+                                    <option>Quinta</option>
+                                    <option>Sexta</option>
+                                    <option>Sábado</option>
+                                    <option>Domingo</option>
+                                  </select>
+                                  <input 
+                                    type="text" 
+                                    value={hour} 
+                                    onChange={(e) => setHour(e.target.value)} 
+                                    placeholder="Horário" 
+                                    className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark'
+                                  />
+                                  <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveEditedTimeSlot}>Salvar</button>
+                                  <button className='px-2 py-1 rounded-md bg-fluency-red-500 hover:bg-fluency-red-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={() => setEditingTime(null)}>Cancelar</button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>}
+                  </div>}
 
         <Toaster />
 

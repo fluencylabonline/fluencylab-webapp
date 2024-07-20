@@ -12,8 +12,8 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
-import { MdOndemandVideo, MdOutlineCollectionsBookmark } from "react-icons/md";
-import { LuBookCopy, LuGamepad2 } from 'react-icons/lu';
+import { MdOndemandVideo, MdOutlineSupportAgent } from "react-icons/md";
+import { LuGamepad2 } from 'react-icons/lu';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 
 interface ISidebarItem {
@@ -72,7 +72,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "Suporte",
       path: "/teacher-dashboard/suporte",
-      icon: <MdOutlineCollectionsBookmark className="h-6 w-6"/>,
+      icon: <MdOutlineSupportAgent className="h-6 w-6"/>,
     },
     {
       name: "Perguntas",

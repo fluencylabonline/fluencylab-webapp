@@ -242,7 +242,13 @@ const Nivelamento = () => {
 
                     <div>
                         <p className='text-xl font-bold py-2 mt-2'>Teste de conversação</p>
-                        <p>Arquivos para fazer o teste de fala <strong className='hover:text-fluency-blue-500'><a href={'https://drive.google.com/drive/folders/1UPxK3h4mNu11bHyGopzrpHOTvf9Cup8W?usp=drive_link'} target='_blank' rel='noopener noreferrer'>estão aqui.</a></strong> Pode escolher um dos dois para fazer. Em breve disponibilizaremos mais material.</p>
+                        <p>Arquivos para fazer o teste de fala <strong className='hover:text-fluency-blue-500'><a href={'https://drive.google.com/drive/folders/1UPxK3h4mNu11bHyGopzrpHOTvf9Cup8W?usp=drive_link'} target='_blank' rel='noopener noreferrer'>estão aqui.</a></strong> Pode escolher um deles para fazer. Em breve disponibilizaremos mais material.</p>
+
+                        
+                        <div className='w-full lg:flex lg:flex-row md:flex md:flex-col flex flex-col gap-1 justify-between items-start my-4 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-900'>
+                            <p className='w-fit p-6'>Um exemplo de nivelamento feito. <strong className='hover:text-fluency-blue-500'><a href="https://drive.google.com/drive/folders/1JKxWTYRx4XBQK0sUYe1dGeE1Xw0qj237?usp=drive_link" target='_blank' rel='noopener noreferrer' >Aqui você vai encontrar</a></strong> arquivos e anotações relacionados ao nivelamento do vídeo.</p>
+                            <iframe className='aspect-video w-[65%] rounded-md' src="https://drive.google.com/file/d/1_DmqiW45c2LUTZvFnZ8AAR1SyAIgrKZG/preview" title="Nivelamento" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                        </div>
                     </div>
                    
                     <div className='flex flex-row gap-2 mt-4'>

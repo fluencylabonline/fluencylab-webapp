@@ -1,5 +1,5 @@
 export default function Ferramentas4(){
-    //Métodos falar a palavra de trás para frente e dividir ela, pedir que o aluno estude todo dia 15min, estudar texto, audio
+    //Métodos falar a palavra de trás para frente e dividir ela, estudar texto, audio
     return(
         <div>
             <p className='text-2xl font-bold py-2 pb-4'>Métodos</p>
@@ -58,6 +58,14 @@ export default function Ferramentas4(){
                         <br />
                         Ajude e lembre seu aluno de definir uma meta de estudos diária. Pelo menos 10 minutos todos os dias. Talvez ele possa colocar o celular para despertar ou algum outro tipo de lembrete. Pode ajudar se ele tiver uma programação do que estudar cada dia. 
                     </p>
+                </div>
+
+                <div className="mt-6">
+                    <p className='text-2xl font-bold py-2'>Como usar o OBS e Google Meet</p>
+                    <div className='w-full lg:flex lg:flex-row-reverse md:flex md:flex-col flex flex-col gap-1 justify-between items-start my-4 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-900'>
+                        <p className='w-fit p-6'>Aqui vai ver como usar melhor as ferramentas para dar aulas. <strong className='hover:text-fluency-blue-500'><a href="https://drive.google.com/drive/folders/12pOo58_BvJ8VPrbjXvnCzWyWvARPQLgp?usp=drive_link" target='_blank' rel='noopener noreferrer' >Aqui nesse link</a></strong> tem arquivos importantes.</p>
+                        <iframe className='w-full rounded-md' width="720" height="275" src="https://www.youtube.com/embed/znTaPMDQ3r8?si=_18G_Bh2jvhEIdHx" title="Nivelamento" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                    </div>
                 </div>
 
         </div>
