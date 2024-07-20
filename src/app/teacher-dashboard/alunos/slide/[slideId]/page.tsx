@@ -1,26 +1,36 @@
 'use client';
-import React from "react";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import React, { useEffect, useState } from "react";
 
-export default function SlideClass(){
-    const params = new URLSearchParams(window.location.search);
-    const slideURL = params.get('slide');
+export default function CanvaEmbed() {
+    const [designURL, setDesignURL] = useState<string | null>(null);
 
-    if (!slideURL) {
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const url = params.get('slide');
+        setDesignURL(url);
+    }, []);
+
+    // Function to add ?embed to the URL
+    const getEmbedURL = (url: string | null) => {
+        if (!url) return '';
+        // Check if the URL already contains a query string
+        return url.includes('?') ? `${url}&embed` : `${url}?embed`;
+    };
+
+    if (!designURL) {
         return <div>Loading...</div>;
     }
 
-    const documents = [
-        { uri:'gs://fluencylabweb-pro.appspot.com/s4mq3n6YZlcJkYTJk5IOqmb6dkC3/materiais/slides/samplepptx.pptx' },
-    ];
+    const embedURL = getEmbedURL(designURL);
 
     return (
-        <div>
-            <p>Slides</p>
-            {slideURL}
-            <DocViewer
-                documents={documents}
-                pluginRenderers={DocViewerRenderers}
+        <div className="flex justify-center w-full h-screen max-h-[90vh]">
+            <iframe
+                className="w-full h-full rounded-md border-none"
+                loading="lazy"
+                src={embedURL}
+                allowFullScreen
+                title="Canva Slide"
             />
         </div>
     );

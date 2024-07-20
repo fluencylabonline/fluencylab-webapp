@@ -22,6 +22,7 @@ import { MdCardTravel } from "react-icons/md";
 import { IoSchool } from "react-icons/io5";
 import Traveling from "./traveling";
 import Instrumental from "./instrumental";
+import Kids from "./kids";
 
 interface Notebook {
     title: string;
@@ -45,6 +46,7 @@ export default function ApostilasCreation() {
     const [allyouneedtoknow, setAllyouneedtoknow] = useState(false);
     const [traveling, setTraveling] = useState(false);
     const [instrumentalEnglish, setInstrumentalEnglish] = useState(false);
+    const [kids, setKids] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Notebook[]>([]);
@@ -146,6 +148,7 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(false);
                 setTraveling(false);
                 setInstrumentalEnglish(false);
+                setKids(false);
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 First Steps <TbBookDownload onClick={() => handleDownloadWorkbook('01 - First Steps')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -157,6 +160,7 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(false);
                 setTraveling(false);
                 setInstrumentalEnglish(false);
+                setKids(false);
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 The Basics <TbBookDownload onClick={() => handleDownloadWorkbook('02 - The Basics')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -168,6 +172,7 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(true);
                 setTraveling(false);
                 setInstrumentalEnglish(false);
+                setKids(false);
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 All you need to know <TbBookDownload onClick={() => handleDownloadWorkbook('All you need to know')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -179,6 +184,7 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(false);
                 setTraveling(true);
                 setInstrumentalEnglish(false);
+                setKids(false);
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Traveling <TbBookDownload  onClick={() => handleDownloadWorkbook('Traveling')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -190,9 +196,22 @@ export default function ApostilasCreation() {
                 setAllyouneedtoknow(false);
                 setTraveling(false);
                 setInstrumentalEnglish(true);
+                setKids(false);
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Instrumental <TbBookDownload  onClick={() => handleDownloadWorkbook('Instrumental')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+            </button>
+
+            <button onClick={() => {
+                setFirststeps(false);
+                setThebasics(false);
+                setAllyouneedtoknow(false);
+                setTraveling(false);
+                setInstrumentalEnglish(false);
+                setKids(true);
+            }} 
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
+                Kids <TbBookDownload  onClick={() => handleDownloadWorkbook('Kids')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
         </div>
         
@@ -222,6 +241,11 @@ export default function ApostilasCreation() {
             {instrumentalEnglish && 
             <div className={instrumentalEnglish ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
                 <Instrumental />
+            </div>}
+
+            {kids && 
+            <div className={kids ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
+                <Kids />
             </div>}
         </div>
         ) : (

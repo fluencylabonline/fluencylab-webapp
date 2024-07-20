@@ -24,9 +24,10 @@ import Link from 'next/link';
 
 import { toast, Toaster } from 'react-hot-toast';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
-import { IoMdCloudOutline } from 'react-icons/io';
+import { IoMdCloudOutline, IoMdHelpCircleOutline } from 'react-icons/io';
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
 import { HiOutlineDocumentReport } from 'react-icons/hi';
+import { Tooltip } from '@nextui-org/react';
 
 interface Notebook {
     studentName: string;
@@ -59,11 +60,11 @@ interface Aluno {
     classDatesWithStatus: { date: Date; status: string }[];
 }
 
-
 export default function Caderno(){
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
-
+    const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+    
     const [studentData, setStudentData] = useState<Aluno | null>(null);
     useEffect(() => {
         const fetchStudentData = async () => {
@@ -249,87 +250,57 @@ export default function Caderno(){
         }
       };
       
-
-    //Upload PowerPoint
+    // Upload PowerPoint
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-    };
+    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
+    const [slideLink, setSlideLink] = useState('');
+    const [slides, setSlides] = useState<{ name: string; url: string; }[]>([]);
+    useEffect(() => {
+        const fetchSlides = async () => {
+            try {
+                const slidesRef = collection(db, `users/${id}/Slides`);
+                const snapshot = await getDocs(slidesRef);
+                const slidesList: { name: string; url: string; }[] = [];
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    slidesList.push({ name: data.name, url: data.url });
+                });
+                setSlides(slidesList);
+            } catch (error) {
+                console.error('Error fetching slides:', error);
+            }
+        };
+        fetchSlides();
+    }, [id]);
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-      
-    const storage = getStorage();
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
-    
-      const file = files[0];
-      const fileName = `${id}/materiais/slides/${file.name}`;
-        const storageRef = ref(storage, fileName);
-    
-      try {
-        // Upload file to Firebase Storage
-        await uploadBytes(storageRef, file);
-    
-        // Handle success, you can update the database or show a success message here
-        console.log('File uploaded successfully!');
-        toast.success('Arquivo salvo!.', {
-          position: "top-center",
-        });
-        setIsModalOpen(false);
-      } catch (error) {
-         // Handle error
-          console.error('Error uploading file:', error);
-          toast.error('Erro ao salvar arquivo!.', {
-            position: "top-center",
-          });
-          setIsModalOpen(false);
-        }
-      };
+    const [slideName, setSlideName] = useState('');
+    const handleSlideNameChange = (e: React.ChangeEvent<HTMLInputElement>) => setSlideName(e.target.value);
+    const handleSlideLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => setSlideLink(e.target.value);
 
-      const [slides, setSlides] = useState<{ name: string; url: string; }[]>([]);
-      useEffect(() => {
-          const fetchSlides = async () => {
-              try {
-                  // Assuming `id` represents the student's ID
-                  const materialsRef = ref(storage, `${id}/materiais/slides`);
-                  const slideList = await listAll(materialsRef);
-                  const slideUrls = await Promise.all(
-                      slideList.items.map(async (item) => {
-                          const downloadUrl = await getDownloadURL(item);
-                          return { name: item.name, url: downloadUrl };
-                      })
-                  );
-                  setSlides(slideUrls);
-              } catch (error) {
-                  console.error('Error fetching PowerPoint slides:', error);
-              }
-          };
-  
-          fetchSlides();
-      }, [id, storage]);
-
-      const deleteSlide = async (slideUrl: string) => {
+    const saveSlideLink = async () => {
         try {
-            // Perform deletion logic here
-            // For example, if you're using Firebase Storage:
-            const storageRef = ref(storage, slideUrl);
-            await deleteObject(storageRef);
-            // Update the slides state after deletion
-            const updatedSlides = slides.filter((slide) => slide.url !== slideUrl);
-            setSlides(updatedSlides);
-            toast.success('Slide deletado!', {
-                position: "top-center",
-            });
+            if (!slideLink || !slideName) {
+                toast.error('Nome e link não podem estar vazios!', { position: "top-center" });
+                return;
+            }
+            const slideRef = collection(db, `users/${id}/Slides`);
+            const newSlide = {
+                name: slideName,
+                url: slideLink,
+            };
+            await addDoc(slideRef, newSlide);
+            toast.success('Link do slide salvo com sucesso!', { position: "top-center" });
+            setSlides([...slides, newSlide]);
+            setSlideLink('');
+            setSlideName('');
+            handleCloseModal();
         } catch (error) {
-            console.error('Error deleting slide:', error);
-            toast.error('Erro ao deletar slide!', {
-                position: "top-center",
-            });
+            console.error('Error saving slide link:', error);
+            toast.error('Erro ao salvar o link!', { position: "top-center" });
         }
     };
+
 
     const [modalNoteId, setModalNoteId] = useState<string | null>(null);
     const [reportContent, setReportContent] = useState<string>('');
@@ -383,7 +354,7 @@ export default function Caderno(){
                         onChange={(e) => setSearchQuery(e.target.value)}/>
                        <div className='flex flex-row gap-2 items-center justify-center'>
                         <FluencyButton variant='confirm' className='min-w-max' onClick={handleOpenModalDescription}>Começar aula</FluencyButton>
-                        <FluencyButton variant='warning' className='hidden min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
+                        <FluencyButton variant='warning' className='min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
                        </div>
                         <div className="flex min-w-max">  
                             <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
@@ -412,9 +383,17 @@ export default function Caderno(){
                                 </div>
                             </Link>
                             <div className='flex flex-row gap-2 items-center'>
+                                <Tooltip content="Deletar" className='bg-fluency-red-300 font-bold text-black rounded-md px-1'>
                                 <p><MdDeleteSweep onClick={() => handleOpenDeleteModal(notebook.id)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                </Tooltip>
+
+                                <Tooltip content="Enviar como tarefa" className='bg-orange-300 font-bold text-black rounded-md px-1'>
                                 <p><GiSchoolBag onClick={() => createReviewTask(notebook.description, notebook.id)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-yellow-500 hover:dark:text-fluency-yellow-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                </Tooltip>
+
+                                <Tooltip content="Relatório de aula" className='bg-fluency-blue-300 font-bold text-black rounded-md px-1'>
                                 <p><HiOutlineDocumentReport onClick={() => handleOpenReportModal(notebook.id, notebook.classReport || '')} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                </Tooltip>
                             </div>
                         </li>
                     ))}
@@ -425,13 +404,10 @@ export default function Caderno(){
                             <Link key={slide.url} href={{ pathname: `/teacher-dashboard/alunos/slide/${encodeURIComponent(slide.name)}`, query: { slide: slide.url } }} passHref>
 
                                 <p className='text-md'>{slide.name}</p>
-                                <p className='text-sm'>PowerPoint Slide</p>
+                                <p className='text-sm'>Canva Slide</p>
                                 </Link>
 
                             </a>
-                            <div className='flex flex-row gap-2 items-center'>
-                                <p><MdDeleteSweep onClick={() => deleteSlide(slide.url)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
-                            </div>
                         </li>
                     ))}
                 </ul>
@@ -477,28 +453,62 @@ export default function Caderno(){
                     </div>
 
                     <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center p-4">
                             <FluencyCloseButton onClick={handleCloseModal} variant='warning'/>
                             
                             <h3 className="text-lg leading-6 font-medium mb-2">
-                                Fazer upload de Arquivo PowerPoint ou PDF
+                                Link do slide Canva
                             </h3>
-                            <div className="mt-2 flex p-4">                    
-                            <div className="flex items-center justify-center w-full p-2 px-6 h-full">
-                                <label className="flex flex-col items-center justify-center w-full h-full border-2 border-fluency-gray-200 border-dashed rounded-lg cursor-pointer bg-fluency-pages-light dark:bg-fluency-pages-dark hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all">
-                                    <div className="flex flex-col items-center justify-center pt-4 pb-4 px-4">
-                                        <IoMdCloudOutline className='w-10 h-auto'/>                       
-                                        <p className="mb-2 text-sm text-fluency-text-light dark:text-fluency-text-dark"><span className="font-semibold">Clique para fazer o upload</span> ou arraste o arquivo aqui</p>
-                                        <p className="text-xs text-fluency-text-light dark:text-fluency-text-dark">Apenas arquivos PowerPoint ou PDF</p>
-                                    </div>
-                                    <input id="dropzone-file" type="file" className="hidden" onChange={handleFileUpload} />
-                                </label>
+                            <div className='flex flex-col items-start gap-2 p-4'>
+                                <FluencyInput
+                                placeholder="Nome do slide"
+                                value={slideName}
+                                onChange={handleSlideNameChange}
+                                />
+                                <div className='flex flex-row items-center gap-1'>
+                                <FluencyInput
+                                    placeholder="Cole o link do slide aqui"
+                                    value={slideLink}
+                                    onChange={handleSlideLinkChange}
+                                />
+                                <Tooltip content="Como fazer" className='bg-fluency-yellow-300 font-bold text-black rounded-md px-1'>
+                                    <button onClick={() => setIsVideoModalOpen(true)}>
+                                        <IoMdHelpCircleOutline className='w-5 h-auto text-fluency-yellow-500' />
+                                    </button>
+                                </Tooltip>
+                                </div>
                             </div>
-                            </div>
+                        <div className="flex gap-4 mt-4">
+                            <FluencyButton variant='warning' onClick={saveSlideLink}>Salvar</FluencyButton>
+                            <FluencyButton variant='danger' onClick={handleCloseModal}>Cancelar</FluencyButton>
+                        </div>
                         </div>
                     </div>
                 </div>
             </div>}
+
+            {isVideoModalOpen && (
+                <div className="fixed z-50 inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="fixed inset-0 transition-opacity">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-[50%] h-[80%] p-4">
+                            <div className="flex flex-col items-center">
+                                <FluencyCloseButton onClick={() => setIsVideoModalOpen(false)} />
+                                <h3 className="text-lg leading-6 font-medium mb-2">Como conseguir o link</h3>
+                                <iframe
+                                    className="aspect-video w-full h-full rounded-md border-none"
+                                    loading="lazy"
+                                    src="https://drive.google.com/file/d/1rGUnvw-nkG4ALDdgeP9JYy9m_axvzb2R/preview"
+                                    allowFullScreen
+                                    title="Tutorial Video"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {isModalDescriptionOpen && 
             <div className="fixed z-50 inset-0 overflow-y-auto">
@@ -533,24 +543,23 @@ export default function Caderno(){
                 <div className="fixed inset-0 transition-opacity">
                     <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                 </div>
-                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                    <div className="flex flex-col">
-                        <FluencyCloseButton onClick={handleCloseDeleteModal}/>
-                        <div className="mt-3 flex flex-col gap-3 p-4">
-                            <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                                Tem certeza que deseja excluir este caderno?
-                            </h3>
-                            <div className="flex justify-center">
-                                <FluencyButton variant='danger' onClick={() => { deleteNotebook(selectedNotebookId); handleCloseDeleteModal(); }}>Sim, excluir</FluencyButton>
-                                <FluencyButton variant='gray' onClick={handleCloseDeleteModal}>Não, cancelar</FluencyButton>
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                        <div className="flex flex-col">
+                            <FluencyCloseButton onClick={handleCloseDeleteModal}/>
+                            <div className="mt-3 flex flex-col gap-3 p-4">
+                                <h3 className="text-center text-lg leading-6 font-bold mb-2">
+                                    Tem certeza que deseja excluir este caderno?
+                                </h3>
+                                <div className="flex justify-center">
+                                    <FluencyButton variant='danger' onClick={() => { deleteNotebook(selectedNotebookId); handleCloseDeleteModal(); }}>Sim, excluir</FluencyButton>
+                                    <FluencyButton variant='gray' onClick={handleCloseDeleteModal}>Não, cancelar</FluencyButton>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    )}
-
+        )}
 
         </div>
     );
