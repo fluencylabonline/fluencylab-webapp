@@ -11,12 +11,12 @@ import {
 } from '@nextui-org/react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc  } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, getDoc, onSnapshot, updateDoc  } from 'firebase/firestore';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { db } from '@/app/firebase';
 import * as XLSX from 'xlsx';
 import { IoIosCheckbox } from 'react-icons/io';
-import { MdFolderDelete, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
+import { MdOutlineIndeterminateCheckBox } from 'react-icons/md';
 import { TbPigMoney } from 'react-icons/tb';
 import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
 import { FaUserCircle } from 'react-icons/fa';
@@ -43,6 +43,7 @@ interface Aluno {
   status: string;
   diaAula: string;
   diaPagamento?: number;
+  userName: string;
 }
 
 interface Professor {
@@ -77,6 +78,7 @@ export default function Students() {
             status: doc.data().status,
             diaAula: doc.data().diaAula,
             diaPagamento: doc.data().diaPagamento,
+            userName: doc.data().userName,
           };
           updatedAlunos.push(aluno);
         });
@@ -323,7 +325,8 @@ export default function Students() {
             paymentKey,
             paymentKeyProp,
             mensalidade,
-            selectedYear
+            selectedYear,
+            templateType: 'receipts',
           }),
         }),
         {
@@ -340,6 +343,7 @@ export default function Students() {
       });
     }
   };
+
   
 const totalStudents = alunos.length;
 const totalMensalidade = alunos.reduce((sum, aluno) => sum + Number(aluno.mensalidade), 0);

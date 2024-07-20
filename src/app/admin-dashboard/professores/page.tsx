@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -12,7 +12,7 @@ import {
 import { collection, query, where, getDocs, doc, setDoc, getDoc, deleteDoc, onSnapshot  } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { IoIosCheckbox } from 'react-icons/io';
-import { MdFolderDelete, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
+import { MdFolderDelete, MdOutlineAttachEmail, MdOutlineIndeterminateCheckBox } from 'react-icons/md';
 import { TbPigMoney } from 'react-icons/tb';
 import { RiErrorWarningLine, RiMailSendFill } from 'react-icons/ri';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
@@ -31,6 +31,7 @@ interface ProfessorProps {
   payments: any;
   email: string; 
   status: string;
+  userName: string;
 }
 
 interface AlunoProps {
@@ -47,7 +48,6 @@ interface TimeSlot {
     studentName: string;
   };
 }
-
 
 export default function Professors() {
   const [professores, setProfessores] = useState<ProfessorProps[]>([]);
@@ -320,7 +320,35 @@ export default function Professors() {
     }
   }, [selectedProfessor]);
   
-  
+  const handleOnClickWelcome = async (userName: string, studentMail: string, name: string) => {
+    try {
+      const response = await toast.promise(
+        fetch('/api/emails/receipts', { // Update the endpoint to the correct one
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userName,
+            teacherName: name,
+            studentMail,
+            templateType: 'welcomeTeacher', // Add the templateType parameter
+          }),
+        }),
+        {
+          loading: 'Enviando e-mail de boas vindas...',
+          success: 'E-mail enviado!',
+          error: 'Erro ao enviar e-mail!',
+        }
+      );
+    } catch (error) {
+      console.error('Error sending welcome email:', error);
+      toast.error('Erro ao enviar email!', {
+        position: 'top-center',
+      });
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
       <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
@@ -388,6 +416,11 @@ export default function Professors() {
                     <span className="hover:text-fluency-green-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
                     <TbPigMoney onClick={() => confirmPayment(professor.id, new Date(), selectedMonth, professor.payments?.[selectedYear]?.[selectedMonth]?.paymentKey || '')} />
                     </span>
+                  </Tooltip>
+                  <Tooltip className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1' content="Enviar e-mail de boas-vindas">
+                      <span className="hover:text-fluency-blue-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
+                          <MdOutlineAttachEmail onClick={() => handleOnClickWelcome(professor.name, professor.email, professor.userName)} />
+                      </span>                                        
                   </Tooltip>
                 </div>
               </TableCell>

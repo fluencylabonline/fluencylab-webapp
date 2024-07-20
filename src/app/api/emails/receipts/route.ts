@@ -1,5 +1,7 @@
 import { Resend } from 'resend';
 import { Receipts } from '@/email/receipts';
+import { Welcome } from '@/email/welcome'; // Import the Welcome component
+import WelcomeTeacher from '@/email/welcomeTeacher';
 
 const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
@@ -23,16 +25,51 @@ const monthsMap: Record<MonthKey, string> = {
 
 export async function POST(request: Request) {
   try {
-    const { studentMail, selectedMonth, paymentStatus, studentName, studentEmail, paymentKey, paymentKeyProp, selectedYear, mensalidade } = await request.json();
+    const { 
+      studentMail, 
+      selectedMonth, 
+      paymentStatus, 
+      studentName, 
+      studentEmail, 
+      paymentKey, 
+      paymentKeyProp, 
+      selectedYear, 
+      mensalidade, 
+      templateType, // Add templateType parameter
+      userName,
+      teacherName
+    } = await request.json();
+
     const translatedMonth = monthsMap[selectedMonth as MonthKey];
     const emailSubject = `FluencyLab - Pagamento de Mensalidade`;
 
-    const results = await resend.emails.send({
+    let results;
+    if (templateType === 'receipts') {
+      results = await resend.emails.send({
         from: 'financeiro@fluencylab.online',
         to: studentMail,
         subject: emailSubject,
         react: Receipts({ selectedMonth: translatedMonth, studentName, paymentKeyProp, selectedYear, mensalidade }),
       });
+    } 
+    
+    if (templateType === 'welcome') {
+      results = await resend.emails.send({
+        from: 'coordenacao@fluencylab.online',
+        to: studentMail,
+        subject: userName,
+        react: Welcome({ studentName, userName }),
+      });
+    }
+
+    if (templateType === 'welcomeTeacher') {
+      results = await resend.emails.send({
+        from: 'coordenacao@fluencylab.online',
+        to: studentMail,
+        subject: teacherName,
+        react: WelcomeTeacher({ studentName, userName, studentMail, teacherName }),
+      });
+    }
 
     return new Response(JSON.stringify({ data: results }), {
       status: 200,

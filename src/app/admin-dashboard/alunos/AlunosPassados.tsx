@@ -12,10 +12,11 @@ import {
     Tooltip,
 } from '@nextui-org/react';
 import { toast, Toaster } from 'react-hot-toast';
-import { MdFolderDelete } from 'react-icons/md';
+import { MdFolderDelete, MdOutlineAttachEmail } from 'react-icons/md';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { LuUserCheck2 } from 'react-icons/lu';
+import { RiMailSendFill } from 'react-icons/ri';
 
 interface Aluno {
     id: string;
@@ -30,7 +31,8 @@ interface Aluno {
     encerrouEm?: string;
     diaAula: string;
     status: string;
-    classes: boolean; // Add the classes field to the interface
+    classes: boolean;
+    userName: string;
 }
 
 export default function AlunosPassados() {
@@ -54,7 +56,8 @@ export default function AlunosPassados() {
                     comecouEm: doc.data().comecouEm,
                     encerrouEm: doc.data().encerrouEm,
                     status: currentCollection === 'users' ? 'Ativo' : 'Desativado',
-                    classes: doc.data().classes || false, // Assuming classes field exists in Firestore
+                    classes: doc.data().classes || false,
+                    userName: doc.data().userName,
                 };
                 updatedAlunos.push(aluno);
             });
@@ -160,6 +163,37 @@ export default function AlunosPassados() {
         }
     };
 
+    const handleOnClickWelcome = async (userName: string, studentName: string, studentMail: string, name: string) => {
+        try {
+          const response = await toast.promise(
+            fetch('/api/emails/receipts', { // Update the endpoint to the correct one
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                userName,
+                studentName,
+                studentMail, // Ensure this matches the expected key in your POST function
+                templateType: 'welcome', // Add the templateType parameter
+              }),
+            }),
+            {
+              loading: 'Enviando e-mail de boas vindas...',
+              success: 'E-mail enviado!',
+              error: 'Erro ao enviar e-mail!',
+            }
+          );
+        } catch (error) {
+          console.error('Error sending welcome email:', error);
+          toast.error('Erro ao enviar email!', {
+            position: 'top-center',
+          });
+        }
+      };
+      
+  
+      
     return (
         <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
             <div className="flex justify-start gap-3">
@@ -214,11 +248,18 @@ export default function AlunosPassados() {
                                     </span>
                                 </Tooltip>
                                 : 
-                                <Tooltip className='text-xs font-bold bg-fluency-red-200 rounded-md p-1' content="Excluir aluno">
+                                <div className='flex flex-row items-center gap-1'>
+                                    <Tooltip className='text-xs font-bold bg-fluency-red-200 rounded-md p-1' content="Excluir aluno">
                                     <span className="hover:text-fluency-red-500 duration-300 ease-in-out transition-all text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => openModal(aluno.id, aluno.name, 'delete')}>
                                         <MdFolderDelete />
                                     </span>
-                                </Tooltip>
+                                    </Tooltip>
+                                    <Tooltip className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1' content="Enviar e-mail de boas-vindas">
+                                        <span className="hover:text-fluency-blue-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
+                                            <MdOutlineAttachEmail onClick={() => handleOnClickWelcome(aluno.name, aluno.studentMail, aluno.userName, aluno.studentMail)} />
+                                        </span>                                        
+                                    </Tooltip>
+                                </div>
                                 }
                             </TableCell>
                         </TableRow>

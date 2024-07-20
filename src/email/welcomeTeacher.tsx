@@ -13,22 +13,22 @@ import {
     Column
   } from "@react-email/components";
   import * as React from "react";
+  import { CSSProperties } from "react";
   
   interface ComprovanteProps{
-    paymentKeyProp?: string;
-    selectedMonth?: string;
     studentName?: string;
-    selectedYear?: string;
-    mensalidade?: string;
+    userName?: string;
+    studentMail?: string;
+    teacherName?: string;
   }
   
-  export const Receipts = ({
-    paymentKeyProp, selectedMonth, studentName, mensalidade, selectedYear
+  export const WelcomeTeacher = ({
+    studentName, userName, studentMail, teacherName
   }: ComprovanteProps ) => (
     
     <Html>
         <Head />
-        <Preview>Recibo</Preview>
+        <Preview>Seja bem-vindo!</Preview>
         <Body style={main}>
         <Container style={container}>
             <Section className="mt-[32px]">
@@ -40,23 +40,28 @@ import {
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading style={heading}>Olá {studentName}, nós recebemos seu pagamento!</Heading>
+            <Heading style={heading}>Olá professor(a), seja bem-vindo à FluencyLab!</Heading>
             <Section style={buttonContainer}>
             <Text style={paragraph}>
-            Recebemos o pagamento no valor de R$ {mensalidade},00 referente à {selectedMonth} de {selectedYear} com o código de referência: 
+            Queremos te receber e passar algumas informações importantes.
             </Text>
-            <code style={code}>{paymentKeyProp}</code>
+            <Text style={paragraph}>
+              Primeiro, seu login e senha para acessar a plataforma em www.fluencylab.me <br/> A senha você pode mudar depois. 
+            </Text>
+              <code style={code}>Login: {studentMail} ou {userName}</code>
+              <br/><code style={code}>Senha: seu telefone, 8 últimos dígitos sem o -</code>
+  
             </Section>
             <Hr style={hr} />
   
             <Section style={container}>
-            <Text style={paragraph}>
-            Grande Abraço, <br></br>
-            Equipe FluencyLab. 
-            </Text>
-            <Text style={reportLink}>
-            Por favor, pedimos que você não responda esse e-mail, pois se trata de uma mensagem automática e não é possível dar continuidade ao seu atendimento por aqui.
-            </Text>
+              <Text style={paragraph}>
+              Grande Abraço, <br></br>
+              Equipe FluencyLab. 
+              </Text>
+              <Text style={reportLink}>
+              Por favor, pedimos que você não responda esse e-mail, pois se trata de uma mensagem automática e não é possível dar continuidade ao seu atendimento por aqui.
+              </Text>
             </Section>
   
             <Section>
@@ -81,7 +86,7 @@ import {
     </Html>
   )
   
-  export default Receipts;
+  export default WelcomeTeacher;
   
   
   const main = {
@@ -105,11 +110,30 @@ import {
     padding: "17px 0 0",
   };
   
+  const subtitle = {
+    fontSize: "17px",
+    letterSpacing: "-0.5px",
+    lineHeight: "1.3",
+    fontWeight: "400",
+    color: "#484848",
+    padding: "17px 0 0",
+  };
+  
   const paragraph = {
     margin: "0 0 15px",
     fontSize: "15px",
     lineHeight: "1.4",
     color: "#3c4149",
+  };
+  
+  const paragraphTwo: CSSProperties = {
+    margin: "0 0 15px",
+    fontSize: "15px",
+    lineHeight: "1.4",
+    color: "#3c4149",
+    textAlign: "justify",
+    marginLeft: "5px",
+    marginRight: "5px",
   };
   
   const buttonContainer = {
@@ -132,7 +156,7 @@ import {
     padding: "1px 4px",
     backgroundColor: "#dfe1e4",
     letterSpacing: "-0.3px",
-    fontSize: "21px",
+    fontSize: "10px",
     borderRadius: "4px",
     color: "#3c4149",
   };
