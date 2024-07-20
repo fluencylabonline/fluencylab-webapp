@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 //Firebase
-import { doc, DocumentData, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, DocumentData, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -26,6 +26,24 @@ import { FaUserCircle } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { Link, Tooltip } from '@nextui-org/react';
 import { PiExam } from 'react-icons/pi';
+import { MdEditCalendar } from 'react-icons/md';
+import { LuCalendarX2 } from 'react-icons/lu';
+
+interface Time {
+  id: string;
+  day: string;
+  hour: string;
+  status?: {
+    studentId: string;
+    studentName: string;
+  };
+}
+
+
+interface Student {
+  id: string;
+  [key: string]: any;
+}
 
 function Perfil() {
   const handleLogout = async () => {
@@ -65,7 +83,6 @@ function Perfil() {
             const docSnap = await getDoc(profile);
             if (docSnap.exists()) {
               const userData = docSnap.data();
-              console.log("User Data:", userData);
               if (userData && userData.courses) {
                 // Convert object values to array of boolean values
                 const coursesArray: boolean[] = Object.values(userData.courses);
@@ -267,6 +284,121 @@ function Perfil() {
         });
     };
 
+    const [horariosModal, setHorariosModal] = useState(false);
+    const openHorariosModal = () => {
+      setHorariosModal(true);
+    };
+  
+    const closeHorariosModal = () => {
+      setHorariosModal(false);
+    };
+
+  const [day, setDay] = useState<string>('Segunda');
+  const [hour, setHour] = useState<string>('');
+  const [times, setTimes] = useState<Time[]>([]);
+
+  const fetchTimes = async () => {
+    if (session && session.user && session.user.id) {
+      const userDoc = doc(db, 'users', session.user.id);
+      const docSnap = await getDoc(userDoc);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        setTimes(userData.times || []);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (horariosModal) {
+      fetchTimes();
+    }
+  }, [horariosModal]);
+
+  const saveTime = async () => {
+    if (session && session.user && session.user.id) {
+      const userDoc = doc(db, 'users', session.user.id);
+      const newTime: Time = {
+        id: new Date().toISOString(),  // Generate a unique ID
+        day,
+        hour,
+        status: { studentId: 'disponivel', studentName: '' }  // Set default status to 'disponível'
+      };
+      const updatedTimes = [...times, newTime];
+      await updateDoc(userDoc, { times: updatedTimes });
+      setTimes(updatedTimes);
+      toast.success("Horário salvo!");
+    }
+  };
+  
+  const [students, setStudents] = useState<Student[]>([]);
+  useEffect(() => {
+      const fetchStudents = async () => {
+          if (session) {
+              const usersRef = collection(db, 'users');
+              const q = query(usersRef, where('role', '==', 'student'), where('professorId', '==', session.user.id));
+              const querySnapshot = await getDocs(q);
+              const fetchedStudents: Student[] = [];
+              querySnapshot.forEach((doc) => {
+                  fetchedStudents.push({ id: doc.id, ...doc.data() });
+              });
+              
+              setStudents(fetchedStudents);
+          }
+      };
+      fetchStudents();
+  }, [session]);
+
+  const updateTimeSlotStatus = async (timeId: string, studentId: string, studentName: string) => {
+    if (session && session.user && session.user.id) {
+      const userDocRef = doc(db, 'users', session.user.id);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const updatedTimes = (userData.times || []).map((time: Time) => 
+          time.id === timeId ? { ...time, status: { studentId, studentName } } : time
+        );
+        await updateDoc(userDocRef, { times: updatedTimes });
+        setTimes(updatedTimes);
+        toast.success("Status atualizado!");
+      }
+    }
+  };
+  
+  const [editingTime, setEditingTime] = useState<Time | null>(null);
+  
+
+  const editTimeSlot = (time: Time) => {
+    setEditingTime(time);
+    setDay(time.day);
+    setHour(time.hour);
+  };
+  const saveEditedTimeSlot = async () => {
+    if (session && session.user && session.user.id) {
+      const userDoc = doc(db, 'users', session.user.id);
+      const updatedTimes = times.map(time => 
+        time.id === editingTime?.id 
+          ? { ...time, day, hour } 
+          : time
+      );
+      await updateDoc(userDoc, { times: updatedTimes });
+      setTimes(updatedTimes);
+      setEditingTime(null);
+      toast.success("Horário atualizado!");
+    }
+  };
+  
+
+
+  const deleteTime = async (id: string) => {
+    if (session && session.user && session.user.id) {
+      const userDoc = doc(db, 'users', session.user.id);
+      const updatedTimes = times.filter((time) => time.id !== id);
+      await updateDoc(userDoc, { times: updatedTimes });
+      setTimes(updatedTimes);
+      toast.success("Horário deletado!");
+    }
+  };
+  
     return (
     <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
         <div className='fade-in fade-out w-full lg:flex lg:flex-row gap-4 md:flex md:flex-col sm:flex sm:flex-col overflow-y-auto h-[90vh]'>
@@ -323,8 +455,9 @@ function Perfil() {
                     <div><Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink} >Link registrado</Tooltip></div>
                 )}</div>
 
-                <div className="mt-4 text-center flex flex-col justify-center">
+                <div className="mt-4 text-center flex flex-col gap-1 justify-center">
                   <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
+                  <FluencyButton onClick={openHorariosModal} variant='gray'>Atualizar horários</FluencyButton>
                 </div>
               </div>
             </div>   
@@ -445,6 +578,95 @@ function Perfil() {
                     </div>
                 </div>
             </div>}
+
+            {horariosModal && 
+             <div className="fixed z-50 inset-0 overflow-y-auto">
+                  <div className="flex items-center justify-center min-h-screen">
+                    <div className="fixed inset-0 transition-opacity">
+                      <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                      <div className="flex flex-col items-center justify-center">
+                        <FluencyCloseButton onClick={closeHorariosModal} />
+                        <h3 className="text-lg leading-6 font-medium mb-2 p-2">
+                          Insira seus horários
+                        </h3>
+                        <div className="mt-2 flex flex-col items-center gap-3">
+                          
+                          <div className='flex flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                            <div className='px-2'>
+                              <p className='font-bold'>Dia</p>
+                              <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
+                                <option>Segunda</option>
+                                <option>Terça</option>
+                                <option>Quarta</option>
+                                <option>Quinta</option>
+                                <option>Sexta</option>
+                                <option>Sábado</option>
+                                <option>Domingo</option>
+                              </select>
+                            </div>
+                            <div className='px-2'>
+                              <p className='font-bold'>Horário</p>
+                              <input className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' type="time" value={hour} onChange={(e) => setHour(e.target.value)} />
+                            </div>
+                            <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveTime}>Adicionar</button>
+                          </div>
+
+                          <div className='flex flex-col items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                            <p className='font-bold'>Horários</p>
+                            <ul className='p-2 flex flex-col items-center gap-2'>
+                              {times.map((time, index) => (
+                                <li className='flex flex-row items-center gap-2 w-full justify-between' key={index}>
+                                  <p className='font-semibold'>{time.day} às {time.hour}</p>
+                                  <select
+                                    className={`rounded-md font-medium ${time.status?.studentId === 'disponivel' ? "text-fluency-green-500 font-semibold" : "text-black"}`}
+                                    value={time.status?.studentId || ''}
+                                    onChange={(e) => updateTimeSlotStatus(time.id, e.target.value, students.find(student => student.id === e.target.value)?.name || '')}
+                                  >
+                                    <option value="" disabled>Selecione um aluno</option>
+                                    <option value="disponivel">Disponível</option>
+                                    {students.map((student) => (
+                                      <option key={student.id} value={student.id}>
+                                        {student.name}
+                                      </option>
+                                    ))}
+                                  </select>
+                                    <Tooltip className='bg-fluency-blue-300 px-2 font-bold rounded-md' content="Editar"><button onClick={() => editTimeSlot(time)}><MdEditCalendar className='w-5 h-auto text-fluency-blue-600 hover:text-fluency-blue-800'/></button></Tooltip>
+                                    <Tooltip className='bg-fluency-red-300 px-2 font-bold rounded-md' content="Deletar"><button onClick={() => deleteTime(time.id)}><LuCalendarX2 className='w-5 h-auto text-fluency-red-600 hover:text-fluency-red-800'/></button></Tooltip>
+                                </li>
+                              ))}
+                            </ul>
+
+                            {editingTime && (
+                          <div className='flex flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                                <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
+                                  <option value="">Selecione um dia</option>
+                                  <option>Segunda</option>
+                                  <option>Terça</option>
+                                  <option>Quarta</option>
+                                  <option>Quinta</option>
+                                  <option>Sexta</option>
+                                  <option>Sábado</option>
+                                  <option>Domingo</option>
+                                </select>
+                                <input 
+                                  type="text" 
+                                  value={hour} 
+                                  onChange={(e) => setHour(e.target.value)} 
+                                  placeholder="Horário" 
+                                  className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark'
+                                />
+                                <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveEditedTimeSlot}>Salvar</button>
+                                <button className='px-2 py-1 rounded-md bg-fluency-red-500 hover:bg-fluency-red-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={() => setEditingTime(null)}>Cancelar</button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>}
 
         <Toaster />
 

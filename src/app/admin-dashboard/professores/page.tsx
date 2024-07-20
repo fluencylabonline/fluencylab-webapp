@@ -39,6 +39,16 @@ interface AlunoProps {
   professorId: string;
 }
 
+interface TimeSlot {
+  day: string;
+  hour: string;
+  status?: {
+    studentId: string;
+    studentName: string;
+  };
+}
+
+
 export default function Professors() {
   const [professores, setProfessores] = useState<ProfessorProps[]>([]);
   const [students, setStudents] = useState<AlunoProps[]>([]);
@@ -266,6 +276,50 @@ export default function Professors() {
     setNewSalary(Number(e.target.value));
   };
   
+
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const fetchTimeSlots = async (professorId: string) => {
+    try {
+      console.log(`Fetching time slots for professorId: ${professorId}`);
+      
+      const docRef = doc(db, 'users', professorId);
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data?.times) {
+          const fetchedTimeSlots: TimeSlot[] = data.times.map((time: any) => ({
+            day: time.day || '',
+            hour: time.hour || '',
+            status: time.status ? {
+              studentId: time.status.studentId || '',
+              studentName: time.status.studentName || ''
+            } : undefined
+          }));
+          console.log('Fetched time slots:', fetchedTimeSlots);
+          setTimeSlots(fetchedTimeSlots);
+        } else {
+          console.log('No time slots found in the document');
+          setTimeSlots([]); // Clear time slots if none are found
+        }
+      } else {
+        console.log('Document not found');
+        setTimeSlots([]); // Clear time slots if document not found
+      }
+    } catch (error) {
+      console.error('Error fetching time slots:', error);
+      setTimeSlots([]); // Clear time slots on error
+    }
+  };
+  
+  useEffect(() => {
+    if (selectedProfessor) {
+      console.log('Selected professor changed:', selectedProfessor);
+      setTimeSlots([]);
+      fetchTimeSlots(selectedProfessor.id);
+    }
+  }, [selectedProfessor]);
+  
   
   return (
     <div className="h-screen flex flex-col items-center lg:px-5 px-2 py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">     
@@ -371,7 +425,7 @@ export default function Professors() {
             <div className="fixed inset-0 transition-opacity">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
               <div className="flex flex-col items-center">
                 <FluencyCloseButton onClick={closeEditModal} />
                 <div className="mt-2 flex flex-col gap-3 p-4">
@@ -407,7 +461,7 @@ export default function Professors() {
                       type="number"
                       value={newSalary || ''}
                       onChange={handleSalaryChange}
-                      className="bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded w-full"
+                      className="bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 rounded w-full font-semibold"
                     /><FluencyButton
                     onClick={() => {
                       updateProfessorSalary(selectedProfessor!.id, newSalary as number);
@@ -420,7 +474,7 @@ export default function Professors() {
                   </div>
                   <div className="mb-4">
                     <label className="block font-bold mb-2">Alunos: {students.length}</label>
-                    <ul className='bg-fluency-gray-200 dark:bg-fluency-gray-700 p-2 rounded'>
+                    <ul className='bg-fluency-gray-100 font-semibold dark:bg-fluency-gray-700 p-2 rounded'>
                       {students.map(student => (
                         <li key={student.id}>
                           <span>{student.name}</span>
@@ -428,6 +482,18 @@ export default function Professors() {
                       ))}
                     </ul>
                   </div>
+
+                  <div className="mb-4 w-full">
+                    <label className="block font-bold mb-2">Horários disponíveis: {timeSlots.filter(slot => slot.status?.studentId === 'disponivel').length}</label>
+                    <ul className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 rounded'>
+                      {timeSlots.map((slot, index) => (
+                        <li className='flex flex-row gap-2 items-center' key={index}>
+                          {slot.day} às {slot.hour}: {slot.status?.studentId === "disponivel" ? <p className='font-semibold text-fluency-green-500'>Disponível</p> : <p className='font-semibold'>{slot.status?.studentName}</p> || "Não disponível"}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
                   <div className="flex flex-row justify-center">
                     <FluencyButton variant='gray' onClick={closeEditModal}>Fechar</FluencyButton>
                   </div>
