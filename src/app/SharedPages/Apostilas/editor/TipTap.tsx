@@ -31,6 +31,16 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 import { VscWholeWord } from 'react-icons/vsc';
 import { useSession } from 'next-auth/react';
 
+import ReactComponent from './Extension';
+import Embed from './Embed';
+
+import EmbedSelectionModal from './EmbedSelectionModal';
+import AudioSelectionModal from './AudioSelectionModal';
+import { LuFileAudio } from 'react-icons/lu';
+import { AiFillYoutube } from 'react-icons/ai';
+
+
+
 type PopoversProps = {
   editor: Editor;
 }
@@ -90,16 +100,16 @@ function Popovers({ editor }: PopoversProps) {
           </button>
 
           <button
-            onClick={() => editor.chain().focus().setColor('#FAFAFA').run()}
-            className={editor.isActive('textStyle', { color: '#FAFAFA' }) ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().setColor('#FFFFFF').run()}
+            className={editor.isActive('textStyle', { color: '#FFFFFF' }) ? 'is-active' : ''}
             data-testid="setWhite"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-white hover:bg-gray-300 duration-300 ease-in-out transition-all'></div>
           </button>
 
           <button
-            onClick={() => editor.chain().focus().setColor('#013A49').run()}
-            className={editor.isActive('textStyle', { color: '#013A49' }) ? 'is-active' : ''}
+            onClick={() => editor.chain().focus().setColor('#000000').run()}
+            className={editor.isActive('textStyle', { color: '#000000' }) ? 'is-active' : ''}
             data-testid="setBlack"
             >        
             <div className='w-5 h-5 p-2 rounded-full bg-black hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
@@ -112,6 +122,9 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
   const workbook = params.get('workbook');
   const lesson = params.get('lesson');
+  
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
   
   const [description, setDescription] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
@@ -151,6 +164,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       Image,
       TextStyle, 
       FontFamily,
+      ReactComponent,
+      Embed,
       Link.configure({
         openOnClick: true,
       }),
@@ -199,6 +214,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     },
   }) 
 
+  
   useEffect(() => {
     if (session?.user.role === 'admin') {
       setEditable(true)
@@ -233,12 +249,36 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     });
   };
 
+  const handleSelectAudio = (audioId: string) => {
+    if (editor && audioId) {
+      editor.chain().focus().insertContent(`<listening-component audioId="${audioId}"></listening-component>`).run();
+    }
+  };
+
+  const handleSelectVideo = (url: string) => {
+    if (editor && url) {
+      editor.chain().focus().insertContent(`<embed-component url="${url}"></embed-component>`).run();
+    }
+  };
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       {session?.user.role === 'admin' && <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage}/>}
       <EditorContent editor={editor} />
+      
       <Popovers editor={editor} />
 
+        <AudioSelectionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectAudio={handleSelectAudio}
+        />
+
+        <EmbedSelectionModal
+          isEmbedOpen={isModalEmbedOpen}
+          onEmbedClose={() => setIsModalEmbedOpen(false)}
+          onSelectVideo={handleSelectVideo}
+        />
 
         <button
           onClick={scrollToBottom}
@@ -256,6 +296,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
         {session?.user.role === 'admin' &&
         <div className="fixed top-32 right-2">
+          <div className='flex flex-col items-center gap-2'>
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
                 <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
@@ -276,6 +317,22 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
               )}
             </PopoverContent>
           </Popover>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <LuFileAudio />
+          </button>
+
+          <button
+            onClick={() => setIsModalEmbedOpen(true)}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <AiFillYoutube />
+          </button>
+          
+          </div>
         </div>}
 
         <Toaster />

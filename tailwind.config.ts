@@ -104,6 +104,7 @@ const config: Config = {
 
       }
     },
+    
   },
   plugins: [],
 };

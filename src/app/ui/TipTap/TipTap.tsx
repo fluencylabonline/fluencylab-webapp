@@ -35,6 +35,14 @@ import { PiNotebookBold } from 'react-icons/pi';
 import FluencyCloseButton from '../Components/ModalComponents/closeModal';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 
+import ReactComponent from '@/app/SharedPages/Apostilas/editor/Extension';
+import Embed from '@/app/SharedPages/Apostilas/editor/Embed';
+
+import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/EmbedSelectionModal';
+import AudioSelectionModal from '@/app/SharedPages/Apostilas/editor/AudioSelectionModal';
+import { LuFileAudio } from 'react-icons/lu';
+import { AiFillYoutube } from 'react-icons/ai';
+
 //Realtime
 import Collaboration from '@tiptap/extension-collaboration'
 import * as Y from 'yjs'
@@ -53,8 +61,8 @@ interface GroupedLessonDocs {
   unit: string;
   docs: LessonDoc[];
 }
-function Popovers({ editor }: PopoversProps) {
 
+function Popovers({ editor }: PopoversProps) {
   return (
       <BubbleMenu className="Popover" editor={editor}>
           <button
@@ -123,6 +131,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const notebookID = params.get('notebook') || '';
   const studentID = params.get('student');
 
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
 
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
@@ -253,6 +263,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       TextStyle, 
       FontFamily,
       FontSize,
+      ReactComponent,
+      Embed,
       Link.configure({
         openOnClick: true,
       }),
@@ -335,12 +347,35 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     setWorkbooks(false)
   };
 
+  const handleSelectAudio = (audioId: string) => {
+    if (editor && audioId) {
+      editor.chain().focus().insertContent(`<listening-component audioId="${audioId}"></listening-component>`).run();
+    }
+  };
+
+  const handleSelectVideo = (url: string) => {
+    if (editor && url) {
+      editor.chain().focus().insertContent(`<embed-component url="${url}"></embed-component>`).run();
+    }
+  };
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} />
       <EditorContent editor={editor} />
       <Popovers editor={editor} />
 
+        <AudioSelectionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectAudio={handleSelectAudio}
+        />
+
+      <EmbedSelectionModal
+          isEmbedOpen={isModalEmbedOpen}
+          onEmbedClose={() => setIsModalEmbedOpen(false)}
+          onSelectVideo={handleSelectVideo}
+        />
 
         <button
           onClick={scrollToBottom}
@@ -359,6 +394,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
         {session?.user.role != 'student' && (
         <div>
         <div className="fixed top-32 right-2">
+        <div className='flex flex-col items-center gap-2'>
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
                 <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
@@ -379,13 +415,27 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
               )}
             </PopoverContent>
           </Popover>
-        </div>
 
-        <div className="fixed top-44 right-2">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <LuFileAudio />
+          </button>
+
+          <button
+            onClick={() => setIsModalEmbedOpen(true)}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <AiFillYoutube />
+          </button>
+
             <Button onClick={openWorkbook} className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
               <PiNotebookBold className="w-6 h-auto"/>
-            </Button>      
+            </Button>   
+          </div>
         </div>
+
         {workbooks && 
             <div className="fixed z-50 inset-0 overflow-y-auto">
               <div className="flex items-center justify-center min-h-screen">
@@ -399,7 +449,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                     
                     <FluencyCloseButton onClick={closeWorkbook}/>
                     
-                    <h3 className="text-2xl leading-6 font-medium mb-2">
+                    <h3 className="text-2xl font-bold leading-6 mb-2">
                       Apostilas                         
                     </h3>
                     <Accordion>
@@ -411,7 +461,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                           title={workbookName}
                           indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
                         >
-                          <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-400 dark:bg-fluency-gray-700">
+                          <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-700">
                             <p className='font-bold text-xl'>{workbookName}</p>   
                             <Accordion>
                               {lessonDocs[workbookName].map((group, groupIndex) => (
@@ -448,6 +498,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           )}
 
         <Toaster />
+
     </div>
   );
 };
