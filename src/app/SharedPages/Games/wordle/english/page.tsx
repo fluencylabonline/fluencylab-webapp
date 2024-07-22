@@ -98,8 +98,6 @@ const Wordle = () => {
         }
       };
 
-
-
       const handleGuess = useCallback(() => {
         const guessedWord = guesses[currentRow].join("").toUpperCase();
         // Check if the guessed word is a valid word from the database

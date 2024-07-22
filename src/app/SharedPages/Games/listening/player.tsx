@@ -18,28 +18,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
   useEffect(() => {
     audioRef.current.src = src; // Update audio source when src prop changes
     audioRef.current.load(); // Reload the audio element
-  
-    // Remove the play() call to prevent automatic playback
-    // const playPromise = audioRef.current.play();
-    // if (playPromise !== undefined) {
-    //   playPromise
-    //     .then(_ => {
-    //       setIsPlaying(true);
-    //     })
-    //     .catch(error => {
-    //       console.error('Audio playback error:', error);
-    //       setIsPlaying(false);
-    //     });
-    // }
-  
-    return () => {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    };
-  }, [src]);
-  
 
-  useEffect(() => {
     const audio = audioRef.current;
 
     const updateTime = () => {
@@ -56,14 +35,22 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
       audio.volume = volume;
     };
 
+    const handleEnded = () => {
+      setIsPlaying(false); // Set isPlaying to false when audio ends
+    };
+
     audio.addEventListener('loadeddata', updateDuration);
     audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('ended', handleEnded); // Add ended event listener
 
     return () => {
       audio.removeEventListener('loadeddata', updateDuration);
       audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('ended', handleEnded); // Clean up ended event listener
+      audio.pause();
+      setIsPlaying(false);
     };
-  }, [volume]);
+  }, [volume, src]);
 
   const togglePlay = () => {
     const audio = audioRef.current;

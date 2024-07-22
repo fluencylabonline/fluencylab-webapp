@@ -32,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <div className="p-2 text-fluency-blue-800">
             <div className="text-lg font-bold mb-3">Nossos contatos</div>
             <div>Email: fluencylab.online@gmail.com</div>
-            <div>Telefone: (86) 9 8616-7890</div>
+            <div>Telefone: (86) 9 9953-5791</div>
           </div>
         </div>
     </div>

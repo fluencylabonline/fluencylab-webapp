@@ -46,7 +46,7 @@ export default function Ferramentas3(){
 
                 <div>
                     <p className='text-2xl font-bold py-2'>Fonética</p>
-                    <div className="flex flex-row items-start w-full justify-around">
+                    <div className="flex flex-col sm:flex sm:flex-row items-start w-full justify-around">
                         <div className="w-[65%] pr-4">
                             <p className='py-2'>
                                 <strong>O que é</strong>

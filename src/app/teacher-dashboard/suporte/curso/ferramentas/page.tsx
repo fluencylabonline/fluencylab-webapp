@@ -103,7 +103,7 @@ const Ferramentas = () => {
                     {currentStep === 3 && <Ferramentas3 />}
                     {currentStep === 4 && <Ferramentas4 />}
 
-                    <div className="flex flex-row gap-2 justify-around mt-4">
+                    <div className="flex flex-col sm:flex sm:flex-row items-center gap-2 justify-around mt-4">
                         <FluencyButton variant="confirm" onClick={handleFinishLesson}>
                             {lessonFinished[`${courseName}-${currentStep}`] ? 'Lição finalizada' : 'Finalizar lição'}
                             <MdDone className="w-4 h-auto ml-2" />

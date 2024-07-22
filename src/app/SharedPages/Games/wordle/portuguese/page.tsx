@@ -5,6 +5,8 @@ import Keyboard from '@/app/ui/Components/Keyboard/keyboard';
 import '@/app/games/wordle/wordle.css';
 import WORDS from '@/app/games/wordle/pt/palavras.json';
 
+const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+
 const Wordle = () => {
     const [word, setWord] = useState("");
     const [guesses, setGuesses] = useState<Array<Array<string>>>(Array.from({ length: 6 }, () => Array(word.length).fill("")));
@@ -40,7 +42,7 @@ const Wordle = () => {
       useEffect(() => {
         // Pick a random word from the words.json file
         const randomIndex = Math.floor(Math.random() * WORDS.length);
-        const randomWord = WORDS[randomIndex].toUpperCase();
+        const randomWord = normalizeString(WORDS[randomIndex].toUpperCase());
         setWord(randomWord);
         
         // Initialize guesses based on the length of the random word
@@ -101,10 +103,9 @@ const Wordle = () => {
 
 
       const handleGuess = useCallback(() => {
-        const guessedWord = guesses[currentRow].join("").toUpperCase();
-        // Check if the guessed word is a valid word from the database
-        const isValidWord = WORDS.includes(guessedWord.toLowerCase());
-      
+        const guessedWord = normalizeString(guesses[currentRow].join("").toUpperCase());
+        const isValidWord = WORDS.map(normalizeString).includes(guessedWord.toLowerCase());
+  
         if (!isValidWord) {
           toast.error('Word not found!');
           return; // Don't proceed further if the word is invalid
@@ -128,8 +129,6 @@ const Wordle = () => {
         }
       }, [currentRow, guesses, word]);
 
-
-
       const handlePlayAgain = () => {
         setGameOver(false);
         setIsGuessed(false);
@@ -138,12 +137,10 @@ const Wordle = () => {
         setCurrentTileIndex(0);
         setResultMessage("");
         const randomIndex = Math.floor(Math.random() * WORDS.length);
-        const randomWord = WORDS[randomIndex].toUpperCase();
+        const randomWord = normalizeString(WORDS[randomIndex].toUpperCase());
         setWord(randomWord);
         setGuesses(Array.from({ length: 6 }, () => Array(randomWord.length).fill("")));
       };
-      
-
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>, row: number, index: number) => {
           const newGuesses = [...guesses];
@@ -154,9 +151,7 @@ const Wordle = () => {
             setCurrentTileIndex(index + 1); // Update the current tile index
             inputRefs.current[row][index + 1]?.focus();
           }
-        };
-
-        
+        };  
 
       useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
@@ -193,15 +188,13 @@ const Wordle = () => {
         };
       }, [currentRow, currentTileIndex, guesses, handleGuess]);
 
-
-
       const renderWordDisplay = () => {
         if (gameOver) {
           const tileColor = isGuessed ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500';
           return (
             <div className='mt-20 flex flex-col items-center gap-8 bg-blue-different dark:bg-fluency-dark-bg'>
                 
-                <h1 className='text-2xl font-bold text-black dark:text-white'>THE WORD WAS:</h1>
+                <h1 className='text-2xl font-bold text-black dark:text-white'>A PALAVRA ERA:</h1>
                 <div className="grid grid-cols-5 gap-1 lg:w-[21rem] w-[17rem]">
                   {Array.from(word).map((letter, index) => (
                     <input
@@ -226,13 +219,13 @@ const Wordle = () => {
           <div key={row} className={`mb-1 grid grid-cols-5 gap-1 lg:w-[21rem] w-[17rem] ${row < currentRow ? 'pointer-events-none' : ''}`}>
             {Array.from(word).map((letter, index) => {
               let bgColor = 'bg-gray-200 dark:bg-black border-stone-400 dark:border-black';
-              if (isGuessed && guessRow.join("").toUpperCase() === word) {
+              if (isGuessed && normalizeString(guessRow.join("").toUpperCase()) === word) {
                 bgColor = 'bg-green-500 border-green-500'; // Entire row is green if the word is guessed correctly
              
               } else if (showColors[row] && index < guessRow.length) {
-                if (guessRow[index] === letter) {
+                if (normalizeString(guessRow[index]) === letter) {
                   bgColor = 'bg-green-500 border-green-500'; // Correct position and correct letter (green)
-                } else if (word.includes(guessRow[index])) {
+                } else if (word.includes(normalizeString(guessRow[index]))) {
                   bgColor = 'bg-amber-400 border-amber-400'; // Correct letter but wrong position (yellow)
                 } else {
                   bgColor = 'bg-stone-400 border-stone-400'; // Wrong letter (red)
@@ -263,6 +256,7 @@ const Wordle = () => {
     <div className='h-[90vh] bg-blue-different dark:bg-fluency-dark-bg p-8'>
 
       <div className='flex flex-col items-center'>
+        {word}
           <div className='mt-5'>{renderWordDisplay()}</div>
           {!gameOver && <div className='absolute bottom-0'><Keyboard onKeyPress={handleKeyboardKeyPress} /></div>}
       </div>   

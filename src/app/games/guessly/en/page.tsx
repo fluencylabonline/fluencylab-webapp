@@ -7,6 +7,7 @@ import allWordsDataEnglish from './wordsDataEnglish.json';
 import Keyboard from '../keyboard-guessly';
 import { CiCircleQuestion } from "react-icons/ci";
 import { IoClose } from 'react-icons/io5';
+import { WhatsAppButton } from '@/app/ui/Components/Buttons/WhatsAppButton';
 
 const Guessly = () =>{
 
@@ -42,8 +43,8 @@ const Guessly = () =>{
   const lastInputRef = useRef<HTMLInputElement>(null);
   const [score, setScore] = useState(0); 
   const [showInstructions, setShowInstructions] = useState(true);
-  const [timerStarted, setTimerStarted] = useState(false); // New state variable for controlling timer start
-
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState('');
   
   const [lastPlayedDate, setLastPlayedDate] = useState<string | null>(null);
   useEffect(() => {
@@ -57,14 +58,14 @@ const Guessly = () =>{
       if (lastPlayedDate === currentDate) {
         setGameOver(true);
       } else {
-        
-        
-        
+        if (lastPlayedDate !== currentDate) {
+          setGameOver(false);
+        }
       }
     };
-  
+
     playOncePerDay();
-  }, [lastPlayedDate]);  
+  }, [lastPlayedDate]); 
 
   const toggleInstructions = () => {
     setShowInstructions(!showInstructions);
@@ -82,6 +83,35 @@ const Guessly = () =>{
     setTempUserInput(Array(wordsData[currentWordIndex].starter.length).fill(''));
     setUserInput(Array(wordsData[currentWordIndex].starter.length).fill(''));
   }, [currentWordIndex, currentSetIndex, wordsData]);
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const calculateTimeRemaining = () => {
+    const now = new Date();
+    const nextMidnight = new Date(now);
+    nextMidnight.setDate(now.getDate() + 1);
+    nextMidnight.setHours(0, 0, 0, 0);
+    
+    // Convert dates to milliseconds and calculate the difference
+    const timeDiff = nextMidnight.getTime() - now.getTime();
+  
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+  
+    setTimeRemaining(`${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
+  };
+  
+
+  useEffect(() => {
+    calculateTimeRemaining(); // Initial calculation
+    const interval = setInterval(calculateTimeRemaining, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Timer effect
   useEffect(() => {
@@ -211,18 +241,6 @@ const Guessly = () =>{
     }
   };
 
-  const restartGame = () => {
-    setCurrentWordIndex(0);
-    setGameOver(false);
-    setScore(0);
-    setTimeLeft(60);
-    setRemainingAttempts(2);
-    setTempUserInput(Array(wordsData[0].starter.length).fill(''));
-    setUserInput(Array(wordsData[0].starter.length).fill(''));
-    setFeedbackMessage('');
-    setFeedbackMessageType('');
-  };
-
   const handleKeyPress = (key: string) => {
     const currentIndex = tempUserInput.findIndex((value) => value === '');
     if (currentIndex !== -1) {
@@ -265,30 +283,54 @@ const Guessly = () =>{
       checkAnswer();
     }
   };
+
+  const saveLastPlayedDate = () => {
+    const currentDate = new Date().toLocaleDateString();
+    localStorage.setItem('english_guessly_last_played_date', currentDate);
+    setLastPlayedDate(currentDate);
+  };
+
+  useEffect(() => {
+    if (gameOver && lastPlayedDate !== new Date().toLocaleDateString()) {
+      saveLastPlayedDate();
+    }
+  }, [gameOver, lastPlayedDate]);
+
+  const currentDate = new Date().toLocaleDateString();
+  const alreadyPlayedToday = lastPlayedDate === currentDate;
   
   return (
     <div className='h-[100vh] overflow-y-hidden'>
 
       <div className="components">
-        {gameOver && (
-          <div className='flex flex-col min-h-screen w-full justify-center items-center bg-blue-different dark:bg-black-different overflow-y-hidden'>
-            <div className="congratulations-message">
-              {score === wordsData.length ? (
-                <>
-                  <div>Congratulations! You have completed the game.</div>
-                  <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md" onClick={restartGame}>Play Again</button>
-                </>
-              ) : (
-                <>
-                  <div>Sorry, you lost the game. Better luck next time!</div>
-                  <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md" onClick={restartGame}>Try Again</button>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+        {alreadyPlayedToday  ? (
+          
+            <div className='flex flex-col gap-2 items-center justify-center h-[100vh]'>
+              <h1 className='text-2xl font-bold text-black dark:text-white'>Você já jogou hoje!</h1>
+              <p className="text-center w-[75%] text-black dark:text-white">Se quiser jogar mais vezes e em mais idiomas, pense sobre fazer um de nossos cursos <br />Você vai ter mais outros jogos e ter ainda mais ajuda para aprender um idioma novo.</p>
 
-        {!gameOver && (
+                <div className='flex flex-col items-center gap-2 text-black dark:text-white'>
+                  <div className='lg:flex lg:flex-row flex flex-col gap-2 items-center'>
+                    <Link href="/u/googlecalendarpage" className="cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-fluency-blue-500 hover:bg-fluency-blue-600 ease-in-out duration-300 text-white text-sm font-medium rounded-md"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
+                    Marca uma aula teste!
+                    </Link>
+                    <WhatsAppButton buttonText="Ou manda mensagem aqui"/>
+                  </div>
+
+                  <p>mas, se já for um de nossos alunos:</p>
+                  <div>
+                      <a href="/signin" className="cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 ease-in-out duration-300 text-white text-sm font-medium rounded-md">
+                        Entrar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" /></svg>
+                      </a>
+                  </div>
+                </div>
+
+                <div className='text-black dark:text-white font-semibold mt-4 text-center'>
+                    <p>Tempo até próximo jogo:</p>
+                    <p>{timeRemaining}</p>
+                </div>  
+            </div>
+        ):(
           <div className='flex flex-col min-h-screen w-full justify-center items-center overflow-y-hidden'>
               
           <div className='lg:w-[45%] w-[85%] lg:h-[65vh] h-[50vh] justify-center p-7 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-xl flex flex-col items-center absolute top-[15%] overflow-y-hidden'>
@@ -340,11 +382,7 @@ const Guessly = () =>{
         </div>
         )}
 
-        <div>
-          Component that appears when the user already played the game
-        </div>
-
-        {showInstructions && (
+        {!alreadyPlayedToday && showInstructions &&(
           <div className="fixed z-[9999] inset-0 overflow-y-hidden text-fluency-text-light  ">
           <div className="flex items-center justify-center min-h-screen">
   
@@ -366,7 +404,7 @@ const Guessly = () =>{
                       <div className="mt-4 text-sm">
                       <strong>Descubra a palavra levando em conta a dica.</strong>
                       <br />
-                      <p>Todas as dicas são em português, mas a palavra que você vai escrever deve ser no idioma selecionado.</p>
+                      <p>Todas as dicas são em português, mas a palavra que você vai escrever deve ser no idioma selecionado, inglês.</p>
                       <ul className="list-disc list-inside">
                         <li>Você pode pular no máximo duas vezes quando não souber a palavra.</li>
                         <li>Não tem um limite de quantas vezes pode adivinhar.</li>

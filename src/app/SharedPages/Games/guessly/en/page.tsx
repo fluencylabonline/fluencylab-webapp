@@ -58,7 +58,8 @@ const Guessly = () =>{
     setHint(wordsData[currentWordIndex].hint);
     setTempUserInput(Array(wordsData[currentWordIndex].starter.length).fill(''));
     setUserInput(Array(wordsData[currentWordIndex].starter.length).fill(''));
-  }, [currentWordIndex, currentSetIndex, wordsData]);
+}, [currentWordIndex, currentSetIndex]);
+
 
   // Timer effect
   useEffect(() => {
@@ -189,16 +190,27 @@ const Guessly = () =>{
   };
 
   const restartGame = () => {
+    const randomIndex = Math.floor(Math.random() * allWordsDataEnglish.length);
+    setCurrentSetIndex(randomIndex);
     setCurrentWordIndex(0);
     setGameOver(false);
     setScore(0);
     setTimeLeft(60);
     setRemainingAttempts(2);
-    setTempUserInput(Array(wordsData[0].starter.length).fill(''));
-    setUserInput(Array(wordsData[0].starter.length).fill(''));
     setFeedbackMessage('');
     setFeedbackMessageType('');
-  };
+    setTempUserInput(Array(allWordsDataEnglish[randomIndex][0].starter.length).fill(''));
+    setUserInput(Array(allWordsDataEnglish[randomIndex][0].starter.length).fill(''));
+    setTimerStarted(false); // Reset the timer state
+    setShowInstructions(true); // Show instructions again if needed
+
+    // Focus on the first input element
+    const firstInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+    if (firstInput) {
+        firstInput.focus();
+    }
+};
+
 
   const handleKeyPress = (key: string) => {
     const currentIndex = tempUserInput.findIndex((value) => value === '');
@@ -250,15 +262,15 @@ const Guessly = () =>{
           <div className='flex flex-col min-h-screen w-full justify-center items-center bg-blue-different dark:bg-black-different overflow-y-hidden'>
             <div className="congratulations-message">
               {score === wordsData.length ? (
-                <>
+                <div className='flex flex-col items-center gap-2'>
                   <div>Congratulations! You have completed the game.</div>
                   <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md" onClick={restartGame}>Play Again</button>
-                </>
+                </div>
               ) : (
-                <>
+                <div className='flex flex-col items-center gap-2'>
                   <div>Sorry, you lost the game. Better luck next time!</div>
                   <button className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md" onClick={restartGame}>Try Again</button>
-                </>
+                </div>
               )}
             </div>
           </div>

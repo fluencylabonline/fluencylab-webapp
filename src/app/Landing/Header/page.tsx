@@ -20,6 +20,7 @@ import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import { WhatsAppButton } from '@/app/ui/Components/Buttons/WhatsAppButton';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import GoogleCalendarButton from '@/app/ui/Components/Buttons/GoogleCalendarButton';
+import { TbLogin2 } from 'react-icons/tb';
 
 const navigation = [
     { name: 'Sobre Nós', href: '#aboutus' },
@@ -114,7 +115,7 @@ return(
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end lg: items-center lg: gap-4">
                         <ToggleDarkMode />
                         <a href="/signin" className="gap-1 leading-6 inline-flex items-center px-4 py-2 font-semibold bg-fluency-blue-500 hover:bg-fluency-blue-600 ease-in-out duration-300 text-fluency-text-dark text-md rounded-md">
-                        Entrar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" /></svg>
+                        Entrar <TbLogin2 className="w-6 h-auto" />
                         </a>
                     </div>
                 </div>
@@ -169,7 +170,7 @@ return(
                                 </div>
                                 <div className="flex flex-col items-center gap-4">
                                     <a href="/signin" className="gap-1 pl-5 leading-6 inline-flex items-center px-4 py-2 font-semibold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-fluency-text-dark ease-in-out duration-300 text-sm rounded-md">
-                                        Entrar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" /></svg>
+                                        Entrar <TbLogin2 className="w-6 h-auto" />
                                     </a>
                                     <ToggleDarkMode />
                                 </div>

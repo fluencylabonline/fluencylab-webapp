@@ -1,7 +1,7 @@
 export default function Ferramentas2(){
     return(
-        <div>
-            <div className='w-full flex flex-col items-center rounded-md p-4 my-4 bg-fluency-gray-200 dark:bg-fluency-gray-900'>
+        <div className="flex flex-col items-center">
+            <div className='w-[85vw] flex flex-col items-center rounded-md p-4 my-4 bg-fluency-gray-200 dark:bg-fluency-gray-900'>
                     <p className='text-2xl font-bold py-2'>Perguntas</p>
                 <div className="lg:flex lg:flex-row md:flex md:flex-col flex flex-col gap-1 justify-between items-start px-4">
                     <p className='w-fit p-6'>Explore a seção de perguntas do FluencyLab, onde você pode solicitar ajuda e interagir com outros professores para esclarecer dúvidas.</p>
@@ -9,7 +9,7 @@ export default function Ferramentas2(){
                 </div>
             </div>
 
-            <div className='w-full flex flex-col items-center rounded-md p-4 my-4 bg-fluency-gray-200 dark:bg-fluency-gray-900'>
+            <div className='w-[85vw] flex flex-col items-center rounded-md p-4 my-4 bg-fluency-gray-200 dark:bg-fluency-gray-900'>
                     <p className='text-2xl font-bold py-2'>Prática</p>
                 <div className="lg:flex lg:flex-row-reverse md:flex md:flex-col flex flex-col gap-1 justify-between items-start px-4">
                     <div className="w-full flex flex-col items-start p-4">

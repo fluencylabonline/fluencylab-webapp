@@ -42,7 +42,8 @@ export default function Wordle(){
 
     {isInstrucoesOpen && 
         <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none transition-opacity duration-300 ${isInstrucoesOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className={`relative w-auto max-w-md mx-auto my-6 p-6 bg-white dark:bg-fluency-dark-bg shadow-md rounded-xl text-black dark:text-white instructions-enter`}>                <div className="p-6 bg-white dark:bg-fluency-dark-bg shadow-md rounded-xl text-black dark:text-white">
+        <div className={`relative w-auto max-w-md mx-auto my-6 p-6 bg-white dark:bg-fluency-pages-dark shadow-md rounded-xl text-black dark:text-white instructions-enter`}>                
+            <div className="p-6 bg-white dark:bg-fluency-pages-dark rounded-xl text-black dark:text-white">
             <div className="flex justify-between items-center">
             <h1 className="text-lg font-bold">Instruções</h1>
             <button

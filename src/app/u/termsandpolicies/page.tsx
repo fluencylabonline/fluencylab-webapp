@@ -66,7 +66,7 @@ export default function TermsOfUse() {
               <p>
               Se você tiver dúvidas ou preocupações sobre nossa Política de
             Privacidade e Termos de Uso, entre em contato conosco através do:
-            fluencylab.online@gmail.com ou (49) 9 3618-2622.
+            fluencylab.online@gmail.com ou (86) 9 9953-5791.
               </p>
               <p>
               Obrigado por confiar em nós como seu parceiro no aprendizado de

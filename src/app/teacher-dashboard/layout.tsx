@@ -70,16 +70,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <PiStudentFill className="h-6 w-6"/>,
     },
     {
-      name: "Suporte",
-      path: "/teacher-dashboard/suporte",
-      icon: <MdOutlineSupportAgent className="h-6 w-6"/>,
-    },
-    {
-      name: "Perguntas",
-      path: "/teacher-dashboard/perguntas",
-      icon: <TbMessageQuestion className="h-6 w-6"/>,
-    },
-    {
       name: "Prática",
       path: "/teacher-dashboard/pratica",
       icon: <LuGamepad2 className="h-6 w-6"/>,
@@ -88,6 +78,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Aulas Gravadas",
       path: "/teacher-dashboard/aulas-gravadas",
       icon: <MdOndemandVideo className="h-6 w-6"/>,
+    },
+    {
+      name: "Perguntas",
+      path: "/teacher-dashboard/perguntas",
+      icon: <TbMessageQuestion className="h-6 w-6"/>,
+    },
+    {
+      name: "Suporte",
+      path: "/teacher-dashboard/suporte",
+      icon: <MdOutlineSupportAgent className="h-6 w-6"/>,
     },
     {
       name: "Conversas",

@@ -378,8 +378,8 @@ export default function Listening() {
         <div className='min-h-[90vh] w-full flex flex-col justify-center items-center px-12 p-8'>
             <Toaster />
 
-            <div className='flex flex-row items-start justify-between p-2 w-full gap-2'>
-                <div className='max-w-[70%] text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
+            <div className='flex flex-col sm:flex sm:flex-row items-center sm:items-start justify-between p-2 w-full gap-2'>
+                <div className='w-screen sm:max-w-[70%] p-3 sm:p-0 text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
                     {selectedAudio && <AudioPlayer src={selectedAudio} />}
                     {randomDocument && (
                         <div className='flex flex-col items-center gap-2' key={randomDocument.id}>
@@ -426,11 +426,11 @@ export default function Listening() {
                     )}
                 </div>
 
-                <div className='w-[30%] flex flex-col p-3 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
+                <div className='w-[90vw] sm:w-[30%] flex flex-col p-3 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
                     <h3 className='text-lg font-semibold mb-2'>Lista de áudios</h3>
                     <ul className='w-full h-[50vh] flex gap-1 flex-col overflow-hidden overflow-y-scroll'>
                         {nivelamentoData.map((doc) => (
-                            <li key={doc.id} className='flex gap-2 items-center justify-between'>
+                            <li key={doc.id} className='flex flex-col sm:flex sm:flex-row gap-2 items-center justify-between'>
                                 <button
                                     onClick={() => handlePlayAudio(doc)}
                                     className={`py-1 px-4 w-full text-center font-bold rounded-md border-2 border-transparent focus:outline-none ${selectedAudio === doc.url ? 'bg-[#E64E17] text-white' : 'hover:bg-fluency-gray-200 dark:hover:bg-gray-800'}`}

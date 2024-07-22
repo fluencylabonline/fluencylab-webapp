@@ -372,12 +372,27 @@ const FlashCard: FC = () => {
         }
     };
 
+    const fetchDecks = async () => {
+        if(currentUserId){
+            try {
+                const decksQuery = query(collection(db, 'users', currentUserId, 'Decks'));
+                const decksSnapshot = await getDocs(decksQuery);
+                const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id }));
+                setDecks(decksData);
+            } catch (error) {
+                console.error('Error fetching decks:', error);
+            }
+        }
+    };
+    fetchDecks();
+
     const confirmOtherDeckAddition = async () => {
         const studentId = session?.user.id;
         try {
             if (studentId && selectedDeck) {
                 await addSelectDeck(selectedDeck, studentId);
                 closeConfirmModal();
+                fetchDecks()
             } else {
                 toast.error('Please select both student and deck.');
             }

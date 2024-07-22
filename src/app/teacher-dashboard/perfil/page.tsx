@@ -585,15 +585,15 @@ function Perfil() {
                     <div className="fixed inset-0 transition-opacity">
                       <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                     </div>
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                      <div className="flex flex-col items-center justify-center">
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5 mx-4">
+                      <div className="flex flex-col items-center justify-center p-2">
                         <FluencyCloseButton onClick={closeHorariosModal} />
                         <h3 className="text-lg leading-6 font-medium mb-2 p-2">
                           Insira seus horários
                         </h3>
                         <div className="mt-2 flex flex-col items-center gap-3">
                           
-                          <div className='flex flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                          <div className='flex flex-col sm:flex sm:flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
                             <div className='px-2'>
                               <p className='font-bold'>Dia</p>
                               <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>

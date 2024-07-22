@@ -99,7 +99,7 @@ const ListeningComponent: React.FC<ListeningProps> = ({ audioId }) => {
         });
         setWordInputs(updatedWordInputs);
         setInputsDisabled(true);
-    };
+    };    
 
     const handlePlayAgain = () => {
         prepareWordInputs(randomDocument?.transcript || '');

@@ -120,7 +120,7 @@ export default function Aulas() {
                 )}
 
                 {activePanel === 'links' && (
-                    <div className='flex flex-row gap-2 items-center justify-center'>
+                    <div className='flex flex-col sm:flex sm:flex-row gap-2 items-center justify-center'>
                         <FluencyButton variant='gray'>
                             <a href={classData.ankiLink} target="_blank" rel="noopener noreferrer">Baixar deck de Flashcards</a>
                         </FluencyButton>
@@ -182,7 +182,6 @@ export default function Aulas() {
                     >
                         <IoIosLink className='w-6 h-auto'/> Links
                     </button>
-
 
                     <button 
                         className={`p-2 flex flex-row items-center gap-3 font-bold text-black dark:text-white 

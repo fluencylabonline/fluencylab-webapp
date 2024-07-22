@@ -56,6 +56,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
       audio.volume = volume;
     };
 
+    const handleEnded = () => {
+      setIsPlaying(false); // Set isPlaying to false when audio ends
+    };
+
     audio.addEventListener('loadeddata', updateDuration);
     audio.addEventListener('timeupdate', updateTime);
 

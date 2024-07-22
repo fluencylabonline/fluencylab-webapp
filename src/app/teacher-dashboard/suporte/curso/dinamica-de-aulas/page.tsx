@@ -92,14 +92,14 @@ const DinamicaAulas = () => {
             </div>
 
             <div className="p-6 px-32 mt-4 text-justify">
-                <p className="text-3xl font-bold py-2">Dinâmica de Aulas</p>
+                <p className="text-3xl font-bold py-2 text-center">Dinâmica de Aulas</p>
 
                 <div className="flex flex-col gap-4">
                     {currentStep === 1 && <Dinamica1 />}
                     {currentStep === 2 && <Dinamica2 />}
                     {currentStep === 3 && <Dinamica3 />}
 
-                    <div className="flex flex-row gap-2 justify-around mt-4">
+                    <div className="flex flex-col sm:flex sm:flex-row items-center gap-2 justify-around mt-4">
                         <FluencyButton variant="confirm" onClick={handleFinishLesson}>
                             {lessonFinished[`${courseName}-${currentStep}`] ? 'Lição já finalizada' : 'Finalizar lição'}
                             <MdDone className="w-4 h-auto ml-2" />

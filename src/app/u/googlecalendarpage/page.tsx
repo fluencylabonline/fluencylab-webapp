@@ -37,7 +37,7 @@ function GoogleCalendarPage() {
   }, [loading]);
 
   return (
-    <div className="container overflow-x-hidden w-screen h-screen flex flex-col items-center relative">
+    <div className="container overflow-x-hidden w-screen h-screen flex flex-col items-center justify-center relative">
       {loading && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-200 bg-opacity-50 z-50">
           <div className="flex flex-col bg-neutral-300 w-56 h-64 animate-pulse rounded-xl p-4 gap-4">
@@ -53,14 +53,14 @@ function GoogleCalendarPage() {
       )}
 
       <iframe
-        src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2i5UIf7z6ksWscY7-ALyW44Dsnj8hEISZDyF5jat-hQ5Tn2fddqtNMxlEtLOqVW_UKUdXreg9P?gv=true"
+        src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2u0_D3Oue-lk5pc2IvkBRHQGkx4QpRX0awy5DqBg_obRmvFzHTeb--6k39os2lm8uJGJZrVjtb?gv=true"
         style={{ border: '0', transition: 'opacity 0.5s ease', opacity: iframeLoaded ? 1 : 0 }}
-        className={`w-full h-[98vh] overflow-x-hidden`}
+        className={`w-[95vw] h-[98vh] overflow-x-hidden`}
         title="Google Calendar Appointment Scheduling"
         onLoad={() => setLoading(false)}
       ></iframe>
 
-      <Link href="/landing">
+      <Link href="/">
         <button className="absolute top-2 left-3 text-gray-500 hover:text-gray-900">
           <BsArrowLeft className='w-7 h-7' />
         </button>

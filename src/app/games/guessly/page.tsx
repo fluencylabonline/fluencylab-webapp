@@ -27,11 +27,12 @@ export default function Guessly(){
 
                     <div className='flex flex-row gap-2 items-center'>
                         <p className='text-fluency-red-500 font-bold text-2xl'>Guessly</p>
+                       {/*
                         <select className='outline-none pl-5 max-w-48 max-h-10 flex flex-row justify-center items-center bg-fluency-pages-light dark:bg-fluency-pages-dark dark:text-fluency-gray-100 p-2 rounded-md px-3' value={selectedLanguage} onChange={handleLanguageChange}>
                             <option className='bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3 ' key={"english"} value={"english"}>English</option>
                             <option className='bg-fluency-pages-light  dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3' key={"portugues"} value={"portugues"}>Português</option>
                             <option className='bg-fluency-pages-light  dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3' key={"espanol"} value={"espanol"}>Español</option>
-                        </select>
+                        </select> */}
                     </div>
 
                     <div className='flex flex-row gap-2 items-center'>

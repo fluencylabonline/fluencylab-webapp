@@ -47,20 +47,22 @@ export default function GamesPro(){
             </div>
             </Link>
             
+            <Link href={"pratica/tic-tac-toe"}>
             <div className="w-auto h-[14.5rem] rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
                 <Image alt="Wordle" className="w-36 h-auto mt-4" src={TicTacToeImage} />
                 <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">TicTacToe</span></p>
             </div>
+            </Link>
 
             <Tooltip className="px-2 bg-fluency-bg-dark text-white rounded-md" content='Em progresso'>
-            <div className="w-auto h-[14.5rem] rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+            <div className="blur-[1.8px] w-auto h-[14.5rem] rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
                 <Image alt="Wordle" className="w-36 h-auto mt-4" src={WhatAmIImage} />
                 <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">What Am I?</span></p>
             </div>
             </Tooltip>
 
             <Tooltip className="px-2 bg-fluency-bg-dark text-white rounded-md" content='Em progresso'>
-            <div className="w-auto h-[14.5rem] rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
+            <div className="blur-[1.8px] w-auto h-[14.5rem] rounded-md p-5 bg-fluency-blue-100 dark:bg-fluency-gray-700 hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
                 <Image alt="Wordle" className="w-36 h-auto mt-4" src={RollAndTellImage} />
                 <p className="flex flex-row gap-2 items-center justify-center"><span className="text-xl font-bold">Roll and Tell</span></p>
             </div>

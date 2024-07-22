@@ -55,7 +55,7 @@ export default function CursoParaProfessores() {
     return (
         <div className="mt-4 h-[90vh] overflow-hidden overflow-y-scroll p-4 rounded-md flex flex-col gap-4 items-center">
             <p className='text-2xl font-bold'>Bem-vindo, {session?.user.name}</p>
-            <div className='mt-3 flex flex-row gap-2'>
+            <div className='mt-3 flex flex-col sm:flex sm:flex-row gap-2'>
                 {CourseInfo.map((course, index) => (
                     <div key={index} onClick={() => handleCardClick(course.link)} className="flex flex-col justify-between gap-2 bg-fluency-pages-light dark:bg-fluency-pages-dark hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all cursor-pointer shadow-md rounded-lg p-6 w-full h-54">
                         <div className="flex items-center justify-between">
