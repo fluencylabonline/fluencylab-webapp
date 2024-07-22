@@ -66,12 +66,12 @@ export default function Traveling(){
                 <div key={index}>
                   <Accordion>
                   <AccordionItem key={index} aria-label={group.unit.toString()} title={"Unidade " + group.unit.toString()}>
-                      <div className="flex flex-row gap-2 items-center">
+                      <div className="flex flex-wrap w-full gap-2 items-center">
                       {group.docs.map((lesson, lessonIndex) => (
-                    <div  id='apostilas-background' className="flex flex-col items-center justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 rounded-sm" key={lessonIndex}>
-                        <Link key={lesson.id} href={{ pathname: `apostilas/${encodeURIComponent(lesson.title)}`, query: { workbook: lesson.workbook, lesson: lesson.id }}} ><p className="font-bold text-sm hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{lesson.data.title}</p></Link>
-                    </div>
-                    ))}
+                        <div  id='apostilas-background' className="flex flex-col items-center justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 rounded-sm" key={lessonIndex}>
+                            <Link key={lesson.id} href={{ pathname: `apostilas/${encodeURIComponent(lesson.title)}`, query: { workbook: lesson.workbook, lesson: lesson.id }}} ><p className="font-bold text-sm hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{lesson.data.title}</p></Link>
+                        </div>
+                        ))}
                       </div>
                     </AccordionItem>
                   </Accordion>

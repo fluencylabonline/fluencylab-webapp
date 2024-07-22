@@ -5,6 +5,7 @@ import { db } from '@/app/firebase'; // Ensure correct import
 import AudioPlayer from '../../Games/listening/component/playerComponent';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
+import { toast, Toaster } from 'react-hot-toast';
 
 const ListeningComponent = ({ node }) => {
   const { audioId } = node.attrs;
@@ -15,6 +16,8 @@ const ListeningComponent = ({ node }) => {
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [transcript, setTranscript] = useState('');
   const [shouldPlayAgain, setShouldPlayAgain] = useState(false);
+  const [isTranscriptVisible, setIsTranscriptVisible] = useState(true);
+  const [showAllWords, setShowAllWords] = useState(false);
 
   useEffect(() => {
     if (!audioId) {
@@ -37,6 +40,7 @@ const ListeningComponent = ({ node }) => {
           });
           setSelectedAudio(data.url);
           prepareWordInputs(data.transcript);
+          setTranscript(data.transcript); // Set transcript for toggling visibility
         } else {
           console.error('Document does not exist.');
         }
@@ -74,6 +78,9 @@ const ListeningComponent = ({ node }) => {
   const checkAnswers = () => {
     const emptyFields = wordInputs.filter(input => input.isInput && input.userAnswer.trim() === '').length;
     if (emptyFields === wordInputs.filter(input => input.isInput).length) {
+      toast.error('Coloque pelo menos uma palavra!', {
+        position: 'top-center',
+      });
       return null;
     }
     const updatedWordInputs = wordInputs.map(input => {
@@ -98,29 +105,62 @@ const ListeningComponent = ({ node }) => {
     }
   }, [shouldPlayAgain, randomDocument]);
 
+  const toggleTranscriptVisibility = () => {
+    setIsTranscriptVisible(!isTranscriptVisible);
+  };
+
+  const toggleShowAllWords = () => {
+    setShowAllWords(!showAllWords);
+  };
+
+  const getWordDisplay = (input, index) => {
+    if (showAllWords) {
+      return input.word;
+    }
+    return input.isInput ? (
+      <input
+        type="text"
+        className={`max-w-[15%] mx-1 font-bold bg-transparent border-fluency-gray-500 dark:border-fluency-gray-100 border-dashed border-b-[1px] outline-none ${input.isCorrect === true ? 'text-green-500' : input.isCorrect === false ? 'text-red-500' : 'text-black dark:text-white'}`}
+        value={input.userAnswer}
+        onChange={(e) => handleInputChange(index, e)}
+        disabled={inputsDisabled}
+      />
+    ) : input.word;
+  };
+
   return (
     <NodeViewWrapper className="react-component">
+      <Toaster />
       <div className='h-min w-full flex flex-col justify-center items-center'>
         <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 w-full text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
           {selectedAudio && <AudioPlayer src={selectedAudio} />}
           {randomDocument && (
             <div className='flex flex-col items-center gap-2' key={randomDocument.id}>
-              <div className='h-max overflow-hidden overflow-y-scroll p-10 rounded-md'>
-                {wordInputs.map((input, index) => (
-                  <span className='w-full' key={index}>
-                    {input.isInput ? (
-                      <input
-                        type="text"
-                        className={`max-w-[15%] mx-1 font-bold bg-transparent border-fluency-gray-500 dark:border-fluency-gray-100 border-dashed border-b-[1px] outline-none ${input.isCorrect === true ? 'text-green-500' : input.isCorrect === false ? 'text-red-500' : 'text-black dark:text-white'}`}
-                        value={input.userAnswer}
-                        onChange={(e) => handleInputChange(index, e)}
-                        disabled={inputsDisabled}
-                      />
-                    ) : input.word}
-                    {' '}
-                  </span>
-                ))}
+              <div className='flex gap-2'>
+                <FluencyButton
+                  className='mt-4'
+                  onClick={toggleTranscriptVisibility}
+                >
+                  {isTranscriptVisible ? 'Esconder texto' : 'Mostrar texto'}
+                </FluencyButton>
+                <FluencyButton
+                  className='mt-4'
+                  variant='confirm'
+                  onClick={toggleShowAllWords}
+                >
+                  {showAllWords ? 'Mostrar respostas' : 'Esconder respostas'}
+                </FluencyButton>
               </div>
+              {isTranscriptVisible && (
+                <div className='h-max overflow-hidden overflow-y-scroll p-10 rounded-md'>
+                  {wordInputs.map((input, index) => (
+                    <span className='w-full' key={index}>
+                      {getWordDisplay(input, index)}
+                      {' '}
+                    </span>
+                  ))}
+                </div>
+              )}
               {inputsDisabled ? (
                 <div className='flex flex-row gap-2 items-center'>
                   <FluencyButton
@@ -133,7 +173,7 @@ const ListeningComponent = ({ node }) => {
                 </div>
               ) : (
                 <FluencyButton
-                  variant='confirm'
+                  variant='gray'
                   onClick={checkAnswers}
                 >
                   Verificar Respostas
