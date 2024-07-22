@@ -64,7 +64,7 @@ export default function ApostilasCreation() {
     useEffect(() => {
         const fetchNotebooks = async () => {
             const notebooksData: Notebook[] = [];
-            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
+            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental', 'Kids'];
 
             for (const wb of workbookCollections) {
                 const q = query(
@@ -289,7 +289,9 @@ export default function ApostilasCreation() {
                                     <option value="">Selecione uma categoria</option>
                                     <option value="First Steps">First Steps</option>
                                     <option value="The Basics">The Basics</option>
-                                    <option value="All you need to know">All you need to know</option>
+                                    <option value="Traveling">Traveling</option>
+                                    <option value="Instrumental">Instrumental</option>
+                                    <option value="Kids">Kids</option>
                                 </select>
 
                                 <select onChange={(e) => setUnit(parseInt(e.target.value, 10))} value={unit} className="ease-in-out duration-300 w-full px-2 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800">
