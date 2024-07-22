@@ -102,7 +102,7 @@ function Footer(){
               <div className="space-y-3 flex flex-col items-center font-bold">
                 <div className="uppercase dark:text-gray-50">Redes Sociais</div>
                   <div className="flex justify-center gap-2">
-                      <SocialIcon style={{ width: '40px', height: '40px' }} url="https://api.whatsapp.com/send/?phone=5549999535791" />
+                      <SocialIcon style={{ width: '40px', height: '40px' }} url="https://api.whatsapp.com/send/?phone=5586999535791" />
                       <SocialIcon style={{ width: '40px', height: '40px' }} url="https://www.threads.net/@fluency.lab" />
                       <SocialIcon style={{ width: '40px', height: '40px' }} url="https://www.instagram.com/fluency.lab/" />
                   </div>
