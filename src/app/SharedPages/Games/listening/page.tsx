@@ -12,6 +12,8 @@ import { GiSchoolBag } from "react-icons/gi";
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { MdDelete, MdOutlineAddTask } from 'react-icons/md';
 import { Tooltip } from '@nextui-org/react';
+import FluencySearch from '@/app/ui/Components/Search/search';
+import FluencyInput from '@/app/ui/Components/Input/input';
 
 declare global {
     interface Window {
@@ -52,6 +54,10 @@ export default function Listening() {
     const [audioName, setAudioName] = useState<string>(''); // State to hold the custom audio name
     const [shouldPracticeAnother, setShouldPracticeAnother] = useState(false);
     const [shouldPlayAgain, setShouldPlayAgain] = useState(false);
+    const [filteredData, setFilteredData] = useState<NivelamentoDocument[]>([]);
+
+    const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
+
 
     useEffect(() => {
         const fetchNivelamentoData = async () => {
@@ -106,6 +112,15 @@ export default function Listening() {
     
         fetchNivelamentoData();
     }, []);
+
+    useEffect(() => {
+        const filtered = nivelamentoData.filter(doc => doc.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        setFilteredData(filtered);
+    }, [searchTerm, nivelamentoData]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
     const prepareWordInputs = (transcript: string) => {
         const words = transcript.split(' ');
@@ -432,10 +447,16 @@ export default function Listening() {
                     )}
                 </div>
 
-                <div className='w-[90vw] sm:w-[30%] flex flex-col p-3 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
-                    <h3 className='text-lg font-semibold mb-2'>Lista de áudios</h3>
+                <div className='w-[90vw] sm:w-[30%] flex flex-col p-2 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
+                    <FluencyInput
+                        type="text"
+                        placeholder="Pesquisar..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="p-2 border border-gray-300 rounded"
+                    />
                     <ul className='w-full h-[50vh] flex gap-1 flex-col overflow-hidden overflow-y-scroll'>
-                        {nivelamentoData.map((doc) => (
+                        {filteredData.map((doc) => (
                             <li key={doc.id} className='flex flex-col sm:flex sm:flex-row gap-2 items-center justify-between'>
                                 <button
                                     onClick={() => handlePlayAudio(doc)}
@@ -505,19 +526,19 @@ export default function Listening() {
                             <input
                                 type="file"
                                 accept="audio/*"
-                                className='border-2 border-fluency-gray-500 dark:border-fluency-gray-100 p-2 rounded-md outline-none'
+                                className='bg-fluency-pages-light dark:bg-fluency-pages-dark border-2 border-fluency-gray-500 dark:border-fluency-gray-100 p-2 rounded-md outline-none'
                                 onChange={handleAudioChange}
                             />
                             <input
                                 type="text"
                                 placeholder="Nome do Áudio"
-                                className='border-2 border-fluency-gray-500 dark:border-fluency-gray-100 p-2 rounded-md outline-none'
+                                className='bg-fluency-pages-light dark:bg-fluency-pages-dark border-2 border-fluency-gray-500 dark:border-fluency-gray-100 p-2 rounded-md outline-none'
                                 value={audioName}
                                 onChange={handleAudioNameChange}
                             />
                             <textarea
                                 placeholder='Transcrição'
-                                className='border-2 border-fluency-gray-500 dark:border-fluency-gray-100 p-2 rounded-md outline-none'
+                                className='bg-fluency-pages-light dark:bg-fluency-pages-dark border-2 border-fluency-gray-500 dark:border-fluency-gray-100 p-2 rounded-md outline-none'
                                 value={transcript}
                                 onChange={handleTranscriptChange}
                             />
