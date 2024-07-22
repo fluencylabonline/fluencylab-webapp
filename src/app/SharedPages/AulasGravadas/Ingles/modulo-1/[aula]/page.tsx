@@ -5,7 +5,7 @@ import { db } from '@/app/firebase';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import '../../../framevideo.css';
-import { BsPersonVideo } from 'react-icons/bs';
+import { BsFilePdf, BsPersonVideo } from 'react-icons/bs';
 import { PiBooksLight } from 'react-icons/pi';
 import { IoIosLink } from 'react-icons/io';
 import { CiSquareQuestion } from 'react-icons/ci';
@@ -15,6 +15,7 @@ import QuizComponent from '@/app/SharedPages/Games/quizz/component/quizzComponen
 import { RiMenuUnfold2Line, RiMenuUnfoldLine } from 'react-icons/ri';
 import { FaHeadphones } from 'react-icons/fa6';
 import { SiGoogleclassroom } from "react-icons/si";
+import { TbCards } from 'react-icons/tb';
 
 interface ClassData {
     deckNAME: string;
@@ -120,23 +121,15 @@ export default function Aulas() {
                 )}
 
                 {activePanel === 'links' && (
-                    <div className='flex flex-col sm:flex sm:flex-row gap-2 items-center justify-center'>
-                        <FluencyButton variant='gray'>
-                            <a href={classData.ankiLink} target="_blank" rel="noopener noreferrer">Baixar deck de Flashcards</a>
-                        </FluencyButton>
-                        <FluencyButton variant='confirm'>
-                            <a href={classData.pdfLink} target="_blank" rel="noopener noreferrer">Baixar PDF da aula</a>
-                        </FluencyButton>
-                        <FluencyButton>
-                            <a href={classData.externalLinks} target="_blank" rel="noopener noreferrer">Material Extra</a>
-                        </FluencyButton>
+                    <div className='flex flex-col items-center justify-center w-[80%] h-full p-4'>
+                        <iframe src={`https://drive.google.com/embeddedfolderview?id=${classData.externalLinks}#grid`} width="100%" height="100%" frameBorder={0}></iframe>
                     </div>
                 )}
                 {activePanel === 'requirements' && (
                     <FluencyButton>Como usar Flashcards</FluencyButton>
                 )}
                 {activePanel === 'quiz' && (
-                    <>{classData.deckNAME === '' ? "Esta licao nao contem deck para pratica" : <QuizComponent deckName={'Verbos'} />}</>
+                    <>{classData.deckNAME === '' ? "Esta licao nao contem deck para pratica" : <QuizComponent deckName={classData.deckNAME} />}</>
                 )}
                 {activePanel === 'listening' && (
                     <>{classData.audioID === '' ? "Esta licao nao contem audio para pratica" : <ListeningComponent audioId={classData.audioID} />}</>
@@ -180,7 +173,7 @@ export default function Aulas() {
                                     duration-300 ease-in-out transition-all`}
                         onClick={() => handlePanelClick('links')}
                     >
-                        <IoIosLink className='w-6 h-auto'/> Links
+                        <IoIosLink className='w-6 h-auto'/> Material Adicional
                     </button>
 
                     <button 
@@ -209,6 +202,23 @@ export default function Aulas() {
                     >
                         <FaHeadphones className='w-6 h-auto'/> Pratica de ouvido
                     </button>
+
+                    <div className='flex flex-col items-center mt-6'>
+                        <button 
+                            className={`p-2 flex flex-row items-center gap-3 font-bold text-orange-500 dark:text-orange-600 `}
+                        >
+                            <a className='flex flex-row items-center gap-3' target="_blank" rel="noopener noreferrer" href={classData.ankiLink}>
+                                <TbCards  className='w-6 h-auto'/>Baixar deck Anki</a>
+                        </button>
+
+                        <button 
+                            className={`p-2 flex flex-row items-center gap-3 font-bold text-red-500 dark:text-red-600 `}
+                        >
+                            <a className='flex flex-row items-center gap-3' target="_blank" rel="noopener noreferrer" href={classData.pdfLink}>
+                                <BsFilePdf   className='w-6 h-auto'/>Baixar PDF</a>
+                        </button>
+                    
+                    </div>
 
                 </div>
             </div>

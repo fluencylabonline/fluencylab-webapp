@@ -373,7 +373,7 @@ export default function ModuloUm() {
                 {filteredClasses.map((classData, index) => (
                     <div key={index} className="relative">
                         <Link href={{ pathname: `modulo-1/${encodeURIComponent(classData.className)}`, query: { id: classData.id } }} passHref>
-                            <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark w-[230px] h-[320px] mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-md ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+                            <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark w-[230px] h-[340px] mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-md ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
                                 <span className={`absolute top-10 z-10 h-20 w-20 rounded-full ${
                                         classData.done ? 'bg-green-500' : 'bg-fluency-gray-500'} transition-all duration-300 group-hover:scale-[10]`}></span>
                                 <div className="relative z-10 mx-auto max-w-md">
@@ -512,7 +512,7 @@ export default function ModuloUm() {
                                 <FluencyCloseButton onClick={closeDeleteConfirmationModal} />
                             </div>
                             <div className="mt-2 flex flex-col items-center text-center">
-                                <p>Tem certeza que deseja excluir a aula <span className="font-bold">{classToDelete.className}</span>?</p>
+                                <p className="text-black dark:text-white">Tem certeza que deseja excluir a aula <span className="font-bold">{classToDelete.className}</span>?</p>
                                 <div className="mt-4 flex gap-2">
                                     <FluencyButton variant="danger" onClick={handleDeleteClass}>Excluir</FluencyButton>
                                     <FluencyButton variant="gray" onClick={closeDeleteConfirmationModal}>Cancelar</FluencyButton>
