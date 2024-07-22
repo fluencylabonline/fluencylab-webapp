@@ -13,6 +13,12 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { MdDelete, MdOutlineAddTask } from 'react-icons/md';
 import { Tooltip } from '@nextui-org/react';
 
+declare global {
+    interface Window {
+        webkitSpeechRecognition: any;
+    }
+}
+
 interface NivelamentoDocument {
     id: string;
     transcript: string;
@@ -491,8 +497,9 @@ export default function Listening() {
 
             {isCreateOpen && (
                 <div className='fixed inset-0 flex justify-center items-center z-50'>
-                    <div className='bg-gray-900 bg-opacity-70 fixed inset-0' onClick={closeCreate}></div>
+                    <div className='bg-gray-900 bg-opacity-70 fixed inset-0'></div>
                     <div className='relative bg-white dark:bg-[#1D1D1D] rounded-lg p-8 z-10'>
+                    <FluencyCloseButton onClick={closeCreate}/>
                         <div className='flex flex-col gap-4'>
                             <h2 className='text-lg font-semibold'>Adicionar Novo Áudio</h2>
                             <input
@@ -515,7 +522,6 @@ export default function Listening() {
                                 onChange={handleTranscriptChange}
                             />
                             <FluencyButton onClick={handleAddAudio} className='self-center' variant='confirm'>Adicionar Áudio</FluencyButton>
-                            
                         </div>
                     </div>
                 </div>
