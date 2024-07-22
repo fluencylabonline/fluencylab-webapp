@@ -581,6 +581,7 @@ function Alunos(){
                                             </div>
                                         </div>                                        
                                         
+                                        <Tooltip content="Marcar aula como feita" className='bg-fluency-blue-400 px-1 rounded-md font-bold text-white'>
                                         <button
                                             className="flex flex-row gap-1 text-xs items-center py-1 px-2 rounded-lg font-bold bg-fluency-blue-200 hover:bg-fluency-blue-300 transition-all duration-300 ease-in-out hover:dark:bg-fluency-blue-700 dark:bg-fluency-blue-800"
                                             onClick={() => handleDone(student.id, classDate.date)}
@@ -588,6 +589,9 @@ function Alunos(){
                                             Feita
                                             <FaRegCalendarCheck className='icon' />
                                         </button>
+                                        </Tooltip>
+
+                                        <Tooltip content="Marcar aula como cancelada" className='bg-fluency-yellow-400 px-1 rounded-md font-bold text-white'>
                                         <button
                                             className="flex flex-row gap-1 text-xs items-center py-1 px-2 rounded-lg font-bold bg-fluency-yellow-300 hover:bg-fluency-yellow-400 transition-all duration-300 ease-in-out hover:dark:bg-fluency-yellow-500 dark:bg-fluency-yellow-600"
                                             onClick={() => handleCanceled(student.id, classDate.date)}
@@ -595,6 +599,7 @@ function Alunos(){
                                             Cancelar
                                             <FaRegCalendarTimes className='icon' />
                                         </button>      
+                                        </Tooltip>
                                     </div>
                                 ))}
                             </div>

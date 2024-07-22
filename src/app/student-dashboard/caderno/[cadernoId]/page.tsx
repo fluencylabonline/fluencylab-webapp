@@ -49,7 +49,6 @@ interface Aluno {
     classDatesWithStatus: { date: Date; status: string }[];
 }
 
-
 export default function CadernoID(){
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
@@ -104,7 +103,6 @@ export default function CadernoID(){
         fetchNotebooks();
     }, [id]);
 
-
     const [searchQuery, setSearchQuery] = useState<string>('');
     const filteredNotebooks = notebooks.filter((notebook) => {
         const searchLower = searchQuery.toLowerCase();
@@ -128,7 +126,6 @@ export default function CadernoID(){
         }
     });
 
-    
       const storage = getStorage();
       const [slides, setSlides] = useState<{ name: string; url: string; }[]>([]);
       useEffect(() => {
@@ -152,48 +149,106 @@ export default function CadernoID(){
           fetchSlides();
       }, [id, storage]);
   
+      const styles = {
+        page: {
+            marginLeft: '5rem',
+            marginRight: '5rem',
+            color: 'black',
+            backgroundColor: 'white',
+        },
+    
+        columnLayout: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            margin: '3rem 0 5rem 0',
+            gap: '2rem',
+        },
+    
+        column: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+    
+        spacer2: {
+            height: '2rem',
+        },
+    
+        fullWidth: {
+            width: '100%',
+        },
+    
+        marginb0: {
+            marginBottom: 0,
+        },
+    };
+
+    
       const generatePDF = async (content: string, title: string) => {
-        try {
-            // Create a temporary element to hold the HTML content
-            const tempElement = document.createElement('div');
-            tempElement.innerHTML = content;
-            document.body.appendChild(tempElement);
-    
-            // Use html2canvas to convert the HTML content to a canvas
-            const canvas = await html2canvas(tempElement);
-    
-            // Create a jsPDF instance with A4 size
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
+        if (content === "") {
+            toast.error('Documento vazio!', {
+                position: "top-center",
             });
+        } else {
+            try {
+                  /*  const doc = new jsPDF({
+                        format: 'a4',
+                        unit: 'px',
+                    });
+            
+                    // Adding the fonts.
+                    doc.setFont('Inter-Regular', 'normal');
+            
+                    doc.html(content, {
+                        async callback(doc) {
+                            await doc.save('document');
+                        },
+                    }); */
+                
+                
+                // Create a temporary element to hold the HTML content
+                const tempElement = document.createElement('div');
+                tempElement.innerHTML = content;
+                tempElement.style.width = '210mm'; // Match A4 width in mm
+                tempElement.style.padding = '10mm'; // Add padding for margins
+                document.body.appendChild(tempElement);
     
-            // Get the canvas data as base64-encoded PNG
-            const imgData = canvas.toDataURL('image/png');
+                // Use html2canvas to convert the HTML content to a canvas
+                const canvas = await html2canvas(tempElement, {
+                    scale: 2, // Increase scale for better resolution
+                    useCORS: true, // Enable cross-origin resource sharing if needed
+                });
     
-            // Define margins and dimensions
-            const marginLeft = 10;
-            const marginTop = 10;
-            const pdfWidth = 210 - 2 * marginLeft;
-            const pdfHeight = 297 - 2 * marginTop;
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
     
-            // Add the image to the PDF with margins
-            pdf.addImage(imgData, 'PNG', marginLeft, marginTop, pdfWidth, pdfHeight);
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
     
-            // Save the PDF with the specified title
-            pdf.save(`${title}.pdf`);
+                let position = 10; // Initial vertical position on the PDF
     
-            // Remove the temporary element
-            document.body.removeChild(tempElement);
-        } catch (error) {
-            toast.error("Erro ao gerar PDF")
-            console.error('Error generating PDF:', error);
+                pdf.addImage(imgData, 'PNG', 10, position, pdfWidth - 20, pdfHeight - 20);
+    
+                while (position + pdfHeight <= pdf.internal.pageSize.getHeight()) {
+                    position += pdfHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, pdfWidth - 20, pdfHeight - 20);
+                }
+    
+                pdf.save(`${title}.pdf`);
+                document.body.removeChild(tempElement);
+            } catch (error) {
+                toast.error("Erro ao gerar PDF");
+                console.error('Error generating PDF:', error);
+            }
         }
     };
     
     
-
     return(
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
@@ -229,7 +284,7 @@ export default function CadernoID(){
                                 </div>
                             </Link>
                             <div className='flex flex-row gap-2 items-center'>
-                            <p>
+                                <p>
                                     <BsFilePdfFill
                                         className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'
                                         onClick={() => generatePDF(notebook.content, notebook.title)}

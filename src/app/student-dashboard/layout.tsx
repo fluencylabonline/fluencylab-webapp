@@ -13,6 +13,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 import { PiStudentFill } from 'react-icons/pi';
 import { LuGamepad2 } from 'react-icons/lu';
 import { RiCalendarScheduleLine } from 'react-icons/ri';
+import LoadingAnimation from '../ui/Animations/LoadingAnimation';
 
 interface ISidebarItem {
   name: string;

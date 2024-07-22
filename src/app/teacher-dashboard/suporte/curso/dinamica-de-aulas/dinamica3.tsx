@@ -18,7 +18,7 @@ export default function Dinamica3(){
                 
                 <div className='w-full lg:flex lg:flex-row-reverse md:flex md:flex-col flex flex-col gap-1 justify-between items-start my-4 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-900'>
                     <p className='w-fit p-6'>Um tutorial para ficar bem fácil de entender!</p>
-                    <iframe className='w-full rounded-md' width="720" height="275" src="https://youtu.be/3-tNLLsYffY" title="Nivelamento" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                    <iframe className='w-full rounded-md' width="720" height="275" src="https://www.youtube.com/embed/H4z1AKR5yMQ" title="Nivelamento" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
                 </div>
             </div>
         </div>
