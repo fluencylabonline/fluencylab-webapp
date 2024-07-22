@@ -156,7 +156,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocsMap>({});
   
   const fetchDocs = async () => {
-    const workbookNames = ['First Steps', 'The Basics', 'All you need to know'];
+    const workbookNames = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental', 'Kids'];
     const groupedLessons: GroupedLessonDocsMap = {};
   
     try {
