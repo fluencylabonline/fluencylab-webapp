@@ -16,7 +16,7 @@ const ListeningComponent = ({ node }) => {
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [transcript, setTranscript] = useState('');
   const [shouldPlayAgain, setShouldPlayAgain] = useState(false);
-  const [isTranscriptVisible, setIsTranscriptVisible] = useState(true);
+  const [isTranscriptVisible, setIsTranscriptVisible] = useState(false);
   const [showAllWords, setShowAllWords] = useState(false);
 
   useEffect(() => {
@@ -141,14 +141,14 @@ const ListeningComponent = ({ node }) => {
                   className='mt-4'
                   onClick={toggleTranscriptVisibility}
                 >
-                  {isTranscriptVisible ? 'Esconder texto' : 'Mostrar texto'}
+                  {isTranscriptVisible ? 'Mostrar texto' : 'Esconder texto'}
                 </FluencyButton>
                 <FluencyButton
                   className='mt-4'
                   variant='confirm'
                   onClick={toggleShowAllWords}
                 >
-                  {showAllWords ? 'Mostrar respostas' : 'Esconder respostas'}
+                  {showAllWords ? 'Esconder respostas' : 'Mostrar respostas'}
                 </FluencyButton>
               </div>
               {isTranscriptVisible && (
