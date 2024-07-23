@@ -126,7 +126,7 @@ export default function Aulas() {
                     </div>
                 )}
                 {activePanel === 'requirements' && (
-                    <FluencyButton>Como usar Flashcards</FluencyButton>
+                    <FluencyButton><a target="_blank" rel="noopener noreferrer" href='https://drive.google.com/file/d/1qBq1cJRjkV0krIrZqV9j4qOJPhOwg_VJ/view?usp=drive_link'>Como usar Flashcards</a></FluencyButton>
                 )}
                 {activePanel === 'quiz' && (
                     <>{classData.deckNAME === '' ? "Esta licao nao contem deck para pratica" : <QuizComponent deckName={classData.deckNAME} />}</>
