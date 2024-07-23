@@ -141,7 +141,7 @@ const ListeningComponent = ({ node }) => {
                   className='mt-4'
                   onClick={toggleTranscriptVisibility}
                 >
-                  {isTranscriptVisible ? 'Mostrar texto' : 'Esconder texto'}
+                  {isTranscriptVisible ? 'Esconder texto' : 'Mostrar texto'}
                 </FluencyButton>
                 <FluencyButton
                   className='mt-4'

@@ -121,9 +121,9 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
 
                 <button className="relative cursor-pointer group focus:outline-none">
                     <div className={`flex flex-col justify-between w-8 h-[22px] transform transition-all duration-300 origin-center ${!isCollapsed ? '' : 'translate-x-0'}`}>
-                        <div className={`bg-fluency-blue-600 h-[3.2px] w-8 rounded transform origin-left ${!isCollapsed ? 'rotate-[42deg] w-2/3' : ''} transition-all duration-300 delay-150`}></div>
-                        <div className={`bg-fluency-blue-600 h-[3px] w-8 rounded transform ${!isCollapsed ? 'opacity-0' : 'translate-x-0'} transition-all duration-300`}></div>
-                        <div className={`bg-fluency-blue-600 h-[3.2px] w-8 rounded transform origin-left ${!isCollapsed ? '-rotate-[42deg] w-2/3' : ''} transition-all duration-300 delay-150`}></div>
+                        <div className={`bg-fluency-blue-600 h-[3.6px] w-8 rounded transform origin-left ${!isCollapsed ? 'rotate-[42deg] w-2/3' : ''} transition-all duration-300 delay-150`}></div>
+                        <div className={`bg-fluency-blue-600 h-[3.1px] w-8 rounded transform ${!isCollapsed ? 'opacity-0' : 'translate-x-0'} transition-all duration-300`}></div>
+                        <div className={`bg-fluency-blue-600 h-[3.6px] w-8 rounded transform origin-left ${!isCollapsed ? '-rotate-[42deg] w-2/3' : ''} transition-all duration-300 delay-150`}></div>
                     </div>
                 </button>
             </div>
