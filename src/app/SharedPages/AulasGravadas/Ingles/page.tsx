@@ -46,7 +46,7 @@ export default function AulasGravadas(){
             </div>
 
             <div className="mt-4 group relative cursor-pointer overflow-hidden px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm rounded-lg sm:px-10">
-            <Link href="">
+            <Link href="aulas-gravadas/modulo-2">
                 <div>
                 <span className="absolute top-10 z-10 h-20 w-20 rounded-full bg-fluency-green-500 transition-all duration-300 group-hover:scale-[10]"></span>
                 <div className="relative z-10 mx-auto max-w-md">
@@ -70,7 +70,7 @@ export default function AulasGravadas(){
                         </svg>
                     </span>
                     <div className="space-y-6 pt-5 text-base font-semibold leading-7 text-fluency-gray-100 transition-all duration-300 group-hover:text-white/90">
-                    <p>Em breve...</p>
+                    <p>Vamos rever alguns conceitos e tentar aprofundar mais ainda neles, para que a sua base fique no idioma fique forte.</p>
                     </div>
                     <div className="pt-5 text-base font-semibold leading-7">
                     <p>
