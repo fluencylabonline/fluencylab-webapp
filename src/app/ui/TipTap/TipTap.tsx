@@ -159,7 +159,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     document: ydoc,
   })
 
-
   type GroupedLessonDocsMap = { [key: string]: GroupedLessonDocs[] };
 
   // Use the above type in useState
@@ -209,7 +208,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     fetchDocs();
   }, []);
 
-
   const [description, setDescription] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
   const [realtimeContent, setRealtimeContent] = useState<string>(content);
@@ -251,7 +249,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     }
   };
 
-
   const CustomDocument = Document.extend({
     content: 'heading block*',
   })
@@ -270,6 +267,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       }),
       StarterKit.configure({
         document: false,
+        history: false,
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],

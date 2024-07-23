@@ -400,14 +400,14 @@ export default function Caderno(){
                     
                     {slides.map((slide) => (
                         <li key={slide.name} className='bg-fluency-blue-100 hover:bg-fluency-gray-100 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 px-6 rounded-md flex flex-row items-center justify-between gap-4 w-full'>
-                            <a href={slide.url} target="_blank" rel="noopener noreferrer" className='hover:text-fluency-blue-700 hover:font-bold duration-200 ease-out transition-all cursor-pointer'>
+                            <div className='hover:text-fluency-blue-700 hover:font-bold duration-200 ease-out transition-all cursor-pointer'>
                             <Link key={slide.url} href={{ pathname: `/teacher-dashboard/alunos/slide/${encodeURIComponent(slide.name)}`, query: { slide: slide.url } }} passHref>
 
                                 <p className='text-md'>{slide.name}</p>
                                 <p className='text-sm'>Canva Slide</p>
                                 </Link>
 
-                            </a>
+                            </div>
                         </li>
                     ))}
                 </ul>
