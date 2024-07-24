@@ -53,28 +53,27 @@ const ListeningComponent = ({ node }) => {
   }, [audioId]);
 
   const prepareWordInputs = (transcript) => {
+    // Split the original transcript into words
     const words = transcript.split(' ');
+  
+    // Create a set to track which words will become inputs
     const inputIndicesSet = new Set();
     while (inputIndicesSet.size < Math.floor(words.length * 0.2)) {
       inputIndicesSet.add(Math.floor(Math.random() * words.length));
     }
+  
+    // Create the word input objects
     const inputs = words.map((word, index) => ({
       word,
       isInput: inputIndicesSet.has(index),
       userAnswer: '',
       isCorrect: null
     }));
+  
     setWordInputs(inputs);
     setInputsDisabled(false);
   };
-
-  const handleInputChange = (index, event) => {
-    const { value } = event.target;
-    const updatedWordInputs = [...wordInputs];
-    updatedWordInputs[index].userAnswer = value;
-    setWordInputs(updatedWordInputs);
-  };
-
+  
   const checkAnswers = () => {
     const emptyFields = wordInputs.filter(input => input.isInput && input.userAnswer.trim() === '').length;
     if (emptyFields === wordInputs.filter(input => input.isInput).length) {
@@ -83,15 +82,27 @@ const ListeningComponent = ({ node }) => {
       });
       return null;
     }
+  
     const updatedWordInputs = wordInputs.map(input => {
       if (input.isInput) {
-        const isCorrect = input.word.toLowerCase() === input.userAnswer.trim().toLowerCase();
+        // Remove punctuation from both the original word and the user answer for comparison
+        const cleanWord = input.word.replace(/[!?]/g, '').toLowerCase();
+        const cleanUserAnswer = input.userAnswer.trim().replace(/[!?]/g, '').toLowerCase();
+        const isCorrect = cleanWord === cleanUserAnswer;
         return { ...input, isCorrect };
       }
       return input;
     });
+  
     setWordInputs(updatedWordInputs);
     setInputsDisabled(true);
+  };
+  
+  const handleInputChange = (index, event) => {
+    const { value } = event.target;
+    const updatedWordInputs = [...wordInputs];
+    updatedWordInputs[index].userAnswer = value;
+    setWordInputs(updatedWordInputs);
   };
 
   const handlePlayAgain = () => {

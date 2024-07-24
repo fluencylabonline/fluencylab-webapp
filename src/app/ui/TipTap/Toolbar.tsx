@@ -233,7 +233,7 @@ const Toolbar = ({ editor, isTyping, addImage }: Props) => {
       </div>
 
 
-      <div className="lg:block md:block hidden">
+      <div className="lg:flex flex-row items-center md:block hidden">
         <Tooltip
             className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
             content="Negrito (Ctrl + B)"

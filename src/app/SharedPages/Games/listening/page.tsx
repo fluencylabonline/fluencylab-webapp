@@ -123,42 +123,56 @@ export default function Listening() {
     };
 
     const prepareWordInputs = (transcript: string) => {
+        // Split the original transcript into words
         const words = transcript.split(' ');
-        const inputIndicesSet = new Set<number>();
+      
+        // Create a set to track which words will become inputs
+        const inputIndicesSet = new Set();
         while (inputIndicesSet.size < Math.floor(words.length * 0.2)) {
-            inputIndicesSet.add(Math.floor(Math.random() * words.length));
+          inputIndicesSet.add(Math.floor(Math.random() * words.length));
         }
-        const inputs: WordInput[] = words.map((word, index) => ({
-            word,
-            isInput: inputIndicesSet.has(index),
-            userAnswer: '',
-            isCorrect: null
+      
+        // Create the word input objects
+        const inputs = words.map((word: any, index: unknown) => ({
+          word,
+          isInput: inputIndicesSet.has(index),
+          userAnswer: '',
+          isCorrect: null
         }));
+      
         setWordInputs(inputs);
         setInputsDisabled(false);
-    };
-
+      };
+      
+      const checkAnswers = () => {
+        const emptyFields = wordInputs.filter(input => input.isInput && input.userAnswer.trim() === '').length;
+        if (emptyFields === wordInputs.filter(input => input.isInput).length) {
+          toast.error('Coloque pelo menos uma palavra!', {
+            position: 'top-center',
+          });
+          return null;
+        }
+      
+        const updatedWordInputs = wordInputs.map(input => {
+          if (input.isInput) {
+            // Remove punctuation from both the original word and the user answer for comparison
+            const cleanWord = input.word.replace(/[!?]/g, '').toLowerCase();
+            const cleanUserAnswer = input.userAnswer.trim().replace(/[!?]/g, '').toLowerCase();
+            const isCorrect = cleanWord === cleanUserAnswer;
+            return { ...input, isCorrect };
+          }
+          return input;
+        });
+      
+        setWordInputs(updatedWordInputs);
+        setInputsDisabled(true);
+      };
+      
     const handleInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         const updatedWordInputs = [...wordInputs];
         updatedWordInputs[index].userAnswer = value;
         setWordInputs(updatedWordInputs);
-    };
-
-    const checkAnswers = () => {
-        const emptyFields = wordInputs.filter(input => input.isInput && input.userAnswer.trim() === '').length;
-        if (emptyFields === wordInputs.filter(input => input.isInput).length) {
-            return null;
-        }
-        const updatedWordInputs = wordInputs.map(input => {
-            if (input.isInput) {
-                const isCorrect = input.word.toLowerCase() === input.userAnswer.trim().toLowerCase();
-                return { ...input, isCorrect };
-            }
-            return input;
-        });
-        setWordInputs(updatedWordInputs);
-        setInputsDisabled(true);
     };
 
     const openModal = () => {

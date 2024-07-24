@@ -4,79 +4,65 @@ import { DocumentData, QuerySnapshot, collection, getDocs } from "firebase/fires
 import { db } from "@/app/firebase";
 import Link from "next/link";
 import { Accordion, AccordionItem } from "@nextui-org/react";
+import { FaRegCopy } from "react-icons/fa6";
+import toast from "react-hot-toast";
 
-interface LessonDoc {
-    id: string;
-    data: DocumentData;
-    unit: number;
-    title: string;
-    workbook: string;
-  }
-  
-  interface GroupedLessonDocs {
-    unit: number;
-    docs: LessonDoc[];
-  }
-  
-export default function Kids(){
-  const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocs[]>([]); // Store the fetched documents
+interface SlideDoc {
+  id: string;
+  title: string;
+  link: string;
+}
+
+export default function Kids() {
+  const [slides, setSlides] = useState<SlideDoc[]>([]);
+
   useEffect(() => {
-    const fetchDocs = async () => {
+    const fetchSlides = async () => {
       try {
-        const lessonsRef = collection(db, 'Notebooks', 'kids', 'Lessons');
-        const lessonsSnapshot: QuerySnapshot<DocumentData> = await getDocs(lessonsRef);
-        const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
+        const slidesRef = collection(db, 'Slides');
+        const slidesSnapshot: QuerySnapshot<DocumentData> = await getDocs(slidesRef);
+        const fetchedSlides: SlideDoc[] = slidesSnapshot.docs.map(doc => ({
           id: doc.id,
-          data: doc.data(),
-          unit: doc.data().unit || 'Uncategorized',
           title: doc.data().title,
-          workbook: doc.data().workbook,
+          link: doc.data().link,
         }));
-  
-        // Group documents by unit
-        const groupedByUnit: { [key: string]: LessonDoc[] } = fetchedLessonDocs.reduce((acc: { [key: string]: LessonDoc[] }, doc: LessonDoc) => {
-          const unit = doc.unit;
-          if (!acc[unit]) {
-            acc[unit] = [];
-          }
-          acc[unit].push(doc);
-          return acc;
-        }, {});
-  
-        // Transform grouped object into an array
-        const groupedLessonDocs: GroupedLessonDocs[] = Object.keys(groupedByUnit).map(unit => ({
-          unit: parseInt(unit, 10),
-          docs: groupedByUnit[unit],
-        }));
-        
-  
-        setLessonDocs(groupedLessonDocs);
+
+        setSlides(fetchedSlides);
       } catch (error) {
-        console.error('Error fetching documents: ', error);
+        console.error('Error fetching slides: ', error);
       }
     };
-  
-    fetchDocs();
-  }, []);
-  
 
-    return(
-        <div className="flex flex-col items-start gap-1">
-            {lessonDocs.map((group, index) => (
-                <div key={index}>
-                  <Accordion>
-                  <AccordionItem key={index} aria-label={group.unit.toString()} title={"Unidade " + group.unit.toString()}>
-                      <div className="flex flex-row gap-2 items-center">
-                      {group.docs.map((lesson, lessonIndex) => (
-                    <div id='apostilas-background' className="flex flex-col items-center justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 rounded-sm" key={lessonIndex}>
-                        <Link key={lesson.id} href={{ pathname: `apostilas/${encodeURIComponent(lesson.title)}`, query: { workbook: lesson.workbook, lesson: lesson.id }}} ><p className="font-bold text-sm hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{lesson.data.title}</p></Link>
-                    </div>
-                    ))}
-                      </div>
-                    </AccordionItem>
-                  </Accordion>
-                </div>
-            ))}
-        </div>
-    )
+    fetchSlides();
+  }, []);
+
+  const copyLinkToClipboard = (link: string) => {
+    navigator.clipboard.writeText(link).then(() => {
+      toast.success('Link copiado!');
+    }).catch((error) => {
+      console.error('Failed to copy link: ', error);
+    });
+  };
+
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <Accordion>
+        {slides.map((slide, index) => (
+          <AccordionItem key={index} aria-label={slide.title} title={slide.title}>
+            <div className="flex flex-col items-center justify-center text-center w-32 h-44 rounded-md bg-fluency-bg-light dark:bg-fluency-bg-dark p-2">
+              <Link className="flex flex-row items-center gap-2" key={slide.link} href={{ pathname: `apostilas/slides/${encodeURIComponent(slide.title)}`, query: { slide: slide.link } }} passHref>
+                <p className="font-bold text-md text-fluency-orange-500 hover:text-fluency-orange-600 duration-300 ease-in-out cursor-pointer">{slide.title}</p>
+                <button 
+                  onClick={() => copyLinkToClipboard(slide.link)} 
+                  className="p-1 text-orange-500 hover:text-orange-600"
+                  >
+                  <FaRegCopy />
+                </button>
+              </Link>
+            </div>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
+  );
 }

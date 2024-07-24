@@ -6,7 +6,7 @@
     }
 
     a {
-      color: #9368f8;
+      color: #1e75c5;
       font-weight: bold;
     }
     
@@ -35,7 +35,7 @@
         font-weight: 900;
       }
       h2{
-        font-size: 1.7rem;
+        font-size: 1.5rem;
         font-weight: 600;
       }
       h3{
@@ -60,9 +60,10 @@
     
       pre {
         background: #DEBE16;
+        text-align: center;
         color: #FFF;
         font-weight: 700;
-        font-family: 'QuickSand', monospace;
+        font-family: 'Inter', sans-serif;
         padding: 0.75rem 1rem;
         border-radius: 0.5rem;
         margin-top: 8px;
@@ -79,7 +80,10 @@
       img {
         max-width: 100%;
         height: auto;
-    
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 16px;
         &.ProseMirror-selectednode {
           outline: 3px solid #68CEF8;
         }

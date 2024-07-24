@@ -23,6 +23,7 @@ import { IoSchool } from "react-icons/io5";
 import Traveling from "./traveling";
 import Instrumental from "./instrumental";
 import Kids from "./kids";
+import { FaRegCopy } from "react-icons/fa6";
 
 interface Notebook {
     title: string;
@@ -30,6 +31,11 @@ interface Notebook {
     content: string;
     unit: number;
     docID: string;
+}
+
+interface Slide {
+    title: string;
+    link: string;
 }
 
 export default function ApostilasCreation() {
@@ -47,11 +53,24 @@ export default function ApostilasCreation() {
     const [traveling, setTraveling] = useState(false);
     const [instrumentalEnglish, setInstrumentalEnglish] = useState(false);
     const [kids, setKids] = useState(false);
+    const [slides, setSlides] = useState<Slide[]>([]);
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState<Notebook[]>([]);
+    const [searchResults, setSearchResults] = useState<(Notebook | Slide)[]>([]);
 
     const [filteredNotebooks, setFilteredNotebooks] = useState<Notebook[]>([]);
+    const [filteredSlides, setFilteredSlides] = useState<Slide[]>([]);
+
+    const [criarSlide, setCriarSlide] = useState(false);
+    const [slideTitle, setSlideTitle] = useState('');
+    const [slideLink, setSlideLink] = useState('');
+    function openModalSlide() {
+        setCriarSlide(true);
+    }
+    
+    function closeModalSlide() {
+        setCriarSlide(false);
+    }
 
     function openModalLicao() {
         setCriarLicao(true);
@@ -78,7 +97,15 @@ export default function ApostilasCreation() {
             setNotebooks(notebooksData);
         };
 
+        const fetchSlides = async () => {
+            const slidesRef = collection(db, 'Slides');
+            const slidesSnapshot = await getDocs(slidesRef);
+            const slidesData = slidesSnapshot.docs.map(doc => ({ ...doc.data() }) as Slide);
+            setSlides(slidesData);
+        };
+
         fetchNotebooks();
+        fetchSlides();
     }, []);
 
     useEffect(() => {
@@ -86,14 +113,20 @@ export default function ApostilasCreation() {
             setSearchResults([]);
             return;
         }
-    
-        const filtered = notebooks.filter(notebook =>
+
+        const filteredNotebooks = notebooks.filter(notebook =>
             notebook.title && notebook.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
-        
-        setSearchResults(filtered);
-    }, [searchTerm, notebooks]);
-    
+
+        const filteredSlides = slides.filter(slide =>
+            slide.title && slide.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        setFilteredNotebooks(filteredNotebooks);
+        setFilteredSlides(filteredSlides);
+
+        setSearchResults([...filteredNotebooks, ...filteredSlides]);
+    }, [searchTerm, notebooks, slides]);
 
     function handleSearchTermChange(event: React.ChangeEvent<HTMLInputElement>) {
         setSearchTerm(event.target.value);
@@ -130,6 +163,32 @@ export default function ApostilasCreation() {
         }
     }
 
+    async function createSlide() {
+        try {
+            const newSlide = {
+                title: slideTitle,
+                link: slideLink
+            };
+            await addDoc(collection(db, `Slides`), newSlide);
+            setSlideTitle('');
+            setSlideLink('');
+            closeModalSlide();
+            toast.success('Slide criado com sucesso!', {
+                position: "top-center",
+            });
+        } catch (error) {
+            console.error('Error creating slide:', error);
+        }
+    }
+
+    const copyLinkToClipboard = (link: string) => {
+        navigator.clipboard.writeText(link).then(() => {
+          toast.success('Link copiado!');
+        }).catch((error) => {
+          console.error('Failed to copy link: ', error);
+        });
+      };
+
  return (
     <div className="p-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md">
         <div className="flex flex-row gap-1 items-center py-2"> 
@@ -138,7 +197,9 @@ export default function ApostilasCreation() {
             placeholder="Procure por uma lição aqui" 
             value={searchTerm}
             onChange={handleSearchTermChange}/>
-            {session?.user.role === 'admin' && <FluencyButton className="w-full" onClick={openModalLicao}>Criar uma lição</FluencyButton>}
+            {session?.user.role === 'admin' && <FluencyButton className="w-full"  onClick={openModalLicao}>Criar uma lição</FluencyButton>}
+            {session?.user.role === 'admin' && <FluencyButton variant="warning" className="w-full" onClick={openModalSlide}>Criar um Slide</FluencyButton>}
+
         </div>
 
         <div className="w-full lg:flex lg:flex-row lg:items-center lg:justify-around md:flex md:flex-row md:items-center md:justify-around flex flex-col items-center justify-around p-4 border border-fluency-blue-600 dark:border-fluency-blue-900 rounded-xl">
@@ -251,11 +312,61 @@ export default function ApostilasCreation() {
         ) : (
         <div>
             <div className="flex flex-row gap-2 items-center p-4">
-                {searchResults.map(notebook => (
-                <div id='apostilas-background'  key={notebook.docID} className="flex flex-col items-center justify-center text-center w-28 h-40 bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 rounded-sm">
-                <Link key={notebook.docID} href={{ pathname: `apostilas/${encodeURIComponent(notebook.title)}`, query: { workbook: notebook.workbook, lesson: notebook.docID }}} ><p className="font-bold hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{notebook.title}</p></Link>
+                <div className="w-full mt-4">
+                    {searchResults.length > 0 ? (
+                        <div className="space-y-4">
+                            {searchResults.map((result) => (
+                                <div key={result.title} className="bg-fluency-blue-200 dark:bg-fluency-bg-dark p-4 rounded-lg">
+                                    {'workbook' in result ? (
+                                        <Link 
+                                            key={result.docID} 
+                                            href={{ 
+                                                pathname: `apostilas/${encodeURIComponent(result.title)}`, 
+                                                query: { 
+                                                    workbook: result.workbook, 
+                                                    lesson: result.docID 
+                                                } 
+                                            }} 
+                                            passHref
+                                        >
+                                            <div>
+                                                <h3 className="text-fluency-blue-700 dark:text-fluency-blue-500 text-xl font-semibold">{result.title}</h3>
+                                                <p>Apostila: {result.workbook}</p>
+                                            </div>
+                                        </Link>
+
+                                    ) : (
+                                        <Link
+                                            href={{ 
+                                                pathname: `apostilas/slides/${encodeURIComponent(result.title)}`, 
+                                                query: { 
+                                                    slide: result.link 
+                                                } 
+                                            }} 
+                                            passHref
+                                        >
+                                            <div>
+                                                <h3 className="text-fluency-orange-500 text-xl font-semibold">{result.title}</h3>
+                                                <button 
+                                                    onClick={() => copyLinkToClipboard(result.link)} 
+                                                    className="flex flex-row items-center gap-1 text-fluency-gray-500 hover:text-fluency-gray-700 dark:text-white hover:dark:text-fluency-gray-200 font-bold duration-300 ease-in-out transition-all"
+                                                    >
+                                                    Copiar link <FaRegCopy />
+                                                </button>
+                                            </div>
+                                        </Link>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-center">Nenhum resultado encontrado</p>
+                    )}
                 </div>
-                ))} 
+
+
+
+                
             </div>
         </div>
         )}
@@ -316,6 +427,50 @@ export default function ApostilasCreation() {
                     </div>
                 </div>
             </div>}
+
+            {criarSlide  && 
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen">
+                    
+                    <div className="fixed inset-0 transition-opacity">
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                        <div className="flex flex-col items-center justify-center">
+                            
+                            <FluencyCloseButton onClick={closeModalSlide}/>
+                            
+                              <h3 className="text-lg leading-6 font-medium  mb-2">
+                                  Criar Slide                     
+                              </h3>
+                              <div className="mt-2 flex flex-col items-center gap-3 p-4">
+
+                                <FluencyInput 
+                                type="text" 
+                                placeholder="Título do Slide" 
+                                value={slideTitle} 
+                                onChange={(e) => setSlideTitle(e.target.value)} 
+                                required/>
+
+                                <FluencyInput 
+                                type="text" 
+                                placeholder="Link do Slide" 
+                                value={slideLink} 
+                                onChange={(e) => setSlideLink(e.target.value)} 
+                                required/>
+
+                                <div className="flex justify-center">
+                                  <FluencyButton variant='confirm' onClick={createSlide}>Salvar</FluencyButton>
+                                  <FluencyButton variant='gray' onClick={closeModalSlide}>Cancelar</FluencyButton>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
+
        <Toaster />
   </div>
 );
