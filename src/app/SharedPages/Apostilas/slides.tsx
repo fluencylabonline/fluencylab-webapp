@@ -18,7 +18,7 @@ export default function Kids() {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const slidesRef = collection(db, 'SlidesKids');
+        const slidesRef = collection(db, 'Slides');
         const slidesSnapshot: QuerySnapshot<DocumentData> = await getDocs(slidesRef);
         const fetchedSlides: SlideDoc[] = slidesSnapshot.docs.map(doc => ({
           id: doc.id,
@@ -26,16 +26,7 @@ export default function Kids() {
           link: doc.data().link,
         }));
 
-        // Sort slides based on the number in the title
-        const sortedSlides = fetchedSlides.sort((a, b) => {
-          const aMatch = a.title.match(/\d+/);
-          const bMatch = b.title.match(/\d+/);
-          const aNumber = aMatch ? parseInt(aMatch[0], 10) : 0;
-          const bNumber = bMatch ? parseInt(bMatch[0], 10) : 0;
-          return aNumber - bNumber;
-        });
-
-        setSlides(sortedSlides);
+        setSlides(fetchedSlides);
       } catch (error) {
         console.error('Error fetching slides: ', error);
       }

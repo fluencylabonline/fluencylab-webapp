@@ -24,6 +24,7 @@ import Traveling from "./traveling";
 import Instrumental from "./instrumental";
 import Kids from "./kids";
 import { FaRegCopy } from "react-icons/fa6";
+import Slides from "./slides";
 
 interface Notebook {
     title: string;
@@ -53,6 +54,7 @@ export default function ApostilasCreation() {
     const [traveling, setTraveling] = useState(false);
     const [instrumentalEnglish, setInstrumentalEnglish] = useState(false);
     const [kids, setKids] = useState(false);
+    const [slidesClass, setSlidesClass] = useState(false);
     const [slides, setSlides] = useState<Slide[]>([]);
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -64,6 +66,8 @@ export default function ApostilasCreation() {
     const [criarSlide, setCriarSlide] = useState(false);
     const [slideTitle, setSlideTitle] = useState('');
     const [slideLink, setSlideLink] = useState('');
+    const [isForKids, setIsForKids] = useState(false);
+
     function openModalSlide() {
         setCriarSlide(true);
     }
@@ -83,7 +87,7 @@ export default function ApostilasCreation() {
     useEffect(() => {
         const fetchNotebooks = async () => {
             const notebooksData: Notebook[] = [];
-            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental', 'Kids'];
+            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
 
             for (const wb of workbookCollections) {
                 const q = query(
@@ -98,11 +102,28 @@ export default function ApostilasCreation() {
         };
 
         const fetchSlides = async () => {
-            const slidesRef = collection(db, 'Slides');
-            const slidesSnapshot = await getDocs(slidesRef);
-            const slidesData = slidesSnapshot.docs.map(doc => ({ ...doc.data() }) as Slide);
-            setSlides(slidesData);
+            try {
+                const slidesRef = collection(db, 'Slides');
+                const slidesKidsRef = collection(db, 'SlidesKids');
+        
+                // Fetch slides from both collections
+                const slidesSnapshot = await getDocs(slidesRef);
+                const slidesKidsSnapshot = await getDocs(slidesKidsRef);
+        
+                // Map documents to Slide objects
+                const slidesData = slidesSnapshot.docs.map(doc => ({ ...doc.data() }) as Slide);
+                const slidesKidsData = slidesKidsSnapshot.docs.map(doc => ({ ...doc.data() }) as Slide);
+        
+                // Combine both arrays
+                const combinedSlides = [...slidesData, ...slidesKidsData];
+        
+                // Set the state with the combined data
+                setSlides(combinedSlides);
+            } catch (error) {
+                console.error('Error fetching slides:', error);
+            }
         };
+        
 
         fetchNotebooks();
         fetchSlides();
@@ -169,9 +190,11 @@ export default function ApostilasCreation() {
                 title: slideTitle,
                 link: slideLink
             };
-            await addDoc(collection(db, `Slides`), newSlide);
+            const collectionName = isForKids ? 'SlidesKids' : 'Slides'; // Determine the collection
+            await addDoc(collection(db, collectionName), newSlide);
             setSlideTitle('');
             setSlideLink('');
+            setIsForKids(false); // Reset the isForKids state
             closeModalSlide();
             toast.success('Slide criado com sucesso!', {
                 position: "top-center",
@@ -189,16 +212,31 @@ export default function ApostilasCreation() {
         });
       };
 
+      const getBackgroundColor = (workbook: string) => {
+        switch (workbook.toLowerCase()) {
+            case 'first steps':
+                return 'bg-fluency-yellow-400'; // Tailwind yellow color
+            case 'the basics':
+                return 'bg-fluency-orange-400'; // Tailwind red color
+            case 'traveling':
+                return 'bg-emerald-400';
+            case 'all you need to know':
+                return 'bg-indigo-400';
+            default:
+                return 'bg-fluency-blue-300'; // Default color
+        }
+    };
+
  return (
     <div className="p-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md">
-        <div className="flex flex-row gap-1 items-center py-2"> 
+        <div className="flex flex-row gap-1 items-center py-2 w-full"> 
             <FluencyInput 
-            className="w-full" 
+            className="w-fit" 
             placeholder="Procure por uma lição aqui" 
             value={searchTerm}
             onChange={handleSearchTermChange}/>
-            {session?.user.role === 'admin' && <FluencyButton className="w-full"  onClick={openModalLicao}>Criar uma lição</FluencyButton>}
-            {session?.user.role === 'admin' && <FluencyButton variant="warning" className="w-full" onClick={openModalSlide}>Criar um Slide</FluencyButton>}
+            {session?.user.role === 'admin' && <FluencyButton className="w-48"  onClick={openModalLicao}>Criar lição</FluencyButton>}
+            {session?.user.role === 'admin' && <FluencyButton variant="warning" className="w-48" onClick={openModalSlide}>Criar Slide</FluencyButton>}
 
         </div>
 
@@ -210,6 +248,8 @@ export default function ApostilasCreation() {
                 setTraveling(false);
                 setInstrumentalEnglish(false);
                 setKids(false);
+                setSlidesClass(false);
+                setSearchTerm('');
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 First Steps <TbBookDownload onClick={() => handleDownloadWorkbook('01 - First Steps')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -222,6 +262,8 @@ export default function ApostilasCreation() {
                 setTraveling(false);
                 setInstrumentalEnglish(false);
                 setKids(false);
+                setSlidesClass(false);
+                setSearchTerm('');
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 The Basics <TbBookDownload onClick={() => handleDownloadWorkbook('02 - The Basics')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -234,6 +276,8 @@ export default function ApostilasCreation() {
                 setTraveling(false);
                 setInstrumentalEnglish(false);
                 setKids(false);
+                setSlidesClass(false);
+                setSearchTerm('');
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 All you need to know <TbBookDownload onClick={() => handleDownloadWorkbook('All you need to know')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -246,6 +290,8 @@ export default function ApostilasCreation() {
                 setTraveling(true);
                 setInstrumentalEnglish(false);
                 setKids(false);
+                setSlidesClass(false);
+                setSearchTerm('');
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Traveling <TbBookDownload  onClick={() => handleDownloadWorkbook('Traveling')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -258,6 +304,8 @@ export default function ApostilasCreation() {
                 setTraveling(false);
                 setInstrumentalEnglish(true);
                 setKids(false);
+                setSlidesClass(false);
+                setSearchTerm('');
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Instrumental <TbBookDownload  onClick={() => handleDownloadWorkbook('Instrumental')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
@@ -270,9 +318,25 @@ export default function ApostilasCreation() {
                 setTraveling(false);
                 setInstrumentalEnglish(false);
                 setKids(true);
+                setSlidesClass(false);
+                setSearchTerm('');
             }} 
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Kids <TbBookDownload  onClick={() => handleDownloadWorkbook('Kids')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+            </button>
+
+            <button onClick={() => {
+                setFirststeps(false);
+                setThebasics(false);
+                setAllyouneedtoknow(false);
+                setTraveling(false);
+                setInstrumentalEnglish(false);
+                setKids(false);
+                setSlidesClass(true);
+                setSearchTerm('');
+            }} 
+            className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
+                Slides <TbBookDownload  onClick={() => handleDownloadWorkbook('Slides')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
         </div>
         
@@ -308,15 +372,23 @@ export default function ApostilasCreation() {
             <div className={kids ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
                 <Kids />
             </div>}
+
+            {slidesClass && 
+            <div className={slidesClass ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
+                <Slides />
+            </div>}
         </div>
         ) : (
         <div>
             <div className="flex flex-row gap-2 items-center p-4">
-                <div className="w-full mt-4">
+                <div className="w-full mt-3">
                     {searchResults.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="flex flex-wrap gap-3 w-full">
                             {searchResults.map((result) => (
-                                <div key={result.title} className="bg-fluency-blue-200 dark:bg-fluency-bg-dark p-4 rounded-lg">
+                                <div key={result.title} 
+                                id='apostilas-background' 
+                                className="flex flex-col items-center justify-center text-center w-32 h-44 bg-fluency-bg-light dark:bg-fluency-bg-dark p-3 rounded-sm"
+>
                                     {'workbook' in result ? (
                                         <Link 
                                             key={result.docID} 
@@ -329,9 +401,11 @@ export default function ApostilasCreation() {
                                             }} 
                                             passHref
                                         >
-                                            <div>
-                                                <h3 className="text-fluency-blue-700 dark:text-fluency-blue-500 text-xl font-semibold">{result.title}</h3>
-                                                <p>Apostila: {result.workbook}</p>
+                                            <div className="flex flex-col items-center">
+                                                <h3 className="font-bold dark:text-fluency-gray-100 text-sm hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500 duration-300 ease-in-out cursor-pointer">{result.title}</h3>
+                                                <p className={`text-xs dark:text-fluency-bg-dark font-bold ${getBackgroundColor(result.workbook)} rounded-md w-fit px-1`}>
+                                                    {result.workbook}
+                                                </p>
                                             </div>
                                         </Link>
 
@@ -346,12 +420,12 @@ export default function ApostilasCreation() {
                                             passHref
                                         >
                                             <div>
-                                                <h3 className="text-fluency-orange-500 text-xl font-semibold">{result.title}</h3>
+                                                <h3 className="font-bold dark:text-fluency-gray-100 text-sm hover:text-fluency-orange-500 dark:hover:text-fluency-orange-500 duration-300 ease-in-out cursor-pointer">{result.title}</h3>
                                                 <button 
                                                     onClick={() => copyLinkToClipboard(result.link)} 
-                                                    className="flex flex-row items-center gap-1 text-fluency-gray-500 hover:text-fluency-gray-700 dark:text-white hover:dark:text-fluency-gray-200 font-bold duration-300 ease-in-out transition-all"
+                                                    className="text-sm flex flex-row items-center gap-1 text-fluency-orange-500 hover:text-fluency-orange-700 dark:text-white hover:dark:text-fluency-orange-500 font-bold duration-300 ease-in-out transition-all"
                                                     >
-                                                    Copiar link <FaRegCopy />
+                                                    Copiar Slide <FaRegCopy />
                                                 </button>
                                             </div>
                                         </Link>
@@ -459,6 +533,16 @@ export default function ApostilasCreation() {
                                 value={slideLink} 
                                 onChange={(e) => setSlideLink(e.target.value)} 
                                 required/>
+
+                                <div className="flex items-center mb-4">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={isForKids}
+                                        onChange={(e) => setIsForKids(e.target.checked)}
+                                        className="mr-2"
+                                    />
+                                    <label className="text-fluency-orange-500 font-bold">Lição Kids</label>
+                                </div>
 
                                 <div className="flex justify-center">
                                   <FluencyButton variant='confirm' onClick={createSlide}>Salvar</FluencyButton>
