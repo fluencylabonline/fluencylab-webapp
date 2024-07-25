@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     if (templateType === 'welcome') {
       results = await resend.emails.send({
         from: 'coordenacao@fluencylab.me',
-        to: studentMail,
+        to: studentName,
         subject: userName,
         react: Welcome({ studentName, userName }),
       });
