@@ -26,7 +26,7 @@ import FontFamily from '@tiptap/extension-font-family'
 import {FontSize} from './font-size';
 
 import Toolbar from "./Toolbar";
-import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem } from '@nextui-org/react';
+import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem, Tooltip } from '@nextui-org/react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -42,6 +42,12 @@ import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/EmbedSelecti
 import AudioSelectionModal from '@/app/SharedPages/Apostilas/editor/AudioSelectionModal';
 import { LuFileAudio } from 'react-icons/lu';
 import { AiFillYoutube } from 'react-icons/ai';
+
+import { CgTranscript } from 'react-icons/cg';
+
+import SpeakingExtension from '@/app/SharedPages/Apostilas/editor/SpeakingComponent/SpeakingExtension';
+import SpeakingSelectionModal from '@/app/SharedPages/Apostilas/editor/SpeakingComponent/SpeakingSelectionModal';
+
 
 //Realtime
 import Collaboration from '@tiptap/extension-collaboration'
@@ -130,6 +136,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
   const { data: session } = useSession();
   const notebookID = params.get('notebook') || '';
   const studentID = params.get('student');
+  const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
@@ -262,6 +269,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       FontSize,
       ReactComponent,
       Embed,
+      SpeakingExtension,
       Link.configure({
         openOnClick: true,
       }),
@@ -357,6 +365,13 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
     }
   };
 
+  const handleSelectTranscript = (audioId: string) => {
+    if (editor && audioId) {
+      editor.chain().focus().insertContent(`<speaking-component audioId="${audioId}"></speaking-component>`).run();
+    }
+  };
+
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} />
@@ -414,19 +429,32 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
             </PopoverContent>
           </Popover>
 
+          <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-orange-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={() => setIsModalOpen(true)}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
           >
             <LuFileAudio />
           </button>
+          </Tooltip>
 
+          <Tooltip content='Clique para adicionar um texto de prática de pronúncia' className='bg-fluency-green-300 font-bold text-sm rounded-md px-1'>
+          <button
+          onClick={() => setIsModalTranscriptOpen(true)}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <CgTranscript  />
+          </button>
+          </Tooltip>
+          
+          <Tooltip content='Clique para adicionar um vídeo' className='bg-fluency-red-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={() => setIsModalEmbedOpen(true)}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
           >
             <AiFillYoutube />
           </button>
+          </Tooltip>
 
             <Button onClick={openWorkbook} className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
               <PiNotebookBold className="w-6 h-auto"/>

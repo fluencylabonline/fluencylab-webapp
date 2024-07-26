@@ -6,7 +6,7 @@ import FluencyInput from '@/app/ui/Components/Input/input';
 import { toast } from 'react-hot-toast';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 
-const AudioSelectionModal = ({ isOpen, onClose, onSelectAudio }) => {
+const SpeakingSelectionModal = ({ isOpen, onClose, onSelectAudio }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [availableAudios, setAvailableAudios] = useState([]);
   const [selectedAudioId, setSelectedAudioId] = useState('');
@@ -56,7 +56,7 @@ const AudioSelectionModal = ({ isOpen, onClose, onSelectAudio }) => {
         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
           <div className="flex flex-col items-center justify-center">
             <FluencyCloseButton onClick={onClose} />
-            <h3 className="text-lg leading-6 font-medium p-4">Selecione um Áudio</h3>
+            <h3 className="text-lg leading-6 font-medium p-4">Selecione um texto para prática</h3>
             <div className="flex flex-col items-center gap-3 p-4">
               <FluencyInput
                 variant='solid'
@@ -87,4 +87,4 @@ const AudioSelectionModal = ({ isOpen, onClose, onSelectAudio }) => {
   );
 };
 
-export default AudioSelectionModal;
+export default SpeakingSelectionModal;

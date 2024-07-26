@@ -270,11 +270,9 @@ export default function Listening() {
             await deleteDoc(doc(db, 'Nivelamento', audioToDelete.id));
             toast.success('Áudio excluído com sucesso!');
             
-            // Update state to remove the deleted audio from nivelamentoData
             setNivelamentoData(prevData => prevData.filter(doc => doc.id !== audioToDelete.id));
-            
-            setIsDeleteConfirmationModalOpen(false); // Close modal after deletion
-            setAudioToDelete(null); // Reset audioToDelete state
+            setIsDeleteConfirmationModalOpen(false); 
+            setAudioToDelete(null); 
         } catch (error) {
             toast.error('Ocorreu um erro ao excluir o áudio. Tente novamente mais tarde.');
             console.error('Error deleting audio: ', error);
@@ -310,8 +308,7 @@ export default function Listening() {
         if (shouldPlayAgain) {
             // Logic to play the current audio again
             prepareWordInputs(randomDocument?.transcript || '');
-    
-            setShouldPlayAgain(false); // Reset flag
+            setShouldPlayAgain(false);
         }
     }, [shouldPlayAgain, randomDocument]);
 

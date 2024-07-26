@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import { useSession } from 'next-auth/react';
 import { db } from '@/app/firebase'; // Ensure correct import
 import AudioPlayer from '../../Games/listening/component/playerComponent';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -9,7 +8,6 @@ import { toast, Toaster } from 'react-hot-toast';
 
 const ListeningComponent = ({ node }) => {
   const { audioId } = node.attrs;
-  const { data: session } = useSession();
   const [randomDocument, setRandomDocument] = useState(null);
   const [wordInputs, setWordInputs] = useState([]);
   const [inputsDisabled, setInputsDisabled] = useState(false);
