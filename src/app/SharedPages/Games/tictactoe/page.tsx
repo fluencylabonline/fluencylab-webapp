@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense  } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { verbs } from './verbs';
@@ -290,6 +290,7 @@ const TicTacToe: React.FC = () => {
   };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="flex flex-col items-center mt-16">
       {!gameID && !gameStarted && (
         <FluencyButton
@@ -371,6 +372,8 @@ const TicTacToe: React.FC = () => {
 
       <Toaster />
     </div>
+    </Suspense>
+
   );
 };
 
