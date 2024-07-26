@@ -144,7 +144,7 @@ const SpeakingComponent = ({ node }) => {
             <div className='flex flex-col items-center gap-2'>
               <div className='text-sm rounded-md bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 w-full'>
                 <p className='font-semibold'>Instruções:</p>
-                <p>Quando estiver pronto, aperte o botão falar e leia o texto em voz alta. Quando terminar, clique em 'Parar' e veja sua pontuação. <span className='text-fluency-yellow-600 font-semibold'>Talvez você precise tentar mais de uma vez. Este ainda é um recurso em teste.</span></p>
+                <p>Quando estiver pronto, aperte o botão falar e leia o texto em voz alta. Quando terminar, clique em Parar e veja sua pontuação. <span className='text-fluency-yellow-600 font-semibold'>Talvez você precise tentar mais de uma vez. Este ainda é um recurso em teste.</span></p>
               </div>
               <div className='rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 w-full'>
                 <h2 className='font-bold text-lg'>{selectedAudio.name}</h2>
