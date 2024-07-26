@@ -390,6 +390,11 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           onSelectVideo={handleSelectVideo}
         />
 
+      <SpeakingSelectionModal 
+        isOpen={isModalTranscriptOpen} 
+        onClose={() => setIsModalTranscriptOpen(false)} 
+        onSelectAudio={handleSelectTranscript} />
+
         <button
           onClick={scrollToBottom}
           className="fixed bottom-5 right-2 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
