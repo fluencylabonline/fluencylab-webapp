@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense  } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { verbs } from './verbs';
@@ -290,90 +290,89 @@ const TicTacToe: React.FC = () => {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
     <div className="flex flex-col items-center mt-16">
-      {!gameID && !gameStarted && (
-        <FluencyButton
-          variant='confirm'
-          onClick={handleStartGame}
-          className="mb-4"
-        >
-          Iniciar jogo
-        </FluencyButton>
-      )}
-
-      <div className="mb-4 flex flex-row items-center gap-2">
-        <input
-          type="text"
-          value={gameID || ''}
-          onChange={(e) => setGameID(e.target.value)}
-          placeholder="Enter Game ID"
-          className="p-2 border rounded mr-2"
-        />
-        <FluencyButton
-          variant='warning'
-          onClick={handleJoinGame}
-        >
-          Entrar no jogo
-        </FluencyButton>
-      </div>
-
-      <div className="flex flex-wrap w-72">
-        {board.map((_, index) => (
-          <div key={index}>
-            {renderSquare(index)}
-          </div>
-        ))}
-      </div>
-
-      {modalIsOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-slate-800 dark:bg-slate-500 bg-opacity-50">
-          <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl mb-4">Escreva uma frase usando o verbo: {board[currentBox as number]}</h2>
-            <form onSubmit={handleSubmit}>
-              <textarea
-                className="w-full p-2 border rounded mb-4 outline-none bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                placeholder={`Use o verbo ${board[currentBox as number]} em uma frase`}
-                required
-              />
-              <div className="flex justify-end space-x-4">
-                <FluencyButton
-                  type="button"
-                  variant='warning'
-                  onClick={handleCloseModal}
-                >
-                  Cancelar
-                </FluencyButton>
-                <FluencyButton
-                  type="submit"
-                  variant='orange'
-                  disabled={loading}
-                >
-                  {loading ? 'Checando...' : 'Enviar'}
-                </FluencyButton>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {gameOver && (
-        <div className="mt-4">
+      <Suspense fallback={<div>Loading...</div>}>
+        {!gameID && !gameStarted && (
           <FluencyButton
             variant='confirm'
             onClick={handleStartGame}
+            className="mb-4"
           >
-            Jogar Novamente
+            Iniciar jogo
+          </FluencyButton>
+        )}
+
+        <div className="mb-4 flex flex-row items-center gap-2">
+          <input
+            type="text"
+            value={gameID || ''}
+            onChange={(e) => setGameID(e.target.value)}
+            placeholder="Enter Game ID"
+            className="p-2 border rounded mr-2"
+          />
+          <FluencyButton
+            variant='warning'
+            onClick={handleJoinGame}
+          >
+            Entrar no jogo
           </FluencyButton>
         </div>
-      )}
 
-      <Toaster />
+        <div className="flex flex-wrap w-72">
+          {board.map((_, index) => (
+            <div key={index}>
+              {renderSquare(index)}
+            </div>
+          ))}
+        </div>
+
+        {modalIsOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-slate-800 dark:bg-slate-500 bg-opacity-50">
+            <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-6 rounded-lg shadow-lg max-w-md mx-auto">
+              <h2 className="text-xl mb-4">Escreva uma frase usando o verbo: {board[currentBox as number]}</h2>
+              <form onSubmit={handleSubmit}>
+                <textarea
+                  className="w-full p-2 border rounded mb-4 outline-none bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white"
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  placeholder={`Use o verbo ${board[currentBox as number]} em uma frase`}
+                  required
+                />
+                <div className="flex justify-end space-x-4">
+                  <FluencyButton
+                    type="button"
+                    variant='warning'
+                    onClick={handleCloseModal}
+                  >
+                    Cancelar
+                  </FluencyButton>
+                  <FluencyButton
+                    type="submit"
+                    variant='orange'
+                    disabled={loading}
+                  >
+                    {loading ? 'Checando...' : 'Enviar'}
+                  </FluencyButton>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {gameOver && (
+          <div className="mt-4">
+            <FluencyButton
+              variant='confirm'
+              onClick={handleStartGame}
+            >
+              Jogar Novamente
+            </FluencyButton>
+          </div>
+        )}
+
+        <Toaster />
+      </Suspense>
     </div>
-    </Suspense>
-
   );
 };
 
