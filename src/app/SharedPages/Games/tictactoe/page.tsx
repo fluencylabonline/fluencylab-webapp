@@ -1,37 +1,80 @@
-// components/TicTacToe.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { verbs } from './verbs'; // Assuming verbs is imported correctly from './verbs'
+import { usePathname, useSearchParams } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
+import { verbs } from './verbs';
 import { Toaster, toast } from 'react-hot-toast';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import './tictac.css';
 import FluencyButton from '@/app/ui/Components/Button/button';
+import { collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
+import { useSession } from 'next-auth/react';
 
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
 
 const TicTacToe: React.FC = () => {
-  // Shuffle the entire verbs array and take the first 9 for the board
+  const { data: session } = useSession(); // Get current session
+  const userId = session?.user?.id ?? null; // Use null if userId is undefined
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [board, setBoard] = useState<string[]>([]);
+  const [isXNext, setIsXNext] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [currentBox, setCurrentBox] = useState<number | null>(null);
+  const [userInput, setUserInput] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [disabledBoxes, setDisabledBoxes] = useState<number[]>([]);
+  const [winner, setWinner] = useState<string | null>(null);
+  const [gameOver, setGameOver] = useState(true);
+  const [gameID, setGameID] = useState<string | null>(null);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [currentTurn, setCurrentTurn] = useState<'X' | 'O'>('X'); // New state for current turn
+  const [playerIds, setPlayerIds] = useState<{X: string | null, O: string | null}>({ X: null, O: null }); // Store player IDs
+
   useEffect(() => {
-    shuffleVerbs();
-  }, []);
+    const id = searchParams.get('gameID');
+    if (id) {
+      setGameID(id);
+      loadGame(id);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (gameStarted) {
+      saveGame();
+    }
+  }, [board, disabledBoxes, isXNext, winner, gameOver, gameStarted]);
+
+  useEffect(() => {
+    setCurrentTurn(isXNext ? 'X' : 'O'); // Update current turn based on isXNext
+  }, [isXNext]);
+
+  useEffect(() => {
+    if (playerIds.X && playerIds.O) {
+      if ((userId === playerIds.X && currentTurn === 'X') || (userId === playerIds.O && currentTurn === 'O')) {
+        // Allow the user to play if it is their turn
+      } else {
+        // Optionally, show a message or disable the board
+      }
+    }
+  }, [playerIds, userId, currentTurn]);
 
   const shuffleVerbs = () => {
-    const shuffledVerbs = shuffleArray(verbs).slice(0, 9); // Take the first 9 shuffled verbs
+    const shuffledVerbs = shuffleArray(verbs).slice(0, 9);
     setBoard(shuffledVerbs);
   };
 
   const shuffleArray = (array: string[]) => {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
-    // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-      // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
 
-      // And swap it with the current element.
       temporaryValue = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
@@ -40,31 +83,20 @@ const TicTacToe: React.FC = () => {
     return array;
   };
 
-  const [board, setBoard] = useState<string[]>([]); // Initialize empty board on first render
-  const [isXNext, setIsXNext] = useState(true);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [currentBox, setCurrentBox] = useState<number | null>(null);
-  const [userInput, setUserInput] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-  const [disabledBoxes, setDisabledBoxes] = useState<number[]>([]); // Track disabled boxes
-  const [winner, setWinner] = useState<string | null>(null); // Track winner ('X' or 'O')
-  const [gameOver, setGameOver] = useState(true); // Initially set to true to prevent immediate display of "Play Again"
-
   useEffect(() => {
     const checkWinner = checkWin();
     if (checkWinner) {
       setWinner(checkWinner);
       setGameOver(true);
     } else if (disabledBoxes.length === board.length) {
-      // All boxes disabled, tie game
       setGameOver(true);
     } else {
-      setGameOver(false); // Reset game over state if game is still ongoing
+      setGameOver(false);
     }
   }, [board, disabledBoxes]);
 
   const handleClick = (index: number) => {
-    if (board[index] === '' || disabledBoxes.includes(index) || gameOver) return; // Skip if no verb, already disabled, or game over
+    if (board[index] === '' || disabledBoxes.includes(index) || gameOver || (currentTurn !== (isXNext ? 'X' : 'O'))) return;
     setCurrentBox(index);
     setModalIsOpen(true);
   };
@@ -125,27 +157,27 @@ const TicTacToe: React.FC = () => {
 
     try {
       const result = await chat.sendMessage(fullPrompt);
-      const responseText = result.response.text().trim(); // Trim whitespace from response text
+      const responseText = result.response.text().trim();
       setLoading(false);
 
-      // Check if the response contains "correct" or "incorrect"
       if (responseText.toLowerCase() === 'correct') {
         const updatedBoard = [...board];
         updatedBoard[currentBox as number] = isXNext ? 'X' : 'O';
         setBoard(updatedBoard);
         setIsXNext(!isXNext);
-        setDisabledBoxes([...disabledBoxes, currentBox as number]); // Disable the box
+        setDisabledBoxes([...disabledBoxes, currentBox as number]);
         toast.success('Frase correta! Movimento aceito.');
+        saveGame();
         return 'correct';
       } else if (responseText.toLowerCase() === 'incorrect') {
         return 'incorrect';
       } else {
-        return 'unknown'; // Handle other cases if necessary
+        return 'unknown';
       }
     } catch (error) {
       setLoading(false);
       console.error('Error during AI verification:', error);
-      return 'unknown'; // Handle error case
+      return 'unknown';
     }
   };
 
@@ -187,26 +219,104 @@ const TicTacToe: React.FC = () => {
       [2, 4, 6],
     ];
 
-    for (let i = 0; i < winLines.length; i++) {
-      const [a, b, c] = winLines[i];
+    for (const [a, b, c] of winLines) {
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a]; // Return 'X' or 'O' if there's a winner
+        return board[a];
       }
     }
-
-    return null; // Return null if no winner
+    return null;
   };
 
-  const handlePlayAgain = () => {
-    shuffleVerbs(); // Shuffle verbs for new game
-    setIsXNext(true); // Reset player turn
-    setDisabledBoxes([]); // Reset disabled boxes
-    setWinner(null); // Reset winner
-    setGameOver(false); // Reset game over state
+  const handleStartGame = () => {
+    shuffleVerbs();
+    setIsXNext(true);
+    setDisabledBoxes([]);
+    setWinner(null);
+    setGameOver(false);
+    setGameID(uuidv4());
+    setGameStarted(true);
+    setPlayerIds({ X: userId, O: null }); // Set the current user as X
+    saveGame();
+  };
+
+  const handleJoinGame = () => {
+    if (gameID) {
+      loadGame(gameID);
+    } else {
+      toast.error('Please enter a game ID.');
+    }
+  };
+
+  const saveGame = async () => {
+    if (gameID) {
+      try {
+        console.log('Saving game:', { board, isXNext, disabledBoxes, winner, gameOver });
+        await setDoc(doc(db, 'games', gameID), {
+          board,
+          isXNext,
+          disabledBoxes,
+          winner,
+          gameOver,
+          playerIds,
+        });
+      } catch (error) {
+        console.error('Error saving game:', error);
+        toast.error('Error saving game.');
+      }
+    } else {
+      console.log('Cannot save game: No game ID provided.');
+    }
+  };
+
+  const loadGame = async (id: string) => {
+    try {
+      const gameDoc = await getDoc(doc(db, 'games', id));
+      if (gameDoc.exists()) {
+        const gameData = gameDoc.data();
+        setBoard(gameData.board || []);
+        setIsXNext(gameData.isXNext || true);
+        setDisabledBoxes(gameData.disabledBoxes || []);
+        setWinner(gameData.winner || null);
+        setGameOver(gameData.gameOver || true);
+        setPlayerIds(gameData.playerIds || { X: null, O: null }); // Load player IDs
+        setGameStarted(true);
+      } else {
+        toast.error('Game not found.');
+      }
+    } catch (error) {
+      console.error('Error loading game:', error);
+      toast.error('Error loading game.');
+    }
   };
 
   return (
     <div className="flex flex-col items-center mt-16">
+      {!gameID && !gameStarted && (
+        <FluencyButton
+          variant='confirm'
+          onClick={handleStartGame}
+          className="mb-4"
+        >
+          Iniciar jogo
+        </FluencyButton>
+      )}
+
+      <div className="mb-4 flex flex-row items-center gap-2">
+        <input
+          type="text"
+          value={gameID || ''}
+          onChange={(e) => setGameID(e.target.value)}
+          placeholder="Enter Game ID"
+          className="p-2 border rounded mr-2"
+        />
+        <FluencyButton
+          variant='warning'
+          onClick={handleJoinGame}
+        >
+          Entrar no jogo
+        </FluencyButton>
+      </div>
+
       <div className="flex flex-wrap w-72">
         {board.map((_, index) => (
           <div key={index}>
@@ -216,7 +326,7 @@ const TicTacToe: React.FC = () => {
       </div>
 
       {modalIsOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-slate-800 dark:bg-slate-300 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-slate-800 dark:bg-slate-500 bg-opacity-50">
           <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-6 rounded-lg shadow-lg max-w-md mx-auto">
             <h2 className="text-xl mb-4">Escreva uma frase usando o verbo: {board[currentBox as number]}</h2>
             <form onSubmit={handleSubmit}>
@@ -252,7 +362,7 @@ const TicTacToe: React.FC = () => {
         <div className="mt-4">
           <FluencyButton
             variant='confirm'
-            onClick={handlePlayAgain}
+            onClick={handleStartGame}
           >
             Jogar Novamente
           </FluencyButton>

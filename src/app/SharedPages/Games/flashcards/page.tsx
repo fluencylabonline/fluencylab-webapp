@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, FC } from 'react';
-import { collection, addDoc, getDocs, query, doc as firestoreDoc, setDoc, getDoc, updateDoc, deleteDoc, doc, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, doc as firestoreDoc, setDoc, getDoc, updateDoc, deleteDoc, doc, where, onSnapshot } from 'firebase/firestore';
 import { db } from '@/app/firebase'; 
 import './flashcards.css';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -33,10 +33,15 @@ interface Student {
     [key: string]: any;
 }
 
+interface DeckData {
+    id: string;
+    name: string;
+    cardsToReviewCount: number;
+}
+
 const FlashCard: FC = () => {
     const { data: session } = useSession();
     const currentUserId = session?.user.id;
-
     const [decks, setDecks] = useState<any[]>([]);
     const [cards, setCards] = useState<Card[]>([]);
     const [currentCard, setCurrentCard] = useState<number>(0);
@@ -51,31 +56,15 @@ const FlashCard: FC = () => {
     const [editedCardBack, setEditedCardBack] = useState<string>('');
     const [globalDecks, setGlobalDecks] = useState<boolean>(false);
     const [globalDecksPractice, setGlobalDecksPractice] = useState<boolean>(false);
-
     const [otherDecks, setOtherDecks] = useState<Deck[]>([]);
     const [otherCards, setOtherCards] = useState<Card[]>([]);
-    const [selectedOtherDeck, setSelectedOtherDeck] = useState<string>('');
     const [otherDecksList, setOtherDecksList] = useState<boolean>(false);
 
-    const openOtherlDecks = () => {
-        setOtherDecksList(true)
-    }
-
-    const closeOtherlDecks = () => {
-        setOtherDecksList(false)
-    }
-
-    const openGlobalDecks = () => {
-        setGlobalDecks(true)
-    }
-
-    const closeGlobalDecks = () => {
-        setGlobalDecks(false)
-    }
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+    const openOtherlDecks = () => {setOtherDecksList(true)}
+    const closeOtherlDecks = () => {setOtherDecksList(false)}
+    const openGlobalDecks = () => {setGlobalDecks(true)}
+    const closeGlobalDecks = () => {setGlobalDecks(false)}
+    const openModal = () => {setIsModalOpen(true);};
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -88,7 +77,6 @@ const FlashCard: FC = () => {
         setEditedCardBack('');
     };
 
-    //Other decks
     useEffect(() => {
         const fetchOtherDecks = async () => {
             try {
@@ -121,12 +109,10 @@ const FlashCard: FC = () => {
         }
     };
 
-    //Personal
     const fetchDecksWithReviewCount = async (userId: string) => {
         const decksQuery = query(collection(db, 'users', userId, 'Decks'));
         const decksSnapshot = await getDocs(decksQuery);
         const decksData = [];
-
         for (const deckDoc of decksSnapshot.docs) {
             const deckId = deckDoc.id;
             const cardsQuery = query(
@@ -135,10 +121,9 @@ const FlashCard: FC = () => {
             );
             const cardsSnapshot = await getDocs(cardsQuery);
             const cardsToReviewCount = cardsSnapshot.docs.length;
-
             decksData.push({ id: deckId, name: deckDoc.id, cardsToReviewCount });
+            console.log(deckId, cardsToReviewCount)
         }
-
         return decksData;
     };
 
@@ -153,10 +138,9 @@ const FlashCard: FC = () => {
                 }
             }
         };
-
         fetchData();
     }, [currentUserId]);
-
+    
     useEffect(() => {
         const fetchDecks = async () => {
             if(currentUserId){
@@ -195,7 +179,6 @@ const FlashCard: FC = () => {
         }
     };
     
-
     const selectDeck = (deckId: string) => {
         setCurrentCard(0);
         setIsFlipped(false);
@@ -277,10 +260,8 @@ const FlashCard: FC = () => {
     const reviewCard = async (cardId: string, rating: 'easy' | 'medium' | 'hard') => {
         const card = cards.find(c => c.id === cardId);
         if (!card) return;
-    
-        let { interval, easeFactor, reviewCount } = card;
-        const now = new Date();
-    
+            let { interval, easeFactor, reviewCount } = card;
+            const now = new Date();
         switch (rating) {
             case 'easy':
                 easeFactor += 0.1;
@@ -294,10 +275,9 @@ const FlashCard: FC = () => {
                 interval = Math.max(1, interval / 2);
                 break;
         }
-    
+
         reviewCount += 1;
         const dueDate = new Date(now.setDate(now.getDate() + interval)).toISOString();
-    
         if(currentUserId){
             try {
                 const cardRef = doc(db, 'users', currentUserId, 'Decks', selectedDeck, 'cards', cardId);
@@ -309,11 +289,9 @@ const FlashCard: FC = () => {
                 console.error('Error reviewing card:', error);
             }
         }
-
         setIsFlipped(false)
     };
 
-    //Send to student
     const [isOtherConfirmModalOpen, setIsOtherConfirmModalOpen] = useState<boolean>(false);
     const openOtherConfirmModal = (deckId: string) => {
         setSelectedDeck(deckId);
@@ -372,27 +350,12 @@ const FlashCard: FC = () => {
         }
     };
 
-    const fetchDecks = async () => {
-        if(currentUserId){
-            try {
-                const decksQuery = query(collection(db, 'users', currentUserId, 'Decks'));
-                const decksSnapshot = await getDocs(decksQuery);
-                const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id }));
-                setDecks(decksData);
-            } catch (error) {
-                console.error('Error fetching decks:', error);
-            }
-        }
-    };
-    fetchDecks();
-
     const confirmOtherDeckAddition = async () => {
         const studentId = session?.user.id;
         try {
             if (studentId && selectedDeck) {
                 await addSelectDeck(selectedDeck, studentId);
                 closeConfirmModal();
-                fetchDecks()
             } else {
                 toast.error('Please select both student and deck.');
             }
@@ -410,17 +373,13 @@ const FlashCard: FC = () => {
         try {
             const deckRef = doc(db, 'Flashcards', deckId);
             const deckSnapshot = await getDoc(deckRef);
-    
             if (deckSnapshot.exists()) {
                 const deckData = deckSnapshot.data() as Deck;
-    
                 const userDeckRef = doc(db, 'users', studentId, 'Decks', deckId);
                 await setDoc(userDeckRef, deckData);
-    
                 const cardsQuery = query(collection(db, 'Flashcards', deckId, 'cards'));
                 const cardsSnapshot = await getDocs(cardsQuery);
                 const cardsData = cardsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Card));
-    
                 const userCardsCollectionRef = collection(db, 'users', studentId, 'Decks', deckId, 'cards');
                 await Promise.all(cardsData.map(async (card) => {
                     await addDoc(userCardsCollectionRef, {
@@ -432,7 +391,8 @@ const FlashCard: FC = () => {
                         reviewCount: 0,
                     });
                 }));
-                toast.success("Deck e cartões adicionados ao aluno!");
+                toast.success("Deck adicionado! Recarregue a página.")
+                
             } else {
                 console.error('Deck not found.');
                 toast.error("Deck not found.");
@@ -441,22 +401,21 @@ const FlashCard: FC = () => {
             console.error('Error adding deck and cards for the user:', error);
             toast.error("Error adding deck and cards for the user.");
         }
-    
         setGlobalDecks(false);
         setIsOtherConfirmModalOpen(false);
     };
     
-
     return (
         <div className="flex flex-row items-center w-full min-h-[90vh] justify-center">
            <div className='flex flex-col w-max items-center justify-center p-6 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
             <div className='flex flex-row gap-2 items-center'>
                 {session?.user.role === 'student' &&
                 <>
-                <FluencyButton variant='gray' onClick={openGlobalDecks}>Seus decks</FluencyButton>
-                <FluencyButton variant='warning' onClick={openOtherlDecks}>Outros decks</FluencyButton>
+                    <FluencyButton variant='gray' onClick={openGlobalDecks}>Seus decks</FluencyButton>
+                    <FluencyButton variant='warning' onClick={openOtherlDecks}>Outros decks</FluencyButton>
+                    
                 </>}
-                
+
                 {session?.user.role === 'teacher' &&
                 <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
                 {session?.user.role === 'teacher' && <FluencyButton variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>}
@@ -475,7 +434,6 @@ const FlashCard: FC = () => {
                     </ul>
                 </div>}
                 </div>}
-
             </div>
             {globalDecksPractice &&
             <div className='flex flex-col items-center'>
@@ -566,8 +524,10 @@ const FlashCard: FC = () => {
                                             deck.cardsToReviewCount === 0
                                                 ? 'bg-gray-400 cursor-not-allowed'
                                                 : 'bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hover:dark:bg-fluency-orange-800'
-                                        }`}
-                                                value={deck.name} onClick={() => selectDeck(deck.id)}>Praticar</button>
+                                            }`}
+                                            value={deck.name} onClick={() => selectDeck(deck.id)}>
+                                                Praticar
+                                        </button>
                                     </div>
                                 </li>
                             ))}
@@ -583,11 +543,11 @@ const FlashCard: FC = () => {
                     <div className="fixed inset-0 transition-opacity">
                         <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                     </div>
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all p-8">
+                    <div className="h-[85vh] overflow-y-scroll bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all p-8">
                         <FluencyCloseButton onClick={closeOtherlDecks}/>
                         
                         <div className='flex flex-col items-center'>
-                            <h2>Outros decks:</h2>
+                            <h2 className='font-bold text-xl'>Decks</h2>
 
                             <ul className='flex flex-col items-start p-4 gap-2'>
                             {otherDecks.map(otherDecks => (
@@ -771,6 +731,5 @@ const FlashCard: FC = () => {
       </div>
     );
 };
-
 export default FlashCard;
 
