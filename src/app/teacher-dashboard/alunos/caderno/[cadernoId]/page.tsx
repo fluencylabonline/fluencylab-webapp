@@ -17,15 +17,13 @@ import { db } from '@/app/firebase';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { MdDeleteSweep } from 'react-icons/md';
-import { BsFilePdfFill } from "react-icons/bs";
 import { GiSchoolBag } from "react-icons/gi";
 import { IoFilter } from 'react-icons/io5';
 import Link from 'next/link';
 
 import { toast, Toaster } from 'react-hot-toast';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
-import { IoMdCloudOutline, IoMdHelpCircleOutline } from 'react-icons/io';
-import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
+import { IoMdHelpCircleOutline } from 'react-icons/io';
 import { HiOutlineDocumentReport } from 'react-icons/hi';
 import { Tooltip } from '@nextui-org/react';
 
@@ -129,7 +127,6 @@ export default function Caderno(){
         setDescription(e.target.value);
     };
 
-    const router = useRouter();
     const createNotebookWithDescription = async () => {
         try {
             const notebookRef = collection(db, `users/${id}/Notebooks`);
@@ -137,7 +134,7 @@ export default function Caderno(){
                 title: new Date().toLocaleDateString(),
                 description: description || 'Documento sem descrição',
                 createdAt: serverTimestamp(),
-                // Store additional information
+                
                 student: id || '', // User ID
                 studentName: studentData?.name || '', // User name
                 professorId: studentData?.professorId || '', // Professor ID
@@ -185,30 +182,6 @@ export default function Caderno(){
           console.error('Error deleting notebook:', error);
         }
       };
-    
-
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const filteredNotebooks = notebooks.filter((notebook) => {
-        const searchLower = searchQuery.toLowerCase();
-        return (
-            notebook.title.toLowerCase().includes(searchLower) ||
-            notebook.description.toLowerCase().includes(searchLower)
-        );
-    });
-
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-
-    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSortOrder(e.target.value as 'asc' | 'desc');
-    };
-
-    const sortedNotebooks = [...filteredNotebooks].sort((a, b) => {
-        if (sortOrder === 'asc') {
-            return notebooks.indexOf(a) - notebooks.indexOf(b);
-        } else {
-            return notebooks.indexOf(b) - notebooks.indexOf(a);
-        }
-    });
 
     const createReviewTask = async (notebookTitle: string, notebookId: string) => {
         try {
@@ -254,6 +227,7 @@ export default function Caderno(){
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
+
     const [slideLink, setSlideLink] = useState('');
     const [slides, setSlides] = useState<{ name: string; url: string; }[]>([]);
     useEffect(() => {
@@ -301,7 +275,6 @@ export default function Caderno(){
         }
     };
 
-
     const [modalNoteId, setModalNoteId] = useState<string | null>(null);
     const [reportContent, setReportContent] = useState<string>('');
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -343,6 +316,69 @@ export default function Caderno(){
             });
         }
     };
+
+    const [isDeleteSlideModalOpen, setIsDeleteSlideModalOpen] = useState(false);
+    const [selectedSlideUrl, setSelectedSlideUrl] = useState('');
+
+    const handleOpenDeleteSlideModal = (slideUrl: string) => {
+        setSelectedSlideUrl(slideUrl);
+        setIsDeleteSlideModalOpen(true);
+    };
+
+    const handleCloseDeleteSlideModal = () => {
+        setSelectedSlideUrl('');
+        setIsDeleteSlideModalOpen(false);
+    };
+
+    const deleteSlide = async (slideUrl: string) => {
+        try {
+            const slideRef = collection(db, `users/${id}/Slides`);
+            const querySnapshot = await getDocs(slideRef);
+            querySnapshot.forEach(async (doc) => {
+                if (doc.data().url === slideUrl) {
+                    await deleteDoc(doc.ref);
+                }
+            });
+
+            const updatedSlides = slides.filter((slide) => slide.url !== slideUrl);
+            setSlides(updatedSlides);
+            toast.error('Slide deletado!', { position: "top-center" });
+        } catch (error) {
+            console.error('Error deleting slide:', error);
+            toast.error('Erro ao deletar slide!', { position: "top-center" });
+        }
+    };
+
+    // Search
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const searchLower = searchQuery.toLowerCase();
+
+    const filteredNotebooks = notebooks.filter((notebook) => {
+        return (
+            notebook.title.toLowerCase().includes(searchLower) ||
+            notebook.description.toLowerCase().includes(searchLower)
+        );
+    });
+
+    const filteredSlides = slides.filter((slide) => {
+        return (
+            slide.name.toLowerCase().includes(searchLower) ||
+            slide.url.toLowerCase().includes(searchLower)  // Include filtering by ID
+        );
+    });
+
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSortOrder(e.target.value as 'asc' | 'desc');
+    };
+
+    const sortedNotebooks = [...filteredNotebooks].sort((a, b) => {
+        if (sortOrder === 'asc') {
+            return notebooks.indexOf(a) - notebooks.indexOf(b);
+        } else {
+            return notebooks.indexOf(b) - notebooks.indexOf(a);
+        }
+    });
 
     return(
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
@@ -398,18 +434,22 @@ export default function Caderno(){
                         </li>
                     ))}
                     
-                    {slides.map((slide) => (
-                        <li key={slide.name} className='bg-fluency-blue-100 hover:bg-fluency-gray-100 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 px-6 rounded-md flex flex-row items-center justify-between gap-4 w-full'>
+                    {filteredSlides.map((slide) => (
+                        <li key={slide.url} className='bg-fluency-blue-100 hover:bg-fluency-gray-100 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 px-6 rounded-md flex flex-row items-center justify-between gap-4 w-full'>
                             <div className='hover:text-fluency-blue-700 hover:font-bold duration-200 ease-out transition-all cursor-pointer'>
-                            <Link key={slide.url} href={{ pathname: `/teacher-dashboard/alunos/slide/${encodeURIComponent(slide.name)}`, query: { slide: slide.url } }} passHref>
-
-                                <p className='text-md'>{slide.name}</p>
-                                <p className='text-sm'>Canva Slide</p>
+                                <Link key={slide.url} href={{ pathname: `/teacher-dashboard/alunos/slide/${encodeURIComponent(slide.name)}`, query: { slide: slide.url } }} passHref>
+                                    <p className='text-md'>{slide.name}</p>
+                                    <p className='text-sm'>Slide</p>
                                 </Link>
-
+                            </div>
+                            <div className='flex flex-row gap-2 items-center'>
+                                <Tooltip content="Deletar" className='bg-fluency-orange-300 font-bold text-black rounded-md px-1'>
+                                    <p><MdDeleteSweep onClick={() => handleOpenDeleteSlideModal(slide.url)} className='w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                </Tooltip>
                             </div>
                         </li>
                     ))}
+
                 </ul>
             </div>
 
@@ -553,6 +593,30 @@ export default function Caderno(){
                                 <div className="flex justify-center">
                                     <FluencyButton variant='danger' onClick={() => { deleteNotebook(selectedNotebookId); handleCloseDeleteModal(); }}>Sim, excluir</FluencyButton>
                                     <FluencyButton variant='gray' onClick={handleCloseDeleteModal}>Não, cancelar</FluencyButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {isDeleteSlideModalOpen && (
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="fixed inset-0 transition-opacity">
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                        <div className="flex flex-col">
+                            <FluencyCloseButton onClick={handleCloseDeleteSlideModal}/>
+                            <div className="mt-3 flex flex-col gap-3 p-4">
+                                <h3 className="text-center text-lg leading-6 font-bold mb-2">
+                                    Tem certeza que deseja excluir este slide?
+                                </h3>
+                                <div className="flex justify-center">
+                                    <FluencyButton variant='danger' onClick={() => { deleteSlide(selectedSlideUrl); handleCloseDeleteSlideModal(); }}>Sim, excluir</FluencyButton>
+                                    <FluencyButton variant='gray' onClick={handleCloseDeleteSlideModal}>Não, cancelar</FluencyButton>
                                 </div>
                             </div>
                         </div>
