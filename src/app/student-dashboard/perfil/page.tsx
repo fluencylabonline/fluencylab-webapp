@@ -58,27 +58,6 @@ function Perfil() {
 
     const { data: session } = useSession();
 
-    useEffect(() => {
-      if (session) {
-        const updateUserStatus = async () => {
-          const { user } = session;
-          const userDocRef = doc(db, 'users', user.id);
-  
-          try {
-            // Update the status field to 'online'
-            await updateDoc(userDocRef, {
-              status: 'online'
-            });
-            console.log('User status updated to online');
-          } catch (error) {
-            console.error('Error updating user status:', error);
-          }
-        };
-  
-        updateUserStatus();
-      }
-    }, [session]);
-
     const [profilePictureURL, setProfilePictureURL] = useState<string | null>(null);
     useEffect(() => {
         if (session) {

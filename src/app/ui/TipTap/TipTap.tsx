@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
 
 //Firebase
-import { collection, doc, getDoc, getDocs, query, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot } from "firebase/firestore";
 import { db } from "@/app/firebase";
 
 import { toast, Toaster } from 'react-hot-toast';
@@ -48,8 +48,8 @@ import { CgTranscript } from 'react-icons/cg';
 import SpeakingExtension from '@/app/SharedPages/Apostilas/editor/SpeakingComponent/SpeakingExtension';
 import SpeakingSelectionModal from '@/app/SharedPages/Apostilas/editor/SpeakingComponent/SpeakingSelectionModal';
 
-
 //Realtime
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import Collaboration from '@tiptap/extension-collaboration'
 import * as Y from 'yjs'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
@@ -112,24 +112,14 @@ function Popovers({ editor }: PopoversProps) {
           </button>
 
           <button
-            onClick={() => editor.chain().focus().setColor('#FAFAFA').run()}
-            className={editor.isActive('textStyle', { color: '#FAFAFA' }) ? 'is-active' : ''}
-            data-testid="setWhite"
-            >        
-            <div className='w-5 h-5 p-2 rounded-full bg-white hover:bg-gray-300 duration-300 ease-in-out transition-all'></div>
-          </button>
-
-          <button
-            onClick={() => editor.chain().focus().setColor('#013A49').run()}
-            className={editor.isActive('textStyle', { color: '#013A49' }) ? 'is-active' : ''}
-            data-testid="setBlack"
-            >        
-            <div className='w-5 h-5 p-2 rounded-full bg-black hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
+            onClick={() => editor.chain().focus().unsetColor().run()}
+            data-testid="unsetColor"
+          >
+            <div className='w-5 h-5 p-2 rounded-full dark:bg-white bg-black dark:hover:bg-gray-300 hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
           </button>
       </BubbleMenu>
   )
 }
-
 
 const Tiptap = ({ onChange, content, isTyping }: any) => {
   const params = new URLSearchParams(window.location.search);
@@ -140,6 +130,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState(true);
 
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
@@ -170,9 +162,8 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   // Use the above type in useState
   const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocsMap>({});
-  
   const fetchDocs = async () => {
-    const workbookNames = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental', 'Kids'];
+    const workbookNames = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
     const groupedLessons: GroupedLessonDocsMap = {};
   
     try {
@@ -217,23 +208,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   const [description, setDescription] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
-  const [realtimeContent, setRealtimeContent] = useState<string>(content);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const notebookID = params.get('notebook');
-    const studentID = params.get('student');
-
-    const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
-    const unsubscribe = onSnapshot(notebookRef, (doc) => {
-      if (doc.exists()) {
-        const { content: updatedContent } = doc.data();
-        setRealtimeContent(updatedContent);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [content]);
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDescription(event.target.value);
@@ -285,6 +259,14 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       Collaboration.configure({
         document: ydoc,
       }),
+      CollaborationCursor.configure({
+        provider: provider,
+        user: {
+          id: session?.user?.id || 'anonymous',
+          name: session?.user?.name || 'Anonymous',
+          color: session?.user?.role === 'teacher' ? '#65C6E0' : '#E08E65',
+        },
+      }),
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
@@ -314,7 +296,6 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
       },
     },
     autofocus: true,
-    content: realtimeContent,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -374,7 +355,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
-      <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} />
+      <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} /> 
       <EditorContent editor={editor} />
       <Popovers editor={editor} />
 
@@ -384,16 +365,17 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           onSelectAudio={handleSelectAudio}
         />
 
-      <EmbedSelectionModal
-          isEmbedOpen={isModalEmbedOpen}
-          onEmbedClose={() => setIsModalEmbedOpen(false)}
-          onSelectVideo={handleSelectVideo}
-        />
+        <EmbedSelectionModal
+            isEmbedOpen={isModalEmbedOpen}
+            onEmbedClose={() => setIsModalEmbedOpen(false)}
+            onSelectVideo={handleSelectVideo}
+          />
 
-      <SpeakingSelectionModal 
-        isOpen={isModalTranscriptOpen} 
-        onClose={() => setIsModalTranscriptOpen(false)} 
-        onSelectAudio={handleSelectTranscript} />
+        <SpeakingSelectionModal 
+          isOpen={isModalTranscriptOpen} 
+          onClose={() => setIsModalTranscriptOpen(false)} 
+          onSelectAudio={handleSelectTranscript} 
+          />
 
         <button
           onClick={scrollToBottom}
@@ -415,7 +397,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
         <div className='flex flex-col items-center gap-2'>
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
-                <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+                <Button className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
                   <VscWholeWord className="w-6 h-auto"/>
                 </Button>      
             </PopoverTrigger>
@@ -437,31 +419,31 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
           <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-orange-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+            className="duration-150 ease-in-out transition-all p-2 px-2 text-md flex flex-col items-center justify-center text-amber-500 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600"
           >
-            <LuFileAudio />
+            <LuFileAudio className="w-5 h-auto"/>
           </button>
           </Tooltip>
 
           <Tooltip content='Clique para adicionar um texto de prática de pronúncia' className='bg-fluency-green-300 font-bold text-sm rounded-md px-1'>
           <button
           onClick={() => setIsModalTranscriptOpen(true)}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+            className="duration-150 ease-in-out transition-all p-2 px-2 text-md flex flex-col items-center justify-center text-blue-500 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600"
           >
-            <CgTranscript  />
+            <CgTranscript  className="w-5 h-auto"/>
           </button>
           </Tooltip>
           
           <Tooltip content='Clique para adicionar um vídeo' className='bg-fluency-red-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={() => setIsModalEmbedOpen(true)}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+            className="duration-150 ease-in-out transition-all p-2 px-2 text-md flex flex-col items-center justify-center text-red-500 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600"
           >
-            <AiFillYoutube />
+            <AiFillYoutube className="w-5 h-auto"/>
           </button>
           </Tooltip>
 
-            <Button onClick={openWorkbook} className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+            <Button onClick={openWorkbook} className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-400 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
               <PiNotebookBold className="w-6 h-auto"/>
             </Button>   
           </div>
@@ -475,7 +457,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                   <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                 </div>
 
-                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-72 h-full p-4">
+                <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-full p-4">
                   <div className="flex flex-col items-center justify-center">
                     
                     <FluencyCloseButton onClick={closeWorkbook}/>
@@ -492,7 +474,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                           title={workbookName}
                           indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
                         >
-                          <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-700">
+                          <div className="mt-2 flex flex-col items-center gap-3 p-4 rounded-md bg-fluency-gray-100 dark:bg-fluency-gray-700">
                             <p className='font-bold text-xl'>{workbookName}</p>   
                             <Accordion>
                               {lessonDocs[workbookName].map((group, groupIndex) => (
@@ -507,7 +489,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                                     {group.docs.map(doc => (
                                       <li className='flex flex-row gap-2 justify-between items-center' key={doc.id}>
                                         <p className='text-lg font-bold'>{doc.data.title}</p>
-                                        <button className='p-1 px-5 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-black dark:text-white font-semibold rounded-md' onClick={() => pasteContentFromFirestore(doc.data.content)}>
+                                        <button className='p-1 px-3 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-white dark:text-white font-semibold rounded-md' onClick={() => pasteContentFromFirestore(doc.data.content)}>
                                           Colar
                                         </button>
                                       </li>
@@ -524,12 +506,10 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
                 </div>
               </div>
             </div>}
-
-            </div>
-          )}
+          </div>
+        )}
 
         <Toaster />
-
     </div>
   );
 };

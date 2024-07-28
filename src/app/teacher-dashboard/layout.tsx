@@ -15,6 +15,8 @@ import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOndemandVideo, MdOutlineSupportAgent } from "react-icons/md";
 import { LuGamepad2 } from 'react-icons/lu';
 import { IoChatbubblesOutline } from 'react-icons/io5';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 interface ISidebarItem {
   name: string;
@@ -30,6 +32,35 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
   });
 
+  useEffect(() => {
+    const updateUserStatus = async (status: string) => {
+      if (session) {
+        const { user } = session;
+        const userDocRef = doc(db, 'users', user.id);
+
+        try {
+          await updateDoc(userDocRef, {
+            status
+          });
+          console.log(`User status updated to ${status}`);
+        } catch (error) {
+          console.error(`Error updating user status to ${status}:`, error);
+        }
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      updateUserStatus('offline');
+    };
+
+    updateUserStatus('online');
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [session]);
+  
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isMenuHidden, setIsMenuHidden] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

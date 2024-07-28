@@ -14,6 +14,8 @@ import { PiStudentFill } from 'react-icons/pi';
 import { LuGamepad2 } from 'react-icons/lu';
 import { RiCalendarScheduleLine } from 'react-icons/ri';
 import LoadingAnimation from '../ui/Animations/LoadingAnimation';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 interface ISidebarItem {
   name: string;
@@ -28,6 +30,36 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       redirect('/signin')
     }
   });
+
+  useEffect(() => {
+    const updateUserStatus = async (status: string) => {
+      if (session) {
+        const { user } = session;
+        const userDocRef = doc(db, 'users', user.id);
+
+        try {
+          await updateDoc(userDocRef, {
+            status
+          });
+          console.log(`User status updated to ${status}`);
+        } catch (error) {
+          console.error(`Error updating user status to ${status}:`, error);
+        }
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      updateUserStatus('offline');
+    };
+
+    updateUserStatus('online');
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [session]);
+
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isMenuHidden, setIsMenuHidden] = useState(false);

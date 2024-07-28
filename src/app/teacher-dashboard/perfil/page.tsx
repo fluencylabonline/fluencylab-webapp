@@ -102,7 +102,7 @@ function Perfil() {
       fetchUserInfo();
     }, [session?.user.id]);
     
-
+/*
     useEffect(() => {
       if (session) {
         const updateUserStatus = async () => {
@@ -122,7 +122,7 @@ function Perfil() {
   
         updateUserStatus();
       }
-    }, [session]);
+    }, [session]); */
 
     const [profilePictureURL, setProfilePictureURL] = useState<string | null>(null);
     useEffect(() => {
@@ -480,6 +480,14 @@ function Perfil() {
                 ) : (
                   <div>No data available</div>
                 )}
+
+                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-gray-400 text-white font-bold p-3 items-center justify-between'>
+                  <p className='font-semibold'>Quando possível, atualize os horários que tem disponível para aulas no botão <span className='font-bold'>Atualizar horários</span>.</p>
+                </div>
+
+                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-500 text-white font-bold p-3 items-center justify-between'>
+                  <p className='font-semibold'>Dica: se o caderno do seu aluno não carregar o conteúdo de primeira. Apenas recarregue a página.</p>
+                </div>
             </div>
                  
         </div>

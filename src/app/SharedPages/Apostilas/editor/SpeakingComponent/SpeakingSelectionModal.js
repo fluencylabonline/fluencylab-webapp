@@ -62,7 +62,7 @@ const SpeakingSelectionModal = ({ isOpen, onClose, onSelectAudio }) => {
                 variant='solid'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Buscar Áudio"
+                placeholder="Buscar Texto"
               />
               <div className="w-full max-h-60 overflow-y-auto mt-2 border rounded bg-fluency-pages-light dark:bg-fluency-pages-dark">
                 {filteredAudios.map(audio => (
