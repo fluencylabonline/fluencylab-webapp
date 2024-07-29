@@ -526,7 +526,7 @@ function Perfil() {
                 <div className='w-full'>
                   {getFilteredNotifications().length > 0 ? (
                     getFilteredNotifications().map(notification => (
-                      <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-2 rounded-lg ${getBackgroundColor(notification.status)}`}>
+                      <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-1 rounded-lg ${getBackgroundColor(notification.status)}`}>
                           <p>{notification.content}</p>                
                       </div>
                     ))
