@@ -387,8 +387,6 @@ function Perfil() {
     }
   };
   
-
-
   const deleteTime = async (id: string) => {
     if (session && session.user && session.user.id) {
       const userDoc = doc(db, 'users', session.user.id);
@@ -399,6 +397,50 @@ function Perfil() {
     }
   };
   
+  const [notifications, setNotifications] = useState<any[]>([]);
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, 'Notificacoes'));
+          const fetchedNotifications = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setNotifications(fetchedNotifications);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      };
+  
+      fetchNotifications();
+    }, []);
+  
+    // Map notification status to colors
+    const statusColors = {
+      notice: 'font-semibold text-white bg-fluency-yellow-600 dark:bg-fluency-yellow-700 hover:bg-fluency-yellow-500 hover:dark:bg-fluency-yellow-800 duration-300 easy-in-out transition-all',
+      information: 'font-semibold text-white bg-fluency-blue-600 dark:bg-fluency-blue-700 hover:bg-fluency-blue-500 hover:dark:bg-fluency-blue-800 duration-300 easy-in-out transition-all',
+      tip: 'font-semibold text-white bg-fluency-green-700 dark:bg-fluency-green-800 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-800 duration-300 easy-in-out transition-all'
+    };
+  
+    const getBackgroundColor = (status: any) => {
+      if (status.notice) return statusColors.notice;
+      if (status.information) return statusColors.information;
+      if (status.tip) return statusColors.tip;
+      return 'bg-white'; // Default color if no status matches
+    };
+
+    const getFilteredNotifications = () => {
+      if (!session?.user) return notifications;
+      const { role } = session.user;
+      if (role === 'teacher') {
+        return notifications.filter(notification => notification.sendTo.professors);
+      }
+      if (role === 'student') {
+        return notifications.filter(notification => notification.sendTo.students);
+      }
+      return notifications;
+    };
+
     return (
     <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
         <div className='fade-in fade-out w-full lg:flex lg:flex-row gap-4 md:flex md:flex-col sm:flex sm:flex-col overflow-y-auto h-[90vh]'>
@@ -480,13 +522,17 @@ function Perfil() {
                 ) : (
                   <div>No data available</div>
                 )}
-
-                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-gray-400 text-white font-bold p-3 items-center justify-between'>
-                  <p className='font-semibold'>Quando possível, atualize os horários que tem disponível para aulas no botão <span className='font-bold'>Atualizar horários</span>.</p>
-                </div>
-
-                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-500 text-white font-bold p-3 items-center justify-between'>
-                  <p className='font-semibold'>Dica: se o caderno do seu aluno não carregar o conteúdo de primeira. Apenas recarregue a página.</p>
+                
+                <div className='w-full'>
+                  {getFilteredNotifications().length > 0 ? (
+                    getFilteredNotifications().map(notification => (
+                      <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-2 rounded-lg ${getBackgroundColor(notification.status)}`}>
+                          <p>{notification.content}</p>                
+                      </div>
+                    ))
+                  ) : (
+                    <p>Nenhuma notificação para mostrar.</p>
+                  )}
                 </div>
             </div>
                  

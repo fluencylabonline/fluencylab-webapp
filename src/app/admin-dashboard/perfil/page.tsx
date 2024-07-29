@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 //Firebase
-import { doc, DocumentData, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL, uploadBytes, getStorage } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -15,13 +15,13 @@ import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 
 //Next Imports
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 
 //Notification
 import { toast, Toaster } from 'react-hot-toast';
 
 //Icons
 import { FaUserCircle } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 function Perfil() {
   const handleLogout = async () => {
@@ -133,7 +133,7 @@ function Perfil() {
   }, [session]);
 
 
-  const [resetPassword, setResetPassword] = useState(false);
+    const [resetPassword, setResetPassword] = useState(false);
     const openResetPassword = () => {
       setResetPassword(true);
     };
@@ -161,6 +161,124 @@ function Perfil() {
           toast.error('Erro ao enviar e-mail de redefinição de senha. Por favor, tente novamente mais tarde.');
         });
     };
+
+    const [notificacao, setNotificacao] = useState(false);
+    const openNotificacao = () => {
+      setNotificacao(true);
+    };
+  
+    const closeNotificacao = () => {
+      setNotificacao(false);
+      setNotificationContent('');
+      setSendTo({
+        professors: false,
+        students: false,
+        coordinators: false,
+      });
+      setStatus({
+        notice: false,
+        information: false,
+        tip: false,
+      });
+    };
+  
+    const [notificationContent, setNotificationContent] = useState('');
+    const [sendTo, setSendTo] = useState({
+      professors: false,
+      students: false,
+      coordinators: false,
+    });
+    const [status, setStatus] = useState({
+      notice: false,
+      information: false,
+      tip: false,
+    });
+  
+    const handleNotificationSubmit = async () => {
+      try {
+        const notificationData = {
+          content: notificationContent,
+          sendTo,
+          status,
+          createdAt: new Date(),
+        };
+    
+        await addDoc(collection(db, 'Notificacoes'), notificationData);
+        toast.success('Notificação criada com sucesso!');
+        
+        // Reset fields
+        setNotificationContent('');
+        setSendTo({
+          professors: false,
+          students: false,
+          coordinators: false,
+        });
+        setStatus({
+          notice: false,
+          information: false,
+          tip: false,
+        });
+    
+        closeNotificacao(); // Close the modal
+      } catch (error) {
+        console.error('Erro ao criar notificação:', error);
+        toast.error('Erro ao criar notificação. Por favor, tente novamente mais tarde.');
+      }
+    };
+    
+    const handleStatusChange = (statusType: 'notice' | 'information' | 'tip') => {
+      setStatus({
+        notice: statusType === 'notice',
+        information: statusType === 'information',
+        tip: statusType === 'tip',
+      });
+    };    
+
+    const [notifications, setNotifications] = useState<any[]>([]);
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, 'Notificacoes'));
+          const fetchedNotifications = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setNotifications(fetchedNotifications);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      };
+  
+      fetchNotifications();
+    }, []);
+  
+    // Map notification status to colors
+    const statusColors = {
+      notice: 'text-white bg-yellow-500 dark:bg-yellow-700 hover:bg-yellow-600 hover:dark:bg-yellow-800 duration-300 easy-in-out transition-all',
+      information: 'text-white bg-blue-400 dark:bg-blue-700 hover:bg-blue-600 hover:dark:bg-blue-800 duration-300 easy-in-out transition-all',
+      tip: 'text-white bg-green-500 dark:bg-green-700 hover:bg-green-600 hover:dark:bg-green-800 duration-300 easy-in-out transition-all'
+    };
+  
+    const getBackgroundColor = (status: any) => {
+      if (status.notice) return statusColors.notice;
+      if (status.information) return statusColors.information;
+      if (status.tip) return statusColors.tip;
+      return 'bg-white'; // Default color if no status matches
+    };
+
+      // Add delete notification function
+    const handleDeleteNotification = async (notificationId: string) => {
+      try {
+        await deleteDoc(doc(db, 'Notificacoes', notificationId));
+        toast.success('Notificação deletada com sucesso!');
+        // Update local state to remove deleted notification
+        setNotifications(notifications.filter(notification => notification.id !== notificationId));
+      } catch (error) {
+        console.error('Erro ao deletar notificação:', error);
+        toast.error('Erro ao deletar notificação. Por favor, tente novamente mais tarde.');
+      }
+    };
+
 
     return (
     <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
@@ -201,18 +319,34 @@ function Perfil() {
 
                   <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-2 justify-center">
                         <FluencyButton variant='danger' onClick={openResetPassword}>Redefinir senha</FluencyButton>  
-                    </div>
+                        <FluencyButton variant='gray' onClick={openNotificacao}>Criar Aviso</FluencyButton>
+                  </div>
                 </div>
             </div>  
           </div>
 
-            <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
-              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
+            <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
+                <p className='font-bold text-lg pb-2'>Notificações</p>
+                <div className='w-full'>
+                  {notifications.length > 0 ? (
+                    notifications.map(notification => (
+                      <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-2 rounded-lg ${getBackgroundColor(notification.status)}`}>
+                        <div>
+                          <p>{notification.content}</p>
+                          <p><strong>Enviado para:</strong> {notification.sendTo.professors ? 'Professores' : ''} {notification.sendTo.students ? 'Alunos' : ''} {notification.sendTo.coordinators ? 'Coordenadores' : ''}</p>
+                        </div>
+                          <button onClick={() => handleDeleteNotification(notification.id)} className='p-1 px-2'><MdDelete className='w-6 h-auto text-white hover:text-red-400 duration-200 ease-in-out transition-all'/></button>                        
+                      </div>
+                    ))
+                  ) : (
+                    <p>Nenhuma notificação para mostrar.</p>
+                  )}
+                </div>
             </div>
                  
         </div>
 
-            {resetPassword && 
+          {resetPassword && 
             <div className="fixed z-50 inset-0 overflow-y-auto">
                 <div className="flex items-center justify-center min-h-screen">
                     
@@ -241,6 +375,103 @@ function Perfil() {
                                 <div className="flex justify-center">
                                   <FluencyButton variant='confirm' onClick={handleResetPassword}>Enviar</FluencyButton>
                                   <FluencyButton variant='gray' onClick={closeResetPassword}>Cancelar</FluencyButton>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
+            {notificacao && 
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen">
+                    
+                    <div className="fixed inset-0 transition-opacity">
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit sm:w-[40vw] h-full p-5">
+                        <div className="flex flex-col items-center justify-center w-full">
+                            
+                            <FluencyCloseButton onClick={closeNotificacao}/>
+                            
+                              <h3 className="text-lg leading-6 font-medium  mb-2">
+                                  Crie notificações aqui                       
+                              </h3>
+
+                              <div className="mt-2 flex flex-col items-center gap-3 p-4 w-full">
+                               
+                                <div className='flex flex-col items-start gap-2 w-full'>
+                                  <div className='flex flex-col items-start gap-1 w-full'>
+                                    <p className='font-bold text-sm'>Conteúdo</p>
+                                    <textarea
+                                      placeholder='Escreva aqui...'
+                                      value={notificationContent}
+                                      onChange={(e) => setNotificationContent(e.target.value)}
+                                      className="p-2 rounded-md outline-none w-full bg-fluency-pages-light dark:bg-fluency-pages-dark"
+                                      rows={5}
+                                    />
+                                  </div>
+
+                                  <div className='flex flex-col items-start gap-1'>
+                                    <p className='font-bold text-sm'>Enviar para</p>
+                                    <div className='flex flex-row gap-1 items-center'>
+                                      <input type='checkbox' 
+                                      checked={sendTo.professors}
+                                      onChange={() => setSendTo({ ...sendTo, professors: !sendTo.professors })}
+                                      /> Professores
+                                    </div>
+
+                                    <div className='flex flex-row gap-1 items-center'>
+                                      <input type='checkbox' 
+                                      checked={sendTo.students}
+                                      onChange={() => setSendTo({ ...sendTo, students: !sendTo.students })}
+                                      /> Alunos
+                                    </div>
+
+                                    <div className='flex flex-row gap-1 items-center'>
+                                      <input type='checkbox' checked={sendTo.coordinators}
+                                        onChange={() => setSendTo({ ...sendTo, coordinators: !sendTo.coordinators })}
+                                      /> Coordenadores
+                                    </div>
+                                  </div>
+
+                                  <div className="flex flex-col items-start my-2">
+                                    <p className='font-bold text-sm mb-1'>Tipo de notificação</p>
+                                    <label>
+                                      <input
+                                        type="radio"
+                                        name="status"
+                                        checked={status.notice}
+                                        onChange={() => handleStatusChange('notice')}
+                                      />
+                                      Aviso
+                                    </label>
+                                    <label>
+                                      <input
+                                        type="radio"
+                                        name="status"
+                                        checked={status.information}
+                                        onChange={() => handleStatusChange('information')}
+                                      />
+                                      Informação
+                                    </label>
+                                    <label>
+                                      <input
+                                        type="radio"
+                                        name="status"
+                                        checked={status.tip}
+                                        onChange={() => handleStatusChange('tip')}
+                                      />
+                                      Dica
+                                    </label>
+                                  </div>
+
+                                </div>
+
+                                <div className="flex justify-center">
+                                  <FluencyButton variant='confirm' onClick={handleNotificationSubmit}>Enviar</FluencyButton>
+                                  <FluencyButton variant='gray' onClick={closeNotificacao}>Cancelar</FluencyButton>
                                 </div>
                               </div>
                         </div>

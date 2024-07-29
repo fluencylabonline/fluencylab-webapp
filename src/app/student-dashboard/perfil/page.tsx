@@ -1,7 +1,7 @@
 'use client';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 //Firebase
-import { doc, DocumentData, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, DocumentData, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL, uploadBytes, getStorage } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -183,6 +183,50 @@ function Perfil() {
       logs: { logID: string; signedAt: string; segundaParteAssinou: boolean }[] 
   } | null>(null);
 
+  const [notifications, setNotifications] = useState<any[]>([]);
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, 'Notificacoes'));
+          const fetchedNotifications = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setNotifications(fetchedNotifications);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      };
+  
+      fetchNotifications();
+    }, []);
+  
+    // Map notification status to colors
+    const statusColors = {
+      notice: 'font-semibold text-white bg-fluency-yellow-600 dark:bg-fluency-yellow-700 hover:bg-fluency-yellow-500 hover:dark:bg-fluency-yellow-800 duration-300 easy-in-out transition-all',
+      information: 'font-semibold text-white bg-fluency-blue-600 dark:bg-fluency-blue-700 hover:bg-fluency-blue-500 hover:dark:bg-fluency-blue-800 duration-300 easy-in-out transition-all',
+      tip: 'font-semibold text-white bg-fluency-green-700 dark:bg-fluency-green-800 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-800 duration-300 easy-in-out transition-all'
+    };
+  
+    const getBackgroundColor = (status: any) => {
+      if (status.notice) return statusColors.notice;
+      if (status.information) return statusColors.information;
+      if (status.tip) return statusColors.tip;
+      return 'bg-white'; // Default color if no status matches
+    };
+
+    const getFilteredNotifications = () => {
+      if (!session?.user) return notifications;
+      const { role } = session.user;
+      if (role === 'teacher') {
+        return notifications.filter(notification => notification.sendTo.professors);
+      }
+      if (role === 'student') {
+        return notifications.filter(notification => notification.sendTo.students);
+      }
+      return notifications;
+    };
+    
     return (
     <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
         <div className='fade-in fade-out w-full lg:flex lg:flex-row gap-4 md:flex md:flex-col sm:flex sm:flex-col overflow-y-auto h-[90vh]'>
@@ -248,29 +292,41 @@ function Perfil() {
             </div>
           </div>
 
-            <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
-              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-              {contratoFoiAssinado?.signed ? (
-                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                    <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato assinado e válido <GrStatusGood className='w-6 h-auto' /></Link>    
-                </div>
-                ) : (
-                <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-700 text-white font-bold p-3 items-center justify-between'>
-                  <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato não assinado ainda <RiErrorWarningLine className='w-6 h-auto' /></Link>    
-                </div>
-              )}
-
-              {nivelamentoPermitido === false ? 
-              (
+          <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
+            <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
+            {contratoFoiAssinado?.signed ? (
               <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                  <div className='flex flex-row w-full justify-between items-center'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+                  <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato assinado e válido <GrStatusGood className='w-6 h-auto' /></Link>    
               </div>
-              ):(
-              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
-                  <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
+              ) : (
+              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-700 text-white font-bold p-3 items-center justify-between'>
+                <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato não assinado ainda <RiErrorWarningLine className='w-6 h-auto' /></Link>    
               </div>
+            )}
+
+            {nivelamentoPermitido === false ? 
+            (
+            <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                <div className='flex flex-row w-full justify-between items-center'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+            </div>
+            ):(
+            <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
+            </div>
+            )}
+
+            <div className='w-full'>
+              {getFilteredNotifications().length > 0 ? (
+                getFilteredNotifications().map(notification => (
+                  <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-2 rounded-lg ${getBackgroundColor(notification.status)}`}>
+                      <p>{notification.content}</p>                
+                  </div>
+                ))
+              ) : (
+                <p>Nenhuma notificação para mostrar.</p>
               )}
             </div>
+          </div>
                  
         </div>
 
