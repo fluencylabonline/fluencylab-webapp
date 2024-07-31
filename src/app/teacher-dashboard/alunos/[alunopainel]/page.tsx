@@ -486,6 +486,7 @@ function AlunoPainel() {
     const closeSugestoes = () => {
       setIsSugestoes(false);
     };  
+   
 
 return (
     <div>

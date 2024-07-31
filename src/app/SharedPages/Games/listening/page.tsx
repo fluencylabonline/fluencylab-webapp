@@ -3,16 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, updateDoc } from 'firebase/firestore';
 import { toast, Toaster } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
-import { db, storage } from '@/app/firebase'; // Ensure 'db' and 'storage' are correctly imported from your Firebase setup
+import { db, storage } from '@/app/firebase';
 import AudioPlayer from './player';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
-import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { GiSchoolBag } from "react-icons/gi";
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { MdDelete, MdOutlineAddTask } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 import { Tooltip } from '@nextui-org/react';
-import FluencySearch from '@/app/ui/Components/Search/search';
 import FluencyInput from '@/app/ui/Components/Input/input';
 
 declare global {
@@ -51,13 +49,12 @@ export default function Listening() {
     const [selectedAudio, setSelectedAudio] = useState<string | null>(null);
     const [transcript, setTranscript] = useState<string>('');
     const [audioFile, setAudioFile] = useState<File | null>(null);
-    const [audioName, setAudioName] = useState<string>(''); // State to hold the custom audio name
+    const [audioName, setAudioName] = useState<string>('');
     const [shouldPracticeAnother, setShouldPracticeAnother] = useState(false);
     const [shouldPlayAgain, setShouldPlayAgain] = useState(false);
     const [filteredData, setFilteredData] = useState<NivelamentoDocument[]>([]);
 
     const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
-
 
     useEffect(() => {
         const fetchNivelamentoData = async () => {

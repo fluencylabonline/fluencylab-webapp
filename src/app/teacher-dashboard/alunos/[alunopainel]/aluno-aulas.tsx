@@ -5,7 +5,6 @@ import { db } from '@/app/firebase';
 import { FaRegCalendarCheck, FaRegCalendarTimes } from 'react-icons/fa';
 import { toast, Toaster } from 'react-hot-toast';
 
-
 interface Aluno {
     overdueClassesCount: number;
     doneClassesCount: number;
@@ -28,8 +27,8 @@ interface Aluno {
 interface AlunosAulasProps {
   id: any;
 }
+
 const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
-   
     const [students, setStudents] = useState<Aluno[]>([]);
     const currentDate = useMemo(() => new Date(), []);
     const weekdays = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
@@ -103,8 +102,9 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                                     overdueClassesCount++;
                                 }
                             }
-                            // Push class date and status to classDatesWithStatus array
-                            classDatesWithStatus.push({ date: classDate, status: classStatus });
+                            if (classStatus !== 'Modificada') { // Exclude "Modificada" status
+                                classDatesWithStatus.push({ date: classDate, status: classStatus });
+                            }
                         }
                     }
                 }
@@ -113,7 +113,6 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                     const weeks = getClassDatesForCurrentMonth(userData.diaAula, userData.frequencia);
                     insertUndoneDates(alunopainel, weeks);
                 }
-    
                 // Return the fetched data
                 return {
                     id: alunopainel,
@@ -130,7 +129,6 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
                     doneClassesCount: doneClassesCount,
                     overdueClassesCount: overdueClassesCount,
                     classDatesWithStatus: classDatesWithStatus,
-                    // Add Classes property here with default value
                     Classes: classesData
                 };
             } else {
@@ -155,10 +153,6 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
         fetchDataForAluno();
     }, [id, fetchData]);
 
-
-    
-    
-    
     const handleClassStatus = async (studentId: string, date: Date, action: string) => {
         try {
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -263,7 +257,6 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
         }
     };
     
-
     const insertUndoneDates = async (studentId: string, weeks: any[]) => {
         try {
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -312,8 +305,7 @@ const AlunosAulas: React.FC<AlunosAulasProps> = ({ id }) => {
             console.error('Error inserting undone dates:', error);
         }
     };
-
-    
+ 
     return (
         <div className='w-max h-[30vh] overflow-y-auto'>
             {students.map((student) => (

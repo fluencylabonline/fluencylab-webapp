@@ -145,7 +145,7 @@ const ListeningComponent = ({ node }) => {
           {selectedAudio && <AudioPlayer src={selectedAudio} />}
           {randomDocument && (
             <div className='flex flex-col items-center gap-2' key={randomDocument.id}>
-              <div className='flex gap-2'>
+              <div className='flex flex-col sm:flex-row gap-0 sm:gap-2'>
                 <FluencyButton
                   className='mt-4'
                   onClick={toggleTranscriptVisibility}
