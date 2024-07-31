@@ -161,6 +161,7 @@ const ListeningComponent = ({ node }) => {
                 </FluencyButton>
               </div>
               {isTranscriptVisible && (
+                <>
                 <div className='h-max overflow-hidden overflow-y-scroll p-10 rounded-md'>
                   {wordInputs.map((input, index) => (
                     <span className='w-full' key={index}>
@@ -169,8 +170,7 @@ const ListeningComponent = ({ node }) => {
                     </span>
                   ))}
                 </div>
-              )}
-              {inputsDisabled ? (
+                {inputsDisabled ? (
                 <div className='flex flex-row gap-2 items-center'>
                   <FluencyButton
                     className='mt-4 flex flex-row items-center'
@@ -187,6 +187,8 @@ const ListeningComponent = ({ node }) => {
                 >
                   Verificar Respostas
                 </FluencyButton>
+              )}
+                </>
               )}
             </div>
           )}
