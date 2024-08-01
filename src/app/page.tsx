@@ -12,18 +12,18 @@ export default function Home() {
 
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark pt-1'>
-    
+    {/*
         <Header />
         <About />
         <Team />
         <Questions />
         <Footer /> 
-{/*
+*/}
         <NewHeader />
         <NewAbout />
         <Team />
         <Questions />
-        <Footer />  */}
+        <Footer />  
     </div>
   );
 }
