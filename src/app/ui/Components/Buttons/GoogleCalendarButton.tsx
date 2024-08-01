@@ -40,8 +40,8 @@ const GoogleCalendarButton = () => {
       </button>
       </div>
       {modalOpen && (
-        <div className="fixed inset-0 overflow-y-auto overflow-x-hidden">
-          <div className="z-[9999] relative flex items-center justify-center min-h-screen">
+        <div className="fixed inset-0 z-[9999] overflow-y-auto overflow-x-hidden">
+          <div className=" relative flex items-center justify-center min-h-screen">
             <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-fluency-gray-300 opacity-75"></div>
             </div>

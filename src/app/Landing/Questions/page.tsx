@@ -7,7 +7,7 @@ interface AccordionItemProps {
 
 function Questions() {
   return (
-    <section id="faq" className="flex flex-col items-center relative z-20 overflow-hidden bg-transparent dark:bg-transparent pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]">
+    <section id="faq" className="flex flex-col items-center relative z-20 overflow-hidden bg-transparent dark:bg-transparent pb-12 pt-10 lg:pb-[90px] lg:pt-[3px]">
       <div className="container mx-auto">
 
         <div className="text-center max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">

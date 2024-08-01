@@ -9,10 +9,6 @@ import WordleImage from '../../../public/images/games/wordlebg.png';
 import GuesslyImage from '../../../public/images/games/guessly.svg';
 import LangJamImage from '../../../public/images/games/langjam.png';
 import Listening from '../../../public/images/games/listening.png';
-import TicTacToeImage from '../../../public/images/games/tictactoe.svg';
-import RollAndTellImage from '../../../public/images/games/rollandtell.svg';
-import WhatAmIImage from '../../../public/images/games/whatami.svg';
-import { CiCircleQuestion } from 'react-icons/ci';
 
 export default function Games() {
 
