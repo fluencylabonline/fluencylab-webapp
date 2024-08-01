@@ -624,7 +624,7 @@ return(
                                 <p className='text-lg font-semibold'>Aulas feitas: <span>{student.doneClassesCount}</span></p>
                                 <p className='text-lg cursor-pointer font-semibold p-1 rounded-md hover:text-fluency-blue-600 hover:dark:bg-fluency-gray-600 hover:dark:text-fluency-blue-300 hover:bg-fluency-blue-100 transition-all duration-300 ease-in-out' onClick={() => retrieveOverdueClasses(student.id)}>Aulas em atraso: <span>{student.overdueClassesCount}</span></p>
                             </div>  
-                            <div className="lg:flex lg:flex-row md:flex md:flex-col flex flex-col items-center justify-center w-full mt-3 mb-2">
+                            <div className="lg:flex lg:flex-row md:flex md:flex-col sm:gap-0 gap-1 flex flex-col items-center justify-center w-full mt-3 mb-2">
                                 <Link href={{ pathname: `alunos/caderno/${encodeURIComponent(student.name)}`, query: { id: student.id } }} passHref>
                                     <FluencyButton>
                                         Caderno <TbBook2 className='w-5 h-auto' />
@@ -728,14 +728,14 @@ return(
                 </div>
 
     {editingDate && 
-        <div className="fixed z-[9999] inset-0 overflow-y-hidden text-fluency-text-light  ">
+    <div className="fixed z-[9999] inset-0 overflow-y-hidden text-fluency-text-light  ">
         <div className="flex items-center justify-center min-h-screen">
 
                 <div className="fade-in fade-out fixed inset-0 transition-opacity duration-200 ease-in-out">
                     <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                 </div>
 
-            <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8">                        
+            <div className="dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg flex flex-col items-center overflow-hidden shadow-xl transform transition-all w-[30rem] h-full p-8 mx-4">                        
                         
                 <FluencyCloseButton onClick={() => setEditingDate(null)} />
         

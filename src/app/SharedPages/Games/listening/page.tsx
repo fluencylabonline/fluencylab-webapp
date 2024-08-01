@@ -56,26 +56,6 @@ export default function Listening() {
     const [filteredData, setFilteredData] = useState<NivelamentoDocument[]>([]);
     const [language, setLanguage] = useState<string>(''); // Add this state
     const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
-    const [embedUrl, setEmbedUrl] = useState('');
-
-
-    const getFileType = (url?: string): 'audio' | 'video' | 'unknown' => {
-        if (!url) return 'unknown';
-    
-        // Extract file extension from URL
-        const fileExtension = url.split('.').pop()?.split('?')[0].toLowerCase();
-    
-        // Handle cases where fileExtension might be undefined
-        if (!fileExtension) return 'unknown';
-    
-        if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
-            return 'audio';
-        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
-            return 'video';
-        }
-    
-        return 'unknown';
-    };
     
     useEffect(() => {
         const fetchNivelamentoData = async () => {
@@ -250,7 +230,7 @@ export default function Listening() {
             if (allowedTypes.includes(file.type)) {
                 setAudioFile(file);
             } else {
-                toast.error('Tipo de arquivo não permitido. Apenas MP3, MPEG e MP4 são aceitos.');
+                toast.error('Tipo de arquivo não permitido. Apenas MP3 e MPEG são aceitos.');
             }
         }
     };
@@ -504,7 +484,7 @@ export default function Listening() {
                 </div>
 
                 <div className='w-[90vw] sm:w-[30%] flex flex-col p-2 gap-3 items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md'>
-                    <div className='flex flex-row items-center gap-2 w-full'>
+                    <div className='flex flex-col sm:flex-row items-center gap-2 w-full'>
                         <FluencyInput
                             type="text"
                             placeholder="Pesquisar..."
@@ -512,7 +492,7 @@ export default function Listening() {
                             onChange={handleSearchChange}
                             className="p-2 border border-gray-300 rounded"
                         />
-                        <select className='bg-fluency-bg-light dark:bg-fluency-bg-dark px-2 py-[10px] rounded-md' onChange={handleLanguageChange} value={language}>
+                        <select className='bg-fluency-bg-light dark:bg-fluency-bg-dark px-2 py-[10px] w-full rounded-md' onChange={handleLanguageChange} value={language}>
                             <option value="">Todos</option>
                             <option value="Ingles">Inglês</option>
                             <option value="Espanhol">Espanhol</option>
@@ -521,7 +501,7 @@ export default function Listening() {
                     </div>
                     <ul className='w-full h-[50vh] flex gap-1 flex-col overflow-hidden overflow-y-scroll'>
                         {filteredData.map((doc) => (
-                            <li key={doc.id} className='flex flex-col sm:flex sm:flex-row gap-2 items-center justify-between'>
+                            <li key={doc.id} className='flex flex-row  gap-2 items-center justify-between'>
                                 <button
                                     onClick={() => handlePlayAudio(doc)}
                                     className={`py-1 px-4 w-full text-center font-bold rounded-md border-2 border-transparent focus:outline-none ${selectedAudio === doc.url ? 'bg-[#E64E17] text-white' : 'hover:bg-fluency-gray-200 dark:hover:bg-gray-800'}`}
@@ -551,7 +531,7 @@ export default function Listening() {
                         ))}
                     </ul>
 
-                    {session?.user.role === 'admin' &&
+                    {session?.user.role === 'teacher' &&
                     <FluencyButton onClick={openCreate} variant='gray'>Adicionar áudio</FluencyButton>}
                 </div>
             </div>

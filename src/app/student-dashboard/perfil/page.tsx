@@ -271,50 +271,66 @@ function Perfil() {
             </div> 
             
             
-            <div className="lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-col lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
-              <p className='flex flex-row justify-center p-1 font-semibold text-lg'>Infomações de Pagamento</p>
-              <div className='p-6 flex flex-col gap-4'>
-                <p>Você pode fazer a tranferência para as seguintes chaves PIX ou simplesmente usar o QR Code:</p>
-                <div className='flex flex-row gap-1 w-full justify-around'>
-                  <div>
-                    <p>CNPJ: <span className='font-bold'>{CNPJ}</span></p>
-                    <p>Nome: <span className='font-bold'>{CNPJ === '47.63.142/0001-07' ? "Matheus Fernandes" : "Deise Laiane"}</span></p>
-                  </div>
-                  <div>
-                    <Image
-                      className="object-cover w-24 h-24 mb-2"
-                      src={CNPJ === '47.63.142/0001-07' ? QrCode : QrCode2}
-                      alt="FluencyLab"
-                    />
+            <div className='flex flex-col sm:flex-row w-full h-full justify-around gap-4'>
+              <div className="lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-col lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
+                <p className='flex flex-row justify-center p-1 font-semibold text-lg'>Infomações de Pagamento</p>
+                <div className='p-4 flex flex-col gap-4'>
+                  <p className='text-justify'>Você pode fazer a tranferência para as seguintes chaves PIX ou simplesmente usar o QR Code:</p>
+                  <div className='flex flex-col items-center gap-1 w-full justify-around'>
+                    <div>
+                      <p>CNPJ: <span className='font-bold'>{CNPJ}</span></p>
+                      <p>Nome: <span className='font-bold'>{CNPJ === '47.63.142/0001-07' ? "Matheus Fernandes" : "Deise Laiane"}</span></p>
+                    </div>
+                    <div>
+                      <Image
+                        className="object-cover w-24 h-24 mb-2"
+                        src={CNPJ === '47.63.142/0001-07' ? QrCode : QrCode2}
+                        alt="FluencyLab"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch justify-center w-full gap-4 lg:mt-0 mt-2'>
+                <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
+                  <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Check-list:</h1>
+                  {contratoFoiAssinado?.signed ? (
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                        <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato assinado e válido <GrStatusGood className='w-6 h-auto' /></Link>    
+                    </div>
+                    ) : (
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-700 text-white font-bold p-3 items-center justify-between'>
+                      <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato não assinado ainda <RiErrorWarningLine className='w-6 h-auto' /></Link>    
+                    </div>
+                  )}
+
+                  {nivelamentoPermitido === false ? 
+                  (
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                      <div className='flex flex-row w-full justify-between items-center'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+                  </div>
+                  ):(
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                      <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
+                  </div>
+                  )}
+                  {profilePictureURL === null ? 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Foto de perfil não adicionada</p>
+                    </div> 
+                    : 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Foto de perfil adicionada</p>  
+                    </div>}
+                </div>
+              </div>
+
+              </div>
             </div>
-          </div>
 
           <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
             <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-            {contratoFoiAssinado?.signed ? (
-              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                  <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato assinado e válido <GrStatusGood className='w-6 h-auto' /></Link>    
-              </div>
-              ) : (
-              <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-yellow-700 text-white font-bold p-3 items-center justify-between'>
-                <Link className='flex flex-row w-full justify-between items-center' href={'contrato'}>Contrato não assinado ainda <RiErrorWarningLine className='w-6 h-auto' /></Link>    
-              </div>
-            )}
-
-            {nivelamentoPermitido === false ? 
-            (
-            <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                <div className='flex flex-row w-full justify-between items-center'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
-            </div>
-            ):(
-            <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
-                <Link className='flex flex-row w-full justify-between items-center' href={'nivelamento'}>Fazer nivelamento <PiExam className='w-6 h-auto' /></Link>    
-            </div>
-            )}
-
             <div className='w-full'>
               {getFilteredNotifications().length > 0 ? (
                 getFilteredNotifications().map(notification => (
@@ -323,7 +339,7 @@ function Perfil() {
                   </div>
                 ))
               ) : (
-                <p>Nenhuma notificação para mostrar.</p>
+                <p>Nenhuma notificação nova para mostrar.</p>
               )}
             </div>
           </div>

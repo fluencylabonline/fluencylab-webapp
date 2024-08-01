@@ -29,6 +29,9 @@ type MobileSidebarProps = {
   export default function MobileSidebar({ toggleMenu, menuItems, isMenuHidden, isSidebarCollapsed }: MobileSidebarProps) {
     const router = useRouter();
     const [selectedItem, setSelectedItem] = useState('');
+    const { data: session } = useSession();
+    const userId = session?.user.id;
+    const userRole = session?.user.role;
 
     const handleItemClick = (path: string) => {
       router.push(path);
@@ -36,7 +39,15 @@ type MobileSidebarProps = {
     };
 
     const handleAvatarClick = () => {
-      router.push('perfil');
+      if (userRole === 'teacher') {
+        router.push('/teacher-dashboard/perfil');
+      } else if (userRole === 'student') {
+        router.push('/student-dashboard/perfil');
+      } else if (userRole === 'admin') {
+        router.push('/admin-dashboard/perfil');
+      } else {
+        router.push('perfil'); // default route if role is not defined or doesn't match
+      }
     };
 
     function handleLogout() {
@@ -47,7 +58,6 @@ type MobileSidebarProps = {
       router.push('aulas-gravadas');
     }
 
-    const { data: session } = useSession();
     const [classes, setClasses] = useState('');
     useEffect(() => {
       const fetchUserInfo = async () => {

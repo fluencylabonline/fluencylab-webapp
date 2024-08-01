@@ -486,44 +486,81 @@ function Perfil() {
             </div>
 
 
-            <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch w-full gap-4 lg:mt-0 mt-2'>
-              <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
-                <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
-                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
-                <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
-                <div className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
-                    <div className='flex flex-row gap-1 items-center text-fluency-yellow-500'><p className='font-bold'>Link pendende </p><RiErrorWarningLine className='animate-pulse w-6 h-auto' /></div>
-                ) : (
-                    <div><Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink} >Link registrado</Tooltip></div>
-                )}</div>
+            <div className='flex flex-col sm:flex-row w-full h-full justify-around gap-4'>
+              <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch justify-center w-full gap-4 lg:mt-0 mt-2'>
+                <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
+                  <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
+                  <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
+                  <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
+                  <div className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu Calendário:</strong> {!calendarLink ? (
+                      <div className='flex flex-row gap-1 items-center text-fluency-yellow-500'><p className='font-bold'>Link pendende </p><RiErrorWarningLine className='animate-pulse w-6 h-auto' /></div>
+                  ) : (
+                      <div>
+                        <Tooltip className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-gray-800 dark:text-fluency-gray-50 font-semibold w-min flex flex-wrap p-2 rounded-md' content={calendarLink}>
+                          Link registrado
+                        </Tooltip>
+                      </div>
+                  )}</div>
 
-                <div className="mt-4 text-center flex flex-col gap-1 justify-center">
-                  <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
-                  <FluencyButton onClick={openHorariosModal} variant='gray'>Atualizar horários</FluencyButton>
+                  <div className="mt-4 text-center flex flex-col gap-1 justify-center">
+                    <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
+                    <FluencyButton onClick={openHorariosModal} variant='gray'>Atualizar horários</FluencyButton>
+                  </div>
                 </div>
-              </div>
-            </div>   
-          </div>
+              </div>   
 
-            <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-start md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
-              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>
-                {Array.isArray(cursoFeito) && cursoFeito.length > 0 ? (
+              <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch justify-center w-full gap-4 lg:mt-0 mt-2'>
+                <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
+                  <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Check-list:</h1>
+                  {Array.isArray(cursoFeito) && cursoFeito.length > 0 ? (
                   <div className={`flex flex-row gap-2 w-full rounded-md ${cursoFeito.every(course => course) ? 'bg-fluency-green-700' : 'bg-fluency-orange-700'} text-white font-bold p-3 items-center justify-between`}>
                     <div className='flex flex-row w-full justify-between items-center'>
                       {cursoFeito.every(course => course) ? (
                         <span className='flex flex-row items-center gap-1 w-full justify-between'>Curso de Instruções Feito! <PiExam className='w-6 h-auto' /></span>
-                      ) : (
-                        <a href="/teacher-dashboard/suporte/curso" className="flex flex-row items-center gap-1 w-full justify-between">
-                          Fazer curso <PiExam className='w-6 h-auto' />
-                        </a>
-                      )}
-                    </div>    
-                  </div>
-                ) : (
-                  <div>No data available</div>
-                )}
-                
-                <div className='w-full'>
+                        ) : (
+                          <a href="/teacher-dashboard/suporte/curso" className="flex flex-row items-center gap-1 w-full justify-between">
+                            Fazer curso <PiExam className='w-6 h-auto' />
+                          </a>
+                        )}
+                      </div>    
+                    </div>
+                  ) : (
+                    <div>Sem informação disponível</div>
+                  )}
+                  {link === null ? 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Link do Meet não adicionado</p>
+                    </div> 
+                    : 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Link do Meet adicionado</p>  
+                    </div>}
+
+                    {number === null ? 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Telefone não adicionado</p>
+                    </div> 
+                    : 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Telefone adicionado</p>  
+                    </div>}
+
+                    {profilePictureURL === null ? 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Foto de perfil não adicionada</p>
+                    </div> 
+                    : 
+                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                      <p>Foto de perfil adicionada</p>  
+                    </div>}
+                </div>
+              </div>   
+            </div>
+          </div>
+
+            <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
+              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>                
+                <div className='w-full mt-2'>
                   {getFilteredNotifications().length > 0 ? (
                     getFilteredNotifications().map(notification => (
                       <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-1 rounded-lg ${getBackgroundColor(notification.status)}`}>
