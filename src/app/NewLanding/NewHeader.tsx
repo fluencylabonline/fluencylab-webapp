@@ -36,59 +36,57 @@ const navigation = [
         const [isScrolled, setIsScrolled] = useState(false);
       
         useEffect(() => {
-          // Execute this code only on the client
-          const updateIsMobile = () => {
             if (typeof window !== 'undefined') {
-              setIsMobile(window.innerWidth <= 768);
+              // Execute this code only on the client
+              const updateIsMobile = () => {
+                setIsMobile(window.innerWidth <= 768);
+              };
+        
+              updateIsMobile();
+              window.addEventListener('resize', updateIsMobile);
+        
+              return () => {
+                window.removeEventListener('resize', updateIsMobile);
+              };
+            }
+          }, []);
+        
+          // DarkMode functions
+          const [isChecked, setIsChecked] = useState(() => {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              const storedDarkMode = localStorage.getItem('isDarkMode');
+              return storedDarkMode ? storedDarkMode === 'true' : true;
+            }
+            return true; // Default to true if localStorage is not available
+          });
+        
+          useEffect(() => {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.setItem('isDarkMode', isChecked.toString());
+              document.body.classList.toggle('dark', isChecked);
+            }
+          }, [isChecked]);
+        
+          useEffect(() => {
+            if (typeof window !== 'undefined') {
+              const handleScroll = () => {
+                setIsScrolled(window.scrollY > 100);
+              };
+        
+              window.addEventListener('scroll', handleScroll);
+        
+              return () => window.removeEventListener('scroll', handleScroll);
+            }
+          }, []);
+        
+          const scrollToTop = () => {
+            if (typeof window !== 'undefined') {
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+              });
             }
           };
-          
-          updateIsMobile();
-          window.addEventListener('resize', updateIsMobile);
-      
-          return () => {
-            window.removeEventListener('resize', updateIsMobile);
-          };
-        }, []);
-      
-        // DarkMode functions
-        const isLocalStorageAvailable = typeof window !== 'undefined' && window.localStorage;
-      
-        const [isChecked, setIsChecked] = useState(() => {
-          if (isLocalStorageAvailable) {
-            const storedDarkMode = localStorage.getItem('isDarkMode');
-            return storedDarkMode ? storedDarkMode === 'true' : true;
-          }
-          return true; // Default to true if localStorage is not available
-        });
-      
-        useEffect(() => {
-          if (isLocalStorageAvailable) {
-            localStorage.setItem('isDarkMode', isChecked.toString());
-            document.body.classList.toggle('dark', isChecked);
-          }
-        }, [isChecked, isLocalStorageAvailable]);
-      
-        useEffect(() => {
-          const handleScroll = () => {
-            if (typeof window !== 'undefined') {
-              setIsScrolled(window.scrollY > 100);
-            }
-          };
-      
-          window.addEventListener('scroll', handleScroll);
-      
-          return () => window.removeEventListener('scroll', handleScroll);
-        }, []);
-      
-        const scrollToTop = () => {
-          if (typeof window !== 'undefined') {
-            window.scrollTo({
-              top: 0,
-              behavior: 'smooth',
-            });
-          }
-        };
     return(
         <div className="text-fluency-text-light mt-2 mr-3 ml-3 rounded-xl overflow-hidden h-[95vh]">
         {/*Navbar*/}
