@@ -1,79 +1,139 @@
-// components/TicTacToe.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { verbs } from './verbs'; // Assuming verbs is imported correctly from './verbs'
+import { db } from '@/app/firebase'; // Import your Firestore configuration
+import { doc, setDoc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import { Toaster, toast } from 'react-hot-toast';
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import './tictac.css';
+import { useSession } from 'next-auth/react'; // Import useSession from next-auth/react
+import { verbs } from './verbs'; // Import the verbs array
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import FluencyButton from '@/app/ui/Components/Button/button';
-
+import FluencyInput from '@/app/ui/Components/Input/input';
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
 
+
 const TicTacToe: React.FC = () => {
-  // Shuffle the entire verbs array and take the first 9 for the board
-  useEffect(() => {
-    shuffleVerbs();
-  }, []);
-
-  const shuffleVerbs = () => {
-    const shuffledVerbs = shuffleArray(verbs).slice(0, 9); // Take the first 9 shuffled verbs
-    setBoard(shuffledVerbs);
-  };
-
-  const shuffleArray = (array: string[]) => {
-    let currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-  };
-
-  const [board, setBoard] = useState<string[]>([]); // Initialize empty board on first render
+  const [gameId, setGameId] = useState<string | null>(null);
+  const [board, setBoard] = useState<string[]>(Array(9).fill(''));
   const [isXNext, setIsXNext] = useState(true);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [currentBox, setCurrentBox] = useState<number | null>(null);
-  const [userInput, setUserInput] = useState<string>('');
+  const [gameCode, setGameCode] = useState<string>('');
+  const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
+  const [playerXId, setPlayerXId] = useState<string | null>(null);
+  const [playerOId, setPlayerOId] = useState<string | null>(null);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
+  const [sentence, setSentence] = useState('');
+  const [randomVerb, setRandomVerb] = useState('');
   const [loading, setLoading] = useState(false);
-  const [disabledBoxes, setDisabledBoxes] = useState<number[]>([]); // Track disabled boxes
-  const [winner, setWinner] = useState<string | null>(null); // Track winner ('X' or 'O')
-  const [gameOver, setGameOver] = useState(true); // Initially set to true to prevent immediate display of "Play Again"
+  const [playerXName, setPlayerXName] = useState<string>(''); // State for player X's name
+  const [playerOName, setPlayerOName] = useState<string>('');
+  const { data: session } = useSession(); // Get session data
+  const userId = session?.user?.id || ''; // Get the user ID from session
+  const userName = session?.user?.name || 'Player'; // Get the user name from session
 
   useEffect(() => {
-    const checkWinner = checkWin();
-    if (checkWinner) {
-      setWinner(checkWinner);
-      setGameOver(true);
-    } else if (disabledBoxes.length === board.length) {
-      // All boxes disabled, tie game
-      setGameOver(true);
-    } else {
-      setGameOver(false); // Reset game over state if game is still ongoing
+    if (session) {
+      setCurrentPlayer(userName);
     }
-  }, [board, disabledBoxes]);
 
-  const handleClick = (index: number) => {
-    if (board[index] === '' || disabledBoxes.includes(index) || gameOver) return; // Skip if no verb, already disabled, or game over
-    setCurrentBox(index);
-    setModalIsOpen(true);
+    // Get the gameCode from the URL
+    const params = new URLSearchParams(window.location.search);
+    const urlGameCode = params.get('gameCode');
+
+    if (urlGameCode) {
+      joinGame(urlGameCode);
+      setGameCode(urlGameCode);
+    }
+  }, [session]);
+
+  // Select a random verb from the verbs array
+  const getRandomVerb = () => {
+    const randomIndex = Math.floor(Math.random() * verbs.length);
+    return verbs[randomIndex];
   };
 
-  const handleCloseModal = () => {
-    setModalIsOpen(false);
-    setUserInput('');
+  // Function to create a new game
+  const createGame = async () => {
+    const id = generateGameId();
+    setGameId(id);
+    const verb = getRandomVerb();
+    setRandomVerb(verb);
+    await setDoc(doc(db, 'games', id), {
+      board: Array(9).fill(''),
+      isXNext: true,
+      playerXId: userId, // Set the current user as player X
+      playerOId: null, // No player O yet
+      isStarted: false, // Game has not started yet
+      randomVerb: verb, // Store the random verb in the game document
+      winner: null // Initialize winner field
+    });
+    
+    // Copy game code to clipboard
+    navigator.clipboard.writeText(id).then(() => {
+      toast.success(`Jogo criado! O ID foi copiado para a área de transferência: ${id}`);
+    }).catch(err => {
+      console.error('Failed to copy game ID: ', err);
+      toast.error('Falha ao copiar o ID do jogo.');
+    });
+  
+    // Update the URL with the new gameCode
+    const url = new URL(window.location.href);
+    url.searchParams.set('gameCode', id);
+    window.history.replaceState(null, '', url.toString());
+  };
+  
+
+  // Function to join an existing game
+  const joinGame = async (id: string) => {
+    setGameId(id);
+    const gameRef = doc(db, 'games', id);
+    onSnapshot(gameRef, (snapshot) => {
+      const data = snapshot.data();
+      if (data) {
+        setBoard(data.board);
+        setIsXNext(data.isXNext);
+        setPlayerXId(data.playerXId);
+        setPlayerOId(data.playerOId);
+        setIsGameStarted(data.isStarted);
+        setRandomVerb(data.randomVerb); // Get the random verb from the game document
+
+        // Update player O if player X is already set
+        if (data.playerXId && data.playerXId !== userId) {
+          if (!data.playerOId) {
+            updateDoc(gameRef, { 
+              playerOId: userId
+            });
+          }
+        }
+
+        // Fetch player names if available
+        if (data.playerXId) {
+          // Assume you have a way to fetch user names by their IDs
+          fetchUserName(data.playerXId).then(name => setPlayerXName(name));
+        }
+        if (data.playerOId) {
+          fetchUserName(data.playerOId).then(name => setPlayerOName(name));
+        }
+
+        // Check if the game has started
+        if (data.playerXId && data.playerOId) {
+          setIsGameStarted(true);
+        }
+      }
+    });
   };
 
+  const fetchUserName = async (userId: string) => {
+    // Replace this with your actual implementation to fetch user names
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    return userDoc.data()?.name || 'Unknown Player';
+  };
+  
+  // Function to validate the sentence using AI
   const runChat = async (prompt: string) => {
     setLoading(true);
     const genAI = new GoogleGenerativeAI(API_KEY);
@@ -120,7 +180,7 @@ const TicTacToe: React.FC = () => {
       ],
     });
 
-    const instruction = `Check if a whole sentence with more than one word is provided using the verb "${board[currentBox as number]}" in the correct tense and form. If it does match the criteria return only the word "correct". If it does not match the criteria then return only the word "incorrect".`;
+    const instruction = `Check if a whole sentence with more than one word is provided using the verb "${randomVerb}" in the correct tense and form. If it does match the criteria return only the word "correct". If it does not match the criteria then return only the word "incorrect".`;
     const fullPrompt = `${instruction}\n\nText: ${prompt}`;
 
     try {
@@ -130,12 +190,6 @@ const TicTacToe: React.FC = () => {
 
       // Check if the response contains "correct" or "incorrect"
       if (responseText.toLowerCase() === 'correct') {
-        const updatedBoard = [...board];
-        updatedBoard[currentBox as number] = isXNext ? 'X' : 'O';
-        setBoard(updatedBoard);
-        setIsXNext(!isXNext);
-        setDisabledBoxes([...disabledBoxes, currentBox as number]); // Disable the box
-        toast.success('Frase correta! Movimento aceito.');
         return 'correct';
       } else if (responseText.toLowerCase() === 'incorrect') {
         return 'incorrect';
@@ -149,34 +203,94 @@ const TicTacToe: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (currentBox !== null) {
-      const result = await runChat(userInput);
-      if (result === 'incorrect') {
-        toast.error('Frase incorreta. Tente novamente.');
-      } else if (result === 'unknown') {
-        toast.error('Error verifying sentence. Please try again.');
+  // Function to handle player moves
+  const handleMove = async () => {
+    if (selectedSquare !== null && sentence.trim() !== '') {
+      if (gameId && board[selectedSquare] === '' && !checkWinner(board) && !isDraw(board)) {
+        if (!isGameStarted) {
+          toast.error("Jogo ainda não começou.");
+          return;
+        }
+
+        if ((isXNext && userId === playerXId) || (!isXNext && userId === playerOId)) {
+          const result = await runChat(sentence);
+
+          if (result === 'correct') {
+            const newBoard = [...board];
+            newBoard[selectedSquare] = isXNext ? 'X' : 'O';
+            await updateDoc(doc(db, 'games', gameId), {
+              board: newBoard,
+              isXNext: !isXNext,
+              randomVerb: getRandomVerb() // Update the random verb after a move
+            });
+
+            // Check for a winner or draw after the move
+            const winner = checkWinner(newBoard);
+            if (winner) {
+              await updateDoc(doc(db, 'games', gameId), { winner: winner }); // Store the winner in Firestore
+              toast.success(`${getWinnerName()} ganhou!`);
+            } else if (isDraw(newBoard)) {
+              toast.error("Empate!");
+            }
+
+            setModalVisible(false);
+            setSelectedSquare(null);
+            setSentence('');
+          } else if (result === 'incorrect') {
+            toast.error("Frase incorreta. Por favor, tente novamente.");
+          } else {
+            toast.error("Erro ao verificar frase. Tente novamente.");
+          }
+        } else {
+          toast.error("Não é sua vez!");
+        }
+      } else {
+        toast.error("Por favor, coloque uma frase válida.");
       }
+    } else {
+      toast.error("Por favor, coloque uma frase válida.");
     }
-    handleCloseModal();
   };
 
+  // Function to render each square of the Tic Tac Toe board
   const renderSquare = (index: number) => {
-    const isWinnerSquare = winner && board[index] === winner;
     return (
       <div
         key={index}
-        className={`w-24 h-24 border border-fluency-gray-200 flex items-center justify-center text-lg cursor-pointer hover:bg-fluency-gray-100 hover:dark:bg-fluency-gray-500 hover:font-semibold duration-300 ease-in-out transition-all dark:text-white ${disabledBoxes.includes(index) ? 'opacity-50 text-black' : ''} ${isWinnerSquare ? 'bg-fluency-green-500 opacity-0' : ''}`}
-        onClick={() => handleClick(index)}
+        className="w-24 h-24 border border-fluency-gray-200 flex items-center justify-center text-lg cursor-pointer hover:bg-fluency-gray-100 hover:dark:bg-fluency-gray-500 hover:font-semibold duration-300 ease-in-out transition-all dark:text-white"
+        onClick={() => {
+          if (userId === (isXNext ? playerXId : playerOId)) {
+            setSelectedSquare(index);
+            setModalVisible(true);
+          } else {
+            toast.error("Não é sua vez!");
+          }
+        }}
       >
-        {board[index] === '' ? '' : board[index]}
+        {board[index]}
       </div>
     );
   };
 
-  const checkWin = () => {
-    const winLines = [
+  // Function to start the game
+  const startGame = async () => {
+    if (gameId && playerXId && playerOId) {
+      await updateDoc(doc(db, 'games', gameId), { isStarted: true });
+      setIsGameStarted(true);
+      toast.success("Jogo iniciou!");
+    } else {
+      toast.error("Os dois jogadores precisam entrar para iniciar o jogo.");
+    }
+  };
+
+  // Function to generate a unique game ID
+  function generateGameId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  // Function to check for a winner
+  const checkWinner = (board: string[]) => {
+    const winningCombinations = [
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -187,26 +301,43 @@ const TicTacToe: React.FC = () => {
       [2, 4, 6],
     ];
 
-    for (let i = 0; i < winLines.length; i++) {
-      const [a, b, c] = winLines[i];
+    for (let combination of winningCombinations) {
+      const [a, b, c] = combination;
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a]; // Return 'X' or 'O' if there's a winner
+        return board[a];
       }
     }
 
-    return null; // Return null if no winner
+    return null;
   };
 
-  const handlePlayAgain = () => {
-    shuffleVerbs(); // Shuffle verbs for new game
-    setIsXNext(true); // Reset player turn
-    setDisabledBoxes([]); // Reset disabled boxes
-    setWinner(null); // Reset winner
-    setGameOver(false); // Reset game over state
+  // Function to check for a draw
+  const isDraw = (board: string[]) => {
+    return board.every((cell) => cell !== '') && !checkWinner(board);
   };
 
+  const getWinnerName = () => {
+    const winner = checkWinner(board);
+    if (winner === 'X') {
+      return playerXName;
+    } else if (winner === 'O') {
+      return playerOName;
+    } else {
+      return '';
+    }
+  };
   return (
-    <div className="flex flex-col items-center mt-16">
+    <div className="flex flex-col items-center p-12">
+      {/* Display whose turn it is */}
+      <div className="mb-4 text-xl">
+        {checkWinner(board) ? 
+           `Game Over! ${getWinnerName()} ganhou!` :
+          isDraw(board) ? 
+            "Empate!" :
+            `Vez de ${isXNext ? playerXName : playerOName}`
+        }
+      </div>
+
       <div className="flex flex-wrap w-72">
         {board.map((_, index) => (
           <div key={index}>
@@ -214,48 +345,45 @@ const TicTacToe: React.FC = () => {
           </div>
         ))}
       </div>
-
-      {modalIsOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-slate-800 dark:bg-slate-300 bg-opacity-50">
-          <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl mb-4">Escreva uma frase usando o verbo: {board[currentBox as number]}</h2>
-            <form onSubmit={handleSubmit}>
-              <textarea
-                className="w-full p-2 border rounded mb-4 outline-none bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                placeholder={`Use o verbo ${board[currentBox as number]} em uma frase`}
-                required
-              />
-              <div className="flex justify-end space-x-4">
-                <FluencyButton
-                  type="button"
-                  variant='warning'
-                  onClick={handleCloseModal}
-                >
-                  Cancelar
-                </FluencyButton>
-                <FluencyButton
-                  type="submit"
-                  variant='orange'
-                  disabled={loading}
-                >
-                  {loading ? 'Checando...' : 'Enviar'}
-                </FluencyButton>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {gameOver && (
-        <div className="mt-4">
-          <FluencyButton
-            variant='confirm'
-            onClick={handlePlayAgain}
-          >
-            Jogar Novamente
+      
+      <div className="mt-4 flex flex-col items-center justify-center gap-1">
+        <p className='text-xs font-bold'>Cole o ID aqui depois de criar um jogo e aperte em Entrar</p>
+        <FluencyInput
+          type="text"
+          value={gameCode}
+          onChange={(e) => setGameCode(e.target.value)}
+          placeholder="Coloque o ID aqui"
+        />
+        <div className='flex flex-row items-center justify-center gap-1'>
+          <FluencyButton variant='confirm' onClick={() => joinGame(gameCode)}>
+            Entrar em um jogo
           </FluencyButton>
+          <FluencyButton variant='warning' onClick={createGame} className="bg-blue-500 text-white px-4 py-2 rounded">
+            Criar jogo
+          </FluencyButton>
+        </div>
+      </div>
+
+      {/* Modal for Sentence Input */}
+      {modalVisible && (
+        <div className="fixed inset-0 bg-black dark:bg-fluency-gray-800 bg-opacity-50 dark:bg-opacity-90 flex items-center justify-center">
+          <div className="flex flex-col items-start gap-2 bg-fluency-pages-light dark:bg-fluency-pages-dark text-black dark:text-white p-4 rounded-md shadow-lg">
+            <h3 className="text-lg">Escreva uma frase com: <strong className='text-md text-gray-600 dark:text-gray-200'>{randomVerb}</strong></h3>
+            <FluencyInput
+              type="text"
+              value={sentence}
+              onChange={(e) => setSentence(e.target.value)}
+              placeholder="Escreva aqui!"
+            />
+            <div className='flex flex-row items-center gap-2'>
+              <FluencyButton variant='confirm' onClick={handleMove}>
+                Checar
+              </FluencyButton>
+              <FluencyButton variant='warning' onClick={() => setModalVisible(false)}>
+                Cancelar
+              </FluencyButton>
+            </div>
+          </div>
         </div>
       )}
 

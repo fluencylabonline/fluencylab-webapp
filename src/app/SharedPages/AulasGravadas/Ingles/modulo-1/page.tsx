@@ -342,6 +342,7 @@ export default function ModuloUm() {
         classData.className.toLowerCase().includes(searchQuery.toLowerCase())
     );
     
+    const [selectedStudentId, setSelectedStudentId] = useState('');
 
     return (
         <div className="flex flex-col items-center justify-center p-6">
@@ -523,27 +524,37 @@ export default function ModuloUm() {
                 </div>}
 
                 {showStudentModal && classToAdd && (
-                <div className="fixed z-50 inset-0 overflow-y-auto">
+                    <div className="fixed z-50 inset-0 overflow-y-auto">
                     <div className="flex items-center justify-center min-h-screen p-5">
                         <div className="fixed inset-0 transition-opacity">
-                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                         </div>
                         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                            <FluencyCloseButton onClick={closeStudentModal} />
-                            <div className="flex flex-col items-center p-4 w-full">
-                                <h2 className="text-lg font-semibold mb-4">Lista dos seus Alunos</h2>
-                                {students.map(student => (
-                                    <div key={student.id} className="flex gap-2 items-center justify-between p-2 px-4 mb-2 bg-fluency-pages-light dark:bg-fluency-gray-900 rounded-md">
-                                        <p className="text-lg font-bold">{student.name}</p>
-                                        <button
-                                        className="p-2 text-sm text-white bg-fluency-green-500 dark:bg-fluency-green-800 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-900 duration-300 ease-in-out transition-all font-bold rounded-md"
-                                        onClick={() => {
-                                            handleAddDeckAsTask(student.id, classToAdd.className, classToAdd.id);
-                                            closeStudentModal();
-                                        }}>Adicionar como tarefa</button>
-                                    </div>
-                                ))}
-                            </div>
+                        <FluencyCloseButton onClick={closeStudentModal} />
+                        <div className="flex flex-col items-center p-4 w-full">
+                            <h2 className="text-lg font-semibold mb-4">Lista dos seus Alunos</h2>
+                            <select
+                            value={selectedStudentId}
+                            onChange={(e) => setSelectedStudentId(e.target.value)}
+                            className="p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark px-4 mb-4"
+                            >
+                            <option value="">Selecione um aluno</option>
+                            {students.map((student) => (
+                                <option key={student.id} value={student.id}>
+                                {student.name}
+                                </option>
+                            ))}
+                            </select>
+                            <button
+                            className="p-2 text-sm text-white bg-fluency-green-500 dark:bg-fluency-green-800 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-900 duration-300 ease-in-out transition-all font-bold rounded-md"
+                            onClick={() => {
+                                handleAddDeckAsTask(selectedStudentId, classToAdd.className, classToAdd.id);
+                                closeStudentModal();
+                            }}
+                            >
+                            Adicionar como tarefa
+                            </button>
+                        </div>
                         </div>
                     </div>
                 </div>)}
