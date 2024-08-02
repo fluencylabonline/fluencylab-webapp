@@ -144,3 +144,27 @@
     white-space: nowrap;
   }
   
+
+  
+/* NotebookEditor.css */
+.save-button {
+  padding: 5px 5px;
+  border-radius: 100%;
+  color: white;
+  border: none;
+  transition: background-color 0.5s ease;
+}
+
+.save-button.animate {
+  animation: saveAnimation 1s ease;
+}
+
+@keyframes saveAnimation {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+

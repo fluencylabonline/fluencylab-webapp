@@ -28,6 +28,10 @@ type Props = {
   content: string;
   isTyping: string;
   addImage: any;
+  lastSaved: string | null;
+  buttonColor: string;
+  animation: boolean;
+  timeLeft: number;
 };
 
 type AddLinkBoxProps = {
@@ -86,7 +90,7 @@ export const AddLinkBox = ({ editor, setModal }: AddLinkBoxProps) => {
 
 
 
-const Toolbar = ({ editor, isTyping, addImage }: Props) => {
+const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor, timeLeft }: Props) => {
   const [selectedFontFamily, setSelectedFontFamily] = useState('QuickSand');
   const [modal, setModal] = useState(false);
   if (!editor) {
@@ -456,7 +460,18 @@ const Toolbar = ({ editor, isTyping, addImage }: Props) => {
             </DropdownItem>
         </DropdownMenu>
       </Dropdown>
+
+      <button
+        className={`ml-4 save-button ${animation ? 'animate' : ''}`}
+        style={{ backgroundColor: buttonColor }}
+      >
+      </button>
+      <div className='hidden'>
+        Time until next save: {Math.floor(timeLeft / 60000)}:{('0' + Math.floor((timeLeft % 60000) / 1000)).slice(-2)}
       </div>
+
+
+    </div>
   );
 };
 

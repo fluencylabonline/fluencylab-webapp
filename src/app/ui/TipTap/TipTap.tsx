@@ -121,7 +121,7 @@ function Popovers({ editor }: PopoversProps) {
   )
 }
 
-const Tiptap = ({ onChange, content, isTyping }: any) => {
+const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const params = new URLSearchParams(window.location.search);
   const { data: session } = useSession();
   const notebookID = params.get('notebook') || '';
@@ -355,7 +355,7 @@ const Tiptap = ({ onChange, content, isTyping }: any) => {
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
-      <Toolbar editor={editor} content={content} isTyping={isTyping} addImage={addImage} /> 
+      <Toolbar editor={editor} content={content} addImage={addImage} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  /> 
       <EditorContent editor={editor} />
       <Popovers editor={editor} />
 

@@ -21,12 +21,7 @@ import Link from 'next/link';
 
 
 export default function About(){
-    const [showMore, setShowMore] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-
-    const toggleShowMore = () => {
-      setShowMore(!showMore);
-    };
     
     useEffect(() => {
         const updateIsMobile = () => {
@@ -75,9 +70,6 @@ export default function About(){
                         Pratique aqui seu vocabulário sob pressão!
                     </div>
                 </div>
-
-                {(showMore || window.innerWidth >= 640) && (
-                    <>
                     <div className="relative group w-52 h-60 rounded-md p-5 bg-fluency-pages-light dark:bg-fluency-pages-dark hover:bg-fluency-blue-200 hover:dark:bg-fluency-gray-800 flex flex-col gap-2 items-center justify-between cursor-pointer duration-200 ease-in-out transition-all">
                         <Image alt="Guessly" src={GuesslyImage} className="w-36 h-auto mt-6" />
                         <p className="flex flex-row gap-2 items-center justify-center">
@@ -97,18 +89,6 @@ export default function About(){
                         Nesse jogo você pode praticar o seu ouvido e melhorar mais ainda seu entendimento.
                         </div>
                     </div>
-                    </>
-                )}
-
-                {/* Show More / Show Less Button */}
-                {window.innerWidth < 640 && (
-                    <button
-                    className="mt-4 px-4 py-2 bg-fluency-blue-600 text-white font-bold rounded"
-                    onClick={toggleShowMore}
-                    >
-                    {showMore ? 'Ver menos' : 'Ver mais'}
-                    </button>
-                )}
             </div>
         </div>
 
