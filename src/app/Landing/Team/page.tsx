@@ -28,7 +28,7 @@ return(
                     <rect fill="url(#247432cb-6e6c-4bec-9766-564ed7c230dc)" width="52" height="24"></rect>
                     </svg>
                 </span>
-                Vem conhecer nosso time excepcional!
+                Agora vem conhecer nosso time excepcional!
                 </h2>
                 <p className="text-base text-fluency-text-light dark:text-fluency-text-dark md:text-lg">
                 Aqui você vai encontrar pessoas dedicadas, que amam ensinar e que têm como objetivo tornar sua jornada o mais agradável possível.

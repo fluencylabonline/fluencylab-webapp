@@ -46,7 +46,7 @@ export default function Quiz() {
     const [questions, setQuestions] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [userScores, setUserScores] = useState({});
-
+    const [selectedStudentId, setSelectedStudentId] = useState('');
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
@@ -223,6 +223,7 @@ export default function Quiz() {
             });
 
             toast.success('Tarefa adicionada com sucesso!');
+            setShowStudentModal(false)
         } catch (error) {
             console.error('Erro ao adicionar tarefa:', error);
             toast.error('Erro ao adicionar tarefa.');
@@ -693,26 +694,45 @@ return (
     </div>}
 
     {showStudentModal && (
-    <div className="fixed z-50 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen p-5">
+        <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen p-5">
             <div className="fixed inset-0 transition-opacity">
-                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-full p-5">
-                <FluencyCloseButton onClick={closeStudentModal} />
-                <div className="flex flex-col p-4 w-full">
-                    <h2 className="text-lg font-semibold mb-4">Lista dos seus Alunos</h2>
-                    {students.map(student => (
-                        <div key={student.id} className="flex items-center justify-between p-2 px-4 mb-2 bg-fluency-pages-light hover:bg-fluency-gray-200 dark:bg-fluency-gray-900 hover:dark:bg-fluency-gray-900 rounded-md">
-                            <p>{student.name}</p>
-                            <FluencyButton variant="warning" onClick={() => handleAddDeckAsTask(student.id, selectedDeck)}>Adicionar como tarefa <MdOutlineAddTask className='w-auto h-6 ml-2' /> </FluencyButton>
-                        </div>
-                    ))}
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+              <FluencyCloseButton onClick={closeStudentModal} />
+              <div className="flex flex-col p-4 w-full">
+                <h2 className="text-center text-lg leading-6 font-bold mb-2">
+                  Lista dos seus Alunos
+                </h2>
+                <select
+                  value={selectedStudentId}
+                  onChange={(e) => setSelectedStudentId(e.target.value)}
+                  className="p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark px-4 mb-4"
+                >
+                  <option value="">Selecione um aluno</option>
+                  {students.map((student) => (
+                    <option key={student.id} value={student.id}>
+                      {student.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex justify-center">
+                  <FluencyButton
+                    variant="confirm"
+                    onClick={() => handleAddDeckAsTask(selectedStudentId, selectedDeck)}
+                  >
+                    Adicionar
+                  </FluencyButton>
+                  <FluencyButton variant="gray" onClick={closeStudentModal}>
+                    Cancelar
+                  </FluencyButton>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>)}
-
+      )}
     <Toaster />
 </div>
 );}

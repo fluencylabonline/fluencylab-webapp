@@ -556,7 +556,7 @@ return(
             className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100"
         />
 
-        <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] p-4 overflow-y-auto">
+        <div className=" text-fluency-text-light dark:text-fluency-text-dark mt-4 fade-in fade-out w-full h-[95vh] overflow-y-auto">
             <div className='flex flex-col gap-3 lg:items-start md:items-start items-center'>
                 {filteredStudents.length === 0 && 
                 <div className="flex items-center justify-center h-[70vh] min-w-full z-30">
@@ -564,9 +564,9 @@ return(
                 </div>}
                 {filteredStudents.map((student) => (
                     <div className="bg-fluency-gray-200 dark:bg-fluency-pages-dark w-full lg:flex lg:flex-row md:flex md:flex-row flex flex-col p-3 items-strecht justify-between rounded-lg gap-3" key={student.id}>
-                        <div className='bg-fluency-gray-100 dark:bg-fluency-gray-500 w-full p-3 px-4 flex flex-col items-start justify-between rounded-lg gap-1'>
+                        <div className='bg-fluency-gray-100 dark:bg-fluency-gray-500 w-full p-3 px-1 flex flex-col items-start justify-between rounded-lg gap-1'>
                             <div className='flex flex-row items-start gap-3'>
-                                <div key={student.id}>
+                                <div className='ml-2 sm:ml-4' key={student.id}>
                                     {student.profilePicUrl ? (
                                         <div className="cursor-pointer relative inline-block">
                                         {student.status === 'online' ? (

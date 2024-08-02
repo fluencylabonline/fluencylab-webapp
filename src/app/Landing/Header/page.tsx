@@ -20,6 +20,8 @@ import { ToggleDarkMode } from '@/app/ui/Components/Buttons/ToggleDarkMode';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { TbLogin2 } from 'react-icons/tb';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { WhatsAppButton } from '@/app/ui/Components/Buttons/WhatsAppButton';
+import GoogleCalendarButton from '@/app/ui/Components/Buttons/GoogleCalendarButton';
 
 const navigation = [
     { name: 'Sobre Nós', href: '#aboutus' },
@@ -178,13 +180,14 @@ const navigation = [
                             </div>
 
                             <div className='flex flex-col items-center gap-3'>
-                                <div className="flex flex-row gap-2">
-                                    <Link href="/u/googlecalendarpage" className="gap-2 leading-6 inline-flex items-center px-4 py-3 font-semibold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-fluency-text-dark ease-in-out duration-30 text-sm rounded-md"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
+                                <div className="flex flex-col gap-2">
+                                    <Link href="/u/googlecalendarpage" className="gap-2 leading-6 inline-flex items-center px-4 py-2 font-semibold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-fluency-text-dark ease-in-out duration-30 text-sm rounded-md"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
                                         Agende uma aula grátis!
                                     </Link>
+                                    <WhatsAppButton buttonText="Ou, manda mensagem aqui"/>
                                 </div>
                                 <div className="flex flex-col items-center gap-4">
-                                    <a href="/signin" className="gap-1 pl-5 leading-6 inline-flex items-center px-4 py-2 font-semibold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-fluency-text-dark ease-in-out duration-300 text-sm rounded-md">
+                                    <a href="/signin" className="gap-1 pl-5 leading-6 inline-flex items-center px-4 py-2 font-semibold bg-fluency-gray-500 dark:bg-fluency-gray-700 text-fluency-text-dark dark:text-fluency-text-dark ease-in-out duration-300 text-sm rounded-md">
                                         Entrar <TbLogin2 className="w-6 h-auto" />
                                     </a>
                                     <ToggleDarkMode />
@@ -199,8 +202,8 @@ const navigation = [
 
         {/*Landing*/}
         <div className="relative isolate px-6 lg:px-8 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark">
-        <div className="container flex flex-col justify-center items-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between">
-            <div className="flex flex-col items-center lg:items-start text-center p-6 sm:text-center sm:content-center lg:text-left lg:text-nowrap mt-4 sm:mt-0">
+        <div className="container flex flex-col justify-center items-center p-2 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between">
+            <div className="flex flex-col items-center lg:items-start text-center p-6 sm:text-center sm:content-center lg:text-left lg:text-nowrap">
             
                 {isMobile && <div className="flex items-center justify-center w-60">
                     <Image
@@ -210,19 +213,38 @@ const navigation = [
                     />
                 </div>}
           
-                <p className="mt-6 mb-8 font-500 text-3xl md:text-6xl">
+                <p className="mt-6 mb-4 font-500 text-3xl md:text-6xl">
                     Uma abordagem <span className="text-fluency-red-500 font-normal hover:text-fluency-red-600 ease-in-out duration-300">única</span><br /> 
                     para aprender <br />
                     um Idioma online
                 </p>
-                <p className='text-base mb-8 font-300'>
+                <p className='text-base mb-4 font-300'>
                     Aprenda no seu próprio ritmo,<br />
                     com o que gosta, e de onde preferir.
                 </p>
 
+                {isMobile ? (
+                <div className="container md:flex md:gap-2 md:flex-row md:content-center flex flex-rows gap-2 items-center">
+                    <button>
+                    <Link href="/u/googlecalendarpage" className="w-max cursor-pointer gap-1 leading-6 inline-flex items-center px-4 py-2 bg-fluency-blue-500 hover:bg-fluency-blue-500 ease-in-out duration-300 text-fluency-text-dark text-sm font-medium rounded-md"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
+                        Agendar, ou
+                    </Link>
+                    </button>
+                    <WhatsAppButton buttonText="Mensagem aqui"/>
+                </div>
+                
+                ) : (
+                <div className='container md:flex md:gap-2 md:flex-row md:justify-center flex flex-col gap-2 items-center lg:content-center lg:flex lg:flex-row lg:justify-start'>
+                    <div>
+                    <GoogleCalendarButton />
+                    </div>
+                    <WhatsAppButton buttonText="Ou, manda mensagem aqui"/>
+                </div>
+                )}
+
             </div>
 
-            <div className="flex items-center justify-center p-1 -mt-[60%] sm:mt-0 md:h-100">
+            <div className="flex items-center justify-center p-4 sm:p-1 -mt-[40%] sm:mt-0 md:h-100">
                 <Image
                     className="object-contain h-[26rem] sm:h-80 lg:h-[27.5rem] xl:h-112 2xl:h-128"
                     src={LandingHeaderImage}
