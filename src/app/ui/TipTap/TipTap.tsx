@@ -54,6 +54,9 @@ import Collaboration from '@tiptap/extension-collaboration'
 import * as Y from 'yjs'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 
+import VersionsModal from "./VersionsModal";
+import { FaHistory } from 'react-icons/fa';
+
 type PopoversProps = {
   editor: Editor;
 }
@@ -124,14 +127,15 @@ function Popovers({ editor }: PopoversProps) {
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const params = new URLSearchParams(window.location.search);
   const { data: session } = useSession();
+  const studentID = params.get('student') || ''; // Default to an empty string if null
   const notebookID = params.get('notebook') || '';
-  const studentID = params.get('student');
   const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [isVersionsModalOpen, setIsVersionsModalOpen] = useState(false);
 
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
@@ -425,6 +429,14 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       <Toolbar editor={editor} content={content} addImage={addImage} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  /> 
       <EditorContent editor={editor} />
       <Popovers editor={editor} />
+      
+        <VersionsModal
+          studentID={studentID}
+          notebookID={notebookID}
+          isOpen={isVersionsModalOpen}
+          onClose={() => setIsVersionsModalOpen(false)} 
+          pasteContentFromFirestore={pasteContentFromFirestore} 
+        />
 
         <AudioSelectionModal
           isOpen={isModalOpen}
@@ -510,9 +522,20 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           </button>
           </Tooltip>
 
-            <Button onClick={openWorkbook} className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-400 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
-              <PiNotebookBold className="w-6 h-auto"/>
-            </Button>   
+          <Tooltip content='Material das apostilas' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <Button onClick={openWorkbook} className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-400 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+            <PiNotebookBold className="w-6 h-auto"/>
+          </Button> 
+          </Tooltip> 
+
+          <Tooltip content='Versões deste caderno' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={() => setIsVersionsModalOpen(true)}
+            className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-400 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'
+            >
+            <FaHistory className="w-5 h-auto"/>
+          </button> 
+          </Tooltip>
           </div>
         </div>
 
