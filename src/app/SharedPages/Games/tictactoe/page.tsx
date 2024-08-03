@@ -1,18 +1,18 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
-import { db } from '@/app/firebase'; // Import your Firestore configuration
+import { db } from '@/app/firebase';
 import { doc, setDoc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import { Toaster, toast } from 'react-hot-toast';
 import './tictac.css';
-import { useSession } from 'next-auth/react'; // Import useSession from next-auth/react
-import { verbs } from './verbs'; // Import the verbs array
+import { useSession } from 'next-auth/react';
+import { verbs } from './verbs';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyInput from '@/app/ui/Components/Input/input';
+import { CiCircleQuestion } from 'react-icons/ci';
+import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
-
 
 const TicTacToe: React.FC = () => {
   const [gameId, setGameId] = useState<string | null>(null);
@@ -33,6 +33,15 @@ const TicTacToe: React.FC = () => {
   const { data: session } = useSession(); // Get session data
   const userId = session?.user?.id || ''; // Get the user ID from session
   const userName = session?.user?.name || 'Player'; // Get the user name from session
+
+  const [isInstrucoesOpen, setIsInstrucoesOpen] = useState(false);
+    const openInstrucoes = () => {
+        setIsInstrucoesOpen(true);
+    };
+
+    const closeInstrucoes = () => {
+        setIsInstrucoesOpen(false);
+    };  
 
   useEffect(() => {
     if (session) {
@@ -334,7 +343,12 @@ const TicTacToe: React.FC = () => {
            `Game Over! ${getWinnerName()} ganhou!` :
           isDraw(board) ? 
             "Empate!" :
-            `Vez de ${isXNext ? playerXName : playerOName}`
+            <div className='flex flex-row items-center gap-1'>
+              <span>
+                {!playerXName || !playerOName ? (<span className='font-bold text-fluency-yellow-500'>Jogo não iniciou</span>) : (<span className='font-medium'>Vez de <strong className='font-bold text-fluency-green-500'>{isXNext ? playerXName : playerOName}</strong></span>)}
+              </span>
+              <CiCircleQuestion onClick={openInstrucoes} className='lg:w-7 lg:h-7 w-5 h-5 text-black dark:text-white cursor-pointer'/>
+            </div>
         }
       </div>
 
@@ -347,7 +361,7 @@ const TicTacToe: React.FC = () => {
       </div>
       
       <div className="mt-4 flex flex-col items-center justify-center gap-1">
-        <p className='text-xs font-bold'>Cole o ID aqui depois de criar um jogo e aperte em Entrar</p>
+        <p className='text-xs font-bold px-1 rounded-md bg-fluency-yellow-400 dark:bg-fluency-yellow-400 text-black dark:text-black'>Cole o ID aqui depois de criar um jogo e aperte em Entrar</p>
         <FluencyInput
           type="text"
           value={gameCode}
@@ -386,6 +400,30 @@ const TicTacToe: React.FC = () => {
           </div>
         </div>
       )}
+
+        {isInstrucoesOpen && 
+          <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none transition-opacity duration-300 ${isInstrucoesOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`relative w-auto max-w-md mx-auto my-6 p-6 bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-md rounded-xl text-black dark:text-white instructions-enter`}>
+              <FluencyCloseButton onClick={closeInstrucoes} />
+              <div className='p-4'>
+                <div className="flex justify-between items-center">
+                  <h1 className="text-lg font-bold">Instruções</h1>
+                </div>
+                <div className="mt-4 text-sm">
+                  <strong>Como Jogar:</strong>
+                  <ol className="list-decimal pl-5">
+                    <li><strong>Criar um Jogo:</strong> Clique em "Criar jogo" para gerar um código. Copie e compartilhe o código com o outro jogador.</li>
+                    <li><strong>Entrar em um Jogo:</strong> Cole o código do jogo e clique em "Entrar em um jogo" para se juntar à partida.</li>
+                    <li><strong>Iniciar o Jogo:</strong> Aguarde ambos os jogadores estarem prontos e clique em "Iniciar jogo" para começar.</li>
+                    <li><strong>Movimentos:</strong> Clique em uma célula do tabuleiro, escreva uma frase com o verbo fornecido e clique em "Checar" para validar seu movimento.</li>
+                    <li><strong>Ganhar ou Empatar:</strong> O jogo termina quando um jogador vence ou quando todas as células estão preenchidas (empate).</li>
+                    <li><strong>Reiniciar o Jogo:</strong> Clique em "Criar jogo" para iniciar uma nova partida.</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
 
       <Toaster />
     </div>
