@@ -259,11 +259,11 @@ const WhatAmI: React.FC = () => {
                         <strong>Como Jogar:</strong>
                     </p>
                     <ol className="list-decimal pl-5 mb-4">
-                        <li><strong>Criar um Jogo:</strong> Clique em "Criar jogo" para iniciar uma nova partida. O ID do jogo será gerado e copiado para você.</li>
-                        <li><strong>Entrar em um Jogo:</strong> Digite o ID do jogo no campo e clique em "Entrar em um jogo" para se juntar à partida.</li>
+                        <li><strong>Criar um Jogo:</strong> Clique em Criar jogo para iniciar uma nova partida. O ID do jogo será gerado e copiado para você.</li>
+                        <li><strong>Entrar em um Jogo:</strong> Digite o ID do jogo no campo e clique em Entrar em um jogo para se juntar à partida.</li>
                         <li><strong>Fazer Chutes:</strong> Veja a dica e digite seu chute. O chute não diferencia maiúsculas de minúsculas.</li>
                         <li><strong>Regras:</strong> Tente adivinhar a palavra em até 6 chutes. Se acertar, você ganha. Se acabar as tentativas sem sucesso, o jogo termina sem vencedor.</li>
-                        <li><strong>Reiniciar o Jogo:</strong> Após o fim do jogo, clique em "Jogar novamente" para começar uma nova partida.</li>
+                        <li><strong>Reiniciar o Jogo:</strong> Após o fim do jogo, clique em Jogar novamente para começar uma nova partida.</li>
                     </ol>
                 </div>
             </div>

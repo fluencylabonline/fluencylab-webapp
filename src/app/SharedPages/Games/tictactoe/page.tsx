@@ -412,12 +412,12 @@ const TicTacToe: React.FC = () => {
                 <div className="mt-4 text-sm">
                   <strong>Como Jogar:</strong>
                   <ol className="list-decimal pl-5">
-                    <li><strong>Criar um Jogo:</strong> Clique em "Criar jogo" para gerar um código. Copie e compartilhe o código com o outro jogador.</li>
-                    <li><strong>Entrar em um Jogo:</strong> Cole o código do jogo e clique em "Entrar em um jogo" para se juntar à partida.</li>
-                    <li><strong>Iniciar o Jogo:</strong> Aguarde ambos os jogadores estarem prontos e clique em "Iniciar jogo" para começar.</li>
-                    <li><strong>Movimentos:</strong> Clique em uma célula do tabuleiro, escreva uma frase com o verbo fornecido e clique em "Checar" para validar seu movimento.</li>
+                    <li><strong>Criar um Jogo:</strong> Clique em Criar jogo para gerar um código. Copie e compartilhe o código com o outro jogador.</li>
+                    <li><strong>Entrar em um Jogo:</strong> Cole o código do jogo e clique em Entrar em um jogo para se juntar à partida.</li>
+                    <li><strong>Iniciar o Jogo:</strong> Aguarde ambos os jogadores estarem prontos e clique em Iniciar jogo para começar.</li>
+                    <li><strong>Movimentos:</strong> Clique em uma célula do tabuleiro, escreva uma frase com o verbo fornecido e clique em Checar para validar seu movimento.</li>
                     <li><strong>Ganhar ou Empatar:</strong> O jogo termina quando um jogador vence ou quando todas as células estão preenchidas (empate).</li>
-                    <li><strong>Reiniciar o Jogo:</strong> Clique em "Criar jogo" para iniciar uma nova partida.</li>
+                    <li><strong>Reiniciar o Jogo:</strong> Clique em Criar jogo para iniciar uma nova partida.</li>
                   </ol>
                 </div>
               </div>
