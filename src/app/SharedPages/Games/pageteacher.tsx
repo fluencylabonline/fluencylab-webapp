@@ -9,6 +9,7 @@ import Flashcards from '../../../../public/images/games/flashcards.svg';
 import QuizzImage from '../../../../public/images/games/quizz.svg';
 import Listening from '../../../../public/images/games/listening.png';
 import TicTacToeImage from '../../../../public/images/games/tictactoe.svg';
+import WhatAmIImage from '../../../../public/images/games/whatami.svg';
 
 export default function GamesProTeacher(){
     return(
