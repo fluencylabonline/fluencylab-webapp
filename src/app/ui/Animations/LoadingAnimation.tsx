@@ -22,7 +22,7 @@ const RedirectingPage = () => {
   }, [isChecked, isLocalStorageAvailable]);
 
   return (
-    <div className="fixed fade-in fade-out bg-fluency-bg-light dark:bg-fluency-bg-dark z-50">
+    <div className="fixed fade-in fade-out bg-transparent dark:bg-transparent z-50">
 
       <div className='flex flex-row justify-around'> 
       <iframe className='w-auto h-auto' src="https://lottie.host/embed/0642876f-5984-458c-965d-837bd42ddb72/mrsk5b9kjh.json"></iframe>

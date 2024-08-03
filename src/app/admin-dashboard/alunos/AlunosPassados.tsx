@@ -17,6 +17,7 @@ import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { LuUserCheck2 } from 'react-icons/lu';
 import { RiMailSendFill } from 'react-icons/ri';
+import FluencyInput from '@/app/ui/Components/Input/input';
 
 interface Aluno {
     id: string;
@@ -37,8 +38,10 @@ interface Aluno {
 
 export default function AlunosPassados() {
     const [alunos, setAlunos] = useState<Aluno[]>([]);
+    const [filteredAlunos, setFilteredAlunos] = useState<Aluno[]>([]);
     const [currentCollection, setCurrentCollection] = useState<string>('users');
-    
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
     useEffect(() => {
         const unsubscribe = onSnapshot(getQuery(), (snapshot) => {
             const updatedAlunos: Aluno[] = [];
@@ -66,6 +69,20 @@ export default function AlunosPassados() {
 
         return () => unsubscribe();
     }, [currentCollection]); // Re-run effect when currentCollection changes
+
+    useEffect(() => {
+        if (searchQuery === '') {
+            setFilteredAlunos(alunos);
+        } else {
+            setFilteredAlunos(
+                alunos.filter(aluno =>
+                    aluno.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    aluno.professor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    aluno.idioma.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+            );
+        }
+    }, [searchQuery, alunos]);
 
     const getQuery = () => {
         if (currentCollection === 'users') {
@@ -192,25 +209,36 @@ export default function AlunosPassados() {
         }
       };
       
-  
-      
     return (
         <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
-            <div className="flex justify-start gap-3">
-                <button
-                    onClick={() => setCurrentCollection('users')}
-                    className={currentCollection === 'users' ? 'p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'p-2 rounded-md font-bold'}
-                    color={currentCollection === 'users' ? 'primary' : 'default'}
-                >
-                    Alunos Atuais
-                </button>
-                <button
-                    onClick={() => setCurrentCollection('past_students')}
-                    className={currentCollection === 'past_students' ? 'p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'p-2 rounded-md font-bold'}
-                    color={currentCollection === 'past_students' ? 'primary' : 'default'}
-                >
-                    Alunos Passados
-                </button>
+            <div className="w-full flex flex-col gap-3">
+                <div className="flex flex-row gap-3 mb-4">
+                    <div className="w-full">
+                        <FluencyInput
+                            type="text"
+                            placeholder="Procure um aluno por aqui..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                    <div className='flex flex-row gap-1 w-full'>
+                        <button
+                            onClick={() => setCurrentCollection('users')}
+                            className={currentCollection === 'users' ? 'w-full p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'w-full p-2 rounded-md font-bold'}
+                            color={currentCollection === 'users' ? 'primary' : 'default'}
+                        >
+                            Alunos Atuais
+                        </button>
+                        <button
+                            onClick={() => setCurrentCollection('past_students')}
+                            className={currentCollection === 'past_students' ? 'w-full p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'w-full p-2 rounded-md font-bold'}
+                            color={currentCollection === 'past_students' ? 'primary' : 'default'}
+                        >
+                            Alunos Passados
+                        </button>
+                    </div>
+                </div>
+                
             </div>
             <Table>
                 <TableHeader>
@@ -223,7 +251,7 @@ export default function AlunosPassados() {
                     <TableColumn>Ações</TableColumn>
                 </TableHeader>
                 <TableBody>
-                    {alunos.map((aluno) => (
+                    {filteredAlunos.map((aluno) => (
                         <TableRow key={aluno.id}>
                             <TableCell>{aluno.name}</TableCell>
                             <TableCell>{aluno.professor}</TableCell>

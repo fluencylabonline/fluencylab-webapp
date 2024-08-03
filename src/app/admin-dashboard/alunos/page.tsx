@@ -29,6 +29,7 @@ import { Toaster, toast } from 'react-hot-toast';
 
 import Contratos from '../contratos/page';
 import AlunosPassados from './AlunosPassados';
+import Paineis from './ProfessorLista';
 
 interface Aluno {
   CNPJ: string;
@@ -375,6 +376,7 @@ const exportToExcel = () => {
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="financeiro">Financeiro</option>
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="juridico">Jurídico</option>
         <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="lista">Lista</option>
+        <option className="bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3" value="paineis">Paineis</option>
       </select>
 
       {selectedOption === 'financeiro' && (
@@ -615,6 +617,10 @@ const exportToExcel = () => {
 
       {selectedOption === 'lista' && (
           <AlunosPassados />
+      )}
+
+      {selectedOption === 'paineis' && (
+          <Paineis />
       )}
 
     <Toaster />
