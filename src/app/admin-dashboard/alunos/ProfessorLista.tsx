@@ -544,7 +544,7 @@ function Paineis(){
     };
 
 return(
-    <div className="w-full h-screen rounded-xl flex flex-col items-center mt-1 lg:px-5 px-2 py-2 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark">     
+    <div className="w-full h-[85vh] rounded-xl flex flex-col items-center mt-1 lg:px-5 px-2 py-2 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark">     
         <Toaster />
         {isModalOpen && <OverdueClassesModal overdueClasses={overdueClasses} onClose={closeModal} />}   
     
