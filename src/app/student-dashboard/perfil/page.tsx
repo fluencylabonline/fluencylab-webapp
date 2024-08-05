@@ -284,7 +284,7 @@ function Perfil() {
                     <div>
                       <Image
                         className="object-cover w-24 h-24 mb-2"
-                        src={CNPJ === '47.63.142/0001-07' ? QrCode : QrCode2}
+                        src={CNPJ === '47.603.142/0001-07' ? QrCode : QrCode2}
                         alt="FluencyLab"
                       />
                     </div>
