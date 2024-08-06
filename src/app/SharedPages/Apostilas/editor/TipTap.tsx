@@ -7,8 +7,9 @@ import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot, onSna
 import { db } from "@/app/firebase";
 
 import { toast, Toaster } from 'react-hot-toast';
-//Icons
 import '@/app/ui/TipTap//styles.scss'
+
+import Toolbar from "@/app/ui/TipTap/Toolbar";
 
 //Imports
 import Link from '@tiptap/extension-link'
@@ -22,27 +23,40 @@ import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import FontFamily from '@tiptap/extension-font-family'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
 
-import Toolbar from "@/app/ui/TipTap/Toolbar";
-import { Popover, PopoverTrigger, PopoverContent, Button, Tooltip } from '@nextui-org/react';
+import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
-import FluencyInput from '@/app/ui/Components/Input/input';
-import FluencyButton from '@/app/ui/Components/Button/button';
-import { VscWholeWord } from 'react-icons/vsc';
-import { useSession } from 'next-auth/react';
-
-import ReactComponent from './Extension';
-import Embed from './Embed';
-
-import EmbedSelectionModal from './EmbedSelectionModal';
-import AudioSelectionModal from './AudioSelectionModal';
 import { LuFileAudio } from 'react-icons/lu';
 import { AiFillYoutube } from 'react-icons/ai';
 import { CgTranscript } from 'react-icons/cg';
+import { VscWholeWord } from 'react-icons/vsc';
+import { GoGoal } from "react-icons/go";
 
-import SpeakingExtension from './SpeakingComponent/SpeakingExtension';
-import SpeakingSelectionModal from './SpeakingComponent/SpeakingSelectionModal';
+import FluencyInput from '@/app/ui/Components/Input/input';
+import FluencyButton from '@/app/ui/Components/Button/button';
 
+import { Popover, PopoverTrigger, PopoverContent, Button, Tooltip } from '@nextui-org/react';
+import { useSession } from 'next-auth/react';
+
+import ReactComponent from './Components/AudioComponent/Extension';
+import Embed from './Components/EmbedComponent/Embed';
+
+import EmbedSelectionModal from './Components/EmbedComponent/EmbedSelectionModal';
+import AudioSelectionModal from './Components/AudioComponent/AudioSelectionModal';
+
+import SpeakingExtension from './Components/SpeakingComponent/SpeakingExtension';
+import SpeakingSelectionModal from './Components/SpeakingComponent/SpeakingSelectionModal';
+
+import TextDisplayModal from './Components/StudentComponent/StudentModal';
+import StudentExtension from './Components/StudentComponent/StudentExtension';
+
+import TextDisplayModalTeacher from './Components/TeacherComponent/TeacherModal';
+import TeacherExtension from './Components/TeacherComponent/TeacherExtension';
+
+import TextDisplayModalTip from './Components/TipComponent/TipModal';
+import TipExtension from './Components/TipComponent/TipExtension';
 
 type PopoversProps = {
   editor: Editor;
@@ -133,6 +147,21 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const [description, setDescription] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
 
+  const [isModalTextOpen, setModalTextOpen] = useState(false);
+  const [initialText, setInitialText] = useState('');
+  const handleOpenModal = () => setModalTextOpen(true);
+  const handleCloseModal = () => setModalTextOpen(false);
+
+  const [isModalTextTeacherOpen, setModalTextTeacherOpen] = useState(false);
+  const [initialTextTeacher, setInitialTextTeacher] = useState('');
+  const handleOpenModalTeacher = () => setModalTextTeacherOpen(true);
+  const handleCloseModalTeacher = () => setModalTextTeacherOpen(false);
+
+  const [isModalTextTipOpen, setModalTextTipOpen] = useState(false);
+  const [initialTextTip, setInitialTextTip] = useState('');
+  const handleOpenModalTip = () => setModalTextTipOpen(true);
+  const handleCloseModalTip = () => setModalTextTipOpen(false);
+
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDescription(event.target.value);
   };
@@ -171,6 +200,13 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       ReactComponent,
       Embed,
       SpeakingExtension,
+      StudentExtension,
+      TeacherExtension,
+      TipExtension,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
       Link.configure({
         openOnClick: true,
       }),
@@ -271,13 +307,16 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       editor.chain().focus().insertContent(`<speaking-component audioId="${audioId}"></speaking-component>`).run();
     }
   };
-
+  
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       {session?.user.role === 'admin' && <Toolbar editor={editor} content={content} addImage={addImage} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
       <EditorContent editor={editor} />
-      
       <Popovers editor={editor} />
+
+        <TextDisplayModal isOpen={isModalTextOpen} onClose={handleCloseModal} initialText={initialText} editor={editor} />
+        <TextDisplayModalTeacher isOpen={isModalTextTeacherOpen} onClose={handleCloseModalTeacher} initialTextTeacher={initialTextTeacher} editor={editor} />
+        <TextDisplayModalTip isOpen={isModalTextTipOpen} onClose={handleCloseModalTip} initialTextTip={initialTextTip} editor={editor} />
 
         <AudioSelectionModal
           isOpen={isModalOpen}
@@ -286,9 +325,10 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         />
 
         <SpeakingSelectionModal 
-        isOpen={isModalTranscriptOpen} 
-        onClose={() => setIsModalTranscriptOpen(false)} 
-        onSelectAudio={handleSelectTranscript} />
+          isOpen={isModalTranscriptOpen} 
+          onClose={() => setIsModalTranscriptOpen(false)} 
+          onSelectAudio={handleSelectTranscript} 
+        />
 
         <EmbedSelectionModal
           isEmbedOpen={isModalEmbedOpen}
@@ -360,6 +400,34 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
             <AiFillYoutube />
           </button>
           </Tooltip>
+
+          <Tooltip content='Clique para faixa de aluno' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={handleOpenModal}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <PiStudentFill />
+          </button>
+          </Tooltip>
+
+          <Tooltip content='Clique para faixa de professor' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={handleOpenModalTeacher}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <PiChalkboardTeacher />
+          </button>
+          </Tooltip>
+
+          <Tooltip content='Clique para adicionar uma dica' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={handleOpenModalTip}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <GoGoal />
+          </button>
+          </Tooltip>
+          
           </div>
         </div>}
 

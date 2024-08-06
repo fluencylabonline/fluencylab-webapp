@@ -24,6 +24,8 @@ import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import FontFamily from '@tiptap/extension-font-family'
 import {FontSize} from './font-size';
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
 
 import Toolbar from "./Toolbar";
 import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem, Tooltip } from '@nextui-org/react';
@@ -35,18 +37,18 @@ import { PiNotebookBold } from 'react-icons/pi';
 import FluencyCloseButton from '../Components/ModalComponents/closeModal';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 
-import ReactComponent from '@/app/SharedPages/Apostilas/editor/Extension';
-import Embed from '@/app/SharedPages/Apostilas/editor/Embed';
+import ReactComponent from '@/app/SharedPages/Apostilas/editor/Components/AudioComponent/Extension';
+import Embed from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/Embed';
 
-import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/EmbedSelectionModal';
-import AudioSelectionModal from '@/app/SharedPages/Apostilas/editor/AudioSelectionModal';
+import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/EmbedSelectionModal';
+import AudioSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/AudioComponent/AudioSelectionModal';
 import { LuFileAudio } from 'react-icons/lu';
 import { AiFillYoutube } from 'react-icons/ai';
 
 import { CgTranscript } from 'react-icons/cg';
 
-import SpeakingExtension from '@/app/SharedPages/Apostilas/editor/SpeakingComponent/SpeakingExtension';
-import SpeakingSelectionModal from '@/app/SharedPages/Apostilas/editor/SpeakingComponent/SpeakingSelectionModal';
+import SpeakingExtension from '@/app/SharedPages/Apostilas/editor/Components/SpeakingComponent/SpeakingExtension';
+import SpeakingSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/SpeakingComponent/SpeakingSelectionModal';
 
 //Realtime
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
@@ -313,6 +315,10 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       TextStyle, 
       FontFamily,
       FontSize,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
       ReactComponent,
       Embed,
       SpeakingExtension,

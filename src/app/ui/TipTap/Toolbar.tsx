@@ -22,6 +22,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import FluencyInput from "../Components/Input/input";
 import FluencyButton from "../Components/Button/button";
 import FluencyCloseButton from "../Components/ModalComponents/closeModal";
+import { RiTaskLine } from "react-icons/ri";
 
 type Props = {
   editor: Editor | null;
@@ -99,7 +100,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
 
   return (
     <div className='sticky top-0 z-10 flex flex-row flex-wrap items-center justify-center gap-2 w-full rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
-      
+        
         <div role="status">
           <svg aria-hidden="true" className={`w-5 h-5 text-gray-200 ${isTyping ? 'animate-spin fill-fluency-blue-500 ease-in-out transition-all duration-300' : 'flex ease-in-out transition-all duration-300'} dark:text-gray-600`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -154,7 +155,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-          <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
           <LuHeading1 className="w-5 h-auto" />
           </button>
         </Tooltip>
@@ -165,7 +166,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-          <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
           <LuHeading2 className="w-5 h-auto" />
           </button>
         </Tooltip>
@@ -223,7 +224,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
 
         <Dropdown>
           <DropdownTrigger>
-            <Button variant="bordered" className={editor.isActive('paragraph') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <Button variant="bordered" className={editor.isActive('paragraph') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
               <PiTextTBold className="w-5 h-auto" />
             </Button>
           </DropdownTrigger>
@@ -244,7 +245,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-          <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
           <PiTextBBold className="w-5 h-auto" />
           </button>
         </Tooltip>
@@ -255,7 +256,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-          <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
           <FaItalic  className="w-4 h-auto" />
           </button>
         </Tooltip>
@@ -266,7 +267,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-          <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={editor.isActive('highlight') ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={editor.isActive('highlight') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
           <LuHighlighter className="w-5 h-auto" />
           </button>
         </Tooltip>
@@ -303,7 +304,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-            <button onClick={() => editor.chain().focus().setTextAlign('left').run()} className={editor.isActive({ textAlign: 'left' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <button onClick={() => editor.chain().focus().setTextAlign('left').run()} className={editor.isActive({ textAlign: 'left' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
             <PiTextAlignLeft className="w-5 h-auto" />
             </button>
         </Tooltip>
@@ -314,7 +315,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-            <button onClick={() => editor.chain().focus().setTextAlign('center').run()} className={editor.isActive({ textAlign: 'center' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <button onClick={() => editor.chain().focus().setTextAlign('center').run()} className={editor.isActive({ textAlign: 'center' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
             <PiTextAlignCenter className="w-5 h-auto" />
             </button>
         </Tooltip>
@@ -325,7 +326,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-            <button onClick={() => editor.chain().focus().setTextAlign('right').run()} className={editor.isActive({ textAlign: 'right' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <button onClick={() => editor.chain().focus().setTextAlign('right').run()} className={editor.isActive({ textAlign: 'right' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
             <PiTextAlignRight className="w-5 h-auto" />
             </button>
         </Tooltip>
@@ -336,7 +337,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             color="primary"
             placement="bottom"
           >
-            <button onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <button onClick={() => editor.chain().focus().setTextAlign('justify').run()} className={editor.isActive({ textAlign: 'justify' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
             <PiTextAlignJustify className="w-5 h-auto" />
             </button>
         </Tooltip>
@@ -370,13 +371,27 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
       <p>|</p>
 
       <div className="lg:block md:block hidden">
+
+          <Tooltip
+            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+            content="Criar tarefa"
+            color="primary"
+            placement="bottom"
+          >
+            <button
+            onClick={() => editor.chain().focus().toggleTaskList().run()} 
+            className={editor.isActive('taskList') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <RiTaskLine className="w-5 h-auto" />
+            </button>
+          </Tooltip>
+
         <Tooltip
             className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
             content="Adicionar imagem com link"
             color="primary"
             placement="bottom"
           >
-            <button onClick={addImage} className={editor.isActive('image', {  }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <button onClick={addImage} className={editor.isActive('image', {  }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
               <IoImage className="w-5 h-auto" />
             </button>
         </Tooltip>
@@ -390,7 +405,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
           >
           <button
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={editor.isActive({ CodeBlock: 'codebloc' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            className={editor.isActive({ CodeBlock: 'codebloc' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
             <AiOutlineBlock className="w-5 h-auto" />
           </button>
         </Tooltip>
@@ -402,7 +417,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             placement="bottom"
           >
           <button onClick={() => editor.chain().focus().setHorizontalRule().run()}
-            className={editor.isActive({ rule: 'rule' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            className={editor.isActive({ rule: 'rule' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
             <GoHorizontalRule className="w-6 h-auto"/>
           </button>
         </Tooltip>
@@ -414,7 +429,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             content="Remover link"
             color="primary">
             <button
-              className={editor.isActive({ unlink: 'unlink' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}
+              className={editor.isActive({ unlink: 'unlink' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}
               title="Remove link"
               onClick={() => editor.chain().focus().unsetLink().run()}
             >
@@ -427,7 +442,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             content="Adicionar link"
             color="primary">
             <button 
-              className={editor.isActive({ link: 'link' }) ? 'text-fluency-gray-500 dark:text-fluency-gray-600 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}
+              className={editor.isActive({ link: 'link' }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}
               title="add a link" onClick={() => setModal(true)}>
               <FaLink />
             </button>

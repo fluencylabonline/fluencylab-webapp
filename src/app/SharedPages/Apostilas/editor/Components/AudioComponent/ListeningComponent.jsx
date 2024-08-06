@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase'; // Ensure correct import
-import AudioPlayer from '../../Games/listening/component/playerComponent';
+import AudioPlayer from '@/app/SharedPages/Games/listening/component/playerComponent';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import { toast, Toaster } from 'react-hot-toast';
