@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react"
 import AuthProvider from './context/AuthProvider'
 import { Quicksand } from "next/font/google";
 import "./globals.css";
@@ -24,6 +25,7 @@ export default function RootLayout({
         <AuthProvider>
           <main>
             {children}
+            <Analytics />
           </main>
         </AuthProvider>
       </body>
