@@ -348,6 +348,23 @@ export default function ApostilasCreation() {
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Slides <TbBookDownload  onClick={() => handleDownloadWorkbook('Slides')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
+
+            {session?.user.role === 'admin' && (
+                <button onClick={() => {
+                    setFirststeps2(true);                
+                    setFirststeps(false);
+                    setThebasics(false);
+                    setAllyouneedtoknow(false);
+                    setTraveling(false);
+                    setInstrumentalEnglish(false);
+                    setKids(false);
+                    setSlidesClass(false);
+                    setSearchTerm('');
+                }} 
+                className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
+                    First Steps II <TbBookDownload  onClick={() => handleDownloadWorkbook('Slides')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
+                </button>
+            )}
         </div>
         
 
@@ -386,6 +403,11 @@ export default function ApostilasCreation() {
             {slidesClass && 
             <div className={slidesClass ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
                 <Slides />
+            </div>}
+
+            {firststeps2 && 
+            <div className={firststeps2 ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
+                <FirstSteps2 />
             </div>}
         </div>
         ) : (

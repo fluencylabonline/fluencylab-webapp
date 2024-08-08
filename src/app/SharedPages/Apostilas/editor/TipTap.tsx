@@ -25,6 +25,8 @@ import TextStyle from '@tiptap/extension-text-style'
 import FontFamily from '@tiptap/extension-font-family'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import BulletList from '@tiptap/extension-bullet-list'
+import Typography from '@tiptap/extension-typography'
 
 import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
@@ -191,6 +193,15 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const { data: session } = useSession();
   const [editable, setEditable] = useState(false)
 
+  const CustomBulletList = BulletList.extend({
+    addKeyboardShortcuts() {
+      return {
+        // ↓ your new keyboard shortcut
+        'Tab': () => this.editor.commands.toggleBulletList(),
+      }
+    },
+  })
+
   const editor = useEditor({
     extensions: [
       CustomDocument,
@@ -203,6 +214,9 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       StudentExtension,
       TeacherExtension,
       TipExtension,
+      Typography,
+      BulletList,
+      CustomBulletList,
       TaskList,
       TaskItem.configure({
         nested: true,

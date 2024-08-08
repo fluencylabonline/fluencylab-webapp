@@ -26,6 +26,8 @@ import FontFamily from '@tiptap/extension-font-family'
 import {FontSize} from './font-size';
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import BulletList from '@tiptap/extension-bullet-list'
+import Typography from '@tiptap/extension-typography'
 
 import Toolbar from "./Toolbar";
 import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem, Tooltip } from '@nextui-org/react';
@@ -308,6 +310,15 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     content: 'heading block*',
   })
 
+  const CustomBulletList = BulletList.extend({
+    addKeyboardShortcuts() {
+      return {
+        // ↓ your new keyboard shortcut
+        'Tab': () => this.editor.commands.toggleBulletList(),
+      }
+    },
+  })
+
   const editor = useEditor({
     extensions: [
       CustomDocument,
@@ -315,6 +326,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       TextStyle, 
       FontFamily,
       FontSize,
+      Typography,
       TaskList,
       TaskItem.configure({
         nested: true,
@@ -322,6 +334,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       ReactComponent,
       Embed,
       SpeakingExtension,
+      BulletList,
+      CustomBulletList,
       Link.configure({
         openOnClick: true,
       }),

@@ -372,18 +372,18 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
 
       <div className="lg:block md:block hidden">
 
-          <Tooltip
-            className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
-            content="Criar tarefa"
-            color="primary"
-            placement="bottom"
-          >
-            <button
-            onClick={() => editor.chain().focus().toggleTaskList().run()} 
-            className={editor.isActive('taskList') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
-            <RiTaskLine className="w-5 h-auto" />
-            </button>
-          </Tooltip>
+        <Tooltip
+          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+          content="Criar tarefa"
+          color="primary"
+          placement="bottom"
+        >
+          <button
+          onClick={() => editor.chain().focus().toggleTaskList().run()} 
+          className={editor.isActive('taskList') ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+          <RiTaskLine className="w-5 h-auto" />
+          </button>
+        </Tooltip>
 
         <Tooltip
             className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'

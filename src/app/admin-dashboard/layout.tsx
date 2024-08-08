@@ -13,7 +13,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
 import { MdOndemandVideo, MdOutlineCollectionsBookmark } from "react-icons/md";
-import { LuBookCopy } from 'react-icons/lu';
+import { LuBookCopy, LuGamepad2 } from 'react-icons/lu';
 import { FiUserPlus } from 'react-icons/fi';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -124,6 +124,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Apostilas",
       path: "/admin-dashboard/apostilas",
       icon: <LuBookCopy  className="h-6 w-6"/>,
+    },
+    {
+      name: "Prática",
+      path: "/admin-dashboard/pratica",
+      icon: <LuGamepad2 className="h-6 w-6"/>,
     },
     {
       name: "Aulas Gravadas",

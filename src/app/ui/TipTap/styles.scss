@@ -5,6 +5,13 @@
       margin-right: 8px;
     }
 
+    mark {
+      background-color: #e4de6e;
+      border-radius: 0.4rem;
+      box-decoration-break: clone;
+      padding: 0.1rem 0.3rem;
+    }
+
     a {
       color: #1e75c5;
       font-weight: bold;
