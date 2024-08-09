@@ -35,7 +35,7 @@ interface Aluno {
     mensalidade: string;
     idioma: string[];
     teacherEmails: string[];
-    chooseProfessor: string;
+    professor: string;
     professorId: string;
     diaAula?: string[];
     profilePicUrl?: string;
@@ -108,12 +108,15 @@ function Paineis(){
             setFilteredStudents(students); // Show all students if search query is empty
             return;
         }
-
+    
         const filtered = students.filter(student =>
-            student.name.toLowerCase().includes(searchQuery.toLowerCase())
+            student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            student.professor.toLowerCase().includes(searchQuery.toLowerCase())
         );
+    
         setFilteredStudents(filtered);
     }, [searchQuery, students]);
+    
 
     // Update filtered students when search query changes
     useEffect(() => {
@@ -237,7 +240,7 @@ function Paineis(){
                         idioma: userData.idioma,
                         teacherEmails: userData.teacherEmails,
                         diaAula: userData.diaAula,
-                        chooseProfessor: userData.chooseProfessor,
+                        professor: userData.professor,
                         frequencia: userData.frequencia,
                         doneClassesCount: doneClassesCount,
                         overdueClassesCount: overdueClassesCount,
@@ -608,16 +611,21 @@ return(
                                 <div>
                                     <p className='font-semibold text-lg'>{student.name}</p>
                                     <p className='font-medium text-xs'>{student.number}</p>
-                                    <p className="font-bold text-xs bg-fluency-blue-400 dark:bg-fluency-blue-900 px-2 py-[2px] rounded-md text-white">Dias de aula:
-                                        {student.diaAula?.map((dia) => (
-                                        <span className='ml-1' key={dia}>{dia}, </span>
-                                        ))}
-                                    </p>    
+                                    <div className='flex flex-col gap-1 items-start'>
+                                        <p className='px-2 p-1 text-xs mt-1 rounded-md font-bold bg-fluency-yellow-500 dark:bg-fluency-yellow-900 hover:bg-fluency-yellow-600 text-white duration-300 ease-in-out transition-all'
+                                            >Professor: <span>{student.professor}</span>
+                                        </p>  
+                                        <p className="font-bold text-xs bg-fluency-blue-400 dark:bg-fluency-blue-900 px-2 py-[2px] rounded-md text-white">Dias de aula:
+                                            {student.diaAula?.map((dia) => (
+                                            <span className='ml-1' key={dia}>{dia}, </span>
+                                            ))}
+                                        </p>    
+                                    </div>    
                                     <button 
                                         onClick={() => openEditingDayModal(student.id)}
-                                        className='px-2 p-1 text-xs mt-1 rounded-md font-bold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-white duration-300 ease-in-out transition-all'
+                                        className='px-2 p-1 text-xs mt-1 rounded-md font-bold bg-fluency-blue-400 dark:bg-fluency-blue-900 hover:bg-fluency-blue-600 text-white duration-300 ease-in-out transition-all'
                                         >Mudar dia de aula
-                                    </button>                                    
+                                    </button>                     
                                 </div>
                             </div>
                             <div className='flex font-medium flex-col items-center w-full'>
@@ -662,7 +670,10 @@ return(
                             <CiCircleQuestion className='text-lg cursor-pointer' onClick={openInstrucoes}/>
 
                         </div>
-                        {student.classDatesWithStatus.slice(0, showAllDates ? student.classDatesWithStatus.length : 4).map((classDate, index) => (
+                        {student.classDatesWithStatus
+                        .filter(classDate => classDate.status !== 'Modificada')
+                        .slice(0, showAllDates ? student.classDatesWithStatus.length : 4)
+                        .map((classDate, index) => (
                             <div key={index} className="flex flex-row gap-2 items-center justify-center">
                                 <div className="group cursor-pointer relative inline-block text-center">
                                     <p className={`flex flex-row font-semibold gap-1 p-1 px-2 rounded-lg text-sm ${classDate.status === 'Feita' ? 'text-fluency-green-500' : classDate.status === 'Cancelada' ? 'text-yellow-500' : classDate.status === 'À Fazer' ? 'text-fluency-blue-600' : classDate.status === 'Atrasada' ? 'text-fluency-red-600' : ''}`}>
