@@ -279,17 +279,29 @@ export default function Caderno(){
     const [reportContent, setReportContent] = useState<string>('');
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
-    const handleOpenReportModal = (notebookId: string, currentReport: string) => {
+    const handleOpenReportModal = async (notebookId: string) => {
         setModalNoteId(notebookId);
-        setReportContent(currentReport);
+    
+        // Fetch the current report content from the database
+        const notebookRef = doc(db, `users/${id}/Notebooks/${notebookId}`);
+        const notebookSnap = await getDoc(notebookRef);
+    
+        if (notebookSnap.exists()) {
+            const currentReport = notebookSnap.data().classReport || '';
+            setReportContent(currentReport);
+        } else {
+            setReportContent('');
+        }
+    
         setIsReportModalOpen(true);
     };
+    
 
     const handleCloseReportModal = () => {
         setModalNoteId(null);
         setReportContent('');
         setIsReportModalOpen(false);
-    };
+    };    
 
     const handleReportContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setReportContent(e.target.value);
@@ -428,7 +440,7 @@ export default function Caderno(){
                                 </Tooltip>
 
                                 <Tooltip content="Relatório de aula" className='bg-fluency-blue-300 font-bold text-black rounded-md px-1'>
-                                <p><HiOutlineDocumentReport onClick={() => handleOpenReportModal(notebook.id, notebook.classReport || '')} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
+                                <p><HiOutlineDocumentReport onClick={() => handleOpenReportModal(notebook.id)} className='w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer'/></p>
                                 </Tooltip>
                             </div>
                         </li>
