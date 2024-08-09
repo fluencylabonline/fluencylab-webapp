@@ -52,7 +52,7 @@ export default function ForgotPassword() {
         <div className="flex flex-col gap-4 w-full py-10 px-5 md:px-10">
           <div className="text-center mb-6">
             <h1 className="font-bold text-3xl">Vamos lá!</h1>
-            <p>Por favor, informe seu e-mail para recuperamors sua senha.</p>
+            <p>Por favor, informe seu e-mail para recuperarmos sua senha.</p>
           </div>
           <div className="w-full px-3 mb-2">
             <label className="text-xs font-semibold px-1">Seu email</label>

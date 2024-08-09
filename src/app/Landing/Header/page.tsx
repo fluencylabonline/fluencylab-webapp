@@ -89,6 +89,7 @@ const navigation = [
               });
             }
           };
+
     return(
         <div className="text-fluency-text-light mt-2 mr-3 ml-3 rounded-xl overflow-hidden h-[95vh]">
         {/*Navbar*/}
@@ -124,7 +125,7 @@ const navigation = [
                     </div>
                     <div className="hidden lg:flex lg:gap-x-12">          
                         {navigation.map((item) => (
-                        <a id='navbarheader' key={item.name} href={item.href} className="font-bold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
+                        <a onClick={() => setMobileMenuOpen(false)} id='navbarheader' key={item.name} href={item.href} className="font-bold border-b-4 border-transparent text-fluency-text-light dark:text-fluency-text-dark mx-1 sm:mx-1">
                             {item.name}
                         </a>
                         ))}
@@ -152,8 +153,7 @@ const navigation = [
                         </a>
                         <button
                             type="button"
-                            className="rounded-md mt-4 text-gray-900 "
-                            onClick={() => setMobileMenuOpen(false)}
+                            className="rounded-md mt-4 text-gray-900"
                         >
                             <span className="sr-only">Close menu</span>
                             <div className="relative cursor-pointer group focus:outline-none">
@@ -170,6 +170,7 @@ const navigation = [
                             <div className="space-y-2 py-6 flex flex-col items-center gap-5">
                             {navigation.map((item) => (
                                 <a
+                                onClick={() => setMobileMenuOpen(false)}
                                 key={item.name}
                                 href={item.href}
                                 className="-mx-3 block rounded-lg px-3 py-2 text-lg font-bold leading-7 text-fluency-text-light dark:text-fluency-text-dark ease-in-out duration-300"
@@ -264,7 +265,7 @@ const navigation = [
       </div>
 
         <div
-            className={`fixed bottom-4 ${
+            className={`fixed bottom-4 z-[99999] ${
                 isScrolled ? 'right-4' : 'left-1/2 transform -translate-x-1/2'
             } cursor-pointer bouncing-arrow-container`}
             onClick={scrollToTop}

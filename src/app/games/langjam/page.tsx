@@ -55,8 +55,8 @@ const LangJam = () => {
                 </Link>
 
                 <div className='flex flex-row gap-5'>
-                    <button id='navbarheader' className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'>Material</button>                    
-                    <button id='navbarheader' className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'>Métodos</button>
+                    <button className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-yellow-500 ease-in-out duration-300 mx-1 sm:mx-1'><a href='https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/MateriaisFluencyJam%2FFluencyJamChallenge.pdf?alt=media&token=458fee2f-ca4f-4c66-a895-52a005a2225f' target='blank' >Material</a></button>                    
+                    <button className='font-semibold border-b-2 border-transparent text-zinc-900 dark:text-gray-100 hover:border-fluency-light-yellow ease-in-out duration-300 mx-1 sm:mx-1'><a>Métodos</a></button>
                 </div>
 
                 <div className=''>
@@ -67,7 +67,7 @@ const LangJam = () => {
                 <div className='m-5 flex items-center overflow-hidden'>
                     <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark text-zinc-900 dark:text-gray-100 rounded-xl lg:p-0 p-10 flex flex-col justify-center items-center gap-5 w-screen h-max'>
                         <Image
-                            className="h-32 w-auto p-4"
+                            className="h-auto w-[60%] p-4"
                             src={Logo}
                             alt="FluencyLab"
                             priority
