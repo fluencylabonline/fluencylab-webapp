@@ -508,7 +508,7 @@ export default function Listening() {
                                 >
                                     {doc.name}
                                 </button>
-                                {session?.user.role === 'teacher' || 'admin' &&
+                                {session?.user.role === 'teacher' &&
                                <div className='flex flex-row gap-1 items-center'>
                                      <Tooltip className='px-1 bg-fluency-red-500 text-white font-bold rounded-md' content="Apagar áudio">
                                         <button
