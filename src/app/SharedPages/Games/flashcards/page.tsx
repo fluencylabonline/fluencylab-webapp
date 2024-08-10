@@ -59,6 +59,11 @@ const FlashCard: FC = () => {
     const [otherDecks, setOtherDecks] = useState<Deck[]>([]);
     const [otherCards, setOtherCards] = useState<Card[]>([]);
     const [otherDecksList, setOtherDecksList] = useState<boolean>(false);
+    
+    const [searchTerm, setSearchTerm] = useState('');
+    const filteredDecks = otherDecks.filter(deck =>
+        deck.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const openOtherlDecks = () => {setOtherDecksList(true)}
     const closeOtherlDecks = () => {setOtherDecksList(false)}
@@ -419,12 +424,22 @@ const FlashCard: FC = () => {
 
                 {session?.user.role === 'teacher' &&
                 <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
-                {session?.user.role === 'teacher' && <FluencyButton variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>}
+                {session?.user.role === 'teacher' && (
+                    <div className='flex flex-col items-center gap-1 w-full'>
+                        <FluencyButton className='w-max' variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>
+                        <FluencyInput
+                            type="text"
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                            placeholder="Lista de decks..."
+                            className="w-max"
+                        />
+                    </div>)}
+                
                 {session?.user.role === 'teacher' && (
                 <div className='flex flex-col items-center gap-2 p-2 h-[70vh] overflow-hidden overflow-y-scroll'>
-                    Lista de decks
                     <ul className='flex flex-col items-start p-4 gap-2'>
-                        {otherDecks.map(deck => (
+                        {filteredDecks.map(deck => (
                             <li className='flex flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-bg-light dark:bg-fluency-bg-dark w-full justify-between' key={deck.id}>
                                 <p className='font-bold'>{deck.name}</p>
                                 <div className='flex flex-row gap-2 items-center'>
