@@ -416,10 +416,10 @@ const FlashCard: FC = () => {
                     
                 </>}
 
-                {session?.user.role === 'teacher' || 'admin' &&
+                {session?.user.role === 'teacher' &&
                 <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
-                {session?.user.role === 'teacher' || 'admin' && <FluencyButton variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>}
-                {session?.user.role === 'teacher' || 'admin' && (
+                {session?.user.role === 'teacher' && <FluencyButton variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>}
+                {session?.user.role === 'teacher' && (
                 <div className='flex flex-col items-center gap-2 p-2 h-[70vh] overflow-hidden overflow-y-scroll'>
                     Lista de decks
                     <ul className='flex flex-col items-start p-4 gap-2'>
@@ -435,6 +435,7 @@ const FlashCard: FC = () => {
                 </div>)}
                 </div>}
             </div>
+
             {globalDecksPractice &&
             <div className='flex flex-col items-center'>
                 <div className='flex flex-col items-center gap-2 p-8'>
