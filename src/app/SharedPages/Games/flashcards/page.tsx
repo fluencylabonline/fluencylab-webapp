@@ -199,10 +199,11 @@ const FlashCard: FC = () => {
                     setSelectedDeck(newDeckName);
                     toast.success("Deck criado!");
                 } else {
-                    alert('Deck already exists!');
+                    toast.error('Deck already exists!');
                 }
             } catch (error) {
                 console.error('Error creating deck:', error);
+                toast.error('Erro!');
             }
         }
     };
@@ -587,7 +588,7 @@ const FlashCard: FC = () => {
                                     
                                     <div className='flex flex-col gap-3 items-center w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md'>
                                     <h4 className="text-lg leading-6 font-medium">Criar cartão</h4>
-                                        <div className='flex flex-row gap-2 w-full items-center'>
+                                        <div className='flex flex-col gap-2 w-full items-start'>
                                             <select className="ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" value={selectedDeck} onChange={e => setSelectedDeck(e.target.value)}>
                                                 <option value="">Selecione um deck</option>
                                                 {otherDecks.map(deck => (
@@ -596,14 +597,16 @@ const FlashCard: FC = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                            <FluencyInput 
-                                                type="text" 
-                                                value={newDeckName} 
-                                                onChange={e => setNewDeckName(e.target.value)} 
-                                                className='w-full'
-                                                placeholder="Ou crie um deck novo" 
-                                            />
-                                            <FluencyButton className='w-full' onClick={createDeck}>Criar deck</FluencyButton>
+                                            <div className='flex flex-row gap-1 w-full'>
+                                                <FluencyInput 
+                                                    type="text" 
+                                                    value={newDeckName} 
+                                                    onChange={e => setNewDeckName(e.target.value)} 
+                                                    className='w-full'
+                                                    placeholder="Ou crie um deck novo: 'Nome do deck - Idioma'" 
+                                                />
+                                                <FluencyButton className='w-min' onClick={createDeck}>Criar</FluencyButton>
+                                            </div>
                                         </div>
 
                                         <FluencyInput 
