@@ -230,9 +230,9 @@ const TicTacToe: React.FC = () => {
             await updateDoc(doc(db, 'games', gameId), {
               board: newBoard,
               isXNext: !isXNext,
-              randomVerb: getRandomVerb() // Update the random verb after a move
+              randomVerb: getRandomVerb()
             });
-
+            
             // Check for a winner or draw after the move
             const winner = checkWinner(newBoard);
             if (winner) {
