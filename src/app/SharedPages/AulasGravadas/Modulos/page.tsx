@@ -3,11 +3,9 @@ import { useState, useEffect, useCallback } from "react";
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/app/firebase';
-
 import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyInput from "@/app/ui/Components/Input/input";
 import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
-
 import { useSession } from 'next-auth/react';
 import toast, { Toaster } from "react-hot-toast";
 import Link from 'next/link';
@@ -29,12 +27,15 @@ export default function Modulos() {
     const [color, setColor] = useState('blue');
     const [modules, setModules] = useState<Module[]>([]);
     const [loading, setLoading] = useState(true); // Loading state
-
-    // Extract language area name from URL
-    const params = new URLSearchParams(window.location.search);
-    const languageareaName = params.get('languageareaName');
+    const [languageareaName, setLanguageareaName] = useState<string | null>(null);
 
     const { data: session } = useSession();
+
+    // Extract language area name from URL on client side
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setLanguageareaName(params.get('languageareaName'));
+    }, []);
 
     // Memoized function to fetch modules from Firestore
     const fetchModules = useCallback(async () => {
