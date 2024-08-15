@@ -11,6 +11,7 @@ import DocumentAnimation from '../Animations/DocumentAnimation';
 
 // CSS for button animation
 import './styles.scss'; // Import your CSS file for animations
+import { usePathname } from 'next/navigation';
 
 const NotebookEditor = () => {
   const params = new URLSearchParams(window.location.search);
@@ -90,6 +91,10 @@ const NotebookEditor = () => {
     const countdownInterval = setInterval(() => {
       setTimeLeft(prev => Math.max(prev - 1000, 0));
     }, 1000);
+
+    window.onbeforeunload = function () {
+      saveVersion();
+    };
 
     return () => {
       clearInterval(saveInterval);

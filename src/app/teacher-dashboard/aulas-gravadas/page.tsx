@@ -1,6 +1,6 @@
-import PageGravadas from '@/app/SharedPages/AulasGravadas/Ingles/page';
+import PageGravadas from '@/app/SharedPages/AulasGravadas/page';
 
-export default function GravadasTeacher(){
+export default function GravadasManager(){
     return(
         <PageGravadas />
     )
