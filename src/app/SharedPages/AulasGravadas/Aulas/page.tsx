@@ -55,8 +55,6 @@ export default function Aulas() {
     const [description, setDescription] = useState('');
     const [ankiLink, setAnkiLink] = useState('');
     const [externalLinks, setExternalLinks] = useState('');
-    
-
     const [editClass, setEditClass] = useState<ClassData | null>(null);
     const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState(false);
     const [classToDelete, setClassToDelete] = useState<ClassData | null>(null);
@@ -66,10 +64,23 @@ export default function Aulas() {
     const [selectedStudentId, setSelectedStudentId] = useState('');
     const [loading, setLoading] = useState(true);
 
+    const [languageareaName, setLanguageareaName] = useState<string | null>(null);
+    const [moduleID, setModuleID] = useState<string | null>(null);
+
+
     // Extract moduleID from URL parameters
+    /*
     const params = new URLSearchParams(window.location.search);
     const moduleID = params.get('moduleID');
     const languageareaName = params.get('languageareaName');
+    */
+
+    // Extract language area name from URL on client side
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setLanguageareaName(params.get('languageareaName'));
+        setModuleID(params.get('moduleID'));
+    }, []);
 
     // Function to handle opening the create class modal
     const openCreateClass = () => {
