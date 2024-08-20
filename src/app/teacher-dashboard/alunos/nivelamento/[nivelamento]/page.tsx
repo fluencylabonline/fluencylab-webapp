@@ -6,6 +6,9 @@ import { db } from "@/app/firebase";
 import { collection, doc, setDoc, getDocs, DocumentData, getDoc } from "firebase/firestore";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
 import LoadingAnimation from "@/app/ui/Animations/LoadingAnimation";
+import DOMPurify from 'dompurify';
+import { Accordion, AccordionItem } from "@nextui-org/react";
+import { timeStamp } from "console";
 
 interface NivelData {
     data: string;
@@ -52,6 +55,8 @@ export default function NivelamentoTeacher() {
     const [retryCount, setRetryCount] = useState(0); // Track retry count
     const maxRetries = 3; // Maximum number of retries
     const retryDelay = 3000; // Retry delay in milliseconds (3 seconds)
+    const [nivel2Analysis, setNivel2Analysis] = useState<string | null>(null);
+    const [nivel2Text, setNivel2Text] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -126,11 +131,25 @@ export default function NivelamentoTeacher() {
             const nivel2DocsSnapshot = await getDocs(nivel2Ref);
 
             const nivel2DataArray: Nivel2Data[] = [];
+            let analysisString: string | null = null;
+            let textString: string | null = null;
+
             nivel2DocsSnapshot.forEach((doc: DocumentData) => {
                 const timeStamp = formatDate(doc.data().timestamp.toDate()); // Convert Timestamp to formatted string
                 const score = doc.data().score.toString(); // Convert score to string
+                
+                if (doc.data().analysis || doc.data().userText) {
+                    analysisString = doc.data().analysis; 
+                    textString = doc.data().userText;// Store the analysis string
+                }
+
                 nivel2DataArray.push({ timeStamp, score });
             });
+            if (analysisString || textString) {
+                setNivel2Analysis(analysisString);
+                setNivel2Text(textString); // You would need to create this state
+            }
+
             setNivel2Data(nivel2DataArray);
 
             // Fetch Nivel-3 data
@@ -238,6 +257,30 @@ export default function NivelamentoTeacher() {
                                 </LineChart>
                             )}
                         </ResponsiveContainer>
+
+                        {nivel2Data.length > 0 && nivel2Analysis && (
+                            <Accordion>
+                                {nivel2Data.map((entry, index) => (
+                                    <AccordionItem key={index} title={`Texto e análise - ${entry.timeStamp}`}>
+                                        <div className="mt-4 p-4 gap-2 flex flex-col bg-fluency-gray-100 dark:bg-fluency-gray-700 rounded shadow">
+                                            <p className="font-bold text-lg">Data: {entry.timeStamp}</p>
+                                            <div className="flex flex-col items-start p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-800">
+                                                <h3 className="text-lg font-bold mb-2">Análise:</h3>
+                                                <div
+                                                    className="w-full"
+                                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(nivel2Analysis) }}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col items-start p-4 rounded-md bg-fluency-gray-200 dark:bg-fluency-gray-800">
+                                                <p className="text-lg font-bold mb-2">Texto do aluno:</p>
+                                                <span>{nivel2Text}</span>
+                                            </div>
+                                        </div>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                        )}
+
                     </div>
 
                     <div className="min-w-full p-4 flex flex-col items-center gap-1">
