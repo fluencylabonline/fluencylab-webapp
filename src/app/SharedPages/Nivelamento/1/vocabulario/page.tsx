@@ -50,6 +50,9 @@ const Level1: React.FC = () => {
   const [score, setScore] = useState(0);
   const [answerChosen, setAnswerChosen] = useState(false);
   const [progressColor, setProgressColor] = useState("bg-fluency-orange-500");
+  const [quizHistory, setQuizHistory] = useState<
+  { word: string; correctAnswer: string; selectedAnswer: string; options: string[] }[]
+  >([]);
 
   useEffect(() => {
     const selectedWords: Word[] = [];
@@ -73,39 +76,60 @@ const Level1: React.FC = () => {
 
   const handleAnswerSelection = (translation: string) => {
     setSelectedTranslation(translation);
+    
+    // Store the current question's data in the history
+    const currentHistory = {
+      word: quizWords[currentQuestionIndex].english,
+      correctAnswer: quizWords[currentQuestionIndex].correct,
+      selectedAnswer: translation,
+      options: quizWords[currentQuestionIndex].translations,
+    };
+    
+    setQuizHistory((prevHistory) => [...prevHistory, currentHistory]);
+    
     if (translation === quizWords[currentQuestionIndex].correct) {
       setScore((prevScore) => prevScore + 1);
       setProgressColor("bg-fluency-green-500");
     } else {
       setProgressColor("bg-fluency-red-500");
     }
+    
     setAnswerChosen(true);
-
+    
     // Revert the progress bar color back to original after 2 seconds
     setTimeout(() => {
       setProgressColor("bg-fluency-orange-500");
     }, 2000);
   };
-
+  
   const handleNextLevel = async () => {
     if (session && session.user) {
       const userId = session.user.id;
+  
+      // Create the score data including the quiz history
       const scoreData = {
         pontos: finalScore,
         data: serverTimestamp(),
+        history: quizHistory.map((entry) => ({
+          word: entry.word,
+          correctAnswer: entry.correctAnswer,
+          selectedAnswer: entry.selectedAnswer,
+          options: entry.options,
+        })),
       };
-
+  
       try {
         // Adding a new document with an auto-generated ID
         await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-1", "Vocabulario"), scoreData);
-        toast.success("Pontuação salva com sucesso!");
+        toast.success("Pontuação e histórico salvos com sucesso!");
         router.push(`frases`);
       } catch (error) {
-        toast.error("Erro ao salvar a pontuação");
-        console.error("Erro ao salvar a pontuação: ", error);
+        toast.error("Erro ao salvar a pontuação e o histórico");
+        console.error("Erro ao salvar a pontuação e o histórico: ", error);
       }
     }
   };
+  
 
   if (quizWords.length === 0) {
     return <div>Loading...</div>;
@@ -171,8 +195,6 @@ const Level1: React.FC = () => {
         </>
         )
       }
-      
-      
       
       <Toaster />
     </div>

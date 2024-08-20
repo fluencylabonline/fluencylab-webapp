@@ -48,7 +48,8 @@ const VerdadeiroOuFalso: React.FC = () => {
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [progressColor, setProgressColor] = useState("bg-fluency-orange-500");
-  
+  const [quizHistory, setQuizHistory] = useState<any[]>([]);
+
   useEffect(() => {
     const selectedStatements: Statement[] = [];
     while (selectedStatements.length < 10) {
@@ -63,13 +64,28 @@ const VerdadeiroOuFalso: React.FC = () => {
 
   const handleAnswerSelection = (truth: boolean) => {
     setSelectedAnswer(truth);
-    if (truth === quizStatements[currentQuestionIndex].truth) {
+
+    const currentStatement = quizStatements[currentQuestionIndex];
+    const isCorrect = truth === currentStatement.truth;
+
+    if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setProgressColor("bg-fluency-green-500");
     } else {
       setProgressColor("bg-fluency-red-500");
     }
+
     setAnswered(true);
+
+    // Save the history for the current question
+    setQuizHistory((prevHistory) => [
+      ...prevHistory,
+      {
+        statement: currentStatement.statement,
+        correctAnswer: currentStatement.truth,
+        selectedAnswer: truth,
+      },
+    ]);
 
     // Revert the progress bar color back to original after 2 seconds
     setTimeout(() => {
@@ -86,19 +102,20 @@ const VerdadeiroOuFalso: React.FC = () => {
   const handleNextLevel = async () => {
     if (session && session.user) {
       const userId = session.user.id;
+
       const scoreData = {
         pontos: finalScore,
         data: serverTimestamp(),
+        history: quizHistory, // Store the quiz history
       };
 
       try {
-        // Adding a new document with an auto-generated ID
         await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-1", "Verdadeiro ou Falso"), scoreData);
-        toast.success("Pontuação salva com sucesso!");
+        toast.success("Pontuação e histórico salvos com sucesso!");
         router.push(`compreensao`);
       } catch (error) {
-        toast.error("Erro ao salvar a pontuação");
-        console.error("Erro ao salvar a pontuação: ", error);
+        toast.error("Erro ao salvar a pontuação e o histórico");
+        console.error("Erro ao salvar a pontuação e o histórico: ", error);
       }
     }
   };

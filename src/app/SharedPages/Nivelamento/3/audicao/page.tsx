@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc, addDoc, collection, serverTimestamp, getDocs, setDoc } from 'firebase/firestore';
 import { toast, Toaster } from 'react-hot-toast';
@@ -21,7 +21,7 @@ interface NivelamentoDocument {
 interface WordInput {
     word: string;
     isInput: boolean;
-    userAnswer: string;
+    userAnswer: string;  // Single string for each input field
     isCorrect: boolean | null;
 }
 
@@ -29,40 +29,40 @@ export default function Audio() {
     const router = useRouter();
     const { data: session } = useSession();
 
-    const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
+    const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false);
     useEffect(() => {
-      const fetchUserInfo = async () => {
-          if (session && session.user && session.user.id) {
-              try {
-                  const profile = doc(db, 'users', session.user.id);
-                  const docSnap = await getDoc(profile);
-                  if (docSnap.exists()) {
-                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+        const fetchUserInfo = async () => {
+            if (session && session.user && session.user.id) {
+                try {
+                    const profile = doc(db, 'users', session.user.id);
+                    const docSnap = await getDoc(profile);
+                    if (docSnap.exists()) {
+                        setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
                     } else {
-                      console.log("No such document!");
-                  }
-              } catch (error) {
-                  console.error("Error fetching document: ", error);
-              }
-          }
-      };
+                        console.log("No such document!");
+                    }
+                } catch (error) {
+                    console.error("Error fetching document: ", error);
+                }
+            }
+        };
 
-      fetchUserInfo()
-  }, [session]);
+        fetchUserInfo();
+    }, [session]);
 
-  const [nivelamentoData, setNivelamentoData] = useState<NivelamentoDocument[]>([]);
-  const [randomDocument, setRandomDocument] = useState<NivelamentoDocument | null>(null);
-  const [wordInputs, setWordInputs] = useState<WordInput[]>([]);
-  const [inputsDisabled, setInputsDisabled] = useState(false);
-  const [score, setScore] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+    const [nivelamentoData, setNivelamentoData] = useState<NivelamentoDocument[]>([]);
+    const [randomDocument, setRandomDocument] = useState<NivelamentoDocument | null>(null);
+    const [wordInputs, setWordInputs] = useState<WordInput[]>([]);
+    const [inputsDisabled, setInputsDisabled] = useState(false);
+    const [score, setScore] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchNivelamentoData = async () => {
             const nivelamentoCollectionRef = collection(db, 'Nivelamento');
             const nivelamentoSnapshot = await getDocs(nivelamentoCollectionRef);
             const nivelamentoDocuments: NivelamentoDocument[] = nivelamentoSnapshot.docs.map(doc => {
-                const data = doc.data() as NivelamentoDocument; // Explicitly define the type
+                const data = doc.data() as NivelamentoDocument;
                 return {
                     ...data
                 };
@@ -126,7 +126,6 @@ export default function Audio() {
         setScore(score);
     };
 
-
     const handleNextLevel = async () => {
         if (!session) {
             return;
@@ -142,7 +141,6 @@ export default function Audio() {
         }
     };
 
-    
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -157,25 +155,28 @@ export default function Audio() {
         handleChecking();
     };
 
-    function handleChecking() {
+    const handleChecking = async () => {
         if (session && session.user) {
             const userId = session.user.id;
             const scoreData = {
                 pontos: score,
                 data: serverTimestamp(),
+                history: wordInputs
+                    .filter(input => input.isInput && input.userAnswer.trim() !== '') // Filter only filled answers
+                    .map(input => ({ word: input.word, userAnswer: input.userAnswer })) // Map to only include the word and user answer
             };
     
             // Check if at least one answer is provided
-            const hasAnswer = wordInputs.some(input => input.isInput && input.userAnswer.trim() !== '');
+            const hasAnswer = scoreData.history.length > 0;
     
             if (hasAnswer) {
                 try {
                     // Adding a new document with an auto-generated ID
-                    addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-3", "Audicao"), scoreData);
+                    await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-3", "Audicao"), scoreData);
                     toast.success("Pontuação salva com sucesso!");
                     // Set NivelamentoPermitido to true
                     const userRef = doc(db, 'users', userId);
-                    setDoc(userRef, { NivelamentoPermitido: true }, { merge: true });
+                    await setDoc(userRef, { NivelamentoPermitido: false }, { merge: true });
                 } catch (error) {
                     toast.error("Erro ao salvar a pontuação");
                     console.error("Erro ao salvar a pontuação: ", error);
@@ -184,84 +185,79 @@ export default function Audio() {
                 toast.error("Por favor, preencha pelo menos uma resposta antes de salvar.");
             }
         }
-    }
+    };
 
     return (
         <div className='min-h-[90vh] w-full flex flex-col justify-center items-center px-12 p-8'>
-        <Toaster />
-
-        {nivelamentoPermitido === false ? 
-          (
-          <div className='w-max h-full rounded-md bg-fluency-green-700 text-white font-bold p-6'>
-              <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
-          </div>
-          ):(
-           
-            <>
             <Toaster />
-            {randomDocument && (
-                <div className='max-w-[80%] text-justify flex flex-col gap-2 items-center justify-center p-8 rounded-md text-lg' key={randomDocument.id}>
-                    <AudioPlayer src={randomDocument.url} />
-                    <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark p-10 rounded-md'>
-                    {wordInputs.map((input, index) => (
-                            <span className='w-full' key={index}>
-                                {input.isInput ? <input
-                                    type="text"
-                                    className={`max-w-[15%] mx-1 font-bold bg-transparent border-fluency-gray-500 dark:border-fluency-gray-100 border-dashed border-b-[1px] outline-none ${input.isCorrect === true ? 'text-green-500' : input.isCorrect === false ? 'text-red-500' : 'text-black dark:text-white'}`}
-                                    value={input.userAnswer}
-                                    onChange={(e) => handleInputChange(index, e)}
-                                    disabled={inputsDisabled}
-                                /> : input.word}
-                                {' '}
-                            </span>
-                    ))}
-                    </div>
-                    {inputsDisabled ? (
-                        <FluencyButton
-                            className='mt-4 flex flex-row items-center'
-                            variant='warning'
-                            onClick={handleNextLevel}
-                        >
-                            Finalizar <IoMdArrowRoundForward className="w-4 h-auto"/>
-                        </FluencyButton>
-                    ) : (
-                        <FluencyButton
-                            variant="orange"
-                            onClick={openModal}
-                        >
-                            Verificar Respostas <TbPencilCheck className='w-6 h-auto' />
-                        </FluencyButton>
-                    )}
-                </div>
-            )}
-            {isModalOpen && (
-                <div className="fixed z-50 inset-0 overflow-y-auto">
-                    <div className="flex items-center justify-center min-h-screen">
-                        <div className="fixed inset-0 transition-opacity">
-                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+
+            {nivelamentoPermitido === false ? 
+              (
+              <div className='w-max h-full rounded-md bg-fluency-green-700 text-white font-bold p-6'>
+                  <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+              </div>
+              ):(
+                <>
+                {randomDocument && (
+                    <div className='max-w-[80%] text-justify flex flex-col gap-2 items-center justify-center p-8 rounded-md text-lg' key={randomDocument.id}>
+                        <AudioPlayer src={randomDocument.url} />
+                        <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark p-10 rounded-md'>
+                        {wordInputs.map((input, index) => (
+                                <span className='w-full' key={index}>
+                                    {input.isInput ? <input
+                                        type="text"
+                                        className={`max-w-[15%] mx-1 font-bold bg-transparent border-fluency-gray-500 dark:border-fluency-gray-100 border-dashed border-b-[1px] outline-none ${input.isCorrect === true ? 'text-green-500' : input.isCorrect === false ? 'text-red-500' : 'text-black dark:text-white'}`}
+                                        value={input.userAnswer}
+                                        onChange={(e) => handleInputChange(index, e)}
+                                        disabled={inputsDisabled}
+                                    /> : input.word}
+                                    {' '}
+                                </span>
+                        ))}
                         </div>
-                        <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                            <div className="flex flex-col">
-                                <FluencyCloseButton onClick={closeModal}/>
-                                <div className="mt-3 flex flex-col gap-3 p-4">
-                                    <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                                        Tem certeza que quer verificar as respostas?                            
-                                    </h3>
-                                    <div className="flex justify-center">
-                                        <FluencyButton variant='confirm' onClick={confirmModal}>Sim, verificar</FluencyButton>
-                                        <FluencyButton variant='danger' onClick={closeModal}>Não, cancelar</FluencyButton>
+                        {inputsDisabled ? (
+                            <FluencyButton
+                                className='mt-4 flex flex-row items-center'
+                                variant='warning'
+                                onClick={handleNextLevel}
+                            >
+                                Finalizar <IoMdArrowRoundForward className="w-4 h-auto"/>
+                            </FluencyButton>
+                        ) : (
+                            <FluencyButton
+                                variant="orange"
+                                onClick={openModal}
+                            >
+                                Verificar Respostas <TbPencilCheck className='w-6 h-auto' />
+                            </FluencyButton>
+                        )}
+                    </div>
+                )}
+                {isModalOpen && (
+                    <div className="fixed z-50 inset-0 overflow-y-auto">
+                        <div className="flex items-center justify-center min-h-screen">
+                            <div className="fixed inset-0 transition-opacity">
+                                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                            </div>
+                            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                                <div className="flex flex-col">
+                                    <FluencyCloseButton onClick={closeModal}/>
+                                    <div className="mt-3 flex flex-col gap-3 p-4">
+                                        <h3 className="text-center text-lg leading-6 font-bold mb-2">
+                                            Tem certeza que quer verificar as respostas?                            
+                                        </h3>
+                                        <div className="flex justify-center">
+                                            <FluencyButton variant='confirm' onClick={confirmModal}>Sim, verificar</FluencyButton>
+                                            <FluencyButton variant='danger' onClick={closeModal}>Não, cancelar</FluencyButton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )}
+                </>
             )}
-            </>
-            
-          )}
-          
-      
-    </div>
-);
+        </div>
+    );
 }

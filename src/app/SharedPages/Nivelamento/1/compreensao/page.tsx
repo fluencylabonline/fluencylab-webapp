@@ -17,31 +17,38 @@ interface Text {
   correct_answer: string;
 }
 
+interface QuizHistory {
+  question: string;
+  options: string[];
+  user_answer: string | null;
+  correct_answer: string;
+}
+
 const Compreensao: React.FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
-    useEffect(() => {
-      const fetchUserInfo = async () => {
-          if (session && session.user && session.user.id) {
-              try {
-                  const profile = doc(db, 'users', session.user.id);
-                  const docSnap = await getDoc(profile);
-                  if (docSnap.exists()) {
-                      setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
-                    } else {
-                      console.log("No such document!");
-                  }
-              } catch (error) {
-                  console.error("Error fetching document: ", error);
-              }
+  const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (session && session.user && session.user.id) {
+        try {
+          const profile = doc(db, 'users', session.user.id);
+          const docSnap = await getDoc(profile);
+          if (docSnap.exists()) {
+            setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+          } else {
+            console.log("No such document!");
           }
-      };
+        } catch (error) {
+          console.error("Error fetching document: ", error);
+        }
+      }
+    };
 
-      fetchUserInfo()
+    fetchUserInfo();
   }, [session]);
-  
+
   const totalPossiblePoints = 5;
   const [quizTexts, setQuizTexts] = useState<Text[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -49,6 +56,9 @@ const Compreensao: React.FC = () => {
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [progressColor, setProgressColor] = useState("bg-fluency-orange-500");
+
+  // Store quiz history
+  const [quizHistory, setQuizHistory] = useState<QuizHistory[]>([]);
 
   useEffect(() => {
     const selectedTexts: Text[] = [];
@@ -72,6 +82,17 @@ const Compreensao: React.FC = () => {
     }
     setAnswered(true);
 
+    // Save history for current question
+    setQuizHistory((prevHistory) => [
+      ...prevHistory,
+      {
+        question: quizTexts[currentQuestionIndex].text,
+        options: quizTexts[currentQuestionIndex].options,
+        user_answer: option,
+        correct_answer: quizTexts[currentQuestionIndex].correct_answer,
+      }
+    ]);
+
     // Revert the progress bar color back to original after 2 seconds
     setTimeout(() => {
       setProgressColor("bg-fluency-orange-500");
@@ -90,6 +111,7 @@ const Compreensao: React.FC = () => {
       const scoreData = {
         pontos: finalScore,
         data: serverTimestamp(),
+        history: quizHistory, // Save all quiz history
       };
 
       try {
@@ -104,7 +126,6 @@ const Compreensao: React.FC = () => {
     }
   };
 
-  
   if (quizTexts.length === 0) {
     return <div>Loading...</div>;
   }
@@ -115,60 +136,60 @@ const Compreensao: React.FC = () => {
   const progressPercentage = ((currentQuestionIndex + 1) / quizTexts.length) * 100;
 
   return (
-  <div className="h-[90vh] overflow-y-hidden flex flex-col items-center justify-around">
-        
-  {nivelamentoPermitido === false ? 
-    (
-    <div className='w-max h-max rounded-md bg-fluency-green-700 text-white font-bold p-6'>
-        <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
-    </div>
-    ):(
-    <>
-      <div className="flex flex-col items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md w-full h-[80vh]">
-        <div className="w-full bg-fluency-gray-200 h-2.5 overflow-hidden dark:bg-gray-700 rounded-tl-md rounded-tr-md">
-          <div
-            className={`${progressColor} h-2.5 transition-all duration-500`}
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
-        </div>
-        <div className="p-16 mt-4">
-        <div>Pontos: {score}</div>
-        <h2 className="text-xl font-medium w-[40rem]">{currentText.text}</h2>
-        <div className="flex flex-col items-stretch gap-1 p-6">
-          {currentText.options.map((option) => (
-            <button
-              className={`p-1 px-3 text-start rounded-md font-semibold text-white duration-300 ease-in-out
-                ${selectedOption === option ? 'bg-gray-600 cursor-not-allowed' : answered ? 'bg-gray-500 cursor-not-allowed' : 'bg-fluency-orange-500 hover:bg-fluency-orange-600'}
-                ${answered && selectedOption === option ? 'bg-gray-700' : ''}
-              `}
-              key={option}
-              onClick={() => handleOptionSelection(option)}
-              disabled={selectedOption !== null || answered}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex flex-col items-center justify-center w-full gap-2">
-            {allTextsAnswered ? (
-              <div>
-                <div className="hidden">Pontuação Final: {finalScore}</div>
-                <FluencyButton variant="confirm" onClick={handleNextLevel}>
-                  Próxima Lição
-                  <FaArrowRight className="w-4 h-auto ml-2" />
-                </FluencyButton>
+    <div className="h-[90vh] overflow-y-hidden flex flex-col items-center justify-around">
+      {nivelamentoPermitido === false ? 
+        (
+          <div className='w-max h-max rounded-md bg-fluency-green-700 text-white font-bold p-6'>
+            <div className='flex flex-row text-2xl w-full h-full gap-2 justify-center items-center p-4'>Nivelamento feito! <PiExam className='w-6 h-auto' /></div>    
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col items-center bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md w-full h-[80vh]">
+              <div className="w-full bg-fluency-gray-200 h-2.5 overflow-hidden dark:bg-gray-700 rounded-tl-md rounded-tr-md">
+                <div
+                  className={`${progressColor} h-2.5 transition-all duration-500`}
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
               </div>
-              ):(
-                <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-2 rounded-md px-3"             onClick={handleNextQuestion}
-                disabled={selectedOption === null || allTextsAnswered}>
-                Próxima <IoMdArrowRoundForward />
-              </button>
-            )}
-        </div>
-        </div>
-      </div></>)}
-     <Toaster />
+              <div className="p-16 mt-4">
+                <div>Pontos: {score}</div>
+                <h2 className="text-xl font-medium w-[40rem]">{currentText.text}</h2>
+                <div className="flex flex-col items-stretch gap-1 p-6">
+                  {currentText.options.map((option) => (
+                    <button
+                      className={`p-1 px-3 text-start rounded-md font-semibold text-white duration-300 ease-in-out
+                        ${selectedOption === option ? 'bg-gray-600 cursor-not-allowed' : answered ? 'bg-gray-500 cursor-not-allowed' : 'bg-fluency-orange-500 hover:bg-fluency-orange-600'}
+                        ${answered && selectedOption === option ? 'bg-gray-700' : ''}
+                      `}
+                      key={option}
+                      onClick={() => handleOptionSelection(option)}
+                      disabled={selectedOption !== null || answered}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-col items-center justify-center w-full gap-2">
+                  {allTextsAnswered ? (
+                    <div>
+                      <div className="hidden">Pontuação Final: {finalScore}</div>
+                      <FluencyButton variant="confirm" onClick={handleNextLevel}>
+                        Próxima Lição
+                        <FaArrowRight className="w-4 h-auto ml-2" />
+                      </FluencyButton>
+                    </div>
+                  ) : (
+                    <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-2 rounded-md px-3" onClick={handleNextQuestion} disabled={selectedOption === null || allTextsAnswered}>
+                      Próxima <IoMdArrowRoundForward />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      <Toaster />
     </div>
   );
 };

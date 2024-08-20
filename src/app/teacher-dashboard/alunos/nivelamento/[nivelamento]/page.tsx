@@ -187,7 +187,7 @@ export default function NivelamentoTeacher() {
         if (id) {
             try {
                 const userRef = doc(db, 'users', id);
-                setDoc(userRef, { NivelamentoPermitido: false }, { merge: true });
+                setDoc(userRef, { NivelamentoPermitido: true }, { merge: true });
             } catch (error) {
                 console.error('Error updating NivelamentoPermitido field:', error);
             }
