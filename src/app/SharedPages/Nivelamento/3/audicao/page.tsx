@@ -161,6 +161,7 @@ export default function Audio() {
             const scoreData = {
                 pontos: score,
                 data: serverTimestamp(),
+                randomDocument: randomDocument?.transcript,
                 history: wordInputs
                     .filter(input => input.isInput && input.userAnswer.trim() !== '') // Filter only filled answers
                     .map(input => ({ word: input.word, userAnswer: input.userAnswer })) // Map to only include the word and user answer

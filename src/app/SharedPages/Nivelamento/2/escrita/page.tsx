@@ -62,7 +62,6 @@ export default function Home() {
   const [userInput, setUserInput] = useState<string>("");
   const [scoreOutput, setScoreOutput] = useState(false);
   const [isTextAreaDisabled, setIsTextAreaDisabled] = useState(false);
-  const [proceedToNextLesson, setProceedToNextLesson] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -76,8 +75,9 @@ export default function Home() {
         const scoreData = {
           userText: userText,
           score: score,
-          timestamp: serverTimestamp(),
+          data: serverTimestamp(),
           analysis: analysis,
+          topic: topic,
         };
         try {
           await addDoc(collection(db, "users", userId, "Nivelamento", "Nivel-2", "Escrita"), scoreData);
@@ -93,8 +93,13 @@ export default function Home() {
   useEffect(() => {
     if (score && data && userInput) {
       saveInFirebase(userInput, data, score);
+      // Clear the states after saving to prevent multiple calls
+      setUserInput("");
+      setData("");
+      setScore("");
     }
   }, [score, data, userInput, saveInFirebase]);
+  
 
   const runChat = async (prompt: string) => {
     setLoading(true);
@@ -177,13 +182,10 @@ export default function Home() {
     const randomTopic = getRandomTopic();
     setTopic(randomTopic);
   };
-
-  useEffect(() => {
-    if (proceedToNextLesson) {
-      router.push("/student-dashboard/nivelamento/nivel-3/audicao");
-    }
-  }, [proceedToNextLesson, router]);
   
+  function goToNextPage(){
+    router.push("/student-dashboard/nivelamento/nivel-3/audicao");
+  }
 
 return (
   <main className="text-fluency-text-light dark:text-fluency-text-dark flex h-[90vh] flex-row overflow-y-hidden items-start justify-around p-6 w-full gap-2">
@@ -194,27 +196,30 @@ return (
     </div>
     ):(
     <>
-      <form onSubmit={onSubmit} className="min-h-[85vh] max-h-[85vh] w-[50%] bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
-        <p className="text-xl font-bold p-3">Seu tema: {topic}</p>
-        <p className="mb-2 text-lg font-semibold">Escreva seu texto aqui:</p>
-        <textarea
-          placeholder="Escreva aqui"
-          name="prompt"
-          className="w-full min-h-[50vh] max-h-full border-none outline-none p-4 rounded-lg bg-fluency-bg-light dark:bg-fluency-bg-dark"
-          disabled={scoreOutput}
-        />
-        <div className="w-full flex flex-col items-center p-4">
-        {!isTextAreaDisabled ? (
-            <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-3 rounded-md px-4" type="submit">
-              Analisar <TbDeviceDesktopAnalytics className="w-6 h-auto" />
-            </button>
-          ) : (
-            <FluencyButton variant="confirm" type="button" onClick={() => setProceedToNextLesson(true)}>
-              Próxima Lição <IoMdArrowRoundForward className="w-4 h-auto"/>
-            </FluencyButton>
+      <div className="flex flex-col items-center gap-2 min-h-[85vh] max-h-[85vh] w-[50%]">
+        <form onSubmit={onSubmit} className="w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
+          <p className="text-xl font-bold p-3">Seu tema: {topic}</p>
+          <p className="mb-2 text-lg font-semibold">Escreva seu texto aqui:</p>
+          <textarea
+            placeholder="Escreva aqui"
+            name="prompt"
+            className="w-full min-h-[50vh] max-h-full border-none outline-none p-4 rounded-lg bg-fluency-bg-light dark:bg-fluency-bg-dark"
+            disabled={scoreOutput}
+          />
+          <div className="w-full flex flex-col items-center p-4">
+          {!isTextAreaDisabled && (
+              <button className="text-white font-bold gap-1 cursor-pointer flex flex-row items-center justify-center bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out p-3 rounded-md px-4" type="submit">
+                Analisar <TbDeviceDesktopAnalytics className="w-6 h-auto" />
+              </button>
           )}
-        </div>
-      </form>
+          </div>
+        </form>
+        {isTextAreaDisabled && (
+          <FluencyButton variant="confirm" type="button" onClick={() => goToNextPage()}>
+          Próxima Lição <IoMdArrowRoundForward className="w-4 h-auto"/>
+        </FluencyButton>
+        )}
+      </div>
 
       <div className="min-h-[85vh] max-h-[85vh] w-[50%] overflow-y-scroll bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 rounded-md">
         <h1 className="text-xl font-bold p-3">Análise do seu texto:</h1>
