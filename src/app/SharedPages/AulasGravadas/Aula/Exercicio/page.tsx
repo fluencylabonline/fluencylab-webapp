@@ -9,7 +9,7 @@ import Tiptap from './TipTap';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 interface ExercicioProps {
-  content: string;
+  content: any;
   languageareaName: string | null;
   moduleID: string | null;
   id: string | null;
