@@ -16,6 +16,7 @@ import { RiMenuUnfold2Line, RiMenuUnfoldLine } from 'react-icons/ri';
 import { FaHeadphones } from 'react-icons/fa6';
 import { SiGoogleclassroom } from "react-icons/si";
 import { TbCards } from 'react-icons/tb';
+import Exercicio from './Exercicio/page';
 
 interface ClassData {
     deckNAME: string;
@@ -28,6 +29,7 @@ interface ClassData {
     ankiLink: string;
     externalLinks: string;
     audioID: string;
+    content: any;  // Adjust the type based on the structure of your content
 }
 
 export default function Aula() {
@@ -35,6 +37,7 @@ export default function Aula() {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false); // State to track sidebar open/close
     const [activePanel, setActivePanel] = useState<string | null>('video');
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
@@ -81,22 +84,31 @@ export default function Aula() {
     };
 
     return (
-        <div className='flex flex-row w-full overflow-y-hidden'>
+        <div className='flex flex-row w-full overflow-hidden overflow-y-scroll'>
 
-            <div className='flex flex-col items-center justify-center w-full p-4 h-[90vh] overflow-y-hidden'>
+            <div className='flex flex-col items-center justify-center w-full p-4 h-[90vh]'>
                 <button
-                    className='fixed right-4 bottom-8 bg-fluency-bg-dark dark:bg-fluency-bg-light text-white dark:text-black p-4 rounded-full shadow-md z-10'
+                    className='fixed z-50 right-4 bottom-8 bg-fluency-bg-dark dark:bg-fluency-bg-light text-white dark:text-black p-4 rounded-full shadow-md'
                     onClick={toggleSidebar}
                 > {sidebarOpen ? <RiMenuUnfoldLine className='w-7 h-auto' /> : <RiMenuUnfold2Line className='w-7 h-auto' />}
                 </button>
 
                 {/* Render content based on active panel */}
                 {activePanel === 'video' && (
-                    <iframe 
+                   <iframe 
                         src={`https://drive.google.com/file/d/${classData.videoID}/preview`} 
                         frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen
                         id="frame-video">
                     </iframe>
+                )}
+
+                {activePanel === 'exercicio' && (
+                   <Exercicio 
+                        content={classData.content} 
+                        languageareaName={new URLSearchParams(window.location.search).get('languageareaName')}
+                        moduleID={new URLSearchParams(window.location.search).get('moduleID')}
+                        id={new URLSearchParams(window.location.search).get('id')} 
+                    />
                 )}
                 {activePanel === 'pdf' && (
                     <iframe 
@@ -139,7 +151,7 @@ export default function Aula() {
             </div>
 
             {/* Sidebar */}
-            <div className={`fixed right-0 top-0 h-full flex flex-col items-center bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 px-8 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`z-10 fixed right-0 top-0 h-full flex flex-col items-center bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 px-8 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <div className='text-xl font-bold mb-8'>Lista de Assuntos</div>
                 <div className='flex flex-col items-center gap-2'>
                     <button 
@@ -149,6 +161,15 @@ export default function Aula() {
                         onClick={() => handlePanelClick('video')}
                     >
                         <BsPersonVideo className='w-6 h-auto'/> Video Aula
+                    </button>
+
+                    <button 
+                        className={`p-2 flex flex-row items-center gap-3 font-bold text-black dark:text-white 
+                                    ${activePanel === 'exercicio' ? 'text-fluency-blue-600 dark:text-fluency-blue-600' : 'hover:text-fluency-blue-600 hover:dark:text-fluency-blue-600'} 
+                                    duration-300 ease-in-out transition-all`}
+                        onClick={() => handlePanelClick('exercicio')}
+                    >
+                        <BsPersonVideo className='w-6 h-auto'/> Exercícios
                     </button>
 
                     <button 

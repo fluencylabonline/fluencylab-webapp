@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
 
 //Firebase
-import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
 import { db } from "@/app/firebase";
 
 import { toast, Toaster } from 'react-hot-toast';
@@ -215,6 +215,24 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     fetchDocs();
   }, []);
 
+  const [realtimeContent, setRealtimeContent] = useState<string>(content);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const notebookID = params.get('notebook');
+    const studentID = params.get('student');
+
+    const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
+    const unsubscribe = onSnapshot(notebookRef, (doc) => {
+      if (doc.exists()) {
+        const { content: updatedContent } = doc.data();
+        setRealtimeContent(updatedContent);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [content]);
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value.toLowerCase());
   };
@@ -313,7 +331,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
-        // ↓ your new keyboard shortcut
         'Tab': () => this.editor.commands.toggleBulletList(),
       }
     },
@@ -348,6 +365,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       }),
       Highlight,
       Color,
+
+      /*
       Collaboration.configure({
         document: ydoc,
       }),
@@ -359,6 +378,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           color: session?.user?.role === 'teacher' ? '#65C6E0' : '#E08E65',
         },
       }),
+      */
+
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
@@ -388,9 +409,17 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       },
     },
     autofocus: true,
+    content: realtimeContent,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
+
+    /*
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    */
+
   }) 
 
   const addImage = () => {

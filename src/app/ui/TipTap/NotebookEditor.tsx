@@ -22,7 +22,7 @@ const NotebookEditor = () => {
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<number>(120000); // 30 seconds in milliseconds
+  const [timeLeft, setTimeLeft] = useState<number>(600000); // 10 minutes in milliseconds
   const [buttonColor, setButtonColor] = useState<string>('black');
   const [animation, setAnimation] = useState<boolean>(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -85,11 +85,11 @@ const NotebookEditor = () => {
 
     const saveInterval = setInterval(() => {
       saveVersion();
-      setTimeLeft(120000);
-    }, 120000);
+      setTimeLeft(600000); // Reset timeLeft to 10 minutes
+    }, 600000); // Save every 10 minutes
 
     const countdownInterval = setInterval(() => {
-      setTimeLeft(prev => Math.max(prev - 1000, 0));
+      setTimeLeft(prev => Math.max(prev - 1000, 0)); // Countdown every second
     }, 1000);
 
     window.onbeforeunload = function () {
@@ -108,7 +108,7 @@ const NotebookEditor = () => {
     const startColor = { r: 0, g: 0, b: 0 };
 
     // Calculate the ratio
-    const ratio = (120000 - timeLeft) / 120000; // 0 to 1
+    const ratio = (600000 - timeLeft) / 600000; // 0 to 1
 
     // Interpolate color values
     const r = Math.round(startColor.r + ratio * (targetColor.r - startColor.r));
