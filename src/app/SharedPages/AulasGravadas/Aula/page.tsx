@@ -29,7 +29,7 @@ interface ClassData {
     ankiLink: string;
     externalLinks: string;
     audioID: string;
-    content: any;  // Adjust the type based on the structure of your content
+    content?: any;  // Adjust the type based on the structure of your content
 }
 
 export default function Aula() {
