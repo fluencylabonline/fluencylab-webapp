@@ -1,5 +1,5 @@
 export default function Exercicio(){
   return(
-    <div>Oi</div>
+    <div>Em manutenção</div>
   )
 }
