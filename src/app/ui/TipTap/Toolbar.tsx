@@ -108,9 +108,42 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
           </svg>
           <span className="sr-only">Salvando...</span>
         </div>
-      
    
-     
+        <Tooltip
+        className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+        content="Desfazer ação (Ctrl + Z)"
+        color="primary"
+        placement="bottom"
+      >
+          <button onClick={() => editor.chain().focus().undo().run()}
+            disabled={
+              !editor.can()
+                .chain()
+                .focus()
+                .undo()
+                .run()
+            } className={editor.isActive('undo') ? 'cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <FaUndoAlt className="w-3 h-auto" />
+          </button>
+      </Tooltip>
+      
+      <Tooltip
+          className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
+          content="Refazer ação (Ctrl + Y)"
+          color="primary"
+          placement="bottom"
+        >
+          <button onClick={() => editor.chain().focus().redo().run()}
+            disabled={
+              !editor.can()
+                .chain()
+                .focus()
+                .redo()
+                .run()
+            } className={editor.isActive('redo') ? 'cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <FaRedoAlt className="w-3 h-auto" />
+          </button>
+      </Tooltip>
       
       <p>|</p>
 

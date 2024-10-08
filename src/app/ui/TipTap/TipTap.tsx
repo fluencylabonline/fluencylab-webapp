@@ -13,6 +13,7 @@ import './styles.scss'
 
 //Imports
 import Link from '@tiptap/extension-link'
+import History from '@tiptap/extension-history'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -340,6 +341,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     extensions: [
       CustomDocument,
       Image,
+      History,
       TextStyle, 
       FontFamily,
       FontSize,
