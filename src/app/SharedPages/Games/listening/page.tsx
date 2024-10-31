@@ -508,8 +508,9 @@ export default function Listening() {
                                 >
                                     {doc.name}
                                 </button>
-                                {session?.user.role === 'teacher' &&
+                                
                                <div className='flex flex-row gap-1 items-center'>
+                               {session?.user.role === 'admin' &&
                                      <Tooltip className='px-1 bg-fluency-red-500 text-white font-bold rounded-md' content="Apagar áudio">
                                         <button
                                             onClick={() => openDeleteConfirmationModal(doc)}
@@ -517,21 +518,22 @@ export default function Listening() {
                                             >
                                             <MdDelete />
                                         </button>
-                                     </Tooltip>
-
+                                     </Tooltip>}
+                                     {session?.user.role === 'teacher' &&
                                     <Tooltip className='px-1 bg-fluency-orange-500 text-white font-bold rounded-md' content="Enviar como tarefa para aluno">
                                         <button 
                                             onClick={() => openSelectModal(doc)}
                                             className='w-10 text-orange-500 hover:text-orange-700 focus:outline-none'>
                                             <GiSchoolBag />
                                         </button>
-                                    </Tooltip>
-                                </div>}
+                                    </Tooltip>}
+                                    
+                                </div>
                             </li>
                         ))}
                     </ul>
 
-                    {session?.user.role === 'teacher' || 'admin' &&
+                    {session?.user.role === 'admin' &&
                     <FluencyButton onClick={openCreate} variant='gray'>Adicionar áudio</FluencyButton>}
                 </div>
             </div>
@@ -599,7 +601,7 @@ export default function Listening() {
                                 type="file"
                                 accept=".mp3, .mpeg, .mp4"
                                 onChange={handleAudioChange}
-                                className="hidden"
+                                className=""
                                 id="audio-upload"
                             />
                             <input
