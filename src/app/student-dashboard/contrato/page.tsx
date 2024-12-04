@@ -94,7 +94,7 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({contractDat
                 </div>
 
                 <div className='flex flex-col text-justify gap-3'>
-                    <p><span className='font-bold'>Cláusula 18ª.</span> Este contrato tem duração de 6 meses, contando-se a partir da efetivação da compra e podendo ser prorrogado por comum acordo de ambas as partes.</p>
+                    <p><span className='font-bold'>Cláusula 18ª.</span> Este contrato tem duração de 06 meses, contando-se a partir da efetivação da compra e podendo ser prorrogado por comum acordo de ambas as partes.</p>
                 </div>
 
                 <div className='flex flex-col text-justify gap-3'>
