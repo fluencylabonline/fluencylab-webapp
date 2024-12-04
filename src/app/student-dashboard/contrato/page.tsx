@@ -491,7 +491,7 @@ export default function ContratoAluno() {
                                         indicator={({ isOpen }) => (isOpen ? <IoIosArrowDown /> : <IoIosArrowBack />)}
                                     >
                                         <div className='flex flex-col text-justify gap-3'>
-                                            <p><span className='font-bold'>Cláusula 18ª.</span> Este contrato tem duração de 12 meses, contando-se a partir da efetivação da compra e podendo ser prorrogado por comum acordo de ambas as partes.</p>
+                                            <p><span className='font-bold'>Cláusula 18ª.</span> Este contrato tem duração de 06 meses, contando-se a partir da efetivação da compra e podendo ser prorrogado por comum acordo de ambas as partes.</p>
                                         </div>
                                     </AccordionItem>
 
