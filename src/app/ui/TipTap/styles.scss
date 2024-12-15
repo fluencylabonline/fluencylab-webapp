@@ -201,3 +201,103 @@ ul[data-type="taskList"] {
     margin: 0;
   }
 }
+
+/* Example CSS */
+/* MultipleChoiceComponent.module.css */
+
+/* Container for the Multiple Choice Component */
+.reactComponent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 3px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Styling the question */
+.reactComponent h3 {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+/* List of options */
+.optionsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each option style */
+.option {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for options */
+.option:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
+  font-weight: bold;
+  transition: 0.3s ease, transform 0.2s ease;
+}
+
+/* Styles for correct answer */
+.correct {
+  background-color: #4caf50; /* Green */
+  color: white;
+  font-weight: bold;
+}
+
+/* Styles for incorrect answer */
+.incorrect {
+  background-color: #f44336; /* Red */
+  color: white;
+  font-weight: bold;
+}
+
+/* Feedback message after selection */
+.feedback {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.textGreen500 {
+  color: #4caf50;
+}
+
+.textRed500 {
+  color: #f44336;
+}
+
+.option.disabled {
+  background-color: #f0f0f0; /* Light gray color */
+  color: #888; /* Disable text */
+  pointer-events: none; /* Prevent any clicks on disabled options */
+  opacity: 0.8; /* Dim the option */
+}
+
+/* Styles for correct answer */
+.correct.disabled {
+  background-color: #5eb961; /* Green */
+  color: white;
+  font-weight: 500;
+}
+
+/* Styles for incorrect answer */
+.incorrect.disabled {
+  background-color: #f88f87; /* Red */
+  color: white;
+  font-weight: 500;
+}

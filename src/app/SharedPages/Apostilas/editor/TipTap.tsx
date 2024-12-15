@@ -35,6 +35,10 @@ import { AiFillYoutube } from 'react-icons/ai';
 import { CgTranscript } from 'react-icons/cg';
 import { VscWholeWord } from 'react-icons/vsc';
 import { GoGoal } from "react-icons/go";
+import { LuBookOpen } from "react-icons/lu";
+import { BsTranslate } from "react-icons/bs";
+import { GiChoice } from "react-icons/gi";
+import { CiImageOn } from "react-icons/ci";
 
 import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -59,6 +63,15 @@ import TeacherExtension from './Components/TeacherComponent/TeacherExtension';
 
 import TextDisplayModalTip from './Components/TipComponent/TipModal';
 import TipExtension from './Components/TipComponent/TipExtension';
+
+import ExerciseModal from './Components/ExerciseModal/ExerciseModal';
+import ExerciseExtension from './Components/ExerciseModal/ExerciseExtension';
+
+import MultipleChoiceModal from './Components/MultipleChoice/MultipleChoiceModal';
+import MultipleChoiceExtension from './Components/MultipleChoice/MultipleChoiceExtension';
+
+import TranslationModal from './Components/TranslationComponent/TranslationModal';
+import TranslationNode from './Components/TranslationComponent/TranslationNode';
 
 type PopoversProps = {
   editor: Editor;
@@ -144,6 +157,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalTranslationOpen, setIsModalTranslationOpen] = useState<boolean>(false);
+  const [isModalImageOpen, setIsModalImageOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
   
   const [description, setDescription] = useState<string>('');
@@ -163,6 +178,13 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const [initialTextTip, setInitialTextTip] = useState('');
   const handleOpenModalTip = () => setModalTextTipOpen(true);
   const handleCloseModalTip = () => setModalTextTipOpen(false);
+
+  const [isModalExerciseOpen, setModalExerciseOpen] = useState(false);
+
+  const handleOpenModalExercise = () => setModalExerciseOpen(true);
+  const handleCloseModalExercise = () => {
+    setModalExerciseOpen(false)
+  };
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewDescription(event.target.value);
@@ -214,6 +236,9 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       StudentExtension,
       TeacherExtension,
       TipExtension,
+      ExerciseExtension,
+      MultipleChoiceExtension,
+      TranslationNode,
       Typography,
       BulletList,
       CustomBulletList,
@@ -322,6 +347,22 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     }
   };
   
+  const openMultipleChoiceModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeMultipleChoiceModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const openTranslationModal = () => {
+    setIsModalTranslationOpen(true);
+  };
+
+  const closeTranslationModal = () => {
+    setIsModalTranslationOpen(false);
+  };
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       {session?.user.role === 'admin' && <Toolbar editor={editor} content={content} addImage={addImage} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
@@ -350,22 +391,40 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           onSelectVideo={handleSelectVideo}
         />
 
+        <ExerciseModal
+          isOpen={isModalExerciseOpen}
+          onClose={handleCloseModalExercise}
+          editor={editor}
+        />
+
+        <MultipleChoiceModal 
+          isOpen={isModalOpen} 
+          onClose={closeMultipleChoiceModal} 
+          editor={editor} 
+        />
+
+        <TranslationModal 
+          isOpen={isModalTranslationOpen} 
+          onClose={closeTranslationModal} 
+          editor={editor} 
+        />
+
         <button
           onClick={scrollToBottom}
-          className="fixed bottom-5 right-2 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          className="fixed bottom-5 left-28 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
         >
           <FaArrowDown />
         </button>
 
         <button
           onClick={scrollToTop}
-          className="fixed bottom-16 right-2 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          className="fixed bottom-16 left-28 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
         >
           <FaArrowUp />
         </button>
 
         {session?.user.role === 'admin' &&
-        <div className="fixed top-32 right-2">
+        <div className="fixed top-24 right-2">
           <div className='flex flex-col items-center gap-2'>
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
@@ -442,6 +501,32 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           </button>
           </Tooltip>
           
+          <Tooltip content='Clique para adicionar um complete a frase' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={handleOpenModalExercise}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <LuBookOpen />
+          </button>
+          </Tooltip>
+
+          <Tooltip content='Clique para adicionar um múltipla escolha' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={openMultipleChoiceModal}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <GiChoice />
+          </button>
+          </Tooltip>
+
+          <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={openTranslationModal}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <BsTranslate />
+          </button>
+          </Tooltip>
           </div>
         </div>}
 

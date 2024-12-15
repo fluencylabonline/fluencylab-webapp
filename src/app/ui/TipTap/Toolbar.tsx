@@ -99,7 +99,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
   }
 
   return (
-    <div className='sticky top-0 z-10 flex flex-row flex-wrap items-center justify-center gap-2 w-full rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
+    <div className='sticky top-0 z-10 flex flex-row flex-wrap items-center justify-center gap-2 w-[85%] rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
         
         <div role="status">
           <svg aria-hidden="true" className={`w-5 h-5 text-gray-200 ${isTyping ? 'animate-spin fill-fluency-blue-500 ease-in-out transition-all duration-300' : 'flex ease-in-out transition-all duration-300'} dark:text-gray-600`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

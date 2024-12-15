@@ -24,7 +24,7 @@ export default function ListeningPage(){
 
                 <div className='m-5 flex items-center text-black dark:text-white overflow-hidden'>
                     
-                    <ListeningComponent audioId={"mUzYGy4xnLlIwxumdhL0"} />
+                    <ListeningComponent audioId={"rS9Je3cwO1mPOkpYpB1a"} />
 
                 </div>
 
