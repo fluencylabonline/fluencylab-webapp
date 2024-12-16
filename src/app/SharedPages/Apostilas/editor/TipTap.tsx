@@ -27,6 +27,7 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import Typography from '@tiptap/extension-typography'
+import Blockquote from '@tiptap/extension-blockquote'
 
 import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
@@ -39,6 +40,7 @@ import { LuBookOpen } from "react-icons/lu";
 import { BsTranslate } from "react-icons/bs";
 import { GiChoice } from "react-icons/gi";
 import { CiImageOn } from "react-icons/ci";
+import { MdOutlineTipsAndUpdates } from "react-icons/md";
 
 import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -60,6 +62,9 @@ import StudentExtension from './Components/StudentComponent/StudentExtension';
 
 import TextDisplayModalTeacher from './Components/TeacherComponent/TeacherModal';
 import TeacherExtension from './Components/TeacherComponent/TeacherExtension';
+
+import TextDisplayModalGoal from './Components/GoalComponent/GoalModal';
+import GoalExtension from './Components/GoalComponent/GoalExtension';
 
 import TextDisplayModalTip from './Components/TipComponent/TipModal';
 import TipExtension from './Components/TipComponent/TipExtension';
@@ -157,8 +162,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalAudioOpen, setIsModalAudioOpen] = useState<boolean>(false);
   const [isModalTranslationOpen, setIsModalTranslationOpen] = useState<boolean>(false);
-  const [isModalImageOpen, setIsModalImageOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
   
   const [description, setDescription] = useState<string>('');
@@ -173,6 +178,11 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const [initialTextTeacher, setInitialTextTeacher] = useState('');
   const handleOpenModalTeacher = () => setModalTextTeacherOpen(true);
   const handleCloseModalTeacher = () => setModalTextTeacherOpen(false);
+
+  const [isModalTextGoalOpen, setModalTextGoalOpen] = useState(false);
+  const [initialTextGoal, setInitialTextGoal] = useState('');
+  const handleOpenModalGoal = () => setModalTextGoalOpen(true);
+  const handleCloseModalGoal = () => setModalTextGoalOpen(false);
 
   const [isModalTextTipOpen, setModalTextTipOpen] = useState(false);
   const [initialTextTip, setInitialTextTip] = useState('');
@@ -207,9 +217,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     }
   };
 
-
   const CustomDocument = Document.extend({
-    content: 'heading block*',
+    content: '',
   })
 
   const { data: session } = useSession();
@@ -218,7 +227,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
-        // ↓ your new keyboard shortcut
         'Tab': () => this.editor.commands.toggleBulletList(),
       }
     },
@@ -226,16 +234,18 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   const editor = useEditor({
     extensions: [
-      CustomDocument,
+      Document,
       Image,
       TextStyle, 
       FontFamily,
+      Blockquote,
       ReactComponent,
       Embed,
       SpeakingExtension,
       StudentExtension,
       TeacherExtension,
       TipExtension,
+      GoalExtension,
       ExerciseExtension,
       MultipleChoiceExtension,
       TranslationNode,
@@ -272,7 +282,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
             return headingPlaceholders[node.attrs.level];
           }
           if (node.type.name === 'paragraph') {
-            return '/'
+            return "O que vamos aprender..."
           }
 
           return '/'
@@ -313,21 +323,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   if (!editor) {
     return null;
   }
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-
-  // Scroll to bottom function
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
-    });
-  };
 
   const handleSelectAudio = (audioId: string) => {
     if (editor && audioId) {
@@ -371,11 +366,12 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
         <TextDisplayModal isOpen={isModalTextOpen} onClose={handleCloseModal} initialText={initialText} editor={editor} />
         <TextDisplayModalTeacher isOpen={isModalTextTeacherOpen} onClose={handleCloseModalTeacher} initialTextTeacher={initialTextTeacher} editor={editor} />
+        <TextDisplayModalGoal isOpen={isModalTextGoalOpen} onClose={handleCloseModalGoal} editor={editor} />
         <TextDisplayModalTip isOpen={isModalTextTipOpen} onClose={handleCloseModalTip} initialTextTip={initialTextTip} editor={editor} />
 
         <AudioSelectionModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalAudioOpen}
+          onClose={() => setIsModalAudioOpen(false)}
           onSelectAudio={handleSelectAudio}
         />
 
@@ -409,23 +405,9 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           editor={editor} 
         />
 
-        <button
-          onClick={scrollToBottom}
-          className="fixed bottom-5 left-28 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-        >
-          <FaArrowDown />
-        </button>
-
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-16 left-28 flex items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-        >
-          <FaArrowUp />
-        </button>
-
         {session?.user.role === 'admin' &&
-        <div className="fixed top-24 right-2">
-          <div className='flex flex-col items-center gap-2'>
+        <div className="fixed top-[7.5rem] right-2">
+          <div className='flex flex-col items-center gap-1'>
           <Popover placement="bottom" showArrow offset={10}>
             <PopoverTrigger>
                 <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
@@ -449,7 +431,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
           <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-orange-300 font-bold text-sm rounded-md px-1'>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsModalAudioOpen(true)}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
           >
             <LuFileAudio />
@@ -495,6 +477,15 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           <Tooltip content='Clique para adicionar uma dica' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={handleOpenModalTip}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <MdOutlineTipsAndUpdates />
+          </button>
+          </Tooltip>
+
+          <Tooltip content='Clique para adicionar uma meta' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={handleOpenModalGoal}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
           >
             <GoGoal />

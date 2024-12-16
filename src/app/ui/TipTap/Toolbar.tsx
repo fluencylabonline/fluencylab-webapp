@@ -23,6 +23,7 @@ import FluencyInput from "../Components/Input/input";
 import FluencyButton from "../Components/Button/button";
 import FluencyCloseButton from "../Components/ModalComponents/closeModal";
 import { RiTaskLine } from "react-icons/ri";
+import { MdOutlineSubtitles } from "react-icons/md";
 
 type Props = {
   editor: Editor | null;
@@ -99,7 +100,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
   }
 
   return (
-    <div className='sticky top-0 z-10 flex flex-row flex-wrap items-center justify-center gap-2 w-[85%] rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
+    <div className='sticky top-0 z-10 flex flex-row flex-wrap items-center justify-center gap-2 w-[100%] rounded-full bg-[#edf2fa] dark:bg-[#0a1322] text-md px-8 py-[0.25rem]'>
         
         <div role="status">
           <svg aria-hidden="true" className={`w-5 h-5 text-gray-200 ${isTyping ? 'animate-spin fill-fluency-blue-500 ease-in-out transition-all duration-300' : 'flex ease-in-out transition-all duration-300'} dark:text-gray-600`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -167,6 +168,20 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
           >
           <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
           <LuHeading2 className="w-5 h-auto" />
+          </button>
+        </Tooltip>
+
+        {/*Admin button */}
+        <Tooltip
+            className='text-xs font-bold bg-fluency-yellow-200 rounded-md p-1'
+            content="Destacar texto"
+            color="primary"
+            placement="bottom"
+          >
+          <button
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={editor.isActive('blockquote') ? 'text-fluency-yellow-500 dark:text-fluency-yellow-600 hover:text-fluency-yellow-700 duration-150 transition-all ease-in-out bg-fluency-yellow-100 rounded-md p-2 px-2 text-md' : 'text-fluency-gray-400 dark:text-fluency-gray-50 hover:text-fluency-yellow-500 dark:hover:text-fluency-yellow-800 hover:bg-fluency-yellow-100 dark:hover:bg-fluency-yellow-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md'}>
+            <MdOutlineSubtitles className="w-5 h-auto" />
           </button>
         </Tooltip>
       </div>
@@ -421,7 +436,6 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
           </button>
         </Tooltip>
 
-        
           {editor.isActive("link") ? (
             <Tooltip
             className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1'
