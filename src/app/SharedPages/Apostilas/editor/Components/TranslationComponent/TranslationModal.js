@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { toast, Toaster } from 'react-hot-toast';
 
@@ -55,7 +54,6 @@ const TranslationModal = ({ isOpen, onClose, editor }) => {
         </div>
         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-28 h-full p-5">
           <div className="flex flex-col items-center justify-center">
-            <FluencyCloseButton onClick={() => { clearInputs(); onClose(); }} />
             <h3 className="text-lg leading-6 font-medium p-1">Crie um exercício de tradução</h3>
             
             {/* Header input */}
@@ -92,7 +90,7 @@ const TranslationModal = ({ isOpen, onClose, editor }) => {
 
             <div className="flex justify-center gap-2 mt-4">
               <FluencyButton variant="confirm" onClick={handleSave}>Salvar</FluencyButton>
-              <FluencyButton variant="danger" onClick={() => { clearInputs(); onClose(); }}>Cancelar</FluencyButton>
+              <FluencyButton variant="gray" onClick={() => { clearInputs(); onClose(); }}>Cancelar</FluencyButton>
             </div>
           </div>
         </div>

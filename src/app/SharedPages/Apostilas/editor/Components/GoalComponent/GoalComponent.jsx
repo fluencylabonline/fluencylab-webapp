@@ -12,7 +12,7 @@ const GoalComponent = ({ node }) => {
 
   return (
     <NodeViewWrapper className="react-component">
-      <div className="flex flex-col bg-fluency-blue-100 dark:bg-fluency-gray-700 text-black dark:text-white rounded-xl px-6 py-4">
+      <div className="flex flex-col bg-fluency-blue-100 dark:bg-fluency-gray-700 text-black dark:text-white rounded-xl px-4 py-4">
         {/* Title and Icon */}
         <div className="flex flex-row items-center justify-center mb-2">
           <h2 className="text-2xl font-bold text-fluency-yellow">{title}</h2>
