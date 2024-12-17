@@ -83,8 +83,8 @@ const MultipleChoiceComponent = ({ node, updateAttributes }) => {
           </>
         ) : (
           <>
-            <h3 className="mb-1">{editableQuestion}</h3>
-            <ul className="options-list">
+            <h3 className="option-h3 text-[16px]">{editableQuestion}</h3>
+            <ul className="options-list list-decimal ml-4">
               {editableOptions.map((option, index) => (
                 <li
                   key={index}
@@ -99,7 +99,7 @@ const MultipleChoiceComponent = ({ node, updateAttributes }) => {
               ))}
             </ul>
             {hasSelectedOption && (
-              <div className={`feedback ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+              <div className={`feedback ml-4 mt-2 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
                 {isCorrect ? 'Correto!' : 'Incorreto.'}
               </div>
             )}

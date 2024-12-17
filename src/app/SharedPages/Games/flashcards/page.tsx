@@ -12,10 +12,12 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { Tooltip } from '@nextui-org/react';
 import { FaArrowRight } from 'react-icons/fa6';
 import { useSession } from 'next-auth/react';
+import {Tabs, Tab} from "@nextui-org/tabs";
 
 interface Deck {
     id: string;
     name: string;
+    tags: string[];
 }
 
 interface Card {
@@ -60,10 +62,46 @@ const FlashCard: FC = () => {
     const [otherCards, setOtherCards] = useState<Card[]>([]);
     const [otherDecksList, setOtherDecksList] = useState<boolean>(false);
     
+    const [tags, setTags] = useState<string[]>([]);
+    const [newTag, setNewTag] = useState<string>('');
+
     const [searchTerm, setSearchTerm] = useState('');
-    const filteredDecks = otherDecks.filter(deck =>
-        deck.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+
+    const [filteredDecks, setFilteredDecks] = useState<Deck[]>([]); // Decks after filtering
+
+    useEffect(() => {
+        const fetchOtherDecks = async () => {
+            try {
+                const decksQuery = query(collection(db, 'Flashcards'));
+                const decksSnapshot = await getDocs(decksQuery);
+                const decksData = decksSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    name: doc.id, // Modify if the name is different in your document
+                    tags: doc.data().tags || [], // Ensure tags is retrieved from the document
+                }));
+                setOtherDecks(decksData);
+                setFilteredDecks(decksData); // Initially, show all decks
+            } catch (error) {
+                console.error('Error fetching decks:', error);
+            }
+        };
+    
+        fetchOtherDecks();
+    }, []);
+    
+    useEffect(() => {
+        // Filter decks by name and tags when searchTerm changes
+        const filtered = otherDecks.filter(deck => 
+            deck.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            deck.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+        setFilteredDecks(filtered);
+    }, [searchTerm, otherDecks]);
+    
+    // Handling search input
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
 
     const openOtherlDecks = () => {setOtherDecksList(true)}
     const closeOtherlDecks = () => {setOtherDecksList(false)}
@@ -81,13 +119,14 @@ const FlashCard: FC = () => {
         setEditedCardFront('');
         setEditedCardBack('');
     };
-
+    
+    /*
     useEffect(() => {
         const fetchOtherDecks = async () => {
             try {
                 const decksQuery = query(collection(db, 'Flashcards'));
                 const decksSnapshot = await getDocs(decksQuery);
-                const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id }));
+                const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id, tags: [], }));
                 setOtherDecks(decksData);
             } catch (error) {
                 console.error('Error fetching decks:', error);
@@ -95,7 +134,8 @@ const FlashCard: FC = () => {
         };
         fetchOtherDecks();
     }, []);
-
+    */
+    
     useEffect(() => {
         if (selectedDeck) {
             fetchOtherCards(selectedDeck);
@@ -192,26 +232,86 @@ const FlashCard: FC = () => {
         setGlobalDecksPractice(true)
     };
 
+    const handleDeckSelection = async (deckId: string) => {
+        setSelectedDeck(deckId); // Set selected deck
+    
+        if (deckId) {
+            try {
+                const deckRef = firestoreDoc(db, 'Flashcards', deckId);
+                const deckDoc = await getDoc(deckRef);
+    
+                if (deckDoc.exists()) {
+                    const { tags: fetchedTags = [] } = deckDoc.data(); // Get tags
+                    setTags(fetchedTags); // Set tags in state
+                    toast.success("Tags carregadas com sucesso!");
+                } else {
+                    setTags([]); // Clear tags if deck has none
+                    toast.error("Deck não possui tags.");
+                }
+            } catch (error) {
+                console.error("Erro ao carregar tags:", error);
+                toast.error("Erro ao carregar tags do deck.");
+            }
+        } else {
+            setTags([]); // Clear tags if no deck is selected
+        }
+    };
+    
     const createDeck = async () => {
         if (newDeckName) {
             try {
                 const deckRef = firestoreDoc(db, 'Flashcards', newDeckName);
                 const deckDoc = await getDoc(deckRef);
-
+    
                 if (!deckDoc.exists()) {
-                    await setDoc(deckRef, {});
-                    setDecks(prevDecks => [...prevDecks, { id: newDeckName, name: newDeckName }]);
+                    await setDoc(deckRef, { tags }); // Add tags to Firestore
+                    setDecks((prevDecks) => [
+                        ...prevDecks,
+                        { id: newDeckName, name: newDeckName, tags },
+                    ]);
                     setSelectedDeck(newDeckName);
-                    toast.success("Deck criado!");
+                    toast.success("Deck criado com tags!");
                 } else {
-                    toast.error('Deck already exists!');
+                    toast.error('Deck já existe!');
                 }
             } catch (error) {
-                console.error('Error creating deck:', error);
-                toast.error('Erro!');
+                console.error('Erro ao criar deck:', error);
+                toast.error('Erro ao criar deck!');
+            }
+        }
+    };    
+
+    const addTag = async () => {
+        if (newTag && !tags.includes(newTag) && selectedDeck) {
+            const updatedTags = [...tags, newTag];
+            try {
+                const deckRef = firestoreDoc(db, 'Flashcards', selectedDeck);
+                await updateDoc(deckRef, { tags: updatedTags }); // Update Firestore
+                setTags(updatedTags); // Update state
+                setNewTag(''); // Clear input field
+                toast.success('Tag adicionada!');
+            } catch (error) {
+                console.error('Erro ao adicionar tag:', error);
+                toast.error('Erro ao adicionar tag!');
             }
         }
     };
+    
+    const removeTag = async (index: number) => {
+        if (selectedDeck) {
+            const updatedTags = tags.filter((_, i) => i !== index);
+            try {
+                const deckRef = firestoreDoc(db, 'Flashcards', selectedDeck);
+                await updateDoc(deckRef, { tags: updatedTags }); // Update Firestore
+                setTags(updatedTags); // Update state
+                toast.success('Tag removida!');
+            } catch (error) {
+                console.error('Erro ao remover tag:', error);
+                toast.error('Erro ao remover tag!');
+            }
+        }
+    };
+    
 
     const addCard = async () => {
         if (selectedDeck && newCardFront && newCardBack) {
@@ -413,105 +513,112 @@ const FlashCard: FC = () => {
     
     return (
         <div className="flex flex-row items-center w-full min-h-[90vh] justify-center">
-           <div className='flex flex-col w-max items-center justify-center p-6 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
-            <div className='flex flex-row gap-2 items-center'>
-                {session?.user.role === 'student' &&
-                <>
-                    <FluencyButton variant='gray' onClick={openGlobalDecks}>Seus decks</FluencyButton>
-                    <FluencyButton variant='warning' onClick={openOtherlDecks}>Outros decks</FluencyButton>
-                    
-                </>}
-
-                {session?.user.role === 'teacher' &&
-                <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>
-                {session?.user.role === 'teacher' && (
-                    <div className='flex flex-col items-center gap-1 w-full'>
-                        <FluencyButton className='w-max' variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>
-                        <FluencyInput
-                            type="text"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            placeholder="Lista de decks..."
-                            className="w-max"
-                        />
-                    </div>)}
-                
-                {session?.user.role === 'teacher' && (
-                <div className='flex flex-col items-center gap-2 p-2 h-[70vh] overflow-hidden overflow-y-scroll'>
-                    <ul className='flex flex-col items-start p-4 gap-2'>
-                        {filteredDecks.map(deck => (
-                            <li className='flex flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-bg-light dark:bg-fluency-bg-dark w-full justify-between' key={deck.id}>
-                                <p className='font-bold'>{deck.name}</p>
-                                <div className='flex flex-row gap-2 items-center'>
-                                    <button className='bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hoverdark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out' value={deck.name} onClick={() => openConfirmModal(deck.id)}>Enviar para Aluno</button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>)}
-                </div>}
-            </div>
-
-            {globalDecksPractice &&
-            <div className='flex flex-col items-center'>
-                <div className='flex flex-col items-center gap-2 p-8'>
-                <p><span className='font-semibold'>Deck: </span>{decks.find(deck => deck.id === selectedDeck)?.name}</p>
-                <p className='flex flex-row gap-1 items-center p-1 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'><span className='font-bold'>Cartões:</span> {cards.length}</p>
-                {cards[currentCard] && (
-                        <div className="flashcard" onClick={() => setIsFlipped(!isFlipped)} style={{ backgroundColor: isFlipped ? '#65C6E0' : '#65C6E0' }}>
-                            <div className={`flashcard__front font-bold ${isFlipped ? 'flipped' : ''}`}>
-                                {cards[currentCard].front}
+           <div className="flex flex-col items-center justify-start min-h-[90vh] w-full">
+                <Tabs aria-label="Options" radius="lg" color="primary" classNames={{
+                    tabList: "gap-6 w-full relative rounded-none p-0 border-b border-divider",
+                    cursor: "w-full bg-fluency-gray-500 rounded-t-lg",
+                    tab: "max-w-fit px-0 h-12",
+                    tabContent: "group-data-[selected=true]:text-white px-4 font-bold"
+                    }}>
+                    <Tab key="seus" title="Praticar">
+                        <div className='flex flex-row gap-2 items-center justify-center'>
+                            <FluencyButton variant='gray' onClick={openGlobalDecks}>Seus decks</FluencyButton>
+                            <FluencyButton variant='warning' onClick={openOtherlDecks}>Outros decks</FluencyButton>
+                        </div>
+                        <div>
+                        {globalDecksPractice &&
+                        <div className='flex flex-col items-center'>
+                            <div className='flex flex-col items-center gap-2 p-8'>
+                            <p><span className='font-semibold'>Deck: </span>{decks.find(deck => deck.id === selectedDeck)?.name}</p>
+                            <p className='flex flex-row gap-1 items-center p-1 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'><span className='font-bold'>Cartões:</span> {cards.length}</p>
+                            {cards[currentCard] && (
+                                    <div className="flashcard" onClick={() => setIsFlipped(!isFlipped)} style={{ backgroundColor: isFlipped ? '#65C6E0' : '#65C6E0' }}>
+                                        <div className={`flashcard__front font-bold ${isFlipped ? 'flipped' : ''}`}>
+                                            {cards[currentCard].front}
+                                        </div>
+                                        <div className={`flashcard__back font-bold ${isFlipped ? 'flipped' : 'hidden'}`}>
+                                            {cards[currentCard].back}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            <div className={`flashcard__back font-bold ${isFlipped ? 'flipped' : 'hidden'}`}>
-                                {cards[currentCard].back}
+                            <div className='flex flex-row gap-3 w-full justify-center'>
+                                <div className='flex flex-row items-center gap-2 text-white'>
+                                    {isFlipped && 
+                                    <>
+                                        <button
+                                            className='bg-fluency-green-500 p-2 px-4 rounded-md font-bold'
+                                            onClick={() => reviewCard(cards[currentCard].id, 'easy')}
+                                        >
+                                            Fácil
+                                        </button>
+                                        <button
+                                            className='bg-fluency-orange-500 p-2 px-4 rounded-md font-bold'
+                                            onClick={() => reviewCard(cards[currentCard].id, 'medium')}
+                                        >
+                                            Médio
+                                        </button>
+                                        <button
+                                            className='bg-fluency-red-500 p-2 px-4 rounded-md font-bold'
+                                            onClick={() => reviewCard(cards[currentCard].id, 'hard')}
+                                        >
+                                            Difícil
+                                        </button>
+                                        
+                                        <button className='bg-fluency-blue-500 p-2 px-4 rounded-md font-bold'
+                                            onClick={() => {
+                                            setCurrentCard(prevCard => (prevCard + 1) % cards.length);
+                                            setIsFlipped(false);
+                                            }}>
+                                            <FaArrowRight className='w-6 h-auto' />
+                                        </button>
+                                    </>}
+                                </div>
+                                            {isFlipped ? (
+                                                <></>
+                                            ):(
+                                            <button className='bg-fluency-orange-500 p-2 px-4 rounded-md font-bold text-white'
+                                                    onClick={() => {
+                                                    setCurrentCard(prevCard => (prevCard + 1) % cards.length);
+                                                    setIsFlipped(false);}}>
+                                                Pular
+                                            </button>
+                                            )}
+                                    </div>
+                                </div>}
+                        </div>
+                    </Tab>
+                    {session?.user.role === 'teacher' && (
+                    <Tab key="criar" title="Criar ou Editar">
+                        <div>
+                            <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>           
+                                <div className='flex flex-row justify-center items-center gap-1 w-full px-4'>
+                                    <FluencyButton className='w-full' variant='confirm' onClick={openModal}>Criar ou Editar deck</FluencyButton>
+                                    <FluencyInput
+                                        type="text"
+                                        value={searchTerm}
+                                        onChange={e => setSearchTerm(e.target.value)}
+                                        placeholder="Procurar por nome ou tag"
+                                        className="w-full"
+                                    />
+                                </div>
+                            
+                                <div className='flex flex-col items-center gap-1 h-fit max-h-[65vh] overflow-hidden overflow-y-scroll'>
+                                    <ul className='flex flex-col items-start p-4 gap-2'>
+                                        {filteredDecks.map(deck => (
+                                            <li className='flex flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-bg-light dark:bg-fluency-bg-dark w-full justify-between' key={deck.id}>
+                                                <p className='font-bold'>{deck.name}</p>
+                                                <div className='flex flex-row gap-2 items-center'>
+                                                    <button className='bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hover:dark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out' value={deck.name} onClick={() => openConfirmModal(deck.id)}>Enviar para Aluno</button>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    )}
-                </div>
-                <div className='flex flex-row gap-3 w-full justify-center'>
-                    <div className='flex flex-row items-center gap-2 text-white'>
-                        {isFlipped && 
-                        <>
-                            <button
-                                className='bg-fluency-green-500 p-2 px-4 rounded-md font-bold'
-                                onClick={() => reviewCard(cards[currentCard].id, 'easy')}
-                            >
-                                Fácil
-                            </button>
-                            <button
-                                className='bg-fluency-orange-500 p-2 px-4 rounded-md font-bold'
-                                onClick={() => reviewCard(cards[currentCard].id, 'medium')}
-                            >
-                                Médio
-                            </button>
-                            <button
-                                className='bg-fluency-red-500 p-2 px-4 rounded-md font-bold'
-                                onClick={() => reviewCard(cards[currentCard].id, 'hard')}
-                            >
-                                Difícil
-                            </button>
-                            
-                            <button className='bg-fluency-blue-500 p-2 px-4 rounded-md font-bold'
-                                onClick={() => {
-                                setCurrentCard(prevCard => (prevCard + 1) % cards.length);
-                                setIsFlipped(false);
-                                }}>
-                                <FaArrowRight className='w-6 h-auto' />
-                            </button>
-                        </>}
-                    </div>
-                        {isFlipped ? (
-                            <></>
-                        ):(
-                        <button className='bg-fluency-orange-500 p-2 px-4 rounded-md font-bold text-white'
-                                onClick={() => {
-                                setCurrentCard(prevCard => (prevCard + 1) % cards.length);
-                                setIsFlipped(false);}}>
-                            Pular
-                        </button>
-                        )}
-                </div>
-             </div>}
+                    </Tab>)}
+                </Tabs>
             </div>
 
             {globalDecks &&
@@ -556,29 +663,50 @@ const FlashCard: FC = () => {
 
             {otherDecksList &&
             <div className="fixed z-50 inset-0 overflow-y-hidden">
-                <div className="flex items-center justify-center min-h-screen">
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    <div className="h-[85vh] overflow-y-scroll bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all p-8">
-                        <FluencyCloseButton onClick={closeOtherlDecks}/>
-                        
-                        <div className='flex flex-col items-center'>
-                            <h2 className='font-bold text-xl'>Decks</h2>
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="fixed inset-0 transition-opacity">
+                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <div className="h-[85vh] overflow-y-scroll bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all p-8">
+                    <FluencyCloseButton onClick={closeOtherlDecks} />
+                    
+                    <div className="flex flex-col items-center">
+                        <h2 className="font-bold text-xl mb-2">Decks</h2>
 
-                            <ul className='flex flex-col items-start p-4 gap-2'>
-                            {otherDecks.map(otherDecks => (
-                                <li className='flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={otherDecks.id}>
-                                    <p className='font-bold'>{otherDecks.name}</p>
-                                    <div className='flex flex-row gap-2 items-center'>
-                                        <button className='bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hoverdark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out' value={otherDecks.name} onClick={() => openOtherConfirmModal(otherDecks.id)}>Praticar</button>
-                                    </div>
-                                </li>
-                            ))}
+                        {/* Search input */}
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            placeholder="Procurar por nome ou tags..."
+                            className="w-full dark:bg-fluency-pages-dark border border-gray-300 focus:outline-none rounded-md px-3 py-2 mb-2"
+                        />
+
+                        <ul className="flex flex-col items-start p-4 gap-2">
+                            {filteredDecks.length > 0 ? (
+                                filteredDecks.map((deck) => (
+                                    <li
+                                        key={deck.id}
+                                        className="flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between"
+                                    >
+                                        <p className="font-bold">{deck.name}</p>
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <button
+                                                className="bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hoverdark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out"
+                                                value={deck.name}
+                                                onClick={() => openOtherConfirmModal(deck.id)}
+                                            >
+                                                Praticar
+                                            </button>
+                                        </div>
+                                    </li>
+                                ))
+                            ) : (
+                                <li className="text-center text-gray-500">Nenhum deck encontrado.</li>
+                            )}
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>}
 
@@ -604,14 +732,19 @@ const FlashCard: FC = () => {
                                     <div className='flex flex-col gap-3 items-center w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md'>
                                     <h4 className="text-lg leading-6 font-medium">Criar cartão</h4>
                                         <div className='flex flex-col gap-2 w-full items-start'>
-                                            <select className="ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" value={selectedDeck} onChange={e => setSelectedDeck(e.target.value)}>
+                                            <select
+                                                className="ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
+                                                value={selectedDeck}
+                                                onChange={(e) => handleDeckSelection(e.target.value)}
+                                                >
                                                 <option value="">Selecione um deck</option>
-                                                {otherDecks.map(deck => (
+                                                {otherDecks.map((deck) => (
                                                     <option key={deck.id} value={deck.id}>
                                                         {deck.name}
                                                     </option>
                                                 ))}
                                             </select>
+
                                             <div className='flex flex-row gap-1 w-full'>
                                                 <FluencyInput 
                                                     type="text" 
@@ -621,6 +754,36 @@ const FlashCard: FC = () => {
                                                     placeholder="Ou crie um deck novo: 'Nome do deck - Idioma'" 
                                                 />
                                                 <FluencyButton className='w-min' onClick={createDeck}>Criar</FluencyButton>
+                                            </div>
+
+                                            <div className='flex flex-col items-start justify-center gap-2'>
+                                                <h5 className="font-medium">Tags</h5>
+                                                <div className="flex gap-2 items-center">
+                                                    <FluencyInput
+                                                        type="text"
+                                                        value={newTag}
+                                                        onChange={(e) => setNewTag(e.target.value)}
+                                                        placeholder="Adicionar Tag"
+                                                        className="flex-grow"
+                                                    />
+                                                    <FluencyButton onClick={addTag}>Adicionar</FluencyButton>
+                                                </div>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {tags.map((tag, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className="text-xs font-bold flex items-center bg-fluency-blue-200 dark:bg-fluency-blue-800 text-fluency-text-light dark:text-fluency-text-dark px-2 py-1 rounded-full"
+                                                        >
+                                                            <span>{tag}</span>
+                                                            <button
+                                                                className="ml-2 text-red-500"
+                                                                onClick={() => removeTag(index)}
+                                                            >
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
 

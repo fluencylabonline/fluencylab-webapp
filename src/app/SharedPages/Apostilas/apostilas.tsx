@@ -94,7 +94,7 @@ export default function ApostilasCreation() {
 
             for (const wb of workbookCollections) {
                 const q = query(
-                    collection(db, `Notebooks/${wb}/Lessons`),
+                    collection(db, `Apostilas/${wb}/Lessons`),
                 );
                 const querySnapshot = await getDocs(q);
                 const notebooksFromWb = querySnapshot.docs.map(doc => ({ ...doc.data(), docID: doc.id }) as Notebook);
@@ -165,7 +165,7 @@ export default function ApostilasCreation() {
                 content: '',
                 unit: unit
             };
-            await addDoc(collection(db, `Notebooks/${workbook}/Lessons`), newNotebook);
+            await addDoc(collection(db, `Apostilas/${workbook}/Lessons`), newNotebook);
             setNotebooks([...notebooks, newNotebook]);
             closeModalLicao();
             toast.success('Lição criada com sucesso!', {

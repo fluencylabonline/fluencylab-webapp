@@ -230,9 +230,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     }
   };
 
-  const CustomDocument = Document.extend({
-    content: '',
-  })
 
   const { data: session } = useSession();
   const [editable, setEditable] = useState(false)
@@ -547,7 +544,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           </button>
           </Tooltip>
 
-          <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <Tooltip content='Clique para adicionar um exercício de tradução' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={openTranslationModal}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"

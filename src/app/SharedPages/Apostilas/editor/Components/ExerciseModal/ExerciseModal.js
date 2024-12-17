@@ -76,7 +76,7 @@ const ExerciseModal = ({ isOpen, onClose, editor }) => {
         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-28 h-full p-5">
           <div className="flex flex-col  items-center justify-center">
             <h3 className="text-lg leading-6 font-medium p-1">Criar Exercício</h3>
-            <div className='flex flex-row gap-2 w-full h-full items-center'>
+            <div className='flex flex-col items-center justify-center gap-1 w-full h-full'>
               {sentences.map((item, index) => (
                 <div key={index} className="w-full">
                   <textarea
