@@ -114,7 +114,7 @@ const TranslationComponent = ({ node, updateAttributes }) => {
 
   return (
     <NodeViewWrapper className="react-component">
-      <div className="flex flex-col items-start w-full">
+      <div className="flex flex-col items-start w-full ml-3">
         <div className="flex flex-row gap-3 items-start">
           <p className="flex flex-row items-end gap-2">
             <strong>{sentenceNumber}. </strong>

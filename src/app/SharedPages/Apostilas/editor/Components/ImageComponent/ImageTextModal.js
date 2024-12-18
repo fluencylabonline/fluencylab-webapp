@@ -12,9 +12,9 @@ const ImageTextModal = ({ isOpen, onClose, editor }) => {
   const [text, setText] = useState('');
   const [position, setPosition] = useState('left');
   const [size, setSize] = useState('100px');
-  const [height, setHeight] = useState('5rem');
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [previewHeight, setPreviewHeight] = useState('auto');
 
   const handleImageUpload = async () => {
     if (!image) return;
@@ -39,7 +39,7 @@ const ImageTextModal = ({ isOpen, onClose, editor }) => {
 
     if (imageUrl && editor) {
       editor.chain().focus().insertContent(
-        `<image-text-component imageUrl="${imageUrl}" text="${text}" position="${position}" size="${size}" height="${height}"></image-text-component>`
+        `<image-text-component imageUrl="${imageUrl}" text="${text}" position="${position}" size="${size}"></image-text-component>`
       ).run();
       onClose();
     }
@@ -61,12 +61,20 @@ const ImageTextModal = ({ isOpen, onClose, editor }) => {
       </div>
       <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
         <div className="flex flex-col items-center justify-center">
-          <h3 className="text-lg font-medium mb-4">Upload Image and Add Text</h3>
+        <h3 className="text-lg font-medium mb-4">Upload Image and Add Text</h3>
           <div className="flex flex-col gap-3">
             <input type="file" onChange={handleImagePreview} />
             {imagePreview && (
               <div className="border p-2 rounded-lg">
-                <img src={imagePreview} alt="Preview" style={{ width: size, height }} />
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  style={{ width: size, height: previewHeight }}
+                  onLoad={(e) => {
+                    const { naturalWidth, naturalHeight } = e.target;
+                    setPreviewHeight((parseInt(size) / naturalWidth) * naturalHeight + 'px');
+                  }}
+                />
               </div>
             )}
             <input
@@ -83,18 +91,14 @@ const ImageTextModal = ({ isOpen, onClose, editor }) => {
               <option value="left">Left</option>
               <option value="right">Right</option>
               <option value="center">Center</option>
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
             </select>
             <input
               className="border rounded p-2"
               value={size}
               onChange={(e) => setSize(e.target.value)}
               placeholder="Image size (e.g., 100px)"
-            />
-            <input
-              className="border rounded p-2"
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
-              placeholder="Div height (e.g., 5rem)"
             />
             <div className="flex gap-2 justify-end">
               <FluencyButton

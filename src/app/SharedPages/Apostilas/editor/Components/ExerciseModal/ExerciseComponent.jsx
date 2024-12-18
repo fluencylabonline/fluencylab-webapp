@@ -49,7 +49,7 @@ const ExerciseComponent = ({ node, updateAttributes }) => {
       <div className="flex flex-col items-start w-full">
         {!isEditing ? (
           <>
-            <p className="mb-2">
+            <p className="mb-2 ml-3">
               {parts[0]}
               <input
                 type="text"
