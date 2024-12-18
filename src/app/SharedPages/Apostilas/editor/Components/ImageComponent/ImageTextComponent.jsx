@@ -24,7 +24,7 @@ const ImageTextComponent = ({ node }) => {
   };
 
   return (
-    <NodeViewWrapper className="react-component">
+    <NodeViewWrapper className="react-component flex flex-col justify-center items-center">
       <div
         className={`flex ${getFlexDirection()}`}
         style={{ width: size, height: calculatedHeight }}

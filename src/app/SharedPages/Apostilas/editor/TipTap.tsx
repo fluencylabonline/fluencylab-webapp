@@ -42,6 +42,7 @@ import { CiImageOn } from "react-icons/ci";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
 import { TbVocabulary } from "react-icons/tb";
 import { TbReload } from "react-icons/tb";
+import { TbCloudDownload } from "react-icons/tb";
 
 import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -87,6 +88,12 @@ import VocabulabNode from './Components/VocabuLabComponent/VocabulabNode';
 
 import ImageTextModal from './Components/ImageComponent/ImageTextModal';
 import ImageTextNode from './Components/ImageComponent/ImageTextNode';
+
+import FileSnippetNode from './Components/FileComponent/FileSnippetNode';
+import FileUploadSnippet from './Components/FileComponent/FileUploadSnippet';
+
+import SentencesModal from './Components/SentencesComponent/SentencesModal';
+import SentencesNode from './Components/SentencesComponent/SentencesNode';
 
 type PopoversProps = {
   editor: Editor;
@@ -177,6 +184,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
   const [isModalVocabulabOpen, setIsModalVocabulabOpen] = useState<boolean>(false);
   const [isModalImageTextOpen, setIsModalImageTextOpen] = useState<boolean>(false);
+  const [isModalFileOpen, setIsModalFileOpen] = useState<boolean>(false);
+  const [isModalSentencesOpen, setIsModalSentencesOpen] = useState<boolean>(false);
   
   const [isModalTextOpen, setModalTextOpen] = useState(false);
   const [initialText, setInitialText] = useState('');
@@ -239,6 +248,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       VocabulabNode,
       ReviewNode,
       ImageTextNode,
+      FileSnippetNode,
+      SentencesNode,
       Typography,
       BulletList,
       CustomBulletList,
@@ -364,6 +375,22 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     setIsModalImageTextOpen(false);
   };
 
+  const openFileModal = () => {
+    setIsModalFileOpen(true);
+  };
+
+  const closeFileModal = () => {
+    setIsModalFileOpen(false);
+  };
+
+  const openSentencesModal = () => {
+    setIsModalSentencesOpen(true);
+  };
+
+  const closeSentencesModal = () => {
+    setIsModalSentencesOpen(false);
+  };
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       {session?.user.role === 'admin' && <Toolbar editor={editor} content={content} addImage={addImage} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
@@ -377,6 +404,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         <VocabulabModal isOpen={isModalVocabulabOpen} onClose={closeVocabulabModal} editor={editor} />
         <ReviewModal isOpen={isModalTextReviewOpen} onClose={handleCloseModalReview} editor={editor} />
         <ImageTextModal isOpen={isModalImageTextOpen} onClose={closeImageTextModal} editor={editor} />
+        <FileUploadSnippet isOpen={isModalFileOpen} onClose={closeFileModal} editor={editor} />
+        <SentencesModal isOpen={isModalSentencesOpen} onClose={closeSentencesModal} editor={editor} />
 
         <AudioSelectionModal
           isOpen={isModalAudioOpen}
@@ -535,6 +564,25 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
           >
             <TbVocabulary />
+          </button>
+          </Tooltip>
+        <Toaster />
+
+        <Tooltip content='Clique para adicionar um link de download' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={openFileModal}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <TbCloudDownload />
+          </button>
+          </Tooltip>
+
+        <Tooltip content='Clique para adicionar um texto' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={openSentencesModal}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <TbCloudDownload />
           </button>
           </Tooltip>
         <Toaster />
