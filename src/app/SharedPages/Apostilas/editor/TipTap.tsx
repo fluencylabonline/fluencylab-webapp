@@ -27,7 +27,6 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import Typography from '@tiptap/extension-typography'
-import Blockquote from '@tiptap/extension-blockquote'
 
 import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
@@ -85,6 +84,9 @@ import TranslationNode from './Components/TranslationComponent/TranslationNode';
 
 import VocabulabModal from './Components/VocabuLabComponent/VocabulabModal';
 import VocabulabNode from './Components/VocabuLabComponent/VocabulabNode';
+
+import ImageTextModal from './Components/ImageComponent/ImageTextModal';
+import ImageTextNode from './Components/ImageComponent/ImageTextNode';
 
 type PopoversProps = {
   editor: Editor;
@@ -174,10 +176,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const [isModalTranslationOpen, setIsModalTranslationOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
   const [isModalVocabulabOpen, setIsModalVocabulabOpen] = useState<boolean>(false);
-
-  const [description, setDescription] = useState<string>('');
-  const [newDescription, setNewDescription] = useState<string>('');
-
+  const [isModalImageTextOpen, setIsModalImageTextOpen] = useState<boolean>(false);
+  
   const [isModalTextOpen, setModalTextOpen] = useState(false);
   const [initialText, setInitialText] = useState('');
   const handleOpenModal = () => setModalTextOpen(true);
@@ -189,7 +189,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const handleCloseModalTeacher = () => setModalTextTeacherOpen(false);
 
   const [isModalTextGoalOpen, setModalTextGoalOpen] = useState(false);
-  const [initialTextGoal, setInitialTextGoal] = useState('');
   const handleOpenModalGoal = () => setModalTextGoalOpen(true);
   const handleCloseModalGoal = () => setModalTextGoalOpen(false);
 
@@ -209,28 +208,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     setModalExerciseOpen(false)
   };
 
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewDescription(event.target.value);
-  };
-
-  const handleUpdateDescription = async () => {
-    try {
-      await updateDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`), {
-        description: newDescription,
-      });
-      setDescription(newDescription);
-      toast.success('Descrição atualizada!', {
-        position: 'top-center',
-      });
-    } catch (error) {
-      console.error('Error updating description: ', error);
-      toast.error('Erro ao atualizar descrição!', {
-        position: 'top-center',
-      });
-    }
-  };
-
-
   const { data: session } = useSession();
   const [editable, setEditable] = useState(false)
 
@@ -248,7 +225,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       Image,
       TextStyle, 
       FontFamily,
-      Blockquote,
       ReactComponent,
       Embed,
       SpeakingExtension,
@@ -261,6 +237,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       TranslationNode,
       VocabulabNode,
       ReviewNode,
+      ImageTextNode,
       Typography,
       BulletList,
       CustomBulletList,
@@ -378,6 +355,14 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     setIsModalTranslationOpen(false);
   };
 
+  const openImageTextModal = () => {
+    setIsModalImageTextOpen(true);
+  };
+
+  const closeImageTextModal = () => {
+    setIsModalImageTextOpen(false);
+  };
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       {session?.user.role === 'admin' && <Toolbar editor={editor} content={content} addImage={addImage} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
@@ -390,6 +375,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         <TextDisplayModalTip isOpen={isModalTextTipOpen} onClose={handleCloseModalTip} initialTextTip={initialTextTip} editor={editor} />
         <VocabulabModal isOpen={isModalVocabulabOpen} onClose={closeVocabulabModal} editor={editor} />
         <ReviewModal isOpen={isModalTextReviewOpen} onClose={handleCloseModalReview} editor={editor} />
+        <ImageTextModal isOpen={isModalImageTextOpen} onClose={closeImageTextModal} editor={editor} />
 
         <AudioSelectionModal
           isOpen={isModalAudioOpen}
@@ -431,29 +417,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         <div className="fixed top-[6.5rem] right-2">
           <div className='flex flex-col items-center gap-1'>
           
-          {/*
-          <Popover placement="bottom" showArrow offset={10}>
-            <PopoverTrigger>
-                <Button className='bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
-                  <VscWholeWord className="w-6 h-auto"/>
-                </Button>      
-            </PopoverTrigger>
-            <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-pages-dark border border-fluency-gray-500 p-3 rounded-md">
-              {(titleProps) => (
-                <div className="px-1 py-2 w-full">
-                  <p className="text-md font-bold text-foreground" {...titleProps}>
-                    Atualizar a Descrição
-                  </p>
-                  <div className="mt-2 flex flex-col gap-2 w-full">
-                  <FluencyInput className="w-full" defaultValue={description} placeholder="Descrição da aula" onChange={handleDescriptionChange} />
-                  <FluencyButton variant="confirm" onClick={handleUpdateDescription} className="w-full">Salvar</FluencyButton>
-                  </div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-          */}
-
           <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-orange-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={() => setIsModalAudioOpen(true)}
@@ -561,9 +524,18 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
             <TbVocabulary />
           </button>
           </Tooltip>
+
+          
           </div>
         </div>}
-
+        <Tooltip content='Clique para adicionar uma imagem' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <button
+            onClick={openImageTextModal}
+            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+          >
+            <TbVocabulary />
+          </button>
+          </Tooltip>
         <Toaster />
     </div>
   );
