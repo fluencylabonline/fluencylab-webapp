@@ -240,9 +240,12 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   const filteredItems = Object.keys(lessonDocs).flatMap(workbookName => {
     return lessonDocs[workbookName].flatMap(group => {
-      return group.docs.filter(doc => doc.data.title.toLowerCase().includes(searchTerm));
+      return group.docs.filter(doc => {
+        const title = doc.data?.title; // Safely access the title
+        return typeof title === 'string' && title.toLowerCase().includes(searchTerm); // Validate and check
+      });
     });
-  });
+  });  
 
   const renderItems = () => {
     return (

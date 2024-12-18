@@ -211,6 +211,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const { data: session } = useSession();
   const [editable, setEditable] = useState(false)
 
+
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
