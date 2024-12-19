@@ -46,7 +46,7 @@ const ImageTextComponent = ({ node }) => {
             />
           </div>
         )}
-        {text && <p className="text-md font-medium text-center">{text}</p>}
+        {text && <p className="text-md font-medium text-justify p-4">{text}</p>}
       </div>
 
       {/* Modal for enlarged image */}

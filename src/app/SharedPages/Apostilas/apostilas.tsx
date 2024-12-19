@@ -18,14 +18,11 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { useSession } from 'next-auth/react';
 
 import './apostilas.css';
-import { MdCardTravel } from "react-icons/md";
-import { IoSchool } from "react-icons/io5";
 import Traveling from "./traveling";
 import Instrumental from "./instrumental";
 import Kids from "./kids";
 import { FaRegCopy } from "react-icons/fa6";
 import Slides from "./slides";
-import FirstSteps2 from "./English/firststeps2";
 
 interface Notebook {
     title: string;
@@ -69,8 +66,6 @@ export default function ApostilasCreation() {
     const [slideLink, setSlideLink] = useState('');
     const [isForKids, setIsForKids] = useState(false);
 
-    const [firststeps2, setFirststeps2] = useState(false);
-
     function openModalSlide() {
         setCriarSlide(true);
     }
@@ -90,7 +85,7 @@ export default function ApostilasCreation() {
     useEffect(() => {
         const fetchNotebooks = async () => {
             const notebooksData: Notebook[] = [];
-            const workbookCollections = ['First Steps', 'First Steps2', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
+            const workbookCollections = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
 
             for (const wb of workbookCollections) {
                 const q = query(
@@ -245,7 +240,6 @@ export default function ApostilasCreation() {
 
         <div className="w-full lg:flex lg:flex-row lg:items-center lg:justify-around md:flex md:flex-row md:items-center md:justify-around flex flex-col items-center justify-around p-4 border border-fluency-blue-600 dark:border-fluency-blue-900 rounded-xl">
             <button onClick={() => {
-                setFirststeps2(false);
                 setFirststeps(true);
                 setThebasics(false);
                 setAllyouneedtoknow(false);
@@ -260,7 +254,6 @@ export default function ApostilasCreation() {
             </button>
             
             <button onClick={() => {
-                setFirststeps2(false);
                 setFirststeps(false);
                 setThebasics(true);
                 setAllyouneedtoknow(false);
@@ -274,8 +267,7 @@ export default function ApostilasCreation() {
                 The Basics <TbBookDownload onClick={() => handleDownloadWorkbook('02 - The Basics')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
             
-            <button onClick={() => {
-                setFirststeps2(false);                
+            <button onClick={() => {               
                 setFirststeps(false);
                 setThebasics(false);
                 setAllyouneedtoknow(true);
@@ -289,8 +281,7 @@ export default function ApostilasCreation() {
                 All you need to know <TbBookDownload onClick={() => handleDownloadWorkbook('All you need to know')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
 
-            <button onClick={() => {
-                setFirststeps2(false);                
+            <button onClick={() => {               
                 setFirststeps(false);
                 setThebasics(false);
                 setAllyouneedtoknow(false);
@@ -304,8 +295,7 @@ export default function ApostilasCreation() {
                 Traveling <TbBookDownload  onClick={() => handleDownloadWorkbook('Traveling')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
 
-            <button onClick={() => {
-                setFirststeps2(false);                
+            <button onClick={() => {               
                 setFirststeps(false);
                 setThebasics(false);
                 setAllyouneedtoknow(false);
@@ -319,8 +309,7 @@ export default function ApostilasCreation() {
                 Instrumental <TbBookDownload  onClick={() => handleDownloadWorkbook('Instrumental')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
 
-            <button onClick={() => {
-                setFirststeps2(false);                
+            <button onClick={() => {             
                 setFirststeps(false);
                 setThebasics(false);
                 setAllyouneedtoknow(false);
@@ -334,8 +323,7 @@ export default function ApostilasCreation() {
                 Kids <TbBookDownload  onClick={() => handleDownloadWorkbook('Kids')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
 
-            <button onClick={() => {
-                setFirststeps2(false);                
+            <button onClick={() => {            
                 setFirststeps(false);
                 setThebasics(false);
                 setAllyouneedtoknow(false);
@@ -348,23 +336,6 @@ export default function ApostilasCreation() {
             className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
                 Slides <TbBookDownload  onClick={() => handleDownloadWorkbook('Slides')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
             </button>
-
-            {session?.user.role === 'admin' && (
-                <button onClick={() => {
-                    setFirststeps2(true);                
-                    setFirststeps(false);
-                    setThebasics(false);
-                    setAllyouneedtoknow(false);
-                    setTraveling(false);
-                    setInstrumentalEnglish(false);
-                    setKids(false);
-                    setSlidesClass(false);
-                    setSearchTerm('');
-                }} 
-                className="flex flex-row gap-2 items-center text-sm font-bold text-fluency-blue-600 capitalize transition-colors duration-300 dark:text-fluency-blue-400 dark:hover:text-fluency-text-dark focus:outline-none hover:bg-fluency-blue-600 hover:text-fluency-text-dark focus:bg-fluency-blue-700 focus:text-fluency-text-dark rounded-md py-2 px-3">
-                    First Steps II <TbBookDownload  onClick={() => handleDownloadWorkbook('Slides')} className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all w-6 h-auto" />
-                </button>
-            )}
         </div>
         
 
@@ -405,10 +376,6 @@ export default function ApostilasCreation() {
                 <Slides />
             </div>}
 
-            {firststeps2 && 
-            <div className={firststeps2 ? 'fade-in w-full flex flex-col mt-4 justify-center' : 'fade-out'}>
-                <FirstSteps2 />
-            </div>}
         </div>
         ) : (
         <div>
@@ -505,7 +472,6 @@ export default function ApostilasCreation() {
 >
                                     <option value="">Selecione uma categoria</option>
                                     <option value="First Steps">First Steps</option>
-                                    <option value="First Steps2">First Steps - Updated</option>
                                     <option value="The Basics">The Basics</option>
                                     <option value="Traveling">Traveling</option>
                                     <option value="Instrumental">Instrumental</option>

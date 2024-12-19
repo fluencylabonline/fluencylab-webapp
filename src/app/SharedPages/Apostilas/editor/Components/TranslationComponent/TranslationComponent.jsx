@@ -132,10 +132,10 @@ const TranslationComponent = ({ node, updateAttributes }) => {
           <strong> - </strong>
           <input
             type="text"
-            className="border-b-2 border-dotted outline-none pl-1 focus:border-fluency-blue-500"
+            className="bg-transparent border-b-2 border-dotted outline-none pl-2 focus:border-fluency-blue-500"
             value={userTranslation}
             onChange={handleChange}
-            placeholder="Escreva a tradução aqui..."
+            placeholder="Escreva a tradução aqui"
           />
           <button
             onClick={checkTranslation}

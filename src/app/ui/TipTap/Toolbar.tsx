@@ -17,7 +17,7 @@ import { LuHighlighter } from "react-icons/lu";
 import { PiTextBBold, PiTextAlignCenter, PiTextAlignJustify, PiTextAlignLeft, PiTextAlignRight, PiTextTBold } from "react-icons/pi";
 import { IoImage } from "react-icons/io5";
 import { GoHorizontalRule } from "react-icons/go";
-import { AiOutlineBlock } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineBlock, AiOutlineColumnWidth, AiOutlineDelete, AiOutlineMergeCells, AiOutlinePlus, AiOutlineSplitCells, AiOutlineTable, AiOutlineTool } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import FluencyInput from "../Components/Input/input";
 import FluencyButton from "../Components/Button/button";
@@ -184,6 +184,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             <MdOutlineSubtitles className="w-5 h-auto" />
           </button>
         </Tooltip>
+
       </div>
 
       <Dropdown>
@@ -465,6 +466,126 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
             <AddLinkBox editor={editor} setModal={setModal} />
           )}
 
+          <Dropdown>
+            <DropdownTrigger>
+              <Button 
+                variant="bordered" 
+                className="hidden ml-1 p-1 px-2 text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md"
+              >
+                <AiOutlineTable className="w-5 h-auto" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu className="p-3 rounded-md bg-fluency-gray-300 dark:bg-fluency-gray-400" aria-label="Table Actions">
+              <DropdownItem 
+                onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineTable className="w-5 h-auto" /><span>Insert Table</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().addColumnBefore().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineColumnWidth className="w-5 h-auto" /><span>Add Column Before</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().addColumnAfter().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineColumnWidth className="w-5 h-auto" /><span>Add Column After</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().deleteColumn().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineDelete className="w-5 h-auto" /><span>Delete Column</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().addRowBefore().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlinePlus className="w-5 h-auto" /><span>Add Row Before</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().addRowAfter().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlinePlus className="w-5 h-auto" /><span>Add Row After</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().deleteRow().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineDelete className="w-5 h-auto" /><span>Delete Row</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().deleteTable().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineDelete className="w-5 h-auto" /><span>Delete Table</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().mergeCells().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineMergeCells className="w-5 h-auto" /><span>Merge Cells</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().splitCell().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineSplitCells className="w-5 h-auto" /><span>Split Cell</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().toggleHeaderColumn().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineColumnWidth className="w-5 h-auto" /><span>Toggle Header Column</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().toggleHeaderRow().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineColumnWidth className="w-5 h-auto" /><span>Toggle Header Row</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().toggleHeaderCell().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineColumnWidth className="w-5 h-auto" /><span>Toggle Header Cell</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().mergeOrSplit().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineMergeCells className="w-5 h-auto" /><span>Merge or Split</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().setCellAttribute('colspan', 2).run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineColumnWidth className="w-5 h-auto" /><span>Set Cell Attribute</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().fixTables().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineTool className="w-5 h-auto" /><span>Fix Tables</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().goToNextCell().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineArrowRight className="w-5 h-auto" /><span>Go to Next Cell</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={() => editor.chain().focus().goToPreviousCell().run()} 
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2"><AiOutlineArrowLeft className="w-5 h-auto" /><span>Go to Previous Cell</span></p>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
       </div>
       
       <Dropdown>
@@ -490,7 +611,7 @@ const Toolbar = ({ editor, isTyping, addImage, lastSaved, animation, buttonColor
       </Dropdown>
 
       <button
-        className={`ml-4 save-button ${animation ? 'animate' : ''}`}
+        className={`hidden ml-4 save-button ${animation ? 'animate' : ''}`}
         style={{ backgroundColor: buttonColor }}
       >
       </button>

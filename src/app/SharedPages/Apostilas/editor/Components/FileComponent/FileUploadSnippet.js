@@ -50,10 +50,10 @@ const FileUploadSnippet = ({ isOpen, onClose, editor }) => {
       </div>
       <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
         <div className="flex flex-col items-center justify-center">
-          <h3 className="text-lg font-medium mb-4">Upload File</h3>
+          <h3 className="text-lg font-medium mb-4">Download de arquivos</h3>
           <div className="flex flex-col gap-3">
             <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-            {file && <p className="text-sm text-gray-700">Selected File: {file.name}</p>}
+            {file && <p className="text-sm text-gray-700">Selecione o arquivo: {file.name}</p>}
 
             <textarea
               className="border rounded p-2"
@@ -69,10 +69,10 @@ const FileUploadSnippet = ({ isOpen, onClose, editor }) => {
                 onClick={handleInsert}
                 disabled={uploading || !file}
               >
-                {uploading ? 'Uploading...' : 'Insert'}
+                {uploading ? 'Uploading...' : 'Inserir'}
               </FluencyButton>
               <FluencyButton variant="danger" onClick={onClose}>
-                Cancel
+                Cancelar
               </FluencyButton>
             </div>
           </div>

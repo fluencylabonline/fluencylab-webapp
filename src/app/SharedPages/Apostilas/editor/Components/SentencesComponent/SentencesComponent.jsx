@@ -89,21 +89,21 @@ const SentencesComponent = ({ node, updateAttributes }) => {
   return (
     <NodeViewWrapper className="react-component">
       <div className="mb-4">
-        <p className="font-bold text-justify">{node.attrs.text}</p>
+        <p className="font-semibold text-justify p-3 bg-fluency-gray-100 dark:bg-fluency-gray-700 dark:text-white rounded-md">{node.attrs.text}</p>
       </div>
 
       {sentences.map((sentence, index) => (
-        <div key={index} className="mb-2 flex flex-row items-center justify-start gap-2">
+        <div key={index} className="mb-3 flex flex-row items-end justify-start gap-4">
           <input
             type="text"
             value={sentence}
             onChange={(e) => handleSentenceChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, index)}
-            placeholder={`Write sentence ${index + 1}`}
-            className="w-[22rem] p-1 bg-transparent border-b-2 border-dotted outline-none pl-1"
+            placeholder={`Escreva uma frase baseada no vocabulário ou estrutura...`}
+            className="w-full bg-transparent border-b-2 border-dotted outline-none pl-1"
           />
           <p
-            className={`text-sm font-bold ${
+            className={`w-[10rem] text-sm font-bold ${
               feedback[index] === 'Muito bem!' ? 'text-green-500' : 'text-red-500'
             }`}
           >

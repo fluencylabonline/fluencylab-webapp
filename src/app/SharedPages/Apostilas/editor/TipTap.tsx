@@ -2,13 +2,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 
-//Firebase
-import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
-import { db } from "@/app/firebase";
-
 import { toast, Toaster } from 'react-hot-toast';
-import '@/app/ui/TipTap//styles.scss'
+import {franc} from 'franc-min'; 
 
+import '@/app/ui/TipTap//styles.scss'
 import Toolbar from "@/app/ui/TipTap/Toolbar";
 
 //Imports
@@ -27,27 +24,29 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import Typography from '@tiptap/extension-typography'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Text from '@tiptap/extension-text'
+import Gapcursor from '@tiptap/extension-gapcursor'
 
 import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
-import { LuFileAudio } from 'react-icons/lu';
+import { LuFileAudio, LuFileText } from 'react-icons/lu';
 import { AiFillYoutube } from 'react-icons/ai';
 import { CgTranscript } from 'react-icons/cg';
-import { VscWholeWord } from 'react-icons/vsc';
 import { GoGoal } from "react-icons/go";
 import { LuBookOpen } from "react-icons/lu";
-import { BsTranslate } from "react-icons/bs";
+import { BsThreeDotsVertical, BsTranslate } from "react-icons/bs";
 import { GiChoice } from "react-icons/gi";
-import { CiImageOn } from "react-icons/ci";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
 import { TbVocabulary } from "react-icons/tb";
 import { TbReload } from "react-icons/tb";
 import { TbCloudDownload } from "react-icons/tb";
+import { FaHeadphonesAlt, FaRegImage } from "react-icons/fa";
+import { BiBandAid } from "react-icons/bi";
 
-import FluencyInput from '@/app/ui/Components/Input/input';
-import FluencyButton from '@/app/ui/Components/Button/button';
-
-import { Popover, PopoverTrigger, PopoverContent, Button, Tooltip } from '@nextui-org/react';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Tooltip } from '@nextui-org/react';
 import { useSession } from 'next-auth/react';
 
 import ReactComponent from './Components/AudioComponent/Extension';
@@ -98,21 +97,53 @@ import SentencesNode from './Components/SentencesComponent/SentencesNode';
 type PopoversProps = {
   editor: Editor;
 }
-interface LessonDoc {
-  id: string;
-  data: DocumentData;
-  unit: string;
-}
-
-interface GroupedLessonDocs {
-  unit: string;
-  docs: LessonDoc[];
-}
 
 function Popovers({ editor }: PopoversProps) {
+  const readAloud = () => {
+    if (editor) {
+      const selectedText = editor.state.selection.empty
+        ? "" // No text selected
+        : editor.state.doc.textBetween(
+            editor.state.selection.from,
+            editor.state.selection.to,
+            " "
+          );
+
+      if (selectedText) {
+        const detectedLanguage = franc(selectedText);
+        const languageMap: { [key: string]: string } = {
+          'eng': 'en', // English
+          'spa': 'es', // Spanish
+          'fra': 'fr', // French
+          'deu': 'de', // German
+          'rus': 'ru', // Russian
+          'jpn': 'ja', // Japanese
+          'kor': 'ko', // Korean
+          // Add more mappings as needed
+        };
+
+        const langCode = languageMap[detectedLanguage] || 'en'; // Default to English if language is not found
+        const speech = new SpeechSynthesisUtterance(selectedText);
+        speech.lang = langCode; // Set the language for speech synthesis
+
+        speechSynthesis.speak(speech);
+      } else {
+        toast.error("Please select some text to read.");
+      }
+    } else {
+      console.error("Editor is not available.");
+    }
+  };
 
   return (
       <BubbleMenu className="Popover" editor={editor}>
+          <button
+            onClick={readAloud}
+            className="bg-fluency-green-500 hover:bg-fluency-green-600 text-white p-2 rounded-lg duration-300 ease-in-out"
+            >
+            < FaHeadphonesAlt/>
+          </button>
+
           <button
             onClick={() => editor.chain().focus().setColor('#21B5DE').run()}
             className={editor.isActive('textStyle', { color: '#0047AB' }) ? 'is-active' : ''}
@@ -173,10 +204,6 @@ function Popovers({ editor }: PopoversProps) {
 }
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
-  const params = new URLSearchParams(window.location.search);
-  const workbook = params.get('workbook');
-  const lesson = params.get('lesson');
-
   const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalAudioOpen, setIsModalAudioOpen] = useState<boolean>(false);
@@ -220,7 +247,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const { data: session } = useSession();
   const [editable, setEditable] = useState(false)
 
-
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -235,6 +261,14 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       Image,
       TextStyle, 
       FontFamily,
+      Text,
+      Gapcursor,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       ReactComponent,
       Embed,
       SpeakingExtension,
@@ -305,7 +339,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     },
   }) 
 
-  
   useEffect(() => {
     if (session?.user.role === 'admin') {
       setEditable(true)
@@ -406,42 +439,12 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         <ImageTextModal isOpen={isModalImageTextOpen} onClose={closeImageTextModal} editor={editor} />
         <FileUploadSnippet isOpen={isModalFileOpen} onClose={closeFileModal} editor={editor} />
         <SentencesModal isOpen={isModalSentencesOpen} onClose={closeSentencesModal} editor={editor} />
-
-        <AudioSelectionModal
-          isOpen={isModalAudioOpen}
-          onClose={() => setIsModalAudioOpen(false)}
-          onSelectAudio={handleSelectAudio}
-        />
-
-        <SpeakingSelectionModal 
-          isOpen={isModalTranscriptOpen} 
-          onClose={() => setIsModalTranscriptOpen(false)} 
-          onSelectAudio={handleSelectTranscript} 
-        />
-
-        <EmbedSelectionModal
-          isEmbedOpen={isModalEmbedOpen}
-          onEmbedClose={() => setIsModalEmbedOpen(false)}
-          onSelectVideo={handleSelectVideo}
-        />
-
-        <ExerciseModal
-          isOpen={isModalExerciseOpen}
-          onClose={handleCloseModalExercise}
-          editor={editor}
-        />
-
-        <MultipleChoiceModal 
-          isOpen={isModalOpen} 
-          onClose={closeMultipleChoiceModal} 
-          editor={editor} 
-        />
-
-        <TranslationModal 
-          isOpen={isModalTranslationOpen} 
-          onClose={closeTranslationModal} 
-          editor={editor} 
-        />
+        <AudioSelectionModal isOpen={isModalAudioOpen} onClose={() => setIsModalAudioOpen(false)} onSelectAudio={handleSelectAudio} />
+        <SpeakingSelectionModal isOpen={isModalTranscriptOpen} onClose={() => setIsModalTranscriptOpen(false)} onSelectAudio={handleSelectTranscript} />
+        <EmbedSelectionModal isEmbedOpen={isModalEmbedOpen} onEmbedClose={() => setIsModalEmbedOpen(false)} onSelectVideo={handleSelectVideo} />
+        <ExerciseModal isOpen={isModalExerciseOpen} onClose={handleCloseModalExercise} editor={editor} />
+        <MultipleChoiceModal isOpen={isModalOpen} onClose={closeMultipleChoiceModal} editor={editor} />
+        <TranslationModal isOpen={isModalTranslationOpen} onClose={closeTranslationModal} editor={editor} />
 
         {session?.user.role === 'admin' &&
         <div className="fixed top-[6.5rem] right-2">
@@ -474,32 +477,44 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           </button>
           </Tooltip>
 
-          <Tooltip content='Clique para faixa de aluno' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={handleOpenModal}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-          >
-            <PiStudentFill />
-          </button>
-          </Tooltip>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button 
+                variant="bordered" 
+                className="flex flex-col items-center justify-center w-10 h-10 rounded-full bg-fluency-gray-200 dark:bg-fluency-gray-400 hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
+              >
+                <BiBandAid className="w-5 h-auto" />
+              </Button>
+            </DropdownTrigger>
+            
+            <DropdownMenu className="p-3 bg-fluency-gray-300 dark:bg-fluency-gray-400 rounded-md" aria-label="User Actions">
+              <DropdownItem 
+                onClick={handleOpenModal}
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2 font-bold"><PiStudentFill className="w-5 h-auto" /><span>Aluno</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={handleOpenModalTeacher}
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2 font-bold"><PiChalkboardTeacher className="w-5 h-auto" /><span>Professor</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={handleOpenModalTip}
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2 font-bold"><MdOutlineTipsAndUpdates className="w-5 h-auto" /><span>Dica</span></p>
+              </DropdownItem>
+              <DropdownItem 
+                onClick={openFileModal}
+                className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+              >
+                <p className="flex flex-row gap-2 font-bold"><TbCloudDownload className="w-5 h-auto" /><span>Arquivo</span></p>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
 
-          <Tooltip content='Clique para faixa de professor' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={handleOpenModalTeacher}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-          >
-            <PiChalkboardTeacher />
-          </button>
-          </Tooltip>
-
-          <Tooltip content='Clique para adicionar uma dica' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={handleOpenModalTip}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-          >
-            <MdOutlineTipsAndUpdates />
-          </button>
-          </Tooltip>
 
           <Tooltip content='Clique para adicionar uma meta' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
           <button
@@ -555,36 +570,26 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           </button>
           </Tooltip>
 
-          
-          </div>
-        </div>}
-        <Tooltip content='Clique para adicionar uma imagem' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <Tooltip content='Clique para adicionar uma imagem' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={openImageTextModal}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
           >
-            <TbVocabulary />
-          </button>
-          </Tooltip>
-        <Toaster />
-
-        <Tooltip content='Clique para adicionar um link de download' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={openFileModal}
-            className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-          >
-            <TbCloudDownload />
+            <FaRegImage />
           </button>
           </Tooltip>
 
-        <Tooltip content='Clique para adicionar um texto' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+          <Tooltip content='Clique para adicionar um texto' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
           <button
             onClick={openSentencesModal}
             className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-200 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-300 hover:dark:bg-fluency-gray-600"
-          >
-            <TbCloudDownload />
+                    >
+            <LuFileText />
           </button>
           </Tooltip>
+
+          </div>
+        </div>}
         <Toaster />
     </div>
   );
