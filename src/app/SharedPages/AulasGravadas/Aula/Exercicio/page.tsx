@@ -9,10 +9,10 @@ import Tiptap from '@/app/SharedPages/Apostilas/editor/TipTap';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 interface ExercicioProps {
-  content: any;
-  languageareaName: string | null;
-  moduleID: string | null;
-  id: string | null;
+  content?: any; // Use `?` for optional props
+  languageareaName?: string | null;
+  moduleID?: string | null;
+  id?: string | null;
 }
 
 const Exercicio: React.FC<ExercicioProps> = ({ content: initialContent, languageareaName, moduleID, id }) => {
