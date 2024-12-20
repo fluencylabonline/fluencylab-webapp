@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-
+/*
 // Firebase
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
@@ -55,3 +55,10 @@ const Exercicio: React.FC<ExercicioProps> = ({ content: initialContent, language
 };
 
 export default Exercicio;
+*/
+
+export default function Exercicio(){
+  return (
+    <div>Oi</div>
+  )
+}

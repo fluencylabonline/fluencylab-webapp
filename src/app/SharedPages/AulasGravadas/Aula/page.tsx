@@ -104,10 +104,10 @@ export default function Aula() {
 
                 {activePanel === 'exercicio' && (
                    <Exercicio 
-                        content={classData.content} 
+                        /*content={classData.content} 
                         languageareaName={new URLSearchParams(window.location.search).get('languageareaName')}
                         moduleID={new URLSearchParams(window.location.search).get('moduleID')}
-                        id={new URLSearchParams(window.location.search).get('id')}  
+                        id={new URLSearchParams(window.location.search).get('id')}  */
                     />
                 )}
                 {activePanel === 'pdf' && (
