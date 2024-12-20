@@ -23,7 +23,7 @@ const NotebookEditor = () => {
   useEffect(() => {
     const fetchNotebookContent = async (workbook: string, lesson: string) => {
       try {
-        const notebookDoc = await getDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`));
+        const notebookDoc = await getDoc(doc(db, `Apostilas/${workbook}/Lessons/${lesson}`));
         if (notebookDoc.exists()) {
           setContent(notebookDoc.data().content);
         } else {
@@ -44,7 +44,7 @@ const NotebookEditor = () => {
   const handleContentChange = async (content: string) => {
     try {
       if (workbook && lesson) {
-        await setDoc(doc(db, `Notebooks/${workbook}/Lessons/${lesson}`), { content: content }, { merge: true });
+        await setDoc(doc(db, `Apostilas/${workbook}/Lessons/${lesson}`), { content: content }, { merge: true });
       }
     } catch (error) {
       console.error('Error saving notebook content: ', error);
