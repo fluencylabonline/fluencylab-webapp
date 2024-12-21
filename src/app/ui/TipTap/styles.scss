@@ -1,13 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
 .tiptap {
     input[type="checkbox"] {
       margin-right: 8px;
     }
 
     mark {
-      background-color: #e4de6e;
-      border-radius: 0.4rem;
-      box-decoration-break: clone;
-      padding: 0.1rem 0.3rem;
+      background-color: #e4d234ec;
     }
 
     a {
@@ -64,10 +63,11 @@
       }
     
       pre {
-        background: #DEBE16;
+        background: #d3b313;
         text-align: center;
         color: #FFF;
         font-weight: 700;
+        font-family: "Quicksand", serif !important;
         padding: 0.75rem 1rem;
         border-radius: 0.5rem;
         margin-top: 8px;
@@ -94,7 +94,7 @@
       }
     
       blockquote {
-        background: #fad419;
+        background: #dbba11;
         text-align: start;
         color: #FFF;
         font-size: 1.5rem;

@@ -10,8 +10,7 @@ import Tiptap from './TipTap';
 import DocumentAnimation from '../Animations/DocumentAnimation';
 
 // CSS for button animation
-import './styles.scss'; // Import your CSS file for animations
-import { usePathname } from 'next/navigation';
+import './styles.scss';
 
 const NotebookEditor = () => {
   const params = new URLSearchParams(window.location.search);
@@ -22,7 +21,7 @@ const NotebookEditor = () => {
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<number>(600000); // 10 minutes in milliseconds
+  const [timeLeft, setTimeLeft] = useState<number>(600000);
   const [buttonColor, setButtonColor] = useState<string>('black');
   const [animation, setAnimation] = useState<boolean>(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;

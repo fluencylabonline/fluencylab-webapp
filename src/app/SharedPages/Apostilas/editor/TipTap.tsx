@@ -238,7 +238,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   const handleCloseModalTip = () => setModalTextTipOpen(false);
 
   const [isModalExerciseOpen, setModalExerciseOpen] = useState(false);
-
   const handleOpenModalExercise = () => setModalExerciseOpen(true);
   const handleCloseModalExercise = () => {
     setModalExerciseOpen(false)

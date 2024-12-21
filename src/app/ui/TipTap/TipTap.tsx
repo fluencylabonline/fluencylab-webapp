@@ -1,17 +1,48 @@
 "use client";
-import React, { useMemo } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
+import { toast, Toaster } from 'react-hot-toast';
+import { franc } from 'franc-min';
+import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem, Tooltip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 
 //Firebase
 import { collection, doc, getDocs, updateDoc, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
 import { db } from "@/app/firebase";
 
-import { toast, Toaster } from 'react-hot-toast';
 //Icons
-import './styles.scss'
+import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
+import { LuFileAudio, LuFileText } from 'react-icons/lu';
+import { AiFillYoutube } from 'react-icons/ai';
+import { CgTranscript } from 'react-icons/cg';
+import { GoGoal } from "react-icons/go";
+import { LuBookOpen } from "react-icons/lu";
+import { BsTranslate } from "react-icons/bs";
+import { GiChoice } from "react-icons/gi";
+import { MdOutlineTipsAndUpdates } from "react-icons/md";
+import { TbVocabulary } from "react-icons/tb";
+import { TbReload } from "react-icons/tb";
+import { FaHeadphonesAlt, FaRegImage } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp, FaFileInvoice, FaSquareCheck } from 'react-icons/fa6';
+import { VscWholeWord } from 'react-icons/vsc';
+import { PiNotebookBold } from 'react-icons/pi';
+import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
+import { FaHistory } from 'react-icons/fa';
 
-//Imports
+//Realtime
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+import Collaboration from '@tiptap/extension-collaboration'
+import * as Y from 'yjs'
+import { TiptapCollabProvider } from '@hocuspocus/provider'
+
+//Other components
+import './styles.scss'
+import FluencyCloseButton from '../Components/ModalComponents/closeModal';
+import FluencyInput from '@/app/ui/Components/Input/input';
+import FluencyButton from '@/app/ui/Components/Button/button';
+import VersionsModal from "./VersionsModal";
+
+//TipTap Imports
+import Toolbar from "./Toolbar";
 import Link from '@tiptap/extension-link'
 import History from '@tiptap/extension-history'
 import Highlight from '@tiptap/extension-highlight'
@@ -29,42 +60,60 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import Typography from '@tiptap/extension-typography'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Text from '@tiptap/extension-text'
+import Gapcursor from '@tiptap/extension-gapcursor'
 
-import Toolbar from "./Toolbar";
-import { Popover, PopoverTrigger, PopoverContent, Button, Accordion, AccordionItem, Tooltip } from '@nextui-org/react';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
-import FluencyInput from '@/app/ui/Components/Input/input';
-import FluencyButton from '@/app/ui/Components/Button/button';
-import { VscWholeWord } from 'react-icons/vsc';
-import { PiNotebookBold } from 'react-icons/pi';
-import FluencyCloseButton from '../Components/ModalComponents/closeModal';
-import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
+//TipTap Components
+import Embed from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/Embed';
+import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/EmbedSelectionModal';
 
 import ReactComponent from '@/app/SharedPages/Apostilas/editor/Components/AudioComponent/Extension';
-import Embed from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/Embed';
-
-import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/EmbedSelectionModal';
 import AudioSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/AudioComponent/AudioSelectionModal';
-import { LuFileAudio } from 'react-icons/lu';
-import { AiFillYoutube } from 'react-icons/ai';
-
-import { CgTranscript } from 'react-icons/cg';
 
 import SpeakingExtension from '@/app/SharedPages/Apostilas/editor/Components/SpeakingComponent/SpeakingExtension';
 import SpeakingSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/SpeakingComponent/SpeakingSelectionModal';
 
-//Realtime
-import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
-import Collaboration from '@tiptap/extension-collaboration'
-import * as Y from 'yjs'
-import { TiptapCollabProvider } from '@hocuspocus/provider'
+import TextDisplayModal from '@/app/SharedPages/Apostilas/editor/Components/StudentComponent/StudentModal';
+import StudentExtension from '@/app/SharedPages/Apostilas/editor/Components/StudentComponent/StudentExtension';
 
-import VersionsModal from "./VersionsModal";
-import { FaHistory } from 'react-icons/fa';
+import TextDisplayModalTeacher from '@/app/SharedPages/Apostilas/editor/Components/TeacherComponent/TeacherModal';
+import TeacherExtension from '@/app/SharedPages/Apostilas/editor/Components/TeacherComponent/TeacherExtension';
 
-type PopoversProps = {
-  editor: Editor;
-}
+import TextDisplayModalGoal from '@/app/SharedPages/Apostilas/editor/Components/GoalComponent/GoalModal';
+import GoalExtension from '@/app/SharedPages/Apostilas/editor/Components/GoalComponent/GoalExtension';
+
+import ReviewModal from '@/app/SharedPages/Apostilas/editor/Components/ReviewComponent/ReviewModal';
+import ReviewNode from '@/app/SharedPages/Apostilas/editor/Components/ReviewComponent/ReviewNode';
+
+import TextDisplayModalTip from '@/app/SharedPages/Apostilas/editor/Components/TipComponent/TipModal';
+import TipExtension from '@/app/SharedPages/Apostilas/editor/Components/TipComponent/TipExtension';
+
+import ExerciseModal from '@/app/SharedPages/Apostilas/editor/Components/ExerciseModal/ExerciseModal';
+import ExerciseExtension from '@/app/SharedPages/Apostilas/editor/Components/ExerciseModal/ExerciseExtension';
+
+import MultipleChoiceModal from '@/app/SharedPages/Apostilas/editor/Components/MultipleChoice/MultipleChoiceModal';
+import MultipleChoiceExtension from '@/app/SharedPages/Apostilas/editor/Components/MultipleChoice/MultipleChoiceExtension';
+
+import TranslationModal from '@/app/SharedPages/Apostilas/editor/Components/TranslationComponent/TranslationModal';
+import TranslationNode from '@/app/SharedPages/Apostilas/editor/Components/TranslationComponent/TranslationNode';
+
+import VocabulabModal from '@/app/SharedPages/Apostilas/editor/Components/VocabuLabComponent/VocabulabModal';
+import VocabulabNode from '@/app/SharedPages/Apostilas/editor/Components/VocabuLabComponent/VocabulabNode';
+
+import ImageTextModal from '@/app/SharedPages/Apostilas/editor/Components/ImageComponent/ImageTextModal';
+import ImageTextNode from '@/app/SharedPages/Apostilas/editor/Components/ImageComponent/ImageTextNode';
+
+import FileSnippetNode from '@/app/SharedPages/Apostilas/editor/Components/FileComponent/FileSnippetNode';
+import FileUploadSnippet from '@/app/SharedPages/Apostilas/editor/Components/FileComponent/FileUploadSnippet';
+
+import SentencesModal from '@/app/SharedPages/Apostilas/editor/Components/SentencesComponent/SentencesModal';
+import SentencesNode from '@/app/SharedPages/Apostilas/editor/Components/SentencesComponent/SentencesNode';
+
+//INTERFACE
 interface LessonDoc {
   id: string;
   data: DocumentData;
@@ -76,9 +125,54 @@ interface GroupedLessonDocs {
   docs: LessonDoc[];
 }
 
+type PopoversProps = {
+  editor: Editor;
+}
+
 function Popovers({ editor }: PopoversProps) {
+  const readAloud = () => {
+    if (editor) {
+      const selectedText = editor.state.selection.empty
+        ? "" // No text selected
+        : editor.state.doc.textBetween(
+            editor.state.selection.from,
+            editor.state.selection.to,
+            " "
+        );
+
+        if (selectedText) {
+          const detectedLanguage = franc(selectedText);
+          const languageMap: { [key: string]: string } = {
+            'eng': 'en', // English
+            'spa': 'es', // Spanish
+            'fra': 'fr', // French
+            'deu': 'de', // German
+            'rus': 'ru', // Russian
+            'jpn': 'ja', // Japanese
+            'kor': 'ko', // Korean
+        };
+
+        const langCode = languageMap[detectedLanguage] || 'en'; // Default to English if language is not found
+        const speech = new SpeechSynthesisUtterance(selectedText);
+        speech.lang = langCode; // Set the language for speech synthesis
+        speechSynthesis.speak(speech);
+      } else {
+        toast.error("Please select some text to read.");
+      }
+    } else {
+      console.error("Editor is not available.");
+    }
+  };
+
   return (
       <BubbleMenu className="Popover" editor={editor}>
+          <button
+            onClick={readAloud}
+            className="bg-fluency-green-500 hover:bg-fluency-green-600 text-white p-2 rounded-lg duration-300 ease-in-out"
+            >
+            < FaHeadphonesAlt/>
+          </button>
+
           <button
             onClick={() => editor.chain().focus().setColor('#21B5DE').run()}
             className={editor.isActive('textStyle', { color: '#0047AB' }) ? 'is-active' : ''}
@@ -120,10 +214,10 @@ function Popovers({ editor }: PopoversProps) {
           </button>
 
           <button
-            onClick={() => editor.chain().focus().unsetColor().run()}
-            data-testid="unsetColor"
-          >
-            <div className='w-5 h-5 p-2 rounded-full dark:bg-white bg-black dark:hover:bg-gray-300 hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
+             onClick={() => editor.chain().focus().unsetColor().run()}
+            className={editor.isActive('textStyle', { color: '#000000' }) ? 'is-active' : ''}
+            >        
+            <div className='w-5 h-5 p-2 rounded-full bg-black dark:bg-white hover:bg-gray-900 duration-300 ease-in-out transition-all'></div>
           </button>
       </BubbleMenu>
   )
@@ -131,17 +225,13 @@ function Popovers({ editor }: PopoversProps) {
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const params = new URLSearchParams(window.location.search);
-  const { data: session } = useSession();
-  const studentID = params.get('student') || ''; // Default to an empty string if null
+  const studentID = params.get('student') || '';
   const notebookID = params.get('notebook') || '';
-  const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
+  const { data: session } = useSession();
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
+  //Versions and Workbooks available
   const [isVersionsModalOpen, setIsVersionsModalOpen] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState('');
   const [workbooks, setWorkbooks] = useState(false);
   function openWorkbook(){
     setWorkbooks(true)
@@ -152,25 +242,114 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     setSearchTerm('')
   }
 
-  //REAL TIME PART
-  const tiptapApiKey = process.env.NEXT_PUBLIC_TIPTAP_API_KEY;
-  const tiptapApiAuth = process.env.NEXT_PUBLIC_TIPTAP_API_AUTH;
+  const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
+  const [isModalTranslationOpen, setIsModalTranslationOpen] = useState<boolean>(false);
+  const [isModalVocabulabOpen, setIsModalVocabulabOpen] = useState<boolean>(false);
+  const [isModalImageTextOpen, setIsModalImageTextOpen] = useState<boolean>(false);
+  const [isModalFileOpen, setIsModalFileOpen] = useState<boolean>(false);
+  const [isModalSentencesOpen, setIsModalSentencesOpen] = useState<boolean>(false);
+  const [isModalAudioOpen, setIsModalAudioOpen] = useState<boolean>(false);
   
-  if (!tiptapApiKey || !tiptapApiAuth) {
-    throw new Error("Tiptap API key or authentication token is missing.");
-  }
+  const [isModalTextOpen, setModalTextOpen] = useState(false);
+  const [initialText, setInitialText] = useState('');
+  const handleOpenModal = () => setModalTextOpen(true);
+  const handleCloseModal = () => setModalTextOpen(false);
+
+  const [isModalTextTeacherOpen, setModalTextTeacherOpen] = useState(false);
+  const [initialTextTeacher, setInitialTextTeacher] = useState('');
+  const handleOpenModalTeacher = () => setModalTextTeacherOpen(true);
+  const handleCloseModalTeacher = () => setModalTextTeacherOpen(false);
+
+  const [isModalTextGoalOpen, setModalTextGoalOpen] = useState(false);
+  const handleOpenModalGoal = () => setModalTextGoalOpen(true);
+  const handleCloseModalGoal = () => setModalTextGoalOpen(false);
+
+  const [isModalTextReviewOpen, setModalTextReviewOpen] = useState(false);
+  const handleOpenModalReview = () => setModalTextReviewOpen(true);
+  const handleCloseModalReview = () => setModalTextReviewOpen(false);
+
+  const [isModalTextTipOpen, setModalTextTipOpen] = useState(false);
+  const [initialTextTip, setInitialTextTip] = useState('');
+  const handleOpenModalTip = () => setModalTextTipOpen(true);
+  const handleCloseModalTip = () => setModalTextTipOpen(false);
+
+  const [isModalExerciseOpen, setModalExerciseOpen] = useState(false);
+  const handleOpenModalExercise = () => setModalExerciseOpen(true);
+  const handleCloseModalExercise = () => {
+    setModalExerciseOpen(false)
+  };
+
   
-  const ydoc: Y.Doc = useMemo(() => new Y.Doc(), []);
-  const provider = new TiptapCollabProvider({
-    name: notebookID, 
-    appId: tiptapApiKey, 
-    token: tiptapApiAuth,
-    document: ydoc,
-  })
+
+  const handleSelectAudio = (audioId: string) => {
+    if (editor && audioId) {
+      editor.chain().focus().insertContent(`<listening-component audioId="${audioId}"></listening-component>`).run();
+    }
+  };
+
+  const handleSelectVideo = (url: string) => {
+    if (editor && url) {
+      editor.chain().focus().insertContent(`<embed-component url="${url}"></embed-component>`).run();
+    }
+  };
+
+  const handleSelectTranscript = (audioId: string) => {
+    if (editor && audioId) {
+      editor.chain().focus().insertContent(`<speaking-component audioId="${audioId}"></speaking-component>`).run();
+    }
+  };
+  
+  const openMultipleChoiceModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeMultipleChoiceModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const openVocabulabModal = () => {
+    setIsModalVocabulabOpen(true);
+  };
+
+  const closeVocabulabModal = () => {
+    setIsModalVocabulabOpen(false);
+  };
+
+  const openTranslationModal = () => {
+    setIsModalTranslationOpen(true);
+  };
+
+  const closeTranslationModal = () => {
+    setIsModalTranslationOpen(false);
+  };
+
+  const openImageTextModal = () => {
+    setIsModalImageTextOpen(true);
+  };
+
+  const closeImageTextModal = () => {
+    setIsModalImageTextOpen(false);
+  };
+
+  const openFileModal = () => {
+    setIsModalFileOpen(true);
+  };
+
+  const closeFileModal = () => {
+    setIsModalFileOpen(false);
+  };
+
+  const openSentencesModal = () => {
+    setIsModalSentencesOpen(true);
+  };
+
+  const closeSentencesModal = () => {
+    setIsModalSentencesOpen(false);
+  };
 
   type GroupedLessonDocsMap = { [key: string]: GroupedLessonDocs[] };
-
-  // Use the above type in useState
   const [lessonDocs, setLessonDocs] = useState<GroupedLessonDocsMap>({});
   const fetchDocs = async () => {
     const workbookNames = ['First Steps', 'The Basics', 'All you need to know', 'Traveling', 'Instrumental'];
@@ -183,7 +362,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(doc => ({
           id: doc.id,
           data: doc.data(),
-          unit: doc.data().unit || 'Uncategorized', // Assuming there's a 'unit' field in your documents
+          unit: doc.data().unit || 'Uncategorized',
         }));
   
         // Group documents by unit
@@ -211,28 +390,9 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     }
   };
 
-  // Effect to fetch documents from Firestore on component mount
   useEffect(() => {
     fetchDocs();
   }, []);
-
-  const [realtimeContent, setRealtimeContent] = useState<string>(content);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const notebookID = params.get('notebook');
-    const studentID = params.get('student');
-
-    const notebookRef = doc(db, `users/${studentID}/Notebooks/${notebookID}`);
-    const unsubscribe = onSnapshot(notebookRef, (doc) => {
-      if (doc.exists()) {
-        const { content: updatedContent } = doc.data();
-        setRealtimeContent(updatedContent);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [content]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value.toLowerCase());
@@ -328,9 +488,23 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     }
   };
 
-  const CustomDocument = Document.extend({
-    content: 'heading block*',
+  //Real Time
+  const tiptapApiKey = process.env.NEXT_PUBLIC_TIPTAP_API_KEY;
+  const tiptapApiAuth = process.env.NEXT_PUBLIC_TIPTAP_API_AUTH;
+  
+  if (!tiptapApiKey || !tiptapApiAuth) {
+    throw new Error("Tiptap API key or authentication token is missing.");
+  }
+  
+  /*
+  const ydoc: Y.Doc = useMemo(() => new Y.Doc(), []);
+  const provider = new TiptapCollabProvider({
+    name: notebookID, 
+    appId: tiptapApiKey, 
+    token: tiptapApiAuth,
+    document: ydoc,
   })
+  */
 
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
@@ -342,21 +516,24 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   const editor = useEditor({
     extensions: [
-      CustomDocument,
+      Document,
       Image,
       History,
       TextStyle, 
       FontFamily,
       FontSize,
       Typography,
+      Gapcursor,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       TaskList,
       TaskItem.configure({
         nested: true,
       }),
-      ReactComponent,
-      Embed,
-      SpeakingExtension,
-      BulletList,
       CustomBulletList,
       Link.configure({
         openOnClick: true,
@@ -370,8 +547,24 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       }),
       Highlight,
       Color,
+      ReactComponent,
+      Embed,
+      SpeakingExtension,
+      StudentExtension,
+      TeacherExtension,
+      TipExtension,
+      GoalExtension,
+      ExerciseExtension,
+      MultipleChoiceExtension,
+      TranslationNode,
+      VocabulabNode,
+      ReviewNode,
+      ImageTextNode,
+      FileSnippetNode,
+      SentencesNode,
 
       /*
+      //Part of collaboration that might work now
       Collaboration.configure({
         document: ydoc,
       }),
@@ -385,6 +578,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       }),
       */
 
+      //Placeholder
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
@@ -395,14 +589,12 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
             5: '/',
             6: '/',
           };
-      
           if (node.type.name === "heading") {
             return headingPlaceholders[node.attrs.level];
           }
           if (node.type.name === 'paragraph') {
-            return '/'
+            return "O que vamos aprender..."
           }
-
           return '/'
         },
       }),
@@ -414,27 +606,12 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       },
     },
     autofocus: true,
-    content: realtimeContent,
+    content: content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-
-    /*
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-    */
-
   }) 
 
-  const addImage = () => {
-    const url = window.prompt('URL');
-  
-    if (editor && url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
-  
   if (!editor) {
     return null;
   }
@@ -460,21 +637,11 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     setWorkbooks(false)
   };
 
-  const handleSelectAudio = (audioId: string) => {
-    if (editor && audioId) {
-      editor.chain().focus().insertContent(`<listening-component audioId="${audioId}"></listening-component>`).run();
-    }
-  };
-
-  const handleSelectVideo = (url: string) => {
+  const addImage = () => {
+    const url = window.prompt('URL');
+  
     if (editor && url) {
-      editor.chain().focus().insertContent(`<embed-component url="${url}"></embed-component>`).run();
-    }
-  };
-
-  const handleSelectTranscript = (audioId: string) => {
-    if (editor && audioId) {
-      editor.chain().focus().insertContent(`<speaking-component audioId="${audioId}"></speaking-component>`).run();
+      editor.chain().focus().setImage({ src: url }).run();
     }
   };
 
@@ -492,23 +659,21 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           pasteContentFromFirestore={pasteContentFromFirestore} 
         />
 
-        <AudioSelectionModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSelectAudio={handleSelectAudio}
-        />
-
-        <EmbedSelectionModal
-            isEmbedOpen={isModalEmbedOpen}
-            onEmbedClose={() => setIsModalEmbedOpen(false)}
-            onSelectVideo={handleSelectVideo}
-          />
-
-        <SpeakingSelectionModal 
-          isOpen={isModalTranscriptOpen} 
-          onClose={() => setIsModalTranscriptOpen(false)} 
-          onSelectAudio={handleSelectTranscript} 
-          />
+        <TextDisplayModal isOpen={isModalTextOpen} onClose={handleCloseModal} initialText={initialText} editor={editor} />
+        <TextDisplayModalTeacher isOpen={isModalTextTeacherOpen} onClose={handleCloseModalTeacher} initialTextTeacher={initialTextTeacher} editor={editor} />
+        <TextDisplayModalGoal isOpen={isModalTextGoalOpen} onClose={handleCloseModalGoal} editor={editor} />
+        <TextDisplayModalTip isOpen={isModalTextTipOpen} onClose={handleCloseModalTip} initialTextTip={initialTextTip} editor={editor} />
+        <VocabulabModal isOpen={isModalVocabulabOpen} onClose={closeVocabulabModal} editor={editor} />
+        <ReviewModal isOpen={isModalTextReviewOpen} onClose={handleCloseModalReview} editor={editor} />
+        <ImageTextModal isOpen={isModalImageTextOpen} onClose={closeImageTextModal} editor={editor} />
+        <FileUploadSnippet isOpen={isModalFileOpen} onClose={closeFileModal} editor={editor} />
+        <SentencesModal isOpen={isModalSentencesOpen} onClose={closeSentencesModal} editor={editor} />
+        <AudioSelectionModal isOpen={isModalAudioOpen} onClose={() => setIsModalAudioOpen(false)} onSelectAudio={handleSelectAudio} />
+        <SpeakingSelectionModal isOpen={isModalTranscriptOpen} onClose={() => setIsModalTranscriptOpen(false)} onSelectAudio={handleSelectTranscript} />
+        <EmbedSelectionModal isEmbedOpen={isModalEmbedOpen} onEmbedClose={() => setIsModalEmbedOpen(false)} onSelectVideo={handleSelectVideo} />
+        <ExerciseModal isOpen={isModalExerciseOpen} onClose={handleCloseModalExercise} editor={editor} />
+        <MultipleChoiceModal isOpen={isModalOpen} onClose={closeMultipleChoiceModal} editor={editor} />
+        <TranslationModal isOpen={isModalTranslationOpen} onClose={closeTranslationModal} editor={editor} />
 
         <button
           onClick={scrollToBottom}
@@ -524,98 +689,191 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
           <FaArrowUp />
         </button>
 
-        {session?.user.role != 'student' && (
-        <div>
-        <div className="fixed top-32 right-2">
-        <div className='flex flex-col items-center gap-2'>
-          <Popover placement="bottom" showArrow offset={10}>
-            <PopoverTrigger>
-                <Button className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
-                  <VscWholeWord className="w-6 h-auto"/>
-                </Button>      
-            </PopoverTrigger>
-            <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-pages-dark border border-fluency-gray-500 p-3 rounded-md">
-              {(titleProps) => (
-                <div className="px-1 py-2 w-full">
-                  <p className="text-md font-bold text-foreground" {...titleProps}>
-                    Atualizar a Descrição
-                  </p>
-                  <div className="mt-2 flex flex-col gap-2 w-full">
-                  <FluencyInput className="w-full" defaultValue={description} placeholder="Descrição da aula" onChange={handleDescriptionChange} />
-                  <FluencyButton variant="confirm" onClick={handleUpdateDescription} className="w-full">Salvar</FluencyButton>
-                  </div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-
-          <Tooltip content='Clique para adicionar um áudio de prática' className='bg-fluency-orange-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="duration-150 ease-in-out transition-all p-2 px-2 text-md flex flex-col items-center justify-center text-amber-500 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600"
-          >
-            <LuFileAudio className="w-5 h-auto"/>
-          </button>
-          </Tooltip>
-
-          <Tooltip content='Clique para adicionar um texto de prática de pronúncia' className='bg-fluency-green-300 font-bold text-sm rounded-md px-1'>
-          <button
-          onClick={() => setIsModalTranscriptOpen(true)}
-            className="duration-150 ease-in-out transition-all p-2 px-2 text-md flex flex-col items-center justify-center text-blue-500 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600"
-          >
-            <CgTranscript  className="w-5 h-auto"/>
-          </button>
-          </Tooltip>
-          
-          <Tooltip content='Clique para adicionar um vídeo' className='bg-fluency-red-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={() => setIsModalEmbedOpen(true)}
-            className="duration-150 ease-in-out transition-all p-2 px-2 text-md flex flex-col items-center justify-center text-red-500 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600"
-          >
-            <AiFillYoutube className="w-5 h-auto"/>
-          </button>
-          </Tooltip>
-
-          <Tooltip content='Material das apostilas' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
-          <Button onClick={openWorkbook} className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-400 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
-            <PiNotebookBold className="w-6 h-auto"/>
-          </Button> 
-          </Tooltip> 
-
-          <Tooltip content='Versões deste caderno' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
-          <button
-            onClick={() => setIsVersionsModalOpen(true)}
-            className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-400 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'
-            >
-            <FaHistory className="w-5 h-auto"/>
-          </button> 
-          </Tooltip>
-          </div>
-        </div>
-
         {workbooks && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 transition-opacity">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-[80vw] h-[80vh] overflow-y-scroll p-4">
-              <div className="flex flex-col items-center justify-center">
-                <FluencyCloseButton onClick={closeWorkbook} />
-                <h3 className="text-2xl font-bold leading-6 mb-2">Apostilas</h3>
-                <input
-                  type="text"
-                  placeholder="Buscar por título..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  className="mb-4 p-2 border border-gray-300 rounded bg-fluency-pages-light dark:bg-fluency-pages-dark text-black dark:text-white"
-                />
-                {searchTerm ? renderItems() : renderAccordion()}
+          <div className="fixed z-50 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="fixed inset-0 transition-opacity">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+              <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-[80vw] h-[80vh] overflow-y-scroll p-4">
+                <div className="flex flex-col items-center justify-center">
+                  <FluencyCloseButton onClick={closeWorkbook} />
+                  <h3 className="text-2xl font-bold leading-6 mb-2">Apostilas</h3>
+                  <input
+                    type="text"
+                    placeholder="Buscar por título..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="mb-4 p-2 border border-gray-300 rounded bg-fluency-pages-light dark:bg-fluency-pages-dark text-black dark:text-white"
+                  />
+                  {searchTerm ? renderItems() : renderAccordion()}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {session?.user.role == 'teacher' && (
+          <div className="fixed top-[6.5rem] right-2">
+            <div className='flex flex-col items-center gap-2'>
+              <Popover placement="bottom" showArrow offset={10}>
+                <PopoverTrigger>
+                    <Button className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-gray-700 dark:text-fluency-gray-50 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+                      <VscWholeWord className="w-6 h-auto"/>
+                    </Button>      
+                </PopoverTrigger>
+                <PopoverContent className="w-[240px] text-fluency-text-light dark:text-fluency-text-dark bg-fluency-bg-light dark:bg-fluency-pages-dark border border-fluency-gray-500 p-3 rounded-md">
+                  {(titleProps) => (
+                    <div className="px-1 py-2 w-full">
+                      <p className="text-md font-bold text-foreground" {...titleProps}>
+                        Atualizar a Descrição
+                      </p>
+                      <div className="mt-2 flex flex-col gap-2 w-full">
+                      <FluencyInput className="w-full" defaultValue={description} placeholder="Descrição da aula" onChange={handleDescriptionChange} />
+                      <FluencyButton variant="confirm" onClick={handleUpdateDescription} className="w-full">Salvar</FluencyButton>
+                      </div>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
+
+              <Tooltip content='Material das apostilas' className='bg-fluency-blue-300 font-bold text-sm rounded-md px-1'>
+              <Button onClick={openWorkbook} className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-blue-500 duration-150 ease-in-out transition-all p-2 px-2 text-md'>
+                <PiNotebookBold className="w-6 h-auto"/>
+              </Button> 
+              </Tooltip> 
+
+              <Tooltip content='Versões deste caderno' className='bg-fluency-green-300 font-bold text-sm rounded-md px-1'>
+              <button
+                onClick={() => setIsVersionsModalOpen(true)}
+                className='bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 text-fluency-green-500 duration-150 ease-in-out transition-all p-2 px-2 text-md'
+                >
+                <FaHistory className="w-5 h-auto"/>
+              </button> 
+              </Tooltip>
+
+            {/*Faixas */}
+            <Dropdown>
+              <DropdownTrigger>
+                <Button 
+                  variant="bordered" 
+                  className="flex flex-col items-center justify-center w-10 h-10 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 duration-150 ease-in-out transition-all"
+                >
+                  <FaFileInvoice  className="w-5 h-auto text-fluency-orange-500" />
+                </Button>
+              </DropdownTrigger>
+              
+              <DropdownMenu className="p-3 bg-fluency-gray-300 dark:bg-fluency-gray-400 rounded-md" aria-label="User Actions">
+                <DropdownItem 
+                  onClick={handleOpenModal}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><PiStudentFill className="w-5 h-auto" /><span>Aluno</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={handleOpenModalTeacher}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><PiChalkboardTeacher className="w-5 h-auto" /><span>Professor</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={handleOpenModalTip}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><MdOutlineTipsAndUpdates className="w-5 h-auto" /><span>Dica</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={openImageTextModal}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><FaRegImage className="w-5 h-auto" /><span>Imagem</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={() => setIsModalEmbedOpen(true)}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><AiFillYoutube className="w-5 h-auto" /><span>Vídeo</span></p>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+
+            <Tooltip content='Clique para adicionar uma meta' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+              <button
+                onClick={handleOpenModalGoal}
+                className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 duration-150 ease-in-out transition-all"
+              >
+                <GoGoal className='text-fluency-yellow-500' />
+              </button>
+            </Tooltip>
+
+            <Tooltip content='Clique para adicionar uma revisão' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+              <button
+                onClick={handleOpenModalReview}
+                className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 duration-150 ease-in-out transition-all"
+              >
+                <TbReload className='text-teal-600'/>
+              </button>
+            </Tooltip>
+
+            <Tooltip content='Clique para adicionar um VocabuLab' className='bg-fluency-gray-300 font-bold text-sm rounded-md px-1'>
+              <button
+                onClick={openVocabulabModal}
+                className="flex flex-col items-center justify-center w-10 h-10 bg-fluency-gray-100 dark:bg-fluency-gray-400 rounded-full hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 duration-150 ease-in-out transition-all" 
+              >
+                <TbVocabulary className='text-fluency-red-600'/>
+              </button>
+            </Tooltip>
+
+            <Dropdown>
+              <DropdownTrigger>
+                <Button 
+                  variant="bordered" 
+                  className="flex flex-col items-center justify-center w-10 h-10 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 hover:dark:bg-fluency-gray-600 duration-150 ease-in-out transition-all"
+                >
+                  <FaSquareCheck className="w-5 h-auto text-violet-900" />
+                </Button>
+              </DropdownTrigger>
+              
+              <DropdownMenu className="p-3 bg-fluency-gray-300 dark:bg-fluency-gray-400 rounded-md" aria-label="User Actions">
+                <DropdownItem 
+                  onClick={openSentencesModal}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><LuFileText className="w-5 h-auto" /><span>Frases</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={openTranslationModal}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><BsTranslate className="w-5 h-auto" /><span>Tradução</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={openMultipleChoiceModal}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><GiChoice className="w-5 h-auto" /><span>Escolha</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={handleOpenModalExercise}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><LuBookOpen className="w-5 h-auto" /><span>Exercício</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={() => setIsModalAudioOpen(true)}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><LuFileAudio className="w-5 h-auto" /><span>Áudio</span></p>
+                </DropdownItem>
+                <DropdownItem 
+                  onClick={() => setIsModalTranscriptOpen(true)}
+                  className="text-md text-fluency-gray-100 hover:text-fluency-blue-300"
+                >
+                  <p className="flex flex-row gap-2 font-bold"><CgTranscript className="w-5 h-auto" /><span>Pronúncia</span></p>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            </div>
           </div>
         )}
 

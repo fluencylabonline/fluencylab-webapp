@@ -47,7 +47,7 @@ const ExerciseModal = ({ isOpen, onClose, editor }) => {
     const content = filteredSentences.map(({ sentence }, index) => {
       const answer = extractAnswer(sentence);
       const cleanedSentence = sentence.replace(/\{.*?\}/, '{{gap}}');
-      return `<exercise-component sentence="${index + 1}) ${cleanedSentence}" answer="${answer}"></exercise-component>`;
+      return `<exercise-component sentence="${index + 1}. ${cleanedSentence}" answer="${answer}"></exercise-component>`;
     }).join('');
     
     if (content) {

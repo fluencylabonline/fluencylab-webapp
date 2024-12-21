@@ -12,9 +12,18 @@ const MultipleChoiceComponent = ({ node, updateAttributes }) => {
   const [hasSelectedOption, setHasSelectedOption] = useState(false);
   const [isEditing, setIsEditing] = useState(false); // Toggle editing mode
   const [editableQuestion, setEditableQuestion] = useState(node.attrs.question);
-  const [editableOptions, setEditableOptions] = useState(
-    Array.isArray(node.attrs.options) ? node.attrs.options : JSON.parse(node.attrs.options)
-  );
+  const [editableOptions, setEditableOptions] = useState(() => {
+    if (Array.isArray(node.attrs.options)) {
+      return node.attrs.options; // Use directly if it's an array
+    }
+    try {
+      return JSON.parse(node.attrs.options); // Try parsing if it's a string
+    } catch (error) {
+      console.error('Failed to parse options:', error, 'Original options:', node.attrs.options);
+      return []; // Default to an empty array if parsing fails
+    }
+  });
+  
 
   const { correctOption } = node.attrs;
 
