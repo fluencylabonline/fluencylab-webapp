@@ -94,7 +94,7 @@
       }
     
       blockquote {
-        background: #dbba11;
+        background: #ecca1e;
         text-align: start;
         color: #FFF;
         font-size: 1.5rem;
@@ -182,17 +182,17 @@
 
 }
   
-    .Popover {
-      background: #e6dfdf67;
-      border-radius: 8px;
-      padding: 10px;
-      padding-right: 16px;
-      padding-left: 16px;
-      margin: -5px;
-      display: flex;
-      flex-direction: row;
-      gap: 12px;
-    }
+  .Popover {
+    background: #e6dfdf67;
+    border-radius: 8px;
+    padding: 10px;
+    padding-right: 16px;
+    padding-left: 16px;
+    margin: -5px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
 
     /* Give a remote user a caret */
   .collaboration-cursor__caret {
@@ -221,127 +221,125 @@
     white-space: nowrap;
   }
   
-
-  
-/* NotebookEditor.css */
-.save-button {
-  padding: 5px 5px;
-  border-radius: 100%;
-  color: white;
-  border: none;
-  transition: background-color 0.5s ease;
-}
-
-.save-button.animate {
-  animation: saveAnimation 1s ease;
-}
-
-@keyframes saveAnimation {
-  from {
-    transform: scale(1);
+  /* NotebookEditor.css */
+  .save-button {
+    padding: 5px 5px;
+    border-radius: 100%;
+    color: white;
+    border: none;
+    transition: background-color 0.5s ease;
   }
-  to {
-    transform: scale(1.2);
+
+  .save-button.animate {
+    animation: saveAnimation 1s ease;
   }
-}
 
-ul[data-type="taskList"] {
-  list-style: none;
-  margin-left: 0;
-  padding: 0;
-
-  li {
-    align-items: flex-start;
-    display: flex;
-
-    > label {
-      flex: 0 0 auto;
-      margin-right: 0.5rem;
-      user-select: none;
+  @keyframes saveAnimation {
+    from {
+      transform: scale(1);
     }
-
-    > div {
-      flex: 1 1 auto;
+    to {
+      transform: scale(1.2);
     }
-  }
-
-  input[type="checkbox"] {
-    cursor: pointer;
   }
 
   ul[data-type="taskList"] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    ul[data-type="taskList"] {
+      margin: 0;
+    }
+  }
+
+  /* List of options */
+  .optionsList {
+    list-style-type: none;
+    padding: 0;
     margin: 0;
   }
-}
 
-/* List of options */
-.optionsList {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
+  /* Each option style */
+  .option {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
 
-/* Each option style */
-.option {
-  padding: 10px;
-  margin: 5px 0;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
+  /* Hover effect for options */
+  .option:hover {
+    color: #3b3b3b;
+    font-weight: 600;
+    transition: 0.3s ease, transform 0.2s ease;
+  }
 
-/* Hover effect for options */
-.option:hover {
-  color: #3b3b3b;
-  font-weight: 600;
-  transition: 0.3s ease, transform 0.2s ease;
-}
+  /* Styles for correct answer */
+  .correct {
+    color: #4caf50; 
+    font-weight: bold;
+  }
 
-/* Styles for correct answer */
-.correct {
-  color: #4caf50; 
-  font-weight: bold;
-}
+  /* Styles for incorrect answer */
+  .incorrect {
+    color: #f44336;
+    font-weight: bold;
+  }
 
-/* Styles for incorrect answer */
-.incorrect {
-  color: #f44336;
-  font-weight: bold;
-}
+  /* Feedback message after selection */
+  .feedback {
+    font-size: 14px;
+    font-weight: bold;
+  }
 
-/* Feedback message after selection */
-.feedback {
-  font-size: 14px;
-  font-weight: bold;
-}
+  .textGreen500 {
+    color: #4caf50;
+  }
 
-.textGreen500 {
-  color: #4caf50;
-}
+  .textRed500 {
+    color: #f44336;
+  }
 
-.textRed500 {
-  color: #f44336;
-}
+  .option-h3 {
+    font-size: 16px !important;
+    font-weight: 600;
+  }
 
-.option-h3 {
-  font-size: 16px !important;
-  font-weight: 600;
-}
+  .option.disabled {
+    color: #888; /* Disable text */
+    pointer-events: none; /* Prevent any clicks on disabled options */
+    opacity: 0.8; /* Dim the option */
+  }
 
-.option.disabled {
-  color: #888; /* Disable text */
-  pointer-events: none; /* Prevent any clicks on disabled options */
-  opacity: 0.8; /* Dim the option */
-}
+  /* Styles for correct answer */
+  .correct.disabled {
+    color: #5eb961; /* Green */
+    font-weight: 900;
+  }
 
-/* Styles for correct answer */
-.correct.disabled {
-  color: #5eb961; /* Green */
-  font-weight: 900;
-}
-
-/* Styles for incorrect answer */
-.incorrect.disabled {
-  color: #f88f87; /* Red */
-  font-weight: 900;
-}
+  /* Styles for incorrect answer */
+  .incorrect.disabled {
+    color: #f88f87; /* Red */
+    font-weight: 900;
+  }
 
