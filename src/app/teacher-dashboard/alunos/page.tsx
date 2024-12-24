@@ -523,7 +523,7 @@ function Alunos(){
             await updateDoc(classRef, {
                 diaAula: selectedDays,
             });
-            alert('Class days updated successfully!');
+            toast.success('Dia de aula atualizado para o mês seguinte!');
             setEditingDay(null);
            
         } catch (error) {
@@ -615,7 +615,7 @@ return(
                                     </p>    
                                     <button 
                                         onClick={() => openEditingDayModal(student.id)}
-                                        className='hidden px-2 p-1 text-xs mt-1 rounded-md font-bold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-white duration-300 ease-in-out transition-all'
+                                        className='px-2 p-1 text-xs mt-1 rounded-md font-bold bg-fluency-blue-500 hover:bg-fluency-blue-600 text-white duration-300 ease-in-out transition-all'
                                         >Mudar dia de aula
                                     </button>                                    
                                 </div>
