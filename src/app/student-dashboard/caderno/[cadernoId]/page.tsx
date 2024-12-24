@@ -138,12 +138,23 @@ export default function CadernoID() {
     };
 
     const sortedNotebooks = [...filteredNotebooks].sort((a, b) => {
+        // Function to convert "dd/mm/yyyy" string to a Date object
+        const parseDate = (dateString: string) => {
+            const [day, month, year] = dateString.split('/').map(Number);
+            // Note: Month is zero-indexed in JavaScript Date (0 = January, 11 = December)
+            return new Date(year, month - 1, day);
+        };
+    
+        const dateA = parseDate(a.title);  // Convert the title string of notebook a to a Date object
+        const dateB = parseDate(b.title);  // Convert the title string of notebook b to a Date object
+    
         if (sortOrder === 'asc') {
-            return notebooks.indexOf(a) - notebooks.indexOf(b);
+            return dateA.getTime() - dateB.getTime();  // Ascending order
         } else {
-            return notebooks.indexOf(b) - notebooks.indexOf(a);
+            return dateB.getTime() - dateA.getTime();  // Descending order
         }
     });
+    
 
     const styles = {
         page: {
