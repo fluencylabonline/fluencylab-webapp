@@ -13,6 +13,7 @@ import { Tooltip } from '@nextui-org/react';
 import { FaArrowRight } from 'react-icons/fa6';
 import { useSession } from 'next-auth/react';
 import {Tabs, Tab} from "@nextui-org/tabs";
+import { franc } from 'franc-min';
 
 interface Deck {
     id: string;
@@ -530,7 +531,7 @@ const FlashCard: FC = () => {
                         <div className='flex flex-col items-center'>
                             <div className='flex flex-col items-center gap-2 p-8'>
                             <p><span className='font-semibold'>Deck: </span>{decks.find(deck => deck.id === selectedDeck)?.name}</p>
-                            <p className='flex flex-row gap-1 items-center p-1 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'><span className='font-bold'>Cartões:</span> {cards.length}</p>
+                            <p className='flex flex-row gap-1 items-center p-1 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'><span className='font-bold flex flex-row items-center gap-1'>Cartões:</span> {cards.length}</p>
                             {cards[currentCard] && (
                                     <div className="flashcard" onClick={() => setIsFlipped(!isFlipped)} style={{ backgroundColor: isFlipped ? '#65C6E0' : '#65C6E0' }}>
                                         <div className={`flashcard__front font-bold ${isFlipped ? 'flipped' : ''}`}>

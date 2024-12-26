@@ -50,3 +50,13 @@ declare module "next-auth/jwt" {
         calendarLink: string,
     }
 }
+
+
+declare global {
+    interface Window {
+      $MPC_loaded?: boolean;
+    }
+  }
+  
+  export {};
+  

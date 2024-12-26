@@ -18,9 +18,7 @@ import { pt } from 'date-fns/locale';
 import { montserrat, myFont } from '@/app/ui/Fonts/fonts';
 import './contrato.css';
 import toast, { Toaster } from 'react-hot-toast';
-
-
-
+import { useRouter } from 'next/navigation';
 
 interface InnerFormProps {
     contractData: any;
@@ -158,6 +156,7 @@ InnerForm.displayName = 'InnerForm';
 
 export default function ContratoAluno() {
     const { data: session } = useSession();
+    const router = useRouter();
     const [formData, setFormData] = useState({
         cpf: '',
         name: '',
@@ -198,7 +197,6 @@ export default function ContratoAluno() {
         fetchUserInfo();
     }, [session]);  
     
-
     // Fetch IP and Browser
     useEffect(() => {
         const fetchIpAndBrowser = async () => {
@@ -243,6 +241,8 @@ export default function ContratoAluno() {
             formattedDate: format(now, "dd 'de' MMMM 'de' yyyy", { locale: pt }),
             logID 
         };
+
+        router.push('/student-dashboard/pagamento');
     
         if (session && session.user && session.user.id) {
             const userId = session.user.id;
@@ -570,7 +570,7 @@ export default function ContratoAluno() {
                                     </div>
 
                                     <div className="flex justify-center mt-2">
-                                        <FluencyButton variant='confirm' type="submit"><FaSignature className="w-6 h-auto"/> Assinar Contrato</FluencyButton>
+                                        <FluencyButton variant='confirm' type="submit"><FaSignature className="w-6 h-auto"/>Assinar Contrato</FluencyButton>
                                         <FluencyButton variant='gray' onClick={closeSigning}>Cancelar</FluencyButton>
                                     </div>
 

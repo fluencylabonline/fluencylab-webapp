@@ -5,15 +5,12 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { auth, db } from "@/app/firebase";
-import { FaEye, FaEyeSlash, FaKey, FaRegCircleUser, FaUser } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaKey, FaRegCircleUser, FaRegCreditCard, FaUser } from "react-icons/fa6";
 import { TbLanguage, TbUserEdit } from "react-icons/tb";
 import { IoPeopleCircle } from "react-icons/io5";
 import { MdAttachMoney } from "react-icons/md";
 import { LuCalendarClock, LuUserPlus2 } from "react-icons/lu";
 import { RiTimeLine } from "react-icons/ri";
-
-import notebookContent from './notebookexample.json';
-
 import { toast, Toaster } from 'react-hot-toast';
 import FluencyButton from "@/app/ui/Components/Button/button";
 
@@ -33,6 +30,11 @@ export default function CreateAluno(){
     const [comecouEm, setComecouEm] = useState('');
     const [selectedDays, setSelectedDays] = useState<string[]>([]); // State to store selected days
     const [showPassword, setShowPassword] = useState(false);
+    const [cnpj, setCnpj] = useState<string>('');
+
+    const handleCnpjChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setCnpj(e.target.value);
+    };
 
     const handleDateChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setComecouEm(e.target.value);
@@ -100,6 +102,8 @@ export default function CreateAluno(){
                 tasks: {},
                 ContratoAssinado: false,
                 NivelamentoPermitido: true,
+                CNPJ: cnpj,
+                diaPagamento: '10'
             });
     
             /*
@@ -149,7 +153,8 @@ export default function CreateAluno(){
             setFrequencia('');
             setSelectedDays([]);
             setComecouEm('');
-    
+            setCnpj('');
+
             // Sign out the user
             await auth.signOut();
     
@@ -285,21 +290,40 @@ export default function CreateAluno(){
                 </div>
                 </div>
                 <div className="flex -mx-3">
-                <div className="w-full px-3 mb-4">
-                    <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Mensalidade</label>
-                    <div className="flex">
-                    <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
-                        <MdAttachMoney />
+                    <div className="w-full px-3 mb-4">
+                        <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Mensalidade</label>
+                        <div className="flex">
+                        <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
+                            <MdAttachMoney />
+                        </div>
+                        <input 
+                            type="number"
+                            inputMode="numeric"
+                            max="3"
+                            value={mensalidade} 
+                            onChange={(e) => setMensalidade(e.target.value)}
+                            className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" 
+                            placeholder="Valor da mensalidade" 
+                        />
+                        </div>
                     </div>
-                    <input 
-                        type="number"
-                        inputMode="numeric"
-                        max="3"
-                        value={mensalidade} 
-                        onChange={(e) => setMensalidade(e.target.value)}
-                        className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" 
-                        placeholder="Valor da mensalidade" 
-                    />
+                </div>
+                <div className="flex -mx-3">
+                    <div className="w-full px-3 mb-4">
+                    <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Pagamento para:</label>
+                    <div className="flex">  
+                    <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
+                        <FaRegCreditCard />
+                    </div>
+                    <select 
+                        value={cnpj}
+                        onChange={handleCnpjChange}
+                        className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"                        
+                    >
+                        <option value="">Selecione o CNPJ</option>
+                        <option value="55.450.653/0001-64">Deise Laiane</option>
+                        <option value="47.63.142/0001-07">Matheus Fernandes</option>
+                    </select>
                     </div>
                 </div>
             </div>
@@ -316,9 +340,9 @@ export default function CreateAluno(){
                         className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"                        
                     >
                         <option value="">Selecione um idioma</option>
-                        <option value="ingles">Inglês</option>
-                        <option value="libras">Libras</option>
-                        <option value="espanhol">Espanhol</option>
+                        <option value="Ingles">Inglês</option>
+                        <option value="Libras">Libras</option>
+                        <option value="Espanhol">Espanhol</option>
                     </select>
                     </div>
                 </div>
@@ -347,31 +371,31 @@ export default function CreateAluno(){
                 </div>
             </div>
             <div className="flex -mx-3">
-    <div className="w-full px-3 mb-4">
-        <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Dia da Aula</label>
-        <div className="flex flex-wrap gap-2">
-            {['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'].map((day, index) => (
-                <div key={index} className="flex items-center">
-                    <input
-                        type="checkbox"
-                        id={day}
-                        value={day}
-                        checked={selectedDays.includes(day)}
-                        onChange={(e) => {
-                            if (e.target.checked) {
-                                setSelectedDays([...selectedDays, e.target.value]);
-                            } else {
-                                setSelectedDays(selectedDays.filter((selectedDay) => selectedDay !== e.target.value));
-                            }
-                        }}
-                        className="mr-1"
-                    />
-                    <label htmlFor={day}>{day}</label>
+                <div className="w-full px-3 mb-4">
+                    <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Dia da Aula</label>
+                    <div className="flex flex-wrap gap-2">
+                        {['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'].map((day, index) => (
+                            <div key={index} className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id={day}
+                                    value={day}
+                                    checked={selectedDays.includes(day)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setSelectedDays([...selectedDays, e.target.value]);
+                                        } else {
+                                            setSelectedDays(selectedDays.filter((selectedDay) => selectedDay !== e.target.value));
+                                        }
+                                    }}
+                                    className="mr-1"
+                                />
+                                <label htmlFor={day}>{day}</label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            ))}
-        </div>
-    </div>
-</div>
+            </div>
 
             <div className="flex -mx-3">
                 <div className="w-full px-3 mb-4">

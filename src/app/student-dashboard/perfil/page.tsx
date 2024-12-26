@@ -119,6 +119,7 @@ function Perfil() {
     };
       
     const [name, setName] = useState('');
+    const [meioPagamento, setMeioPagamento] = useState('');
     const [CNPJ, setCNPJ] = useState('');
     const [userName, setUserName] = useState('');
     const [nivelamentoPermitido, setNivelamentoPermitido] = useState(false)
@@ -136,6 +137,7 @@ function Perfil() {
                       setUserName(docSnap.data().userName);
                       setContratoFoiAssinado(docSnap.data().ContratoAssinado || { signed: false, logs: [] });
                       setNivelamentoPermitido(docSnap.data().NivelamentoPermitido);
+                      setMeioPagamento(docSnap.data().meioPagamento);
                     } else {
                       console.log("No such document!");
                   }
@@ -275,6 +277,10 @@ function Perfil() {
               <div className="lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-col lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
                 <p className='flex flex-row justify-center p-1 font-semibold text-lg'>Infomações de Pagamento</p>
                 <div className='p-4 flex flex-col gap-4'>
+                  {meioPagamento === 'cartao' ? 
+                  (<div><p>Se tiver dúvidas sobre o pagamento, entre em contato.</p></div>)
+                  :
+                  (<div>
                   <p className='text-justify'>Você pode fazer a tranferência para as seguintes chaves PIX ou simplesmente usar o QR Code:</p>
                   <div className='flex flex-col items-center gap-1 w-full justify-around'>
                     <div>
@@ -289,6 +295,7 @@ function Perfil() {
                       />
                     </div>
                   </div>
+                  </div>)}
                 </div>
               </div>
 
