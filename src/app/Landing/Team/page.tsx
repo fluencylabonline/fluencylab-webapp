@@ -4,7 +4,7 @@ import Team2 from '../../../../public/images/avatar/team-2.svg';
 import Team3 from '../../../../public/images/avatar/team-3.svg';
 import Team4 from '../../../../public/images/avatar/team-4.svg';
 import Team5 from '../../../../public/images/avatar/team-5.svg';
-import Team6 from '../../../../public/images/avatar/team-6.svg';
+import Team9 from '../../../../public/images/avatar/team-9.svg';
 import Team7 from '../../../../public/images/avatar/team-7.svg';
 import Team8 from '../../../../public/images/avatar/team-8.svg';
 
@@ -93,12 +93,12 @@ return(
               <div className="flex flex-col items-center">
                   <Image
                   className="object-cover w-20 h-20 mb-2 rounded-full shadow"
-                  src={Team6}
+                  src={Team9}
                   alt="FluencyLab"
                   />
                 <div className="flex flex-col items-center">
-                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Lizi</p>
-                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professora de Espanhol</p>
+                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Gideon</p>
+                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professor de Inglês</p>
                 </div>
               </div>
 
