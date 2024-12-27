@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import {
     Table,
@@ -130,45 +130,97 @@ export default function AlunosPassados() {
         try {
             const userRef = doc(db, 'users', userId);
             const pastUserRef = doc(db, 'past_students', userId);
-
+    
+            // Fetch user data from the 'users' collection
             const userSnapshot = await getDoc(userRef);
             const userData = userSnapshot.data();
-
+    
             if (userData) {
-                // Add the 'encerrouEm' field with the current date
+                // Add 'encerrouEm' field with the current date
                 userData.encerrouEm = new Date().toISOString();
-
+    
+                // Transfer user data to the 'past_students' collection
                 await setDoc(pastUserRef, userData);
+                
+                // Collections to transfer (notebooks, contracts, etc.)
+                const collections = [
+                    'Notebooks', 
+                    'Contratos', 
+                    'Nivelamento', 
+                    'Decks', 
+                    'AulasGravadas', 
+                    'Slides'
+                ];
+    
+                // Transfer each collection for the user
+                for (const collectionName of collections) {
+                    const collectionRef = collection(db, 'users', userId, collectionName);
+                    const snapshot = await getDocs(collectionRef);
+                    
+                    snapshot.forEach(async (docSnapshot: { data: () => any; id: string; }) => {
+                        const docData = docSnapshot.data();
+                        const pastCollectionRef = doc(db, 'past_students', userId, collectionName, docSnapshot.id);
+                        await setDoc(pastCollectionRef, docData);
+                    });
+                }
+    
+                // Finally, delete the user from 'users' collection
                 await deleteDoc(userRef);
-
-                toast.error('Aluno deletado!', {
+    
+                toast.error('Aluno deletado e transferido para alunos passados!', {
                     position: 'top-center',
                 });
             }
         } catch (error) {
             console.error('Error transferring user to past-users:', error);
-            toast.error('Erro ao deletar aluno!', {
+            toast.error('Erro ao transferir aluno para alunos passados!', {
                 position: 'top-center',
             });
         }
     };
-
+    
     const reactivateStudent = async (userId: string) => {
         try {
             const pastUserRef = doc(db, 'past_students', userId);
             const userRef = doc(db, 'users', userId);
-
+    
+            // Fetch the past user document
             const pastUserSnapshot = await getDoc(pastUserRef);
             const pastUserData = pastUserSnapshot.data();
-
+    
             if (pastUserData) {
-                // Set the 'encerrouEm' field to 0
-                pastUserData.encerrouEm = 0;
-
+                // Set the 'encerrouEm' field to 0 (or remove it)
+                delete pastUserData.encerrouEm;
+    
+                // Restore the user data to the 'users' collection
                 await setDoc(userRef, pastUserData);
+    
+                // Collections to restore
+                const collections = [
+                    'Notebooks', 
+                    'Contratos', 
+                    'Nivelamento', 
+                    'Decks', 
+                    'AulasGravadas', 
+                    'Slides'
+                ];
+    
+                // Restore each collection for the user
+                for (const collectionName of collections) {
+                    const pastCollectionRef = collection(db, 'past_students', userId, collectionName);
+                    const snapshot = await getDocs(pastCollectionRef);
+                    
+                    snapshot.forEach(async (docSnapshot) => {
+                        const docData = docSnapshot.data();
+                        const collectionRef = doc(db, 'users', userId, collectionName, docSnapshot.id);
+                        await setDoc(collectionRef, docData);
+                    });
+                }
+    
+                // Finally, delete the user from 'past_students' collection
                 await deleteDoc(pastUserRef);
-
-                toast.success('Aluno reativado!', {
+    
+                toast.success('Aluno reativado com sucesso!', {
                     position: 'top-center',
                 });
             }
@@ -178,7 +230,7 @@ export default function AlunosPassados() {
                 position: 'top-center',
             });
         }
-    };
+    };    
 
     const handleOnClickWelcome = async (userName: string, studentName: string, studentMail: string, name: string) => {
         try {

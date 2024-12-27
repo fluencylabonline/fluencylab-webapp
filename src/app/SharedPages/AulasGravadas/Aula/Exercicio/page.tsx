@@ -59,6 +59,6 @@ export default Exercicio;
 
 export default function Exercicio(){
   return (
-    <div>Oi</div>
+    <div></div>
   )
 }

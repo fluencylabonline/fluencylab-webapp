@@ -139,14 +139,12 @@ export default function Aula() {
                         <iframe src={`https://drive.google.com/embeddedfolderview?id=${classData.externalLinks}#grid`} width="100%" height="100%" frameBorder={0}></iframe>
                     </div>
                 )}
-                {activePanel === 'requirements' && (
-                    <FluencyButton><a target="_blank" rel="noopener noreferrer" href='https://drive.google.com/file/d/1qBq1cJRjkV0krIrZqV9j4qOJPhOwg_VJ/view?usp=drive_link'>Como usar Flashcards</a></FluencyButton>
-                )}
+                
                 {activePanel === 'quiz' && (
-                    <>{classData.deckNAME === '' ? "Esta licao nao contem deck para pratica" : <QuizComponent deckName={classData.deckNAME} />}</>
+                    <>{classData.deckNAME === '' ? "Esta lição não contém deck para prática" : <QuizComponent deckName={classData.deckNAME} />}</>
                 )}
                 {activePanel === 'listening' && (
-                    <>{classData.audioID === '' ? "Esta licao nao contem audio para pratica" : <ListeningComponent audioId={classData.audioID} />}</>
+                    <>{classData.audioID === '' ? "Esta lição não contém áudio para prática" : <ListeningComponent audioId={classData.audioID} />}</>
                 )}
             </div>
 
@@ -162,16 +160,7 @@ export default function Aula() {
                     >
                         <BsPersonVideo className='w-6 h-auto'/> Video Aula
                     </button>
-
-                    <button 
-                        className={`p-2 flex flex-row items-center gap-3 font-bold text-black dark:text-white 
-                                    ${activePanel === 'exercicio' ? 'text-fluency-blue-600 dark:text-fluency-blue-600' : 'hover:text-fluency-blue-600 hover:dark:text-fluency-blue-600'} 
-                                    duration-300 ease-in-out transition-all`}
-                        onClick={() => handlePanelClick('exercicio')}
-                    >
-                        <BsPersonVideo className='w-6 h-auto'/> Exercícios
-                    </button>
-
+                    
                     <button 
                         className={`p-2 flex flex-row items-center gap-3 font-bold text-black dark:text-white 
                                     ${activePanel === 'pdf' ? 'text-fluency-red-600 dark:text-fluency-red-600' : 'hover:text-fluency-red-600 hover:dark:text-fluency-red-600'} 
@@ -197,15 +186,6 @@ export default function Aula() {
                         onClick={() => handlePanelClick('links')}
                     >
                         <IoIosLink className='w-6 h-auto'/> Material Adicional
-                    </button>
-
-                    <button 
-                        className={`p-2 flex flex-row items-center gap-3 font-bold text-black dark:text-white 
-                                    ${activePanel === 'requirements' ? 'text-fluency-green-600 dark:text-fluency-green-600' : 'hover:text-fluency-green-700 hover:dark:text-fluency-green-700'} 
-                                    duration-300 ease-in-out transition-all`}
-                        onClick={() => handlePanelClick('requirements')}
-                    >
-                        <CiSquareQuestion className='w-6 h-auto'/> Requisitos da Aula
                     </button>
 
                     <button 

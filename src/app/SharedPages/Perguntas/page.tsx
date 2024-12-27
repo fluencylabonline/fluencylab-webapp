@@ -372,10 +372,10 @@ export default function Forum() {
             }
         }
     };
-
-    const filteredOptions = tags.filter(tag =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    
+    const filteredOptions = tags.filter(tag => 
+        tag && (searchTerm || '').toLowerCase().includes((searchTerm || '').toLowerCase())
+    );    
 
     const visibleTags = filteredOptions.slice(0, 3);
     
