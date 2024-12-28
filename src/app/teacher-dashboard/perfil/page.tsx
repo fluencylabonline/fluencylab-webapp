@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 //Firebase
-import { collection, doc, DocumentData, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, DocumentData, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -348,6 +348,159 @@ function Perfil() {
       fetchStudents();
   }, [session]);
 
+
+  /*
+  useEffect(() => {
+    const syncData = async () => {
+      if (session && session.user && session.user.id) {
+        const db = getFirestore();
+        const professorDocRef = doc(db, "users", session.user.id);
+  
+        // Fetch the professor's data
+        const professorDocSnap = await getDoc(professorDocRef);
+  
+        if (professorDocSnap.exists()) {
+          const professorData = professorDocSnap.data();
+  
+          if (professorData.role === "teacher") {
+            const studentsQuery = query(
+              collection(db, "users"),
+              where("role", "==", "student"),
+              where("professorId", "==", session.user.id)
+            );
+  
+            // Fetch all students linked to this professor
+            const studentsQuerySnapshot = await getDocs(studentsQuery);
+  
+            if (!studentsQuerySnapshot.empty) {
+              let updatedTimes: Array<any> = [];
+              let currentDate = new Date();
+  
+              // Collect all the days from the students' diaAula
+              let studentDays: string[] = [];
+  
+              console.log("Initial professor times (will be replaced):", professorData.times);
+  
+              // Loop through all students
+              studentsQuerySnapshot.forEach((docSnap) => {
+                const studentData = docSnap.data();
+                const studentId = docSnap.id;
+                const { diaAula = [], name } = studentData;
+  
+                console.log(`Processing student ${name} with ID: ${studentId}`);
+                console.log("Student diaAula:", diaAula);
+  
+                // Add the student's days to the studentDays array
+                studentDays = [...studentDays, ...diaAula];
+  
+                diaAula.forEach((day: string) => {
+                  // Create the new time slot
+                  const newTimeSlot = {
+                    day: day,
+                    hour: "07:00",
+                    id: new Date(currentDate).toISOString(),
+                    status: {
+                      studentId,
+                      studentName: name,
+                    },
+                  };
+  
+                  // Increment the currentDate by 1 hour for the next time slot
+                  currentDate.setHours(currentDate.getHours() + 1);
+  
+                  console.log("Adding new time slot:", newTimeSlot);
+  
+                  updatedTimes.push(newTimeSlot);
+                });
+              });
+  
+              // Log studentDays to ensure we have all days correctly
+              console.log("All student days:", studentDays);
+  
+              // Add missing days if there are any, even if there are no students
+              studentDays.forEach((day) => {
+                const existsInTimes = updatedTimes.some((time) => time.day === day);
+                if (!existsInTimes) {
+                  // If the day is missing, create a new time slot for it
+                  const newTimeSlot = {
+                    day: day,
+                    hour: "07:00",
+                    id: new Date(currentDate).toISOString(),
+                    status: {
+                      studentId: "missing", // Placeholder ID if no student is attached
+                      studentName: "Missing",
+                    },
+                  };
+  
+                  // Increment currentDate by 1 hour for the next slot
+                  currentDate.setHours(currentDate.getHours() + 1);
+                  updatedTimes.push(newTimeSlot);
+  
+                  console.log(`Added missing time slot for ${day}:`, newTimeSlot);
+                }
+              });
+  
+              console.log("Final updated times (with missing days):", updatedTimes);
+  
+              // Update the professor's times field in Firestore with the rebuilt times
+              await updateDoc(professorDocRef, { times: updatedTimes });
+              setTimes(updatedTimes); // Update the local state
+  
+              toast.success("Horários atualizados com os dados dos estudantes!");
+            } else {
+              toast.error("Nenhum estudante vinculado foi encontrado.");
+            }
+          }
+        } else {
+          toast.error("Dados do professor não encontrados.");
+        }
+      }
+    };
+  
+    syncData();
+  }, [session]);
+  
+  const updateTimeSlotStatus = async (timeId: string, studentId: string, studentName: string) => {
+    if (session && session.user && session.user.id) {
+      const userDocRef = doc(db, 'users', session.user.id);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+  
+        // Update the times array in the professor's document
+        const updatedTimes = (userData.times || []).map((time: Time) =>
+          time.id === timeId ? { ...time, status: { studentId, studentName } } : time
+        );
+        await updateDoc(userDocRef, { times: updatedTimes });
+        setTimes(updatedTimes);
+  
+        // Update the 'diaAula' array in the specific student's document
+        if (studentId !== 'disponivel') {
+          const studentDocRef = doc(db, 'users', studentId);
+          const studentDocSnap = await getDoc(studentDocRef);
+  
+          if (studentDocSnap.exists()) {
+            const studentData = studentDocSnap.data();
+            const currentDiaAula = studentData.diaAula || []; // Ensure it's an array
+            const dayToAdd = updatedTimes.find((time: { id: string; }) => time.id === timeId)?.day;
+  
+            if (dayToAdd && !currentDiaAula.includes(dayToAdd)) {
+              // Append the day if it doesn't already exist in the array
+              await updateDoc(studentDocRef, { diaAula: [...currentDiaAula, dayToAdd] });
+            }
+          } else {
+            // If student document doesn't exist, create it with the diaAula array
+            await setDoc(studentDocRef, { diaAula: [updatedTimes.find((time: { id: string; }) => time.id === timeId)?.day] });
+          }
+        }
+  
+        toast.success("Status atualizado e diaAula do estudante atualizado!");
+      }
+    }
+  };
+*/
+  
   const updateTimeSlotStatus = async (timeId: string, studentId: string, studentName: string) => {
     if (session && session.user && session.user.id) {
       const userDocRef = doc(db, 'users', session.user.id);
@@ -366,7 +519,6 @@ function Perfil() {
   
   const [editingTime, setEditingTime] = useState<Time | null>(null);
   
-
   const editTimeSlot = (time: Time) => {
     setEditingTime(time);
     setDay(time.day);
@@ -683,7 +835,6 @@ function Perfil() {
                           Insira seus horários
                         </h3>
                         <div className="mt-2 flex flex-col items-center gap-3">
-                          
                           <div className='flex flex-col sm:flex sm:flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
                             <div className='px-2'>
                               <p className='font-bold'>Dia</p>

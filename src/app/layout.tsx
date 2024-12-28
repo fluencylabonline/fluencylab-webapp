@@ -8,7 +8,18 @@ const quicksand = Quicksand({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "FluencyLab",
-  description: "Vem aprender idiomas!",
+  description: "Vem aprender idiomas com a gente!",
+  keywords: "idiomas, aprender idiomas, FluencyLab, ensino de idiomas, aprender inglês, aprender espanhol, fluency, estudar ingles, ingles, espanhol",
+  robots: "index, follow",  // Instructions for search engines to index and follow links
+  openGraph: {
+    title: "FluencyLab",
+    description: "Vem aprender idiomas com a gente!",
+    url: "https://www.fluencylab.me", // Replace with the actual URL
+    images: "https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-looping-only.webm?alt=media&token=040f0a1f-e733-4cd7-9062-e904c577d2c1", // Replace with actual image URL
+    siteName: "FluencyLab",
+    type: "website",
+  },
+  themeColor: "#21B5DE",
 };
 
 export default function RootLayout({
