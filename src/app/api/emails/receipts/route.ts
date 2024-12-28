@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       paymentKeyProp, 
       selectedYear, 
       mensalidade, 
-      templateType, // Add templateType parameter
+      templateType,
       userName,
       teacherName
     } = await request.json();
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     
     if (templateType === 'welcome') {
       results = await resend.emails.send({
-        from: 'coordenacao@fluencylab.me',
+        from: 'coordenação@fluencylab.me',
         to: studentName,
         subject: userName,
         react: Welcome({ studentName, userName }),
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
     if (templateType === 'welcomeTeacher') {
       results = await resend.emails.send({
-        from: 'coordenacao@fluencylab.me',
+        from: 'coordenação@fluencylab.me',
         to: studentMail,
         subject: teacherName,
         react: WelcomeTeacher({ studentName, userName, studentMail, teacherName }),

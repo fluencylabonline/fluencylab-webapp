@@ -43,7 +43,7 @@ import {
             <Heading style={heading}>Olá {studentName}, nós recebemos seu pagamento!</Heading>
             <Section style={buttonContainer}>
             <Text style={paragraph}>
-            Recebemos o pagamento no valor de R$ {mensalidade},00 referente à {selectedMonth} de {selectedYear} com o código de referência: 
+            Recebemos seu pagamento referente à {selectedMonth} de {selectedYear} com o código de referência: 
             </Text>
             <code style={code}>{paymentKeyProp}</code>
             </Section>
