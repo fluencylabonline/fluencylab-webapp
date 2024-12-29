@@ -115,12 +115,12 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({contractDat
                     <div className='p-1'>
                         <p className='font-bold'>Acesso:</p>
                         <div className='flex flex-col items-start gap-2'>
-                            <span className='font-bold'>IP:</span> {contractData.ip}
-                            <span className='font-bold'>Navegador:</span> {contractData.browser}
+                            <span className='font-bold'>IP:</span> {contractData?.ip}
+                            <span className='font-bold'>Navegador:</span> {contractData?.browser}
                         </div>
-                        <p><span className='font-bold'>Contrato assinado em:</span> {contractData.signedAt}</p>
-                        <p><span className='font-bold'>Contrato visualizado em:</span> {contractData.viewedAt}</p>
-                        <p><span className='font-bold'>Concordou com os termos do contrato:</span> {contractData.agreedToTerms}</p>
+                        <p><span className='font-bold'>Contrato assinado em:</span> {contractData?.signedAt}</p>
+                        <p><span className='font-bold'>Contrato visualizado em:</span> {contractData?.viewedAt}</p>
+                        <p><span className='font-bold'>Concordou com os termos do contrato:</span> {contractData?.agreedToTerms}</p>
                     </div>
                 </div>
             </div>
