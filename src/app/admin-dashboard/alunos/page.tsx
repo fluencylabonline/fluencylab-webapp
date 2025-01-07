@@ -442,7 +442,7 @@ const exportToExcel = () => {
                 {renderPaymentStatus(aluno.payments)}
               </TableCell>
               <TableCell>
-                {aluno.CNPJ === "55.450.653/0001-64" ? "Deise" : aluno.CNPJ === "47.63.142/0001-07" ? "Matheus" : "Não definido"}
+                {aluno.CNPJ === "55.450.653/0001-64" ? "Deise" : aluno.CNPJ === "47.603.142/0001-07" ? "Matheus" : "Não definido"}
               </TableCell>
               <TableCell>
                 <div className="relative flex items-center gap-2">
