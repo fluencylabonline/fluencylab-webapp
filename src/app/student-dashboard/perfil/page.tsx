@@ -284,15 +284,33 @@ function Perfil() {
                   <p className='text-justify'>Você pode fazer a tranferência para as seguintes chaves PIX ou simplesmente usar o QR Code:</p>
                   <div className='flex flex-col items-center gap-1 w-full justify-around'>
                     <div>
-                      <p>CNPJ: <span className='font-bold'>{CNPJ}</span></p>
-                      <p>Nome: <span className='font-bold'>{CNPJ === '47.63.142/0001-07' ? "Matheus Fernandes" : "Deise Laiane"}</span></p>
+                      <p>CNPJ: <span className='font-bold'>{CNPJ}</span></p>    
+                      <p>
+                        Nome: 
+                        <span className="font-bold">
+                          {CNPJ === '47.603.142/0001-07'
+                            ? "Matheus Fernandes"
+                            : CNPJ === '55.450.653/0001-64'
+                            ? "Deise Laiane"
+                            : "Entre em contato"}
+                        </span>
+                      </p>
                     </div>
                     <div>
-                      <Image
+                      {CNPJ === '55.450.653/0001-64' && (
+                        <Image
                         className="object-cover w-24 h-24 mb-2"
-                        src={CNPJ === '47.603.142/0001-07' ? QrCode : QrCode2}
+                        src={QrCode2}
                         alt="FluencyLab"
                       />
+                      )}
+                      {CNPJ === '47.603.142/0001-07' && (
+                        <Image
+                        className="object-cover w-24 h-24 mb-2"
+                        src={QrCode}
+                        alt="FluencyLab"
+                      />
+                      )}
                     </div>
                   </div>
                   </div>)}
