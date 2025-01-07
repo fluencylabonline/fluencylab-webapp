@@ -322,7 +322,7 @@ export default function CreateAluno(){
                     >
                         <option value="">Selecione o CNPJ</option>
                         <option value="55.450.653/0001-64">Deise Laiane</option>
-                        <option value="47.63.142/0001-07">Matheus Fernandes</option>
+                        <option value="47.603.142/0001-07">Matheus Fernandes</option>
                     </select>
                     </div>
                 </div>
