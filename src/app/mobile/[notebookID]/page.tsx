@@ -6,7 +6,7 @@ import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
 // TipTap
-import Tiptap from '@/app/ui/TipTap/TipTap';
+import TiptapMobile from '../Editor/TipTapMobile';
 
 // CSS for button animation
 import '@/app/ui/TipTap/styles.scss';
@@ -16,6 +16,12 @@ const NotebookEditor = () => {
   const params = new URLSearchParams(window.location.search);
   const notebookID = params.get('notebook');
   const studentID = params.get('student');
+  const role = params.get('role');
+
+  /*
+  http://localhost:3000/mobile/notebook-editor?notebook=nQVhDReTRyEMJjalVjzM&student=gNU1UzcBeXh7d0cQE6PCEP5G8I33?role=teacher
+  */
+
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
@@ -42,12 +48,13 @@ const NotebookEditor = () => {
   }
 
   return (
-    <div className='lg:px-6 lg:py-4 md:px-6 md:py-4 px-2 py-1'>
-      <Tiptap
+    <div>
+      <TiptapMobile
         content={content}
         onChange={(newContent: string) => {
           setContent(newContent);
         }}
+        role={role}
       />
     </div>
   );
