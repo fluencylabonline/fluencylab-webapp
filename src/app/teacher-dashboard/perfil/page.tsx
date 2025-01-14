@@ -518,11 +518,12 @@ function Perfil() {
   };
   
   const [editingTime, setEditingTime] = useState<Time | null>(null);
-  
-  const editTimeSlot = (time: Time) => {
+  const [studentEditingName, setStudentEditingName] = useState('')
+  const editTimeSlot = (time: Time, studentName: string ) => {
     setEditingTime(time);
     setDay(time.day);
     setHour(time.hour);
+    setStudentEditingName(studentName)
   };
   const saveEditedTimeSlot = async () => {
     if (session && session.user && session.user.id) {
@@ -549,54 +550,11 @@ function Perfil() {
     }
   };
   
-  const [notifications, setNotifications] = useState<any[]>([]);
-    useEffect(() => {
-      const fetchNotifications = async () => {
-        try {
-          const querySnapshot = await getDocs(collection(db, 'Notificacoes'));
-          const fetchedNotifications = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          setNotifications(fetchedNotifications);
-        } catch (error) {
-          console.error('Error fetching notifications:', error);
-        }
-      };
-  
-      fetchNotifications();
-    }, []);
-  
-    // Map notification status to colors
-    const statusColors = {
-      notice: 'font-semibold text-white bg-fluency-yellow-600 dark:bg-fluency-yellow-700 hover:bg-fluency-yellow-500 hover:dark:bg-fluency-yellow-800 duration-300 easy-in-out transition-all',
-      information: 'font-semibold text-white bg-fluency-blue-600 dark:bg-fluency-blue-700 hover:bg-fluency-blue-500 hover:dark:bg-fluency-blue-800 duration-300 easy-in-out transition-all',
-      tip: 'font-semibold text-white bg-fluency-green-700 dark:bg-fluency-green-800 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-800 duration-300 easy-in-out transition-all'
-    };
-  
-    const getBackgroundColor = (status: any) => {
-      if (status.notice) return statusColors.notice;
-      if (status.information) return statusColors.information;
-      if (status.tip) return statusColors.tip;
-      return 'bg-white'; // Default color if no status matches
-    };
-
-    const getFilteredNotifications = () => {
-      if (!session?.user) return notifications;
-      const { role } = session.user;
-      if (role === 'teacher') {
-        return notifications.filter(notification => notification.sendTo.professors);
-      }
-      if (role === 'student') {
-        return notifications.filter(notification => notification.sendTo.students);
-      }
-      return notifications;
-    };
-
     return (
-    <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
-        <div className='fade-in fade-out w-full lg:flex lg:flex-row gap-4 md:flex md:flex-col sm:flex sm:flex-col overflow-y-auto h-[90vh]'>
-          <div className="lg:flex lg:flex-col lg:items-stretch w-full gap-4">
+    <div className="flex flex-col items-center lg:pr-2 md:pr-2 pt-3 bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark">                   
+        <div className='fade-in fade-out w-full gap-4 lg:flex lg:flex-row sm:flex sm:flex-col md:flex md:flex-col overflow-y-auto'>
+          
+          <div className="flex flex-col items-stretch w-full h-full gap-4">
             <div className="bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-row lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
               <div className='lg:mb-3 mb-0'>
                 <label className="relative cursor-pointer hover:opacity-80 transition-opacity duration-300 ease-in-out">
@@ -627,7 +585,7 @@ function Perfil() {
                 <div className='p-3 rounded-lg flex flex-col lg:items-start md:items-start items-center gap-1'>
                   <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Informações Pessoais</h1>
                   <p><strong>Nome:</strong> {name}</p>
-                  <p className='flex flex-wrap gap-1 justify-start'><strong>Email pessoal:</strong> {session?.user.email}</p>
+                  <p className='flex flex-wrap gap-1 justify-center lg:justify-start'><strong>Email pessoal:</strong> {session?.user.email}</p>
                   <p><strong>Número:</strong> {number}</p>
 
                   <div className="mt-6 text-center lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-2 justify-center">
@@ -637,10 +595,8 @@ function Perfil() {
                 </div>
             </div>
 
-
             <div className='flex flex-col sm:flex-row w-full h-full justify-around gap-4'>
-              <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch justify-center w-full gap-4 lg:mt-0 mt-2'>
-                <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
+                <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col items-center gap-1'>
                   <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Sobre o professor:</h1>
                   <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu link:</strong> {link}</p>
                   <p className='flex flex-wrap gap-1 items-center justify-start'><strong>Seu login:</strong> {session?.user.userName}</p>
@@ -658,257 +614,280 @@ function Perfil() {
                     <FluencyButton onClick={openEditModalTwo} variant='solid'>Atualizar informações</FluencyButton>  
                     <FluencyButton onClick={openHorariosModal} variant='gray'>Atualizar horários</FluencyButton>
                   </div>
-                </div>
-              </div>   
+                </div> 
 
-              <div className='lg:flex lg:flex-row lg:items-stretch flex flex-col items-stretch justify-center w-full gap-4 lg:mt-0 mt-2'>
-                <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1'>
-                  <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Check-list:</h1>
-                  {Array.isArray(cursoFeito) && cursoFeito.length > 0 ? (
-                  <div className={`flex flex-row gap-2 w-full rounded-md ${cursoFeito.every(course => course) ? 'bg-fluency-green-700' : 'bg-fluency-orange-700'} text-white font-bold p-3 items-center justify-between`}>
-                    <div className='flex flex-row w-full justify-between items-center'>
-                      {cursoFeito.every(course => course) ? (
-                        <span className='flex flex-row items-center gap-1 w-full justify-between'>Curso de Instruções Feito! <PiExam className='w-6 h-auto' /></span>
-                        ) : (
-                          <a href="/teacher-dashboard/suporte/curso" className="flex flex-row items-center gap-1 w-full justify-between">
-                            Fazer curso <PiExam className='w-6 h-auto' />
-                          </a>
-                        )}
-                      </div>    
-                    </div>
-                  ) : (
-                    <div>Sem informação disponível</div>
-                  )}
-                  {link === null ? 
-                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
-                      <p>Link do Meet não adicionado</p>
-                    </div> 
-                    : 
-                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                      <p>Link do Meet adicionado</p>  
-                    </div>}
+              <div className='w-full bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col items-center gap-1'>
+                <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Check-list:</h1>
+                {Array.isArray(cursoFeito) && cursoFeito.length > 0 ? (
+                <div className={`flex flex-row gap-2 w-full rounded-md ${cursoFeito.every(course => course) ? 'bg-fluency-green-700' : 'bg-fluency-orange-700'} text-white font-bold p-3 items-center justify-between`}>
+                  <div className='flex flex-row w-full justify-between items-center'>
+                    {cursoFeito.every(course => course) ? (
+                      <span className='flex flex-row items-center gap-1 w-full justify-between'>Curso de Instruções Feito! <PiExam className='w-6 h-auto' /></span>
+                      ) : (
+                        <a href="/teacher-dashboard/suporte/curso" className="flex flex-row items-center gap-1 w-full justify-between">
+                          Fazer curso <PiExam className='w-6 h-auto' />
+                        </a>
+                      )}
+                    </div>    
+                  </div>
+                ) : (
+                  <div>Sem informação disponível</div>
+                )}
+                {link === null ? 
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                    <p>Link do Meet não adicionado</p>
+                  </div> 
+                  : 
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                    <p>Link do Meet adicionado</p>  
+                  </div>}
 
-                    {number === null ? 
-                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
-                      <p>Telefone não adicionado</p>
-                    </div> 
-                    : 
-                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                      <p>Telefone adicionado</p>  
-                    </div>}
+                  {number === null ? 
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                    <p>Telefone não adicionado</p>
+                  </div> 
+                  : 
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                    <p>Telefone adicionado</p>  
+                  </div>}
 
-                    {profilePictureURL === null ? 
-                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
-                      <p>Foto de perfil não adicionada</p>
-                    </div> 
-                    : 
-                    <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
-                      <p>Foto de perfil adicionada</p>  
-                    </div>}
-                </div>
-              </div>   
+                  {profilePictureURL === null ? 
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-orange-700 text-white font-bold p-3 items-center justify-between'>
+                    <p>Foto de perfil não adicionada</p>
+                  </div> 
+                  : 
+                  <div className='flex flex-row gap-2 w-full rounded-md bg-fluency-green-700 text-white font-bold p-3 items-center justify-between'>
+                    <p>Foto de perfil adicionada</p>  
+                  </div>}
+              </div> 
             </div>
           </div>
 
-            <div className='bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 overflow-hidden overflow-y-scroll ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col lg:items-center md:items-center items-center gap-1 w-full lg:mt-0 mt-2'>
-              <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Notificações</h1>                
-                <div className='w-full mt-2'>
-                  {getFilteredNotifications().length > 0 ? (
-                    getFilteredNotifications().map(notification => (
-                      <div key={notification.id} className={`flex flex-row items-start w-full justify-between p-3 mb-1 rounded-lg ${getBackgroundColor(notification.status)}`}>
-                          <p>{notification.content}</p>                
-                      </div>
-                    ))
-                  ) : (
-                    <p>Nenhuma notificação para mostrar.</p>
-                  )}
-                </div>
-            </div>
-                 
+          <div className='w-full lg:mt-0 md:mt-0 mt-4 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-3 rounded-lg flex flex-col items-center gap-1'>
+            <h1 className='flex flex-row justify-center p-1 font-semibold text-lg'>Informações importantes</h1>
+          </div>
         </div>
 
-        {isEditModalOpen && 
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
+    {isEditModalOpen && 
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+              
+              <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
 
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                        <div className="flex flex-col items-center">
-                            <FluencyCloseButton onClick={closeEditModal}/>
-                            
-                            <h3 className="text-lg leading-6 font-medium mb-2">
-                                Atualizar Perfil
-                            </h3>
-                            <div className="mt-2 flex flex-col gap-3 p-4">                    
-                              <FluencyInput type="text" placeholder="Nome" value={name} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)} variant='solid' />
-                              <FluencyInput type="text" placeholder="Número" value={number} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNumber(e.target.value)} variant='solid' />
+              <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                  <div className="flex flex-col items-center">
+                      <FluencyCloseButton onClick={closeEditModal}/>
+                      
+                      <h3 className="text-lg leading-6 font-medium mb-2">
+                          Atualizar Perfil
+                      </h3>
+                      <div className="mt-2 flex flex-col gap-3 p-4">                    
+                        <FluencyInput type="text" placeholder="Nome" value={name} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)} variant='solid' />
+                        <FluencyInput type="text" placeholder="Número" value={number} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNumber(e.target.value)} variant='solid' />
 
-                            <div className="flex w-full">                            
-                              <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
-                              <FluencyButton variant='gray' onClick={closeEditModal}>Cancelar</FluencyButton>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>}
-
-            {isEditModalOpenTwo && 
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                        <div className="flex flex-col items-center justify-center">
-                            
-                            <FluencyCloseButton onClick={closeEditModalTwo}/>
-                            
-                              <h3 className="text-lg leading-6 font-medium  mb-2">
-                                  Atualizar Informações                            
-                              </h3>
-                              <div className="mt-2 flex flex-col items-center gap-3 p-4">
-                                <FluencyInput type="text" placeholder="Link" value={link} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLink(e.target.value)} variant='solid' />
-                                <FluencyInput type="text" placeholder="Calendario Link" value={calendarLink} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setCalendarLink(e.target.value)} variant='solid' />
-                                <div className="flex justify-center">
-                                  <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
-                                  <FluencyButton variant='gray' onClick={closeEditModalTwo}>Cancelar</FluencyButton>
-                                </div>
-                              </div>
-                        </div>
-                    </div>
-                </div>
-            </div>}
-
-
-            {resetPassword && 
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
-                        <div className="flex flex-col items-center justify-center">
-                            
-                            <FluencyCloseButton onClick={closeResetPassword}/>
-                            
-                              <h3 className="text-lg leading-6 font-medium  mb-2">
-                                  Insira seu email pessoal                         
-                              </h3>
-                              <div className="mt-2 flex flex-col items-center gap-3 p-4">
-                                <FluencyInput 
-                                variant='solid' 
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                placeholder={session?.user.email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required/>
-                                <div className="flex justify-center">
-                                  <FluencyButton variant='confirm' onClick={handleResetPassword}>Enviar</FluencyButton>
-                                  <FluencyButton variant='gray' onClick={closeResetPassword}>Cancelar</FluencyButton>
-                                </div>
-                              </div>
-                        </div>
-                    </div>
-                </div>
-            </div>}
-
-            {horariosModal && 
-             <div className="fixed z-50 inset-0 overflow-y-auto">
-                  <div className="flex items-center justify-center min-h-screen">
-                    <div className="fixed inset-0 transition-opacity">
-                      <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5 mx-4">
-                      <div className="flex flex-col items-center justify-center p-2">
-                        <FluencyCloseButton onClick={closeHorariosModal} />
-                        <h3 className="text-lg leading-6 font-medium mb-2 p-2">
-                          Insira seus horários
-                        </h3>
-                        <div className="mt-2 flex flex-col items-center gap-3">
-                          <div className='flex flex-col sm:flex sm:flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
-                            <div className='px-2'>
-                              <p className='font-bold'>Dia</p>
-                              <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
-                                <option>Segunda</option>
-                                <option>Terça</option>
-                                <option>Quarta</option>
-                                <option>Quinta</option>
-                                <option>Sexta</option>
-                                <option>Sábado</option>
-                                <option>Domingo</option>
-                              </select>
-                            </div>
-                            <div className='px-2'>
-                              <p className='font-bold'>Horário</p>
-                              <input className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' type="time" value={hour} onChange={(e) => setHour(e.target.value)} />
-                            </div>
-                            <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveTime}>Adicionar</button>
-                          </div>
-
-                          <div className='flex flex-col items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
-                            <p className='font-bold'>Horários</p>
-                            <ul className='p-2 flex flex-col items-center gap-2'>
-                              {times.map((time, index) => (
-                                <li className='flex flex-row items-center gap-2 w-full justify-between' key={index}>
-                                  <p className='font-semibold'>{time.day} às {time.hour}</p>
-                                  <select
-                                    className={`text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-md font-medium ${time.status?.studentId === 'disponivel' ? "text-fluency-green-500 font-semibold" : "text-black"}`}
-                                    value={time.status?.studentId || ''}
-                                    onChange={(e) => updateTimeSlotStatus(time.id, e.target.value, students.find(student => student.id === e.target.value)?.name || '')}
-                                  >
-                                    <option value="" disabled>Selecione um aluno</option>
-                                    <option value="disponivel">Disponível</option>
-                                    {students.map((student) => (
-                                      <option key={student.id} value={student.id}>
-                                        {student.name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                    <Tooltip className='bg-fluency-blue-300 px-2 font-bold rounded-md' content="Editar"><button onClick={() => editTimeSlot(time)}><MdEditCalendar className='w-5 h-auto text-fluency-blue-600 hover:text-fluency-blue-800'/></button></Tooltip>
-                                    <Tooltip className='bg-fluency-red-300 px-2 font-bold rounded-md' content="Deletar"><button onClick={() => deleteTime(time.id)}><LuCalendarX2 className='w-5 h-auto text-fluency-red-600 hover:text-fluency-red-800'/></button></Tooltip>
-                                </li>
-                              ))}
-                            </ul>
-
-                            {editingTime && (
-                            <div className='flex flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
-                                  <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
-                                    <option value="">Selecione um dia</option>
-                                    <option>Segunda</option>
-                                    <option>Terça</option>
-                                    <option>Quarta</option>
-                                    <option>Quinta</option>
-                                    <option>Sexta</option>
-                                    <option>Sábado</option>
-                                    <option>Domingo</option>
-                                  </select>
-                                  <input 
-                                    type="text" 
-                                    value={hour} 
-                                    onChange={(e) => setHour(e.target.value)} 
-                                    placeholder="Horário" 
-                                    className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark'
-                                  />
-                                  <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveEditedTimeSlot}>Salvar</button>
-                                  <button className='px-2 py-1 rounded-md bg-fluency-red-500 hover:bg-fluency-red-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={() => setEditingTime(null)}>Cancelar</button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                        <div className="flex w-full">                            
+                          <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
+                          <FluencyButton variant='gray' onClick={closeEditModal}>Cancelar</FluencyButton>
                         </div>
                       </div>
+                  </div>
+              </div>
+          </div>
+      </div>}
+
+    {isEditModalOpenTwo && 
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+              
+              <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+
+              <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                  <div className="flex flex-col items-center justify-center">
+                      
+                      <FluencyCloseButton onClick={closeEditModalTwo}/>
+                      
+                        <h3 className="text-lg leading-6 font-medium  mb-2">
+                            Atualizar Informações                            
+                        </h3>
+                        <div className="mt-2 flex flex-col items-center gap-3 p-4">
+                          <FluencyInput type="text" placeholder="Link" value={link} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLink(e.target.value)} variant='solid' />
+                          <FluencyInput type="text" placeholder="Calendario Link" value={calendarLink} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setCalendarLink(e.target.value)} variant='solid' />
+                          <div className="flex justify-center">
+                            <FluencyButton variant='confirm' onClick={handleSaveProfile}>Salvar</FluencyButton>
+                            <FluencyButton variant='gray' onClick={closeEditModalTwo}>Cancelar</FluencyButton>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+          </div>
+      </div>}
+
+    {resetPassword && 
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+              
+              <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+
+              <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full p-5">
+                  <div className="flex flex-col items-center justify-center">
+                      
+                      <FluencyCloseButton onClick={closeResetPassword}/>
+                      
+                        <h3 className="text-lg leading-6 font-medium  mb-2">
+                            Insira seu email pessoal                         
+                        </h3>
+                        <div className="mt-2 flex flex-col items-center gap-3 p-4">
+                          <FluencyInput 
+                          variant='solid' 
+                          id="email"
+                          name="email"
+                          type="email"
+                          autoComplete="email"
+                          placeholder={session?.user.email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required/>
+                          <div className="flex justify-center">
+                            <FluencyButton variant='confirm' onClick={handleResetPassword}>Enviar</FluencyButton>
+                            <FluencyButton variant='gray' onClick={closeResetPassword}>Cancelar</FluencyButton>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+          </div>
+    </div>}
+
+    {horariosModal && 
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="fixed inset-0 transition-opacity">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white rounded-lg overflow-hidden shadow-xl transform transition-all w-fit h-full max-h-[95vh] p-5 mx-4">
+              <div className="flex flex-col items-center justify-center p-2">
+                <FluencyCloseButton onClick={closeHorariosModal} />
+                <h3 className="text-lg leading-6 font-medium mb-2 p-2">
+                  Insira seus horários
+                </h3>
+                <div className="mt-2 flex flex-col items-center gap-3">
+                  <div className='flex flex-col sm:flex sm:flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                    <div className='px-2'>
+                      <p className='font-bold'>Dia</p>
+                      <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
+                        <option>Segunda</option>
+                        <option>Terça</option>
+                        <option>Quarta</option>
+                        <option>Quinta</option>
+                        <option>Sexta</option>
+                        <option>Sábado</option>
+                        <option>Domingo</option>
+                      </select>
                     </div>
-                  </div>}
+                    <div className='px-2'>
+                      <p className='font-bold'>Horário</p>
+                      <input className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' type="time" value={hour} onChange={(e) => setHour(e.target.value)} />
+                    </div>
+                    <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveTime}>Adicionar</button>
+                  </div>
+
+                  <div className='flex flex-col items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full h-max'>
+                      {!editingTime ? (
+                      <>
+                      <p className='font-bold'>Horários</p>
+                      <ul className='p-2 flex flex-col items-center gap-4 lg:gap-2 overflow-y-auto max-h-[50vh]'>
+                        {times.map((time, index) => (
+                          <li className='flex flex-col lg:flex lg:flex-row items-center sm:gap-1 lg:gap-8 w-full justify-between bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-md p-2' key={index}>
+                            <p className='font-semibold'>{time.day} às {time.hour}</p>
+                            <select
+                              className={`text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-md font-medium ${
+                                time.status?.studentId === 'disponivel' ? "text-fluency-green-500 font-semibold" : "text-black"
+                                }`}
+                                value={time.status?.studentId || ''}
+                                onChange={(e) =>
+                                  updateTimeSlotStatus(
+                                    time.id,
+                                    e.target.value,
+                                    students.find((student) => student.id === e.target.value)?.name || ''
+                                  )
+                                }
+                              >
+                              <option value="" disabled>Selecione um aluno</option>
+                              <option value="disponivel">Disponível</option>
+                              {students.map((student) => (
+                                <option key={student.id} value={student.id}>
+                                  {student.name}
+                                </option>
+                              ))}
+                            </select>
+                            <div className='flex flex-row items-center gap-2'>
+                              <Tooltip
+                                className='bg-fluency-blue-300 px-2 font-bold rounded-md'
+                                content="Editar"
+                              >
+                                <button
+                                  onClick={() =>
+                                    editTimeSlot(
+                                      time,
+                                      time.status?.studentId && students.find((s) => s.id === time.status?.studentId)?.name
+                                    )
+                                  }
+                                >
+                                  <MdEditCalendar className='w-5 h-auto text-fluency-blue-600 hover:text-fluency-blue-800' />
+                                </button>
+                              </Tooltip>
+                              <Tooltip
+                                className='bg-fluency-red-300 px-2 font-bold rounded-md'
+                                content="Deletar"
+                              >
+                                <button onClick={() => deleteTime(time.id)}>
+                                  <LuCalendarX2 className='w-5 h-auto text-fluency-red-600 hover:text-fluency-red-800' />
+                                </button>
+                              </Tooltip>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                    
+                    ):(
+                    <>
+                      <p className='font-bold'>Modificar horário de {studentEditingName}</p>
+                        <div className='flex flex-col lg:flex lg:flex-row items-center justify-between gap-3 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md w-full'>
+                          <select className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark' value={day} onChange={(e) => setDay(e.target.value)}>
+                            <option value="">Selecione um dia</option>
+                            <option>Segunda</option>
+                            <option>Terça</option>
+                            <option>Quarta</option>
+                            <option>Quinta</option>
+                            <option>Sexta</option>
+                            <option>Sábado</option>
+                            <option>Domingo</option>
+                          </select>
+                          <input 
+                            type="text" 
+                            value={hour} 
+                            onChange={(e) => setHour(e.target.value)} 
+                            placeholder="Horário" 
+                            className='px-2 rounded-md font-bold text-black dark:text-white py-1 bg-fluency-bg-light dark:bg-fluency-bg-dark'
+                          />
+                          <div className='flex flex-row items-center gap-2'>
+                            <button className='px-2 py-1 rounded-md bg-fluency-green-500 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={saveEditedTimeSlot}>Salvar</button>
+                            <button className='px-2 py-1 rounded-md bg-fluency-red-500 hover:bg-fluency-red-700 duration-300 ease-in-out transition-all font-bold text-white' onClick={() => setEditingTime(null)}>Cancelar</button>
+                          </div>
+                      </div>
+                    </>
+                    )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
 
         <Toaster />
 

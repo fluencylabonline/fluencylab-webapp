@@ -36,3 +36,11 @@
   .hidden {
     display: none;
   }
+
+  #deck-bg {
+    background-image: url(../../../../../public/images/games/flashcards-deck4.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: #00000010;
+  }

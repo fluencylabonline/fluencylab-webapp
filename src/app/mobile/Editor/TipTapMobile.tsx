@@ -94,6 +94,9 @@ import SentencesModal from '@/app/SharedPages/Apostilas/editor/Components/Senten
 import SentencesNode from '@/app/SharedPages/Apostilas/editor/Components/SentencesComponent/SentencesNode';
 import ReactDOM from 'react-dom';
 
+import Collaboration from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+
 //INTERFACE
 type PopoversProps = {
   editor: Editor;
@@ -334,7 +337,7 @@ function Popovers({ editor }: PopoversProps) {
   )
 }
 
-const TiptapMobile = ({ onChange, content, role }: any) => {
+const TiptapMobile = ({ onChange, content, provider, studentID, role, notebookID, userName }: any) => {
   const [isModalTranscriptOpen, setIsModalTranscriptOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEmbedOpen, setIsModalEmbedOpen] = useState<boolean>(false);
@@ -468,8 +471,17 @@ const TiptapMobile = ({ onChange, content, role }: any) => {
         openOnClick: true,
       }),
       StarterKit.configure({
-        document: false,
-        history: false,
+        history: false
+      }),
+      Collaboration.configure({
+        document: provider.doc,
+      }),
+      CollaborationCursor.configure({
+        provider: provider,
+        user: {
+          name: userName,
+          color: 'blue'
+        },
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
@@ -521,10 +533,11 @@ const TiptapMobile = ({ onChange, content, role }: any) => {
     },
     autofocus: true,
     content: content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+    onUpdate: async ({ editor }) => {
+      const newContent = editor.getHTML();
+      onChange(newContent);
     },
-  }) 
+  });
 
   if (!editor) {
     return null;

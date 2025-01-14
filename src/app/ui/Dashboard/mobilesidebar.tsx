@@ -9,9 +9,11 @@ import { useSession } from 'next-auth/react';
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
 import { BsFillDoorOpenFill } from 'react-icons/bs';
-import { MdOndemandVideo } from 'react-icons/md';
+import { MdOndemandVideo, MdOutlineDarkMode } from 'react-icons/md';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
+import { FaUserCircle } from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
 
 interface ISidebarItem {
     name: string;
@@ -46,7 +48,7 @@ type MobileSidebarProps = {
       } else if (userRole === 'admin') {
         router.push('/admin-dashboard/perfil');
       } else {
-        router.push('perfil'); // default route if role is not defined or doesn't match
+        router.push('perfil');
       }
     };
 
@@ -114,11 +116,6 @@ type MobileSidebarProps = {
                 <MdOndemandVideo className='w-6 h-6'/> Aulas Gravadas
               </div>)}
 
-              <div>
-                  <div className={`mt-8 flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`} onClick={handleLogout}>
-                    <BsFillDoorOpenFill className='w-6 h-6'/> Sair
-                  </div>
-              </div>
               <div className='fixed bottom-2' onClick={() => {handleAvatarClick(); toggleMenu()}}>
                 <Avatar isCollapsed={false} />
               </div>

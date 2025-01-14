@@ -10,6 +10,7 @@
     "email": "email dev --dir src/emails"
   },
   "dependencies": {
+    "@gmcfall/yjs-firestore-provider": "^1.0.0-rc.5",
     "@google/generative-ai": "^0.11.4",
     "@headlessui/react": "^2.0.3",
     "@hocuspocus/provider": "^2.13.0",
@@ -79,7 +80,7 @@
     "wavesurfer.js": "^7.7.15",
     "xlsx": "^0.18.5",
     "xlsx-js-style": "^1.2.0",
-    "yjs": "^13.6.21"
+    "yjs": "^13.6.22"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",

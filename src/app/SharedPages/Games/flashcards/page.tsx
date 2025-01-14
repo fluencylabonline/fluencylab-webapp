@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, FC } from 'react';
-import { collection, addDoc, getDocs, query, doc as firestoreDoc, setDoc, getDoc, updateDoc, deleteDoc, doc, where, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, doc as firestoreDoc, setDoc, getDoc, updateDoc, deleteDoc, doc, where } from 'firebase/firestore';
 import { db } from '@/app/firebase'; 
 import './flashcards.css';
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -13,7 +13,7 @@ import { Tooltip } from '@nextui-org/react';
 import { FaArrowRight } from 'react-icons/fa6';
 import { useSession } from 'next-auth/react';
 import {Tabs, Tab} from "@nextui-org/tabs";
-import { franc } from 'franc-min';
+import { IoClose } from 'react-icons/io5';
 
 interface Deck {
     id: string;
@@ -36,12 +36,6 @@ interface Student {
     [key: string]: any;
 }
 
-interface DeckData {
-    id: string;
-    name: string;
-    cardsToReviewCount: number;
-}
-
 const FlashCard: FC = () => {
     const { data: session } = useSession();
     const currentUserId = session?.user.id;
@@ -61,14 +55,10 @@ const FlashCard: FC = () => {
     const [globalDecksPractice, setGlobalDecksPractice] = useState<boolean>(false);
     const [otherDecks, setOtherDecks] = useState<Deck[]>([]);
     const [otherCards, setOtherCards] = useState<Card[]>([]);
-    const [otherDecksList, setOtherDecksList] = useState<boolean>(false);
-    
     const [tags, setTags] = useState<string[]>([]);
     const [newTag, setNewTag] = useState<string>('');
-
     const [searchTerm, setSearchTerm] = useState('');
-
-    const [filteredDecks, setFilteredDecks] = useState<Deck[]>([]); // Decks after filtering
+    const [filteredDecks, setFilteredDecks] = useState<Deck[]>([]);
 
     useEffect(() => {
         const fetchOtherDecks = async () => {
@@ -91,7 +81,6 @@ const FlashCard: FC = () => {
     }, []);
     
     useEffect(() => {
-        // Filter decks by name and tags when searchTerm changes
         const filtered = otherDecks.filter(deck => 
             deck.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
             deck.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -99,17 +88,11 @@ const FlashCard: FC = () => {
         setFilteredDecks(filtered);
     }, [searchTerm, otherDecks]);
     
-    // Handling search input
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
 
-    const openOtherlDecks = () => {setOtherDecksList(true)}
-    const closeOtherlDecks = () => {setOtherDecksList(false)}
-    const openGlobalDecks = () => {setGlobalDecks(true)}
-    const closeGlobalDecks = () => {setGlobalDecks(false)}
     const openModal = () => {setIsModalOpen(true);};
-
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedDeck('');
@@ -120,22 +103,6 @@ const FlashCard: FC = () => {
         setEditedCardFront('');
         setEditedCardBack('');
     };
-    
-    /*
-    useEffect(() => {
-        const fetchOtherDecks = async () => {
-            try {
-                const decksQuery = query(collection(db, 'Flashcards'));
-                const decksSnapshot = await getDocs(decksQuery);
-                const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id, tags: [], }));
-                setOtherDecks(decksData);
-            } catch (error) {
-                console.error('Error fetching decks:', error);
-            }
-        };
-        fetchOtherDecks();
-    }, []);
-    */
     
     useEffect(() => {
         if (selectedDeck) {
@@ -186,22 +153,6 @@ const FlashCard: FC = () => {
         };
         fetchData();
     }, [currentUserId]);
-    
-    useEffect(() => {
-        const fetchDecks = async () => {
-            if(currentUserId){
-                try {
-                    const decksQuery = query(collection(db, 'users', currentUserId, 'Decks'));
-                    const decksSnapshot = await getDocs(decksQuery);
-                    const decksData = decksSnapshot.docs.map(doc => ({ id: doc.id, name: doc.id }));
-                    setDecks(decksData);
-                } catch (error) {
-                    console.error('Error fetching decks:', error);
-                }
-            }
-        };
-        fetchDecks();
-    }, []);
 
     useEffect(() => {
         if (selectedDeck) {
@@ -233,20 +184,26 @@ const FlashCard: FC = () => {
         setGlobalDecksPractice(true)
     };
 
+    const setDeckNull = () => {
+        setCurrentCard(0);
+        setIsFlipped(false);
+        setSelectedDeck('');
+        setGlobalDecksPractice(false)
+    }
+
     const handleDeckSelection = async (deckId: string) => {
-        setSelectedDeck(deckId); // Set selected deck
-    
+        setSelectedDeck(deckId);
         if (deckId) {
             try {
                 const deckRef = firestoreDoc(db, 'Flashcards', deckId);
                 const deckDoc = await getDoc(deckRef);
     
                 if (deckDoc.exists()) {
-                    const { tags: fetchedTags = [] } = deckDoc.data(); // Get tags
-                    setTags(fetchedTags); // Set tags in state
+                    const { tags: fetchedTags = [] } = deckDoc.data();
+                    setTags(fetchedTags);
                     toast.success("Tags carregadas com sucesso!");
                 } else {
-                    setTags([]); // Clear tags if deck has none
+                    setTags([]);
                     toast.error("Deck não possui tags.");
                 }
             } catch (error) {
@@ -254,7 +211,7 @@ const FlashCard: FC = () => {
                 toast.error("Erro ao carregar tags do deck.");
             }
         } else {
-            setTags([]); // Clear tags if no deck is selected
+            setTags([]);
         }
     };
     
@@ -263,9 +220,8 @@ const FlashCard: FC = () => {
             try {
                 const deckRef = firestoreDoc(db, 'Flashcards', newDeckName);
                 const deckDoc = await getDoc(deckRef);
-    
                 if (!deckDoc.exists()) {
-                    await setDoc(deckRef, { tags }); // Add tags to Firestore
+                    await setDoc(deckRef, { tags });
                     setDecks((prevDecks) => [
                         ...prevDecks,
                         { id: newDeckName, name: newDeckName, tags },
@@ -312,7 +268,6 @@ const FlashCard: FC = () => {
             }
         }
     };
-    
 
     const addCard = async () => {
         if (selectedDeck && newCardFront && newCardBack) {
@@ -326,10 +281,10 @@ const FlashCard: FC = () => {
                     reviewCount: 0,
                 };
                 await addDoc(collection(db, 'Flashcards', selectedDeck, 'cards'), newCard);
-                fetchOtherCards(selectedDeck);
-                setNewCardFront('');
-                setNewCardBack('');
-                toast.success('Cartão adicionado!');
+                    fetchOtherCards(selectedDeck);
+                    setNewCardFront('');
+                    setNewCardBack('');
+                    toast.success('Cartão adicionado!');
             } catch (error) {
                 console.error('Error adding card:', error);
             }
@@ -382,7 +337,6 @@ const FlashCard: FC = () => {
                 interval = Math.max(1, interval / 2);
                 break;
         }
-
         reviewCount += 1;
         const dueDate = new Date(now.setDate(now.getDate() + interval)).toISOString();
         if(currentUserId){
@@ -499,7 +453,7 @@ const FlashCard: FC = () => {
                     });
                 }));
                 toast.success("Deck adicionado! Recarregue a página.")
-                
+                fetchDecksWithReviewCount(studentId)
             } else {
                 console.error('Deck not found.');
                 toast.error("Deck not found.");
@@ -514,30 +468,64 @@ const FlashCard: FC = () => {
     
     return (
         <div className="flex flex-row items-center w-full min-h-[90vh] justify-center">
-           <div className="flex flex-col items-center justify-start min-h-[90vh] w-full">
+           <div className="flex flex-col items-center justify-start min-h-[87vh] w-full mt-4">
                 <Tabs aria-label="Options" radius="lg" color="primary" classNames={{
-                    tabList: "gap-6 w-full relative rounded-none p-0 border-b border-divider",
+                    tabList: "gap-2 w-full relative rounded-none p-0 border-b border-divider",
                     cursor: "w-full bg-fluency-gray-500 rounded-t-lg",
                     tab: "max-w-fit px-0 h-12",
-                    tabContent: "group-data-[selected=true]:text-white px-4 font-bold"
+                    tabContent: "group-data-[selected=true]:text-white px-4 font-bold",
                     }}>
                     <Tab key="seus" title="Praticar">
-                        <div className='flex flex-row gap-2 items-center justify-center'>
-                            <FluencyButton variant='gray' onClick={openGlobalDecks}>Seus decks</FluencyButton>
-                            <FluencyButton variant='warning' onClick={openOtherlDecks}>Outros decks</FluencyButton>
-                        </div>
                         <div>
-                        {globalDecksPractice &&
+                        {!globalDecksPractice ? (
+                            <div className='flex flex-col items-center'>
+                            <h2 className='font-bold text-lg'>Seus decks:</h2>
+                            <ul className='flex flex-col items-start p-4 gap-2'>
+                            {decks.map(deck => (
+                                <li id='deck-bg' className='flex flex-col items-center gap-6 p-2 py-8 px-3 rounded-lg w-full justify-between' key={deck.id}>
+                                    <p className='font-bold px-4'>{deck.name}</p>
+                                    <div className='flex flex-col sm:flex-row gap-6 items-center'>
+                                        <div className={`flex font-bold text-sm p-1 rounded-md ${
+                                            deck.cardsToReviewCount > 0 ? 'text-orange-500' : 'text-green-500'
+                                        }`}>
+                                            {deck.cardsToReviewCount > 0
+                                                ? `À Revisar: ${deck.cardsToReviewCount}`
+                                                : 'Sem cartões para revisar'}
+                                        </div>
+                                        <button disabled={deck.cardsToReviewCount === 0} 
+                                        className={`text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out ${
+                                            deck.cardsToReviewCount === 0
+                                                ? 'bg-gray-400 cursor-not-allowed'
+                                                : 'bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hover:dark:bg-fluency-orange-800'
+                                            }`}
+                                            value={deck.name} onClick={() => selectDeck(deck.id)}>
+                                                Praticar
+                                        </button>
+                                    </div>
+                                </li>
+                            ))}
+                            </ul>
+                        </div>
+                        ):(
                         <div className='flex flex-col items-center'>
-                            <div className='flex flex-col items-center gap-2 p-8'>
-                            <p><span className='font-semibold'>Deck: </span>{decks.find(deck => deck.id === selectedDeck)?.name}</p>
-                            <p className='flex flex-row gap-1 items-center p-1 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'><span className='font-bold flex flex-row items-center gap-1'>Cartões:</span> {cards.length}</p>
-                            {cards[currentCard] && (
+                            <div className='flex flex-col items-center gap-2 p-2'>
+                                <p>
+                                    <span className='font-semibold'>
+                                        Deck: {decks.find(deck => deck.id === selectedDeck)?.name}
+                                    </span>
+                                </p>
+                                <p className='flex flex-row gap-1 items-center justify-around w-[90%] p-1 rounded-md bg-fluency-gray-100 dark:bg-fluency-gray-400'>
+                                    <span className='font-bold flex flex-row items-center gap-1'>
+                                        Cartões: {cards.length}
+                                    </span>
+                                    <button onClick={setDeckNull}><IoClose className='w-6 h-6' /></button>
+                                </p>
+                                {cards[currentCard] && (
                                     <div className="flashcard" onClick={() => setIsFlipped(!isFlipped)} style={{ backgroundColor: isFlipped ? '#65C6E0' : '#65C6E0' }}>
-                                        <div className={`flashcard__front font-bold ${isFlipped ? 'flipped' : ''}`}>
+                                        <div className={`flashcard__front font-bold px-4 text-center ${isFlipped ? 'flipped' : ''}`}>
                                             {cards[currentCard].front}
                                         </div>
-                                        <div className={`flashcard__back font-bold ${isFlipped ? 'flipped' : 'hidden'}`}>
+                                        <div className={`flashcard__back font-bold px-4 text-center ${isFlipped ? 'flipped' : 'hidden'}`}>
                                             {cards[currentCard].back}
                                         </div>
                                     </div>
@@ -575,22 +563,59 @@ const FlashCard: FC = () => {
                                         </button>
                                     </>}
                                 </div>
-                                            {isFlipped ? (
-                                                <></>
-                                            ):(
-                                            <button className='bg-fluency-orange-500 p-2 px-4 rounded-md font-bold text-white'
-                                                    onClick={() => {
-                                                    setCurrentCard(prevCard => (prevCard + 1) % cards.length);
-                                                    setIsFlipped(false);}}>
-                                                Pular
-                                            </button>
-                                            )}
-                                    </div>
-                                </div>}
+                                {isFlipped ? (
+                                    <></>
+                                ):(
+                                <button className='bg-fluency-orange-500 p-2 px-4 rounded-md font-bold text-white'
+                                        onClick={() => {
+                                        setCurrentCard(prevCard => (prevCard + 1) % cards.length);
+                                        setIsFlipped(false);}}>
+                                    Pular
+                                </button>
+                                )}
+                            </div>
+                        </div>)}
                         </div>
                     </Tab>
+
+                    <Tab key="disponiveis" title="Decks">
+                        <div className="flex flex-col items-center">
+                            <h2 className="font-bold text-xl mb-2">Decks</h2>
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                placeholder="Procurar por nome ou tags..."
+                                className="w-full dark:bg-fluency-pages-dark border border-gray-300 focus:outline-none rounded-md px-3 py-2 mb-2"
+                            />
+                            <ul className="flex flex-col items-start p-4 gap-2">
+                                {filteredDecks.length > 0 ? (
+                                    filteredDecks.map((deck) => (
+                                        <li
+                                            key={deck.id}
+                                            className="flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between"
+                                        >
+                                        <p className="font-bold">{deck.name}</p>
+                                            <div className="flex flex-row gap-2 items-center">
+                                                <button
+                                                    className="bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hoverdark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out"
+                                                    value={deck.name}
+                                                    onClick={() => openOtherConfirmModal(deck.id)}
+                                                >
+                                                    Praticar
+                                                </button>
+                                            </div>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li className="text-center text-gray-500">Nenhum deck encontrado.</li>
+                                )}
+                            </ul>
+                        </div>
+                    </Tab>
+
                     {session?.user.role === 'teacher' && (
-                    <Tab key="criar" title="Criar ou Editar">
+                    <Tab key="criar" title="Criar/Editar">
                         <div>
                             <div className='flex flex-col items-center gap-2 p-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark'>           
                                 <div className='flex flex-row justify-center items-center gap-1 w-full px-4'>
@@ -622,95 +647,6 @@ const FlashCard: FC = () => {
                 </Tabs>
             </div>
 
-            {globalDecks &&
-            <div className="fixed z-50 inset-0 overflow-y-hidden">
-                <div className="flex items-center justify-center min-h-screen">
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all p-8">
-                        <FluencyCloseButton onClick={closeGlobalDecks}/>
-                        <div className='flex flex-col items-center'>
-                            <h2>Seus decks:</h2>
-                            <ul className='flex flex-col items-start p-4 gap-2'>
-                            {decks.map(deck => (
-                                <li className='flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between' key={deck.id}>
-                                    <p className='font-bold'>{deck.name}</p>
-                                    <div className='flex flex-col sm:flex-row gap-6 items-center'>
-                                        <div className={`flex font-bold text-sm p-1 rounded-md ${
-                                            deck.cardsToReviewCount > 0 ? 'text-orange-500' : 'text-green-500'
-                                        }`}>
-                                            {deck.cardsToReviewCount > 0
-                                                ? `À Revisar: ${deck.cardsToReviewCount}`
-                                                : 'Sem cartões para revisar'}
-                                        </div>
-                                        <button disabled={deck.cardsToReviewCount === 0} 
-                                        className={`text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out ${
-                                            deck.cardsToReviewCount === 0
-                                                ? 'bg-gray-400 cursor-not-allowed'
-                                                : 'bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hover:dark:bg-fluency-orange-800'
-                                            }`}
-                                            value={deck.name} onClick={() => selectDeck(deck.id)}>
-                                                Praticar
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>}
-
-            {otherDecksList &&
-            <div className="fixed z-50 inset-0 overflow-y-hidden">
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="fixed inset-0 transition-opacity">
-                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <div className="h-[85vh] overflow-y-scroll bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all p-8">
-                    <FluencyCloseButton onClick={closeOtherlDecks} />
-                    
-                    <div className="flex flex-col items-center">
-                        <h2 className="font-bold text-xl mb-2">Decks</h2>
-
-                        {/* Search input */}
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            placeholder="Procurar por nome ou tags..."
-                            className="w-full dark:bg-fluency-pages-dark border border-gray-300 focus:outline-none rounded-md px-3 py-2 mb-2"
-                        />
-
-                        <ul className="flex flex-col items-start p-4 gap-2">
-                            {filteredDecks.length > 0 ? (
-                                filteredDecks.map((deck) => (
-                                    <li
-                                        key={deck.id}
-                                        className="flex flex-col sm:flex-row items-center gap-6 p-2 px-3 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark w-full justify-between"
-                                    >
-                                        <p className="font-bold">{deck.name}</p>
-                                        <div className="flex flex-row gap-2 items-center">
-                                            <button
-                                                className="bg-fluency-orange-500 hover:bg-fluency-orange-600 dark:bg-fluency-orange-700 hoverdark:bg-fluency-orange-800 text-white font-semibold text-sm p-2 rounded-md duration-300 transition-all ease-in-out"
-                                                value={deck.name}
-                                                onClick={() => openOtherConfirmModal(deck.id)}
-                                            >
-                                                Praticar
-                                            </button>
-                                        </div>
-                                    </li>
-                                ))
-                            ) : (
-                                <li className="text-center text-gray-500">Nenhum deck encontrado.</li>
-                            )}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>}
-
             {isModalOpen && 
             <div className="fixed z-50 inset-0 overflow-y-hidden">
                 <div className="flex items-center justify-center min-h-screen">
@@ -719,135 +655,130 @@ const FlashCard: FC = () => {
                         <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                     </div>
 
-                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-[90vh] p-5 m-8">
-                        <div className="flex flex-col items-center">
+                    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-full h-[95vh] p-3 m-5">
+                        <div className="flex flex-col items-center h-[90vh]">
                             <FluencyCloseButton onClick={closeModal}/>
                             
-                            <h3 className="text-lg leading-6 font-medium mb-2">
+                            <h3 className="text-xl leading-6 font-bold mb-2">
                                 FlashCards
                             </h3>
+                   
+                            <div className='flex flex-col lg:flex lg:flex-row items-start w-full justify-around gap-4 overflow-y-auto h-[100vh]'>
+                                <div className='flex flex-col gap-3 items-center w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md'>
+                                <h4 className="text-lg leading-6 font-medium">Criar ou editar cartão</h4>
+                                    <div className='flex flex-col gap-2 w-full items-start'>
+                                        <select
+                                            className="ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
+                                            value={selectedDeck}
+                                            onChange={(e) => handleDeckSelection(e.target.value)}
+                                            >
+                                            <option value="">Selecione um deck</option>
+                                            {otherDecks.map((deck) => (
+                                                <option key={deck.id} value={deck.id}>
+                                                    {deck.name}
+                                                </option>
+                                            ))}
+                                        </select>
 
-                            <div className="mt-2 flex flex-col gap-3 p-4 w-full h-full">                    
-                                <div className='flex flex-row items-start w-full justify-around gap-4'>
-                                    
-                                    <div className='flex flex-col gap-3 items-center w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-md'>
-                                    <h4 className="text-lg leading-6 font-medium">Criar cartão</h4>
-                                        <div className='flex flex-col gap-2 w-full items-start'>
-                                            <select
-                                                className="ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
-                                                value={selectedDeck}
-                                                onChange={(e) => handleDeckSelection(e.target.value)}
-                                                >
-                                                <option value="">Selecione um deck</option>
-                                                {otherDecks.map((deck) => (
-                                                    <option key={deck.id} value={deck.id}>
-                                                        {deck.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-
-                                            <div className='flex flex-row gap-1 w-full'>
-                                                <FluencyInput 
-                                                    type="text" 
-                                                    value={newDeckName} 
-                                                    onChange={e => setNewDeckName(e.target.value)} 
-                                                    className='w-full'
-                                                    placeholder="Ou crie um deck novo: 'Nome do deck - Idioma'" 
-                                                />
-                                                <FluencyButton className='w-min' onClick={createDeck}>Criar</FluencyButton>
-                                            </div>
-
-                                            <div className='flex flex-col items-start justify-center gap-2'>
-                                                <h5 className="font-medium">Tags</h5>
-                                                <div className="flex gap-2 items-center">
-                                                    <FluencyInput
-                                                        type="text"
-                                                        value={newTag}
-                                                        onChange={(e) => setNewTag(e.target.value)}
-                                                        placeholder="Adicionar Tag"
-                                                        className="flex-grow"
-                                                    />
-                                                    <FluencyButton onClick={addTag}>Adicionar</FluencyButton>
-                                                </div>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {tags.map((tag, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="text-xs font-bold flex items-center bg-fluency-blue-200 dark:bg-fluency-blue-800 text-fluency-text-light dark:text-fluency-text-dark px-2 py-1 rounded-full"
-                                                        >
-                                                            <span>{tag}</span>
-                                                            <button
-                                                                className="ml-2 text-red-500"
-                                                                onClick={() => removeTag(index)}
-                                                            >
-                                                                &times;
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
+                                        <div className='flex flex-row gap-1 w-full'>
+                                            <FluencyInput 
+                                                type="text" 
+                                                value={newDeckName} 
+                                                onChange={e => setNewDeckName(e.target.value)} 
+                                                className='w-full'
+                                                placeholder="Ou crie um deck novo: 'Nome do deck - Idioma'" 
+                                            />
+                                            <FluencyButton className='w-min' onClick={createDeck}>Criar</FluencyButton>
                                         </div>
 
+                                        <div className='flex flex-col items-start justify-center gap-2'>
+                                            <h5 className="font-medium">Tags</h5>
+                                            <div className="flex gap-2 items-center">
+                                                <FluencyInput
+                                                    type="text"
+                                                    value={newTag}
+                                                    onChange={(e) => setNewTag(e.target.value)}
+                                                    placeholder="Adicionar Tag"
+                                                    className="flex-grow"
+                                                />
+                                                <FluencyButton onClick={addTag}>Adicionar</FluencyButton>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2">
+                                                {tags.map((tag, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="text-xs font-bold flex items-center bg-fluency-blue-200 dark:bg-fluency-blue-800 text-fluency-text-light dark:text-fluency-text-dark px-2 py-1 rounded-full"
+                                                    >
+                                                        <span>{tag}</span>
+                                                        <button
+                                                            className="ml-2 text-red-500"
+                                                            onClick={() => removeTag(index)}
+                                                        >
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <FluencyInput 
+                                        type="text" 
+                                        value={newCardFront} 
+                                        onChange={e => setNewCardFront(e.target.value)} 
+                                        placeholder="Frente do Cartão" 
+                                    />
+                                    <FluencyInput 
+                                        type="text" 
+                                        value={newCardBack}
+                                        onChange={e => setNewCardBack(e.target.value)} 
+                                        placeholder="Fundo do Cartão" 
+                                    />
+                                    <FluencyButton onClick={addCard}>Adicionar</FluencyButton>
+                                </div>
+
+                                <div className='flex flex-col items-center w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-2'>
+                                    <h4 className="text-lg leading-6 font-medium">Cartões no deck</h4>
+                                    {editedCardId && (
+                                    <div className="flex flex-row gap-3 items-center w-full">
                                         <FluencyInput 
                                             type="text" 
-                                            value={newCardFront} 
-                                            onChange={e => setNewCardFront(e.target.value)} 
+                                            value={editedCardFront} 
+                                            onChange={e => setEditedCardFront(e.target.value)} 
                                             placeholder="Frente do Cartão" 
                                         />
                                         <FluencyInput 
                                             type="text" 
-                                            value={newCardBack}
-                                            onChange={e => setNewCardBack(e.target.value)} 
+                                            value={editedCardBack} 
+                                            onChange={e => setEditedCardBack(e.target.value)} 
                                             placeholder="Fundo do Cartão" 
                                         />
-                                        <FluencyButton onClick={addCard}>Adicionar</FluencyButton>
-                                    </div>
-
-                                    <div className='flex flex-col items-center w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-2'>
-                                        <h4 className="text-lg leading-6 font-medium">Cartões no deck</h4>
-                                        <ul className='w-full h-[65vh] overflow-y-scroll p-4 flex flex-col gap-2'>
-                                            {otherCards.map(card => (
-                                                <li key={card.id} className="flex flex-row items-center border-b border-gray-200">
-                                                    <div className='flex flex-row items-center w-full justify-around bg-fluency-blue-200 dark:bg-fluency-blue-1100 p-2 rounded-md'>
-                                                        <div className="font-bold">Frente:</div> {card.front}
-                                                        <div className="font-bold">Fundo:</div> {card.back}
-                                                        <div className="flex gap-1">
-
-                                                            <Tooltip className='bg-fluency-blue-500 font-bold text-sm text-white p-1 rounded-md' content="Editar cartão">
-                                                            <button className='bg-fluency-blue-700 p-1 text-white rounded-md' onClick={() => handleEditInputChange(card)}>
-                                                                <FiEdit3 />
-                                                            </button>
-                                                            </Tooltip>
-                                                            <Tooltip className='bg-fluency-red-500 font-bold text-sm text-white p-1 rounded-md' content="Deletar cartão">
-                                                            <button className='bg-fluency-red-700 p-1 text-white rounded-md' onClick={() => deleteCard(card.id)}>
-                                                                <MdDeleteOutline />
-                                                            </button>
-                                                            </Tooltip>
-                                                        </div>
+                                        <FluencyButton onClick={updateCard}>Salvar</FluencyButton>
+                                    </div>)}
+                                    <ul className='w-full h-full overflow-y-scroll p-4 flex flex-col gap-2'>
+                                        {otherCards.map(card => (
+                                            <li key={card.id} className="flex flex-row items-center border-b border-gray-200">
+                                                <div className='flex flex-col lg:flex lg:flex-row items-center w-full justify-around bg-fluency-blue-200 dark:bg-fluency-blue-1100 p-2 rounded-md'>
+                                                    <div className="font-bold">Frente:</div> {card.front}
+                                                    <div className="font-bold">Fundo:</div> {card.back}
+                                                    <div className="flex gap-1">
+                                                        <Tooltip className='bg-fluency-blue-500 font-bold text-sm text-white p-1 rounded-md' content="Editar cartão">
+                                                        <button className='bg-fluency-blue-700 p-1 text-white rounded-md' onClick={() => handleEditInputChange(card)}>
+                                                            <FiEdit3 />
+                                                        </button>
+                                                        </Tooltip>
+                                                        <Tooltip className='bg-fluency-red-500 font-bold text-sm text-white p-1 rounded-md' content="Deletar cartão">
+                                                        <button className='bg-fluency-red-700 p-1 text-white rounded-md' onClick={() => deleteCard(card.id)}>
+                                                            <MdDeleteOutline />
+                                                        </button>
+                                                        </Tooltip>
                                                     </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-
-                                        {editedCardId && (
-                                        <div className="flex flex-row gap-3 items-center w-full">
-                                            <FluencyInput 
-                                                type="text" 
-                                                value={editedCardFront} 
-                                                onChange={e => setEditedCardFront(e.target.value)} 
-                                                placeholder="Frente do Cartão" 
-                                            />
-                                            <FluencyInput 
-                                                type="text" 
-                                                value={editedCardBack} 
-                                                onChange={e => setEditedCardBack(e.target.value)} 
-                                                placeholder="Fundo do Cartão" 
-                                            />
-                                            <FluencyButton onClick={updateCard}>Salvar</FluencyButton>
-                                        </div>)}
-                                    </div>
-                                </div>       
-                            </div>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>  
                         </div>
                     </div>
                 </div>
@@ -909,7 +840,6 @@ const FlashCard: FC = () => {
                         </div>
                     </div>
                 </div>)}
-
          <Toaster />
       </div>
     );
