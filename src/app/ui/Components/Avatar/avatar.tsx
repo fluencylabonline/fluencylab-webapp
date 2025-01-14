@@ -8,6 +8,7 @@ import { MdOutlineDarkMode } from 'react-icons/md';
 import { PiSunDimDuotone } from 'react-icons/pi';
 import Square from '../../../../../public/images/avatar/Ativo 16.png';
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
 
 type AvatarProps = {
     isCollapsed: boolean;
@@ -18,16 +19,14 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
 
     const [profilePictureURL, setProfilePictureURL] = useState<string | null>(null);
     const [name, setName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
     const [role, setRole] = useState<string>('');
 
     useEffect(() => {
         if (session) {
             const { user } = session;
-            const { name, email } = user; // Include id here
+            const { name } = user; // Include id here
     
             setName(name || '');
-            setEmail(email || '');
     
             if (user.role) {
                 setRole(user.role);
@@ -64,11 +63,26 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
     function handleLogout() {
         signOut({ callbackUrl: '/signin' })
     }
-    
+
+    const router = useRouter();
+    const userRole = session?.user.role;
+
+    const handleAvatarClick = () => {
+    if (userRole === 'teacher') {
+        router.push('/teacher-dashboard/perfil');
+    } else if (userRole === 'student') {
+        router.push('/student-dashboard/perfil');
+    } else if (userRole === 'admin') {
+        router.push('/admin-dashboard/perfil');
+    } else {
+        router.push('perfil'); // default route if role is not defined or doesn't match
+    }
+    };
+      
     return (
         <div>
             {isCollapsed ? (
-                <div className='justify-center items-center'>
+                <div onClick={handleAvatarClick} className='justify-center items-center'>
                     {profilePictureURL ? (
                         <div className="cursor-pointer relative inline-block">
                             <img src={profilePictureURL} className="object-cover w-12 h-12 rounded-full" alt="Profile" />
@@ -82,7 +96,7 @@ export default function Avatar({ isCollapsed }: AvatarProps) {
                 </div>
             ) : (
                 <div className='bg-fluency-blue-200 hover:bg-fluency-blue-300 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 transition-all ease-in-out duration-300 cursor-pointer font-semibold text-fluency-text-light dark:text-fluency-text-dark w-[13.7rem] rounded-xl flex flex-col items-start justify-between overflow-visible'>
-                    <div className='w-[4.4rem] h-[4.4rem] rounded-full bg-fluency-bg-light shadow-md dark:bg-fluency-pages-dark items-center justify-center flex relative bottom-4 left-3'>
+                    <div onClick={handleAvatarClick} className='w-[4.4rem] h-[4.4rem] rounded-full bg-fluency-bg-light shadow-md dark:bg-fluency-pages-dark items-center justify-center flex relative bottom-4 left-3'>
                     {profilePictureURL ? (
                         <div className="cursor-pointer relative inline-block">
                             <img src={profilePictureURL} className="object-cover min-w-[4.4rem] max-w-[4.4rem] h-[4.4rem] rounded-full" alt="Profile" />

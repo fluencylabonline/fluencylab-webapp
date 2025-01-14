@@ -47,7 +47,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
         setTimeout(() => {
           setIsModalOpen(false); // Close the modal after animation
           setIsAnimating(false);
-        }, 300); // Match the animation duration
+        }, 200); // Match the animation duration
       };
       
     useEffect(() => {

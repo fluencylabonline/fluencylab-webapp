@@ -116,7 +116,7 @@ type MobileSidebarProps = {
                 <MdOndemandVideo className='w-6 h-6'/> Aulas Gravadas
               </div>)}
 
-              <div className='fixed bottom-2' onClick={() => {handleAvatarClick(); toggleMenu()}}>
+              <div className='fixed bottom-2' onClick={() => {toggleMenu()}}>
                 <Avatar isCollapsed={false} />
               </div>
 

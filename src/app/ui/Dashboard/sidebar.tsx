@@ -25,32 +25,17 @@ import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { db } from '@/app/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { MdOndemandVideo } from 'react-icons/md';
-import Link from 'next/link';
 
 export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: SidebarProps) {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState('');
   const { data: session } = useSession();
-  const userId = session?.user.id;
-  const userRole = session?.user.role; // Assuming role is available in session.user.role
 
   const handleItemClick = (path: string) => {
     router.push(path);
     setSelectedItem(path);
   };
 
-  const handleAvatarClick = () => {
-    if (userRole === 'teacher') {
-      router.push('/teacher-dashboard/perfil');
-    } else if (userRole === 'student') {
-      router.push('/student-dashboard/perfil');
-    } else if (userRole === 'admin') {
-      router.push('/admin-dashboard/perfil');
-    } else {
-      router.push('perfil'); // default route if role is not defined or doesn't match
-    }
-  };
-  
   const handleAulas = () => {
     router.push('aulas-gravadas');
   }
@@ -168,7 +153,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
                 )}
               </div>
 
-            <div className='fixed bottom-2' onClick={handleAvatarClick}>
+            <div className='fixed bottom-2'>
               <Avatar isCollapsed={isCollapsed} />
             </div>
           </div>

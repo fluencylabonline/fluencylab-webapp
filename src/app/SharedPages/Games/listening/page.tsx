@@ -533,7 +533,7 @@ export default function Listening() {
                         ))}
                     </ul>
 
-                    {session?.user.role === 'admin' &&
+                    {session?.user.role === 'admin' || session?.user.role === 'teacher' &&
                     <FluencyButton onClick={openCreate} variant='gray'>Adicionar áudio</FluencyButton>}
                 </div>
             </div>
