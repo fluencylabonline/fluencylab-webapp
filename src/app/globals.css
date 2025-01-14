@@ -84,6 +84,21 @@ html {
   margin: 20mm;
 }
 
+
+#modalNotification {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: none; /* Prevent transition on mount */
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-in-out forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-in-out forwards;
+}
+
 @keyframes slideUp {
   from {
     transform: translateY(100%);
@@ -106,10 +121,3 @@ html {
   }
 }
 
-.animate-slideUp {
-  animation: slideUp 0.3s ease-in-out forwards;
-}
-
-.animate-slideDown {
-  animation: slideDown 0.3s ease-in-out forwards;
-}
