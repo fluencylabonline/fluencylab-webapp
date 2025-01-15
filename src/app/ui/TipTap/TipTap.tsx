@@ -46,6 +46,7 @@ import ReviewExtension from './Components/Extensions/Review/ReviewExtension';
 import GoalExtension from './Components/Extensions/Goal/GoalExtension';
 import VocabulabExtension from './Components/Extensions/Vocabulab/VocabulabExtension';
 import DownloadExtension from './Components/Extensions/Download/DownloadExtension';
+import Bubble from './Components/Bubble';
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const { data: session } = useSession();
@@ -175,6 +176,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  /> 
       <EditorContent editor={editor} />
+      <Bubble editor={editor}/>
       {session?.user.role === 'teacher' &&<Tools editor={editor}/>}
       <Toaster />
     </div>
