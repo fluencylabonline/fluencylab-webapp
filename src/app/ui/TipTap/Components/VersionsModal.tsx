@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/app/firebase";
-import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal"; // Assume you have this component
-import DOMPurify from 'dompurify'; // Import DOMPurify
+import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
+import DOMPurify from "dompurify";
+import { Editor } from "@tiptap/react";
 
 interface VersionsModalProps {
   isOpen: boolean;
-  onClose: () => void;
-  studentID: string;
-  notebookID: string;
-  pasteContentFromFirestore: (content: string) => void; // Add this prop
+  onClose: any;
+  editor: Editor;
 }
 
 interface VersionDoc {
@@ -17,7 +16,11 @@ interface VersionDoc {
   data: DocumentData;
 }
 
-const VersionsModal: React.FC<VersionsModalProps> = ({ studentID, notebookID, isOpen, onClose, pasteContentFromFirestore }) => {
+const VersionsModal: React.FC<VersionsModalProps> = ({ editor, isOpen, onClose }) => {
+  const params = new URLSearchParams(window.location.search);
+  const studentID = params.get("student") || "";
+  const notebookID = params.get("notebook") || "";
+
   const [versions, setVersions] = useState<VersionDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedContent, setSelectedContent] = useState<string | null>(null);
@@ -31,17 +34,24 @@ const VersionsModal: React.FC<VersionsModalProps> = ({ studentID, notebookID, is
           id: doc.id,
           data: doc.data(),
         }));
+
+        const sortedVersions = fetchedVersions.sort((b, a) => {
+          // Parse the dates explicitly
+          const [dayA, monthA, yearA] = a.data.date.split("/").map(Number);
+          const [hourA, minuteA] = a.data.time.split(":").map(Number);
+          const dateA = new Date(yearA, monthA - 1, dayA, hourA, minuteA);
         
-        // Sort versions by date and time
-        const sortedVersions = fetchedVersions.sort((a, b) => {
-          const dateA = new Date(`${a.data.date} ${a.data.time}`);
-          const dateB = new Date(`${b.data.date} ${b.data.time}`);
-          return dateB.getTime() - dateA.getTime(); // Sort in descending order
+          const [dayB, monthB, yearB] = b.data.date.split("/").map(Number);
+          const [hourB, minuteB] = b.data.time.split(":").map(Number);
+          const dateB = new Date(yearB, monthB - 1, dayB, hourB, minuteB);
+        
+          // Sort in ascending order
+          return dateA.getTime() - dateB.getTime();
         });
+        
 
         setVersions(sortedVersions);
-        
-        // Set the last version's content as default selected content
+
         if (sortedVersions.length > 0) {
           setSelectedContent(sortedVersions[0].data.content);
         }
@@ -57,20 +67,32 @@ const VersionsModal: React.FC<VersionsModalProps> = ({ studentID, notebookID, is
     }
   }, [isOpen, studentID, notebookID]);
 
+  const formatDateTime = (date: string, time: string) => {
+    const [day, month, year] = date.split("/").map(Number);
+    const [hour, minutes] = time.split(":").map(Number);
+    const formattedDate = new Date(year, month - 1, day, hour, minutes);
+
+    return formattedDate.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const handleVersionClick = (content: string) => {
     setSelectedContent(content);
   };
 
-  const handlePasteContent = () => {
-    if (selectedContent) {
-      pasteContentFromFirestore(selectedContent);
+  const pasteContentFromFirestore = (content: typeof selectedContent) => {
+    if (editor) {
+      editor.chain().focus().insertContent(content).run();
     }
-    onClose()
+    onClose();
   };
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   return (
     <div className="fixed z-50 inset-0 overflow-y-auto">
@@ -89,8 +111,8 @@ const VersionsModal: React.FC<VersionsModalProps> = ({ studentID, notebookID, is
                 <ul className="flex flex-col gap-2 items-end h-[65vh] overflow-hidden overflow-y-scroll w-[40%]">
                   {versions.map((version) => (
                     <li key={version.id} className="flex flex-row gap-3">
-                      <div className="flex flex-col items-start gap-1"><p>Dia <strong className="font-bold">{version.data.date}</strong></p>
-                           <p className="text-sm">às <strong className="font-bold">{version.data.time}</strong></p>
+                      <div className="flex flex-col items-start gap-1">
+                        <p className="text-sm font-bold">{formatDateTime(version.data.date, version.data.time)}</p>
                       </div>
                       <button
                         className="p-1 px-3 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-white dark:text-white font-semibold rounded-md"
@@ -108,7 +130,7 @@ const VersionsModal: React.FC<VersionsModalProps> = ({ studentID, notebookID, is
                         <h4 className="text-xl font-semibold">Conteúdo Selecionado</h4>
                         <button
                           className="p-1 px-3 bg-fluency-green-500 hover:bg-fluency-green-600 dark:bg-fluency-green-600 hover:dark:bg-fluency-green-700 duration-300 ease-in-out text-white dark:text-white font-semibold rounded-md"
-                          onClick={handlePasteContent}
+                          onClick={() => pasteContentFromFirestore(selectedContent)}
                         >
                           Colar
                         </button>

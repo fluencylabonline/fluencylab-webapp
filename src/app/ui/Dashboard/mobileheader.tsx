@@ -142,6 +142,7 @@ return(
         {isModalOpen && (
             <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-end z-50">
                 <div
+                    id='modalNotification'
                     className={`bg-white dark:bg-gray-800 w-full min-h-[70vh] max-h-[90vh] rounded-t-2xl p-4 overflow-y-auto shadow-lg transform transition-transform duration-300 ease-in-out ${
                     isAnimating ? 'animate-slideDown' : 'animate-slideUp'
                     }`}

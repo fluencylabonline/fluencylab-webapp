@@ -18,7 +18,7 @@ export type ButtonProps = React.DetailedHTMLProps<
 > &
   ButtonOptions;
 
-type ButtonVariant = "solid" | "danger" | "warning" | "confirm" | "gray" | "orange";
+type ButtonVariant = "solid" | "danger" | "warning" | "confirm" | "gray" | "orange" | "purple";
 
 const getVariant = (variant: ButtonVariant) => {
   switch (variant) {
@@ -32,6 +32,8 @@ const getVariant = (variant: ButtonVariant) => {
       return "border-fluency-orange-500 hover:border-fluency-orange-600 bg-fluency-orange-500 text-fluency-text-dark hover:bg-fluency-orange-600 focus:bg-fluency-orange-700 dark:bg-transparent dark:text-fluency-orange-500 dark:hover:text-white dark:hover:bg-fluency-orange-500 hover:dark:border-fluency-orange-500"
     case "gray":
       return "border-fluency-gray-100 hover:border-fluency-gray-100 bg-fluency-gray-500 text-fluency-text-dark hover:bg-fluency-gray-600 focus:bg-fluency-gray-700 dark:bg-transparent dark:text-fluency-gray-100 dark:hover:text-black dark:hover:bg-fluency-gray-100 hover:dark:border-fluency-gray-500"
+    case "purple":
+      return "border-indigo-700 hover:border-indigo-800 bg-indigo-500 text-fluency-text-dark hover:bg-indigo-600 focus:bg-indigo-700 dark:bg-transparent dark:text-indigo-700 dark:hover:text-black dark:hover:bg-indigo-700 hover:dark:border-indigo-700"  
     default:
       return "border-fluency-blue-500 hover:border-fluency-blue-600 bg-fluency-blue-500 text-fluency-text-dark hover:bg-fluency-blue-700 focus:bg-fluency-blue-800 dark:bg-transparent dark:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-500 hover:dark:border-fluency-blue-500";
   }
