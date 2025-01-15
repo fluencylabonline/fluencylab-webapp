@@ -266,21 +266,21 @@ function Perfil() {
             </div> 
             
             <div className='flex flex-col sm:flex-row w-full lg:h-full md:h-fit sm:h-fit justify-around gap-4'>
-              <div className="lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-col lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
+              <div className="w-full lg:mt-0 md:mt-2 mt-2 bg-fluency-pages-light hover:bg-fluency-blue-100 dark:bg-fluency-pages-dark hover:dark:bg-fluency-gray-900 ease-in-out transition-all duration-300 p-2 rounded-lg lg:flex lg:flex-col lg:items-center md:flex md:flex-row md:justify-center flex flex-col md:items-center items-center gap-2">
                 <p className='flex flex-row justify-center p-1 font-semibold text-lg'>Infomações de Pagamento</p>
                 <div className='p-4 flex flex-col gap-4'>
                   <div className='p-4 flex flex-col gap-4'>
                     {meioPagamento === 'cartao' && mensalidade === '165' && (
-                      <div>
-                        <p>Se tiver dúvidas sobre o pagamento, entre em contato.</p>
-                        <a href='https://mpago.la/1oT7aAq'>Clique aqui para pagar pelo cartão</a>
+                      <div className='flex flex-col items-center justify-center gap-2'>
+                        <p className='text-md font-bold text-black dark:text-white'>Se tiver dúvidas sobre o pagamento, entre em contato.</p>
+                        <a className='bg-fluency-green-500 text-white py-2 px-4 rounded-md text-sm font-bold' href='https://mpago.la/1oT7aAq'>Clique aqui para pagar pelo cartão</a>
                       </div>
                     )}
 
                     {meioPagamento === 'cartao' && mensalidade === '150' && (
-                      <div>
-                        <p>Se tiver dúvidas sobre o pagamento, entre em contato.</p>
-                        <a href='https://mpago.la/1oLPP4R'>Clique aqui para pagar pelo cartão</a>
+                      <div className='flex flex-col items-center justify-center gap-2'>
+                        <p className='text-md font-bold text-black dark:text-white'>Se tiver dúvidas sobre o pagamento, entre em contato.</p>
+                        <a className='bg-fluency-green-500 text-white py-2 px-4 rounded-md text-sm font-bold' href='https://mpago.la/1oLPP4R'>Clique aqui para pagar pelo cartão</a>
                       </div>
                     )}
                     
