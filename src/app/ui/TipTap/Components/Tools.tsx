@@ -277,19 +277,19 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
                 <IoClose onClick={closeBottomSheet} className="icon cursor-pointer absolute top-0 right-4 mt-2 ml-2 transition-all text-gray-500 hover:text-blue-600 w-7 h-7 ease-in-out duration-300" />
             </div>
             <div className='flex flex-row items-start justify-center flex-wrap gap-2'>
-              <div className="min-w-[20%] max-w-[25%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
                 <h1 className="text-xl font-bold text-fluency-orange-500">Faixas</h1>
                 {bands()}
               </div>
-              <div className="min-w-[20%] max-w-[25%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
                 <h1 className="text-xl font-bold text-fluency-blue-500">Outros</h1>
                 {others()}
               </div>
-              <div className="min-w-[20%] max-w-[25%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
                 <h1 className="text-xl font-bold text-fluency-green-500">Exercícios</h1>
                 {exercises()}
               </div>
-              <div className="min-w-[20%] max-w-[25%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
                 <h1 className="text-xl font-bold text-indigo-700">Apostila</h1>
                 {workbooksItems()}
                 <DescriptionChange />
