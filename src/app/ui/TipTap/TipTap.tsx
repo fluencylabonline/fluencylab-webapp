@@ -47,7 +47,7 @@ import GoalExtension from './Components/Extensions/Goal/GoalExtension';
 import VocabulabExtension from './Components/Extensions/Vocabulab/VocabulabExtension';
 import DownloadExtension from './Components/Extensions/Download/DownloadExtension';
 
-const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, provider }: any) => {
+const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const { data: session } = useSession();
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
