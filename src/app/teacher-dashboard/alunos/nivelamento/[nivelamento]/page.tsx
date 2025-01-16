@@ -6,7 +6,6 @@ import { collection, doc, setDoc, getDocs, DocumentData, getDoc, query, orderBy,
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
 import LoadingAnimation from "@/app/ui/Animations/LoadingAnimation";
 import XLSX from 'xlsx-js-style';
-import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
 
 interface NivelData {
     data: string;
