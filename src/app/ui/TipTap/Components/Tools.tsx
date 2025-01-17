@@ -13,7 +13,7 @@ import { PiChalkboardTeacher, PiNotebookBold, PiStudentFill } from 'react-icons/
 import { MdOutlineTipsAndUpdates } from 'react-icons/md';
 import { AiFillYoutube } from 'react-icons/ai';
 import { FiTool } from 'react-icons/fi';
-import { FaHistory, FaRegImage } from 'react-icons/fa';
+import { FaHistory, FaRegImage, FaTasks } from 'react-icons/fa';
 import { BsTranslate } from 'react-icons/bs';
 import { CgTranscript } from 'react-icons/cg';
 import { GiChoice } from 'react-icons/gi';
@@ -38,6 +38,7 @@ import Review from './Extensions/Review/ReviewModal';
 import Goal from './Extensions/Goal/GoalModal';
 import Vocabulab from './Extensions/Vocabulab/VocabulabModal';
 import Download from './Extensions/Download/DownloadModal';
+import StudentTasks from './StudentTasks';
 
 interface ToolsProps {
   editor: Editor;
@@ -66,6 +67,8 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
     workbooksList: false,
     versions: false,
     description: false,
+
+    tasks: false
   });
 
   const toggleModal = (modalName: keyof typeof modals, state: boolean) => {
@@ -207,6 +210,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
   const workbooksButtons = [
     { label: 'Apostilas', icon: <PiNotebookBold className='text-xl'/>, modal: 'workbooksList', description: 'Apostilas disponíveis para usar em aula' },
     { label: 'Histórico', icon: <FaHistory className='text-xl'/>, modal: 'versions', description: 'Histórico das modificações feitas neste documento' },
+    { label: 'Tarefas', icon: <FaTasks className='text-xl'/>, modal: 'tasks', description: 'Adicionar tarefas para o aluno' },
   ];
 
   const workbooksItems = () =>
@@ -256,6 +260,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
       <Download isOpen={modals.download} onClose={() => toggleModal('download', false)} editor={editor} />
       <Workbooks editor={editor} isOpen={modals.workbooksList} onClose={() => toggleModal('workbooksList', false)} />
       <VersionsModal editor={editor} isOpen={modals.versions} onClose={() => toggleModal('versions', false)} />
+      <StudentTasks isOpen={modals.tasks} onClose={() => toggleModal('tasks', false)} />
 
       {/* Mobile Bottom Sheet */}
       <div
@@ -268,7 +273,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
       {isBottomSheetOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-end z-50">
           <div
-            className={`bg-white dark:bg-gray-800 w-full max-w-[95vw] min-h-[80vh] max-h-[90vh] overflow-y-auto rounded-t-2xl p-4 shadow-lg transform transition-transform duration-300 ${
+            className={`bg-white dark:bg-gray-800 w-full max-w-[100vw] min-h-[85vh] max-h-[95vh] overflow-y-auto rounded-t-2xl p-4 shadow-lg transform transition-transform duration-300 ${
               isAnimating ? 'animate-slideDown' : 'animate-slideUp'
               }`}
             >
@@ -282,7 +287,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
                 {bands()}
               </div>
               <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
-                <h1 className="text-xl font-bold text-fluency-blue-500">Outros</h1>
+                <h1 className="text-xl font-bold text-fluency-blue-500">Recursos</h1>
                 {others()}
               </div>
               <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">

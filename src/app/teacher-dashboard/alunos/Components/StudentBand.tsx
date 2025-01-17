@@ -44,14 +44,7 @@ import FluencyInput from '@/app/ui/Components/Input/input';
         classDatesWithStatus: { date: Date; status: string }[];
         status: string;
     }   
-
-    interface ActionButtonProps {
-        label: string;
-        onClick: () => void;
-        bgColor: string;
-        icon: JSX.Element;
-    }
-
+    
 function Paineis(){
     const { data: session } = useSession();
     const [teacherId, setTeacherId] = useState(false);

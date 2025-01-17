@@ -25,7 +25,7 @@ import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { db } from '@/app/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { MdOndemandVideo } from 'react-icons/md';
-import PomodoroClock from '../Components/Pomodoro/PomodoroClock';
+import PomodoroClock from '../TipTap/Components/PomodoroClock';
 
 export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: SidebarProps) {
   const router = useRouter();
