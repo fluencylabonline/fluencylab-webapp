@@ -15,15 +15,11 @@ import {
   import * as React from "react";
   
   interface ComprovanteProps{
-    paymentKeyProp?: string;
-    selectedMonth?: string;
     studentName?: string;
-    mensalidade?: string;
-    selectedYear?: string;
   }
   
-  export const Receipts = ({
-    paymentKeyProp, selectedMonth, studentName, selectedYear, mensalidade
+  export const Canceling = ({
+    studentName
   }: ComprovanteProps ) => (
     
     <Html>
@@ -40,12 +36,12 @@ import {
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading style={heading}>Olá {studentName}, nós recebemos seu pagamento!</Heading>
+            <Heading style={heading}>Olá {studentName}, nós recebemos seu pagamento da taxa de cancelamento!</Heading>
             <Section style={buttonContainer}>
             <Text style={paragraph}>
-            Recebemos seu pagamento de R$ {mensalidade} referente à {selectedMonth} de {selectedYear} com o código de referência: 
+            Uma pena que você está deixando a gente por agora! Lembre que pode sempre contar com nossa ajuda no seu aprendizado. Obrigado por essa jornada.
             </Text>
-            <code style={code}>{paymentKeyProp}</code>
+            <code style={code}>Esperamos ver você de novo em breve.</code>
             </Section>
             <Hr style={hr} />
   
@@ -81,7 +77,7 @@ import {
     </Html>
   )
   
-  export default Receipts;
+  export default Canceling;
   
   
   const main = {

@@ -7,7 +7,7 @@ import FluencyButton from "@/app/ui/Components/Button/button";
 import { FaSignature } from "react-icons/fa6";
 import { MdAutorenew, MdOutlineDoneAll } from "react-icons/md";
 import FluencyInput from "@/app/ui/Components/Input/input";
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 interface Aluno {
     id: string;
@@ -206,8 +206,8 @@ const filteredAlunos = alunos.filter((aluno) => {
     };
       
     return (
-        <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-xl mt-1 lg:p-4 md:p-4 p-2 w-full">
-            <div className="flex flex-row gap-2 w-full pb-3">
+        <div className="flex flex-col items-center justify-center gap-2 w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 rounded-xl">
+            <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-center gap-2 w-full">
                 <FluencyInput 
                     placeholder="Procure um aluno por aqui..." 
                     value={searchQuery} 
@@ -227,38 +227,38 @@ const filteredAlunos = alunos.filter((aluno) => {
                     </select>
                 </div>
             </div>
-            {filteredAlunos.map((aluno) => (
-                <div key={aluno.id}>
-                    <div className="mt-2 flex flex-row items-center justify-between w-full p-2 rounded-md bg-fluency-bg-light dark:bg-fluency-bg-dark">
-                        <div className="flex flex-col gap-1 items-start p-2">
-                            <p><span className="font-bold" >Aluno:</span> {aluno.name}</p>
-                            <p><span className="font-bold" >Validade:</span> <span>{aluno.ContratoAssinado.logs.length > 0 ? calculateValidity(aluno.ContratoAssinado.logs[0].signedAt) : 'N/A'} meses</span></p>
-                        </div>
-                        <div>
-                        {aluno.ContratoAssinado.logs.length > 0 ? (
-                            calculateValidity(aluno.ContratoAssinado.logs[0].signedAt) < 0 ? (
-                                <FluencyButton variant="warning" onClick={() => handleRenovar(aluno.id)}>
-                                    <MdAutorenew className="w-6 h-auto"/> Renovar
-                                </FluencyButton>
+            <div className="w-full overflow-y-auto h-[70vh]">
+                {filteredAlunos.map((aluno) => (
+                    <div key={aluno.id}>
+                        <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-center justify-between w-full p-2 gap-3 bg-fluency-gray-100 dark:bg-fluency-gray-500 rounded-md mt-2">
+                            <div className="flex flex-col gap-1 items-start p-2">
+                                <p><span className="font-bold" >Aluno:</span> {aluno.name}</p>
+                                <p><span className="font-bold" >Validade:</span> <span>{aluno.ContratoAssinado.logs.length > 0 ? calculateValidity(aluno.ContratoAssinado.logs[0].signedAt) : 'N/A'} meses</span></p>
+                            </div>
+                            <div>
+                            {aluno.ContratoAssinado.logs.length > 0 ? (
+                                calculateValidity(aluno.ContratoAssinado.logs[0].signedAt) < 0 ? (
+                                    <FluencyButton variant="warning" onClick={() => handleRenovar(aluno.id)}>
+                                        <MdAutorenew className="w-6 h-auto"/> Renovar
+                                    </FluencyButton>
+                                    ) : (
+                                        <p className="font-bold text-fluency-green-600">Contrato válido</p>
+                                    )
                                 ) : (
-                                    <p className="font-bold text-fluency-green-600">Contrato válido</p>
-                                )
-                            ) : (
-                            <p className="font-bold text-fluency-red-600">Contrato não assinado pelo aluno</p>
-                        )}
-                        </div>
-                        <div className="flex flex-row gap-1 items-center">
-                            {aluno.ContratoAssinado.logs.length > 0 && aluno.ContratoAssinado.logs[aluno.ContratoAssinado.logs.length - 1].segundaParteAssinou ? (
-                                <FluencyButton variant="gray" disabled><MdOutlineDoneAll className="w-6 h-auto"/> Assinado</FluencyButton>
-                            ) : (
-                                <FluencyButton variant="confirm" onClick={() => handleAssinar(aluno.id)}><FaSignature className="w-6 h-auto"/> Assinar</FluencyButton>
+                                <p className="text-center font-bold text-fluency-red-600">Contrato não assinado pelo aluno</p>
                             )}
+                            </div>
+                            <div className="flex flex-row gap-1 items-center">
+                                {aluno.ContratoAssinado.logs.length > 0 && aluno.ContratoAssinado.logs[aluno.ContratoAssinado.logs.length - 1].segundaParteAssinou ? (
+                                    <FluencyButton variant="gray" disabled><MdOutlineDoneAll className="w-6 h-auto"/> Assinado</FluencyButton>
+                                ) : (
+                                    <FluencyButton variant="confirm" onClick={() => handleAssinar(aluno.id)}><FaSignature className="w-6 h-auto"/> Assinar</FluencyButton>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
-
-         <Toaster />
+                ))}
+            </div>
         </div>
     );
 }

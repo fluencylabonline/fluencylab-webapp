@@ -11,16 +11,17 @@ import {
     TableCell,
     Tooltip,
 } from '@nextui-org/react';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast} from 'react-hot-toast';
 import { MdFolderDelete, MdOutlineAttachEmail } from 'react-icons/md';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { LuUserCheck2 } from 'react-icons/lu';
-import { RiMailSendFill } from 'react-icons/ri';
 import FluencyInput from '@/app/ui/Components/Input/input';
+import EditAluno from './EditAlunoModal';
 
 interface Aluno {
     id: string;
+    CNPJ: string;
     name: string;
     professor: string;
     professorId: string;
@@ -34,10 +35,13 @@ interface Aluno {
     status: string;
     classes: boolean;
     userName: string;
+    profilePictureURL: any;
 }
 
-export default function AlunosPassados() {
+export default function Lista() {
     const [alunos, setAlunos] = useState<Aluno[]>([]);
+    const [selectedAluno, setSelectedAluno] = useState<Aluno | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [filteredAlunos, setFilteredAlunos] = useState<Aluno[]>([]);
     const [currentCollection, setCurrentCollection] = useState<string>('users');
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -48,7 +52,8 @@ export default function AlunosPassados() {
             snapshot.forEach((doc) => {
                 const aluno: Aluno = {
                     id: doc.id,
-                    name: doc.data().name,
+                    name: doc.data().name, 
+                    CNPJ: doc.data().CNPJ,
                     professor: doc.data().professor,
                     professorId: doc.data().professorId,
                     mensalidade: doc.data().mensalidade,
@@ -61,6 +66,7 @@ export default function AlunosPassados() {
                     status: currentCollection === 'users' ? 'Ativo' : 'Desativado',
                     classes: doc.data().classes || false,
                     userName: doc.data().userName,
+                    profilePictureURL: doc.data().profilePictureURL
                 };
                 updatedAlunos.push(aluno);
             });
@@ -68,7 +74,7 @@ export default function AlunosPassados() {
         });
 
         return () => unsubscribe();
-    }, [currentCollection]); // Re-run effect when currentCollection changes
+    }, [currentCollection]);
 
     useEffect(() => {
         if (searchQuery === '') {
@@ -90,23 +96,21 @@ export default function AlunosPassados() {
         } else if (currentCollection === 'past_students') {
             return query(collection(db, 'past_students'));
         }
-        
         return query(collection(db, 'users'), where('role', '==', 'student'));
     };
 
-    const capitalizeFirstLetter = (string: string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    };
+    const capitalizeFirstLetter = (str: string) => {
+        if (!str) return ''; // Check for an empty string or null/undefined
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      };      
 
     const toggleClassesStatus = async (alunoId: string, currentClasses: boolean) => {
         const alunoRef = doc(db, 'users', alunoId);
         await updateDoc(alunoRef, {
-            classes: !currentClasses, // Toggle the classes field
+            classes: !currentClasses,
         });
-
-        // Show toast notification based on currentClasses state
         toast.success(currentClasses ? 'Desativado' : 'Ativado', {
-            duration: 3000, // Display for 3 seconds
+            duration: 3000,
         });
     };
 
@@ -114,7 +118,6 @@ export default function AlunosPassados() {
     const [selectedUserId, setSelectedUserId] = useState<string>('');
     const [selectedUserName, setSelectedUserName] = useState<string>('');
     const [modalAction, setModalAction] = useState<'delete' | 'reactivate'>('delete');
-
     const openModal = (userId: string, userName: string, action: 'delete' | 'reactivate') => {
         setSelectedUserId(userId);
         setSelectedUserName(userName);
@@ -130,19 +133,12 @@ export default function AlunosPassados() {
         try {
             const userRef = doc(db, 'users', userId);
             const pastUserRef = doc(db, 'past_students', userId);
-    
-            // Fetch user data from the 'users' collection
             const userSnapshot = await getDoc(userRef);
             const userData = userSnapshot.data();
     
             if (userData) {
-                // Add 'encerrouEm' field with the current date
                 userData.encerrouEm = new Date().toISOString();
-    
-                // Transfer user data to the 'past_students' collection
                 await setDoc(pastUserRef, userData);
-                
-                // Collections to transfer (notebooks, contracts, etc.)
                 const collections = [
                     'Notebooks', 
                     'Contratos', 
@@ -151,8 +147,6 @@ export default function AlunosPassados() {
                     'AulasGravadas', 
                     'Slides'
                 ];
-    
-                // Transfer each collection for the user
                 for (const collectionName of collections) {
                     const collectionRef = collection(db, 'users', userId, collectionName);
                     const snapshot = await getDocs(collectionRef);
@@ -163,10 +157,7 @@ export default function AlunosPassados() {
                         await setDoc(pastCollectionRef, docData);
                     });
                 }
-    
-                // Finally, delete the user from 'users' collection
                 await deleteDoc(userRef);
-    
                 toast.error('Aluno deletado e transferido para alunos passados!', {
                     position: 'top-center',
                 });
@@ -183,19 +174,12 @@ export default function AlunosPassados() {
         try {
             const pastUserRef = doc(db, 'past_students', userId);
             const userRef = doc(db, 'users', userId);
-    
-            // Fetch the past user document
             const pastUserSnapshot = await getDoc(pastUserRef);
             const pastUserData = pastUserSnapshot.data();
     
             if (pastUserData) {
-                // Set the 'encerrouEm' field to 0 (or remove it)
                 delete pastUserData.encerrouEm;
-    
-                // Restore the user data to the 'users' collection
                 await setDoc(userRef, pastUserData);
-    
-                // Collections to restore
                 const collections = [
                     'Notebooks', 
                     'Contratos', 
@@ -204,8 +188,6 @@ export default function AlunosPassados() {
                     'AulasGravadas', 
                     'Slides'
                 ];
-    
-                // Restore each collection for the user
                 for (const collectionName of collections) {
                     const pastCollectionRef = collection(db, 'past_students', userId, collectionName);
                     const snapshot = await getDocs(pastCollectionRef);
@@ -216,8 +198,6 @@ export default function AlunosPassados() {
                         await setDoc(collectionRef, docData);
                     });
                 }
-    
-                // Finally, delete the user from 'past_students' collection
                 await deleteDoc(pastUserRef);
     
                 toast.success('Aluno reativado com sucesso!', {
@@ -261,93 +241,102 @@ export default function AlunosPassados() {
         }
       };
       
-    return (
-        <div className="flex flex-col w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 overflow-y-auto rounded-xl mt-1">
-            <div className="w-full flex flex-col gap-3">
-                <div className="flex flex-row gap-3 mb-4">
-                    <div className="w-full">
-                        <FluencyInput
-                            type="text"
-                            placeholder="Procure um aluno por aqui..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-                    <div className='flex flex-row gap-1 w-full'>
-                        <button
-                            onClick={() => setCurrentCollection('users')}
-                            className={currentCollection === 'users' ? 'w-full p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'w-full p-2 rounded-md font-bold'}
-                            color={currentCollection === 'users' ? 'primary' : 'default'}
-                        >
-                            Alunos Atuais
-                        </button>
-                        <button
-                            onClick={() => setCurrentCollection('past_students')}
-                            className={currentCollection === 'past_students' ? 'w-full p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'w-full p-2 rounded-md font-bold'}
-                            color={currentCollection === 'past_students' ? 'primary' : 'default'}
-                        >
-                            Alunos Passados
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-            <Table>
-                <TableHeader>
-                    <TableColumn>Nome</TableColumn>
-                    <TableColumn>Professor</TableColumn>
-                    <TableColumn>Idioma</TableColumn>
-                    <TableColumn>Começou em</TableColumn>
-                    <TableColumn>Encerrou em</TableColumn>
-                    <TableColumn className='flex flex-col justify-center items-center'>Gravações</TableColumn>
-                    <TableColumn>Ações</TableColumn>
-                </TableHeader>
-                <TableBody>
-                    {filteredAlunos.map((aluno) => (
-                        <TableRow key={aluno.id}>
-                            <TableCell>{aluno.name}</TableCell>
-                            <TableCell>{aluno.professor}</TableCell>
-                            <TableCell>{capitalizeFirstLetter(aluno.idioma)}</TableCell>
-                            <TableCell>{aluno.comecouEm}</TableCell>
-                            <TableCell>{aluno.encerrouEm}</TableCell>
-                            <TableCell className='flex flex-col justify-center items-center'>
-                                {currentCollection === 'users' && (
-                                    <button 
-                                    className={`font-bold text-sm text-white py-1 px-2 rounded-md duration-300 ease-in-out transition-all 
-                                        ${aluno.classes ? 'bg-red-500 hover:bg-red-700' : 'bg-fluency-green-400 dark:bg-fluency-green-600 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-800'}`}
-                                    onClick={() => toggleClassesStatus(aluno.id, aluno.classes)}>
-                                    {aluno.classes ? 'Desativar' : 'Ativar'}
-                                </button>
-                                )}
-                            </TableCell>
-                            <TableCell>
-                                {currentCollection === 'past_students' ? 
-                                <Tooltip className='text-xs font-bold bg-fluency-green-200 rounded-md p-1' content="Reativar aluno">
-                                    <span className="hover:text-fluency-green-500 duration-300 ease-in-out transition-all text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => openModal(aluno.id, aluno.name, 'reactivate')}>
-                                        <LuUserCheck2  />
-                                    </span>
-                                </Tooltip>
-                                : 
-                                <div className='flex flex-row items-center gap-1'>
-                                    <Tooltip className='text-xs font-bold bg-fluency-red-200 rounded-md p-1' content="Excluir aluno">
-                                    <span className="hover:text-fluency-red-500 duration-300 ease-in-out transition-all text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => openModal(aluno.id, aluno.name, 'delete')}>
-                                        <MdFolderDelete />
-                                    </span>
-                                    </Tooltip>
-                                    <Tooltip className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1' content="Enviar e-mail de boas-vindas">
-                                        <span className="hover:text-fluency-blue-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
-                                            <MdOutlineAttachEmail onClick={() => handleOnClickWelcome(aluno.name, aluno.studentMail, aluno.userName, aluno.studentMail)} />
-                                        </span>                                        
-                                    </Tooltip>
-                                </div>
-                                }
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+    const handleEditClick = (aluno: Aluno) => {
+        setSelectedAluno(aluno);
+        setIsEditModalOpen(true);
+    };
 
-            <Toaster position="top-center" />
+    const handleCloseModal = () => {
+        setIsEditModalOpen(false);
+        setSelectedAluno(null);
+    };
+    
+    return (
+        <div className="flex flex-col items-center justify-center gap-2 w-full bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark lg:p-4 md:p-4 p-2 rounded-xl">
+            <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-center gap-2 w-full">
+                <div className="w-full">
+                    <FluencyInput
+                        type="text"
+                        placeholder="Procure um aluno por aqui..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+                <div className='flex flex-row gap-1 w-full'>
+                    <button
+                        onClick={() => setCurrentCollection('users')}
+                        className={currentCollection === 'users' ? 'w-full p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'w-full p-2 rounded-md font-bold'}
+                        color={currentCollection === 'users' ? 'primary' : 'default'}
+                    >
+                        Alunos Atuais
+                    </button>
+                    <button
+                        onClick={() => setCurrentCollection('past_students')}
+                        className={currentCollection === 'past_students' ? 'w-full p-2 rounded-md bg-fluency-blue-600 font-bold text-white' : 'w-full p-2 rounded-md font-bold'}
+                        color={currentCollection === 'past_students' ? 'primary' : 'default'}
+                    >
+                        Alunos Passados
+                    </button>
+                </div>
+            </div>
+            <div className="w-full overflow-y-auto h-[70vh]">
+                <Table>
+                    <TableHeader>
+                        <TableColumn>Nome</TableColumn>
+                        <TableColumn>Professor</TableColumn>
+                        <TableColumn>Idioma</TableColumn>
+                        <TableColumn>Começou em</TableColumn>
+                        <TableColumn>Encerrou em</TableColumn>
+                        <TableColumn className='flex flex-col justify-center items-center'>Gravações</TableColumn>
+                        <TableColumn>Ações</TableColumn>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredAlunos.map((aluno) => (
+                            <TableRow key={aluno.id}>
+                                <TableCell className='cursor-pointer' onClick={() => handleEditClick(aluno)}>
+                                    {aluno.name}
+                                </TableCell>
+                                <TableCell>{aluno.professor}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(aluno.idioma)}</TableCell>
+                                <TableCell>{aluno.comecouEm}</TableCell>
+                                <TableCell>{aluno.encerrouEm}</TableCell>
+                                <TableCell className='flex flex-col justify-center items-center'>
+                                    {currentCollection === 'users' && (
+                                        <button 
+                                            className={`font-bold text-sm text-white py-1 px-2 rounded-md duration-300 ease-in-out transition-all 
+                                                ${aluno.classes ? 'bg-red-500 hover:bg-red-700' : 'bg-fluency-green-400 dark:bg-fluency-green-600 hover:bg-fluency-green-600 hover:dark:bg-fluency-green-800'}`}
+                                            onClick={() => toggleClassesStatus(aluno.id, aluno.classes)}>
+                                            {aluno.classes ? 'Desativar' : 'Ativar'}
+                                        </button>
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    {currentCollection === 'past_students' ? 
+                                    <Tooltip className='text-xs font-bold bg-fluency-green-200 rounded-md p-1' content="Reativar aluno">
+                                        <span className="hover:text-fluency-green-500 duration-300 ease-in-out transition-all text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => openModal(aluno.id, aluno.name, 'reactivate')}>
+                                            <LuUserCheck2  />
+                                        </span>
+                                    </Tooltip>
+                                    : 
+                                    <div className='flex flex-row items-center gap-1'>
+                                        <Tooltip className='text-xs font-bold bg-fluency-red-200 rounded-md p-1' content="Excluir aluno">
+                                        <span className="hover:text-fluency-red-500 duration-300 ease-in-out transition-all text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => openModal(aluno.id, aluno.name, 'delete')}>
+                                            <MdFolderDelete />
+                                        </span>
+                                        </Tooltip>
+                                        <Tooltip className='text-xs font-bold bg-fluency-blue-200 rounded-md p-1' content="Enviar e-mail de boas-vindas">
+                                            <span className="hover:text-fluency-blue-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
+                                                <MdOutlineAttachEmail onClick={() => handleOnClickWelcome(aluno.name, aluno.studentMail, aluno.userName, aluno.studentMail)} />
+                                            </span>                                        
+                                        </Tooltip>
+                                    </div>
+                                    }
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
 
             {isModalOpen && (
             <div className="fixed z-50 inset-0 overflow-y-auto">
@@ -371,7 +360,11 @@ export default function AlunosPassados() {
                 </div>
               </div>
             </div>)}
-            
+
+            {isEditModalOpen && selectedAluno && (
+                <EditAluno selectedAluno={selectedAluno} onClose={handleCloseModal} />
+            )}
+    
         </div>
     );
 }

@@ -6,6 +6,9 @@ import { Toaster } from 'react-hot-toast';
 import './styles.scss'
 import { useSession } from 'next-auth/react';
 
+//Icons
+import { LuTimer, LuTimerOff } from 'react-icons/lu';
+
 //TipTap Imports
 import Toolbar from "./Toolbar";
 import Link from '@tiptap/extension-link'
@@ -28,7 +31,6 @@ import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
-import Tools from './Components/Tools';
 
 //Extensions
 import TextStudentExtension from './Components/Extensions/TextStudent/TextStudentExtension';
@@ -46,8 +48,11 @@ import ReviewExtension from './Components/Extensions/Review/ReviewExtension';
 import GoalExtension from './Components/Extensions/Goal/GoalExtension';
 import VocabulabExtension from './Components/Extensions/Vocabulab/VocabulabExtension';
 import DownloadExtension from './Components/Extensions/Download/DownloadExtension';
+
+//Tools
+import Tools from './Components/Tools';
 import Bubble from './Components/Bubble';
-import PomodoroClock from './Components/PomodoroClock';
+import { usePomodoro } from '@/app/context/PomodoroContext';
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const { data: session } = useSession();
@@ -120,8 +125,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
         },
       }),
       
-
-      
       Collaboration.configure({
         document: provider.doc,
       }),
@@ -173,12 +176,23 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     return null;
   }
 
+  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
+
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  /> 
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
       {session?.user.role === 'teacher' &&<Tools editor={editor}/>}
+      {session?.user.role === 'student' && (
+        <div className='fixed bottom-5 right-5'>
+          {isPomodoroVisible ? (
+           <LuTimerOff onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-red-500 duration-300 ease-in-out transition-all" />
+          ):(
+           <LuTimer onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-green-500 duration-300 ease-in-out transition-all" />
+          )}
+        </div>
+      )}
       <Toaster />
     </div>
   );

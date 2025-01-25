@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
 import { Receipts } from '@/email/receipts';
+import { Canceling } from '@/email/canceling';
 import { Welcome } from '@/email/welcome'; // Import the Welcome component
-import WelcomeTeacher from '@/email/welcomeTeacher';
+import { WelcomeTeacher } from '@/email/welcomeTeacher';
 
 const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
@@ -49,7 +50,16 @@ export async function POST(request: Request) {
         from: 'financeiro@fluencylab.me',
         to: studentMail,
         subject: emailSubject,
-        react: Receipts({ selectedMonth: translatedMonth, studentName, paymentKeyProp, selectedYear, mensalidade }),
+        react: Receipts({ selectedMonth, studentName, paymentKeyProp, selectedYear, mensalidade }),
+      });
+    } 
+
+    if (templateType === 'canceling') {
+      results = await resend.emails.send({
+        from: 'contato@fluencylab.me',
+        to: studentMail,
+        subject: 'FluencyLab - Nunca é um adeus...',
+        react: Canceling({ studentName }),
       });
     } 
     

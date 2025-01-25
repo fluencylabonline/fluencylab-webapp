@@ -127,7 +127,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
   ];
 
-  const router = useRouter();
   const [showAnimation, setShowAnimation] = useState(true);
   useEffect(() => {
     if (!session || session.user.role !== "teacher") {
