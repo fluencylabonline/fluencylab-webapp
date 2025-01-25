@@ -45,7 +45,7 @@ export default function ApostilasCreation() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedLanguage, setSelectedLanguage] = useState('English');
 
-    const workbookCollections = ['Slides', 'First Steps', 'The Basics', 'All you need to know', 'Speaking and Accent Practice', 'Travelling', 'Writting Skills', 'Basic Grammar', 'Pinitos'];
+    const workbookCollections = ['Slides', 'First Steps', 'The Basics', 'All you need to know', 'Speaking and Accent Practice', 'Travelling', 'Writting Skills', 'Basic Grammar', 'Pinitos', 'Instrumental' ];
 
     function openModalLicao() {
         setCriarLicao(true);
