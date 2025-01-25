@@ -7,6 +7,7 @@ import { MdAdd, MdDelete } from 'react-icons/md';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { IoClose } from 'react-icons/io5';
+import toast from 'react-hot-toast';
 
 interface AddForecastModalProps {
   selectedPeriod: string;
@@ -63,7 +64,7 @@ export default function AddForecastModal({ selectedPeriod }: AddForecastModalPro
 
   const handleSave = async () => {
     if (!amount || !description) {
-      alert('Please fill out all fields.');
+      toast.error('Please fill out all fields.');
       return;
     }
 
@@ -78,12 +79,12 @@ export default function AddForecastModal({ selectedPeriod }: AddForecastModalPro
         description,
         createdAt: new Date().toISOString(),
       });
-      alert('Forecast added successfully!');
+      toast.success('Forecast added successfully!');
       fetchForecastedExpenses();
       setShowModal(false);
     } catch (error) {
       console.error('Error saving forecast:', error);
-      alert('Error saving forecast.');
+      toast.error('Error saving forecast.');
     }
   };
 
@@ -93,11 +94,11 @@ export default function AddForecastModal({ selectedPeriod }: AddForecastModalPro
 
     try {
       await deleteDoc(expenseDocRef);
-      alert('Expense deleted successfully!');
+      toast.success('Expense deleted successfully!');
       fetchForecastedExpenses();
     } catch (error) {
       console.error('Error deleting expense:', error);
-      alert('Error deleting expense.');
+      toast.error('Error deleting expense.');
     } finally {
       setIsDeleting(null); // Reset deleting state
     }

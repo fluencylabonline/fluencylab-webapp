@@ -10,7 +10,7 @@ import FinancialOverview from "./Components/FinancialOverview";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import { MdDelete } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 export interface Transaction {
   id: string;
@@ -166,10 +166,10 @@ export default function TransactionList() {
     try {
       const transactionRef = doc(db, "transactions", id);
       await deleteDoc(transactionRef);
-      alert("Transaction deleted successfully!");
+      toast.success("Transaction deleted successfully!");
     } catch (error) {
       console.error("Error deleting transaction: ", error);
-      alert("Failed to delete transaction.");
+      toast.error("Failed to delete transaction.");
     }
   };
 

@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { LuExpand } from "react-icons/lu";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
 import { IoMdArrowRoundUp, IoMdArrowRoundDown } from "react-icons/io";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 export default function DetailedModal() {
   const [newStudentsCount, setNewStudentsCount] = useState(0);
@@ -259,6 +259,7 @@ export default function DetailedModal() {
   const chartOptions = {
     responsive: true,
     plugins: {
+      Filler,
       legend: {
         display: false, // Hides the legend at the top
       },
@@ -321,7 +322,7 @@ export default function DetailedModal() {
           className="icon cursor-pointer absolute top-5 right-16 mt-2 ml-2 transition-all text-gray-500 hover:text-blue-600 w-7 h-7 ease-in-out duration-300"
         />
       <div className="lg:flex lg:flex-row md:flex md:flex-col flex flex-col w-full p-2 gap-4 justify-evenly">
-        <div className="lg:flex lg:flex-row md:flex md:flex-col flex flex-col lg:items-start lg:justify-start md:items-center md:justify-center items-center justify-center w-full overflow-y-auto gap-4 bg-fluency-gray-100 dark:bg-fluency-bg-dark rounded-md p-6">
+        <div className="lg:flex lg:flex-col md:flex md:flex-col flex flex-col lg:items-start lg:justify-start md:items-center md:justify-center items-center justify-center w-full overflow-y-auto gap-4 bg-fluency-gray-100 dark:bg-fluency-bg-dark rounded-md p-6">
           <div className="lg:flex lg:flex-row md:flex md:flex-col flex flex-col items-center gap-4">
             <select value={selectedMonth} onChange={handleMonthChange} className="px-4 py-2 rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark">
               {months.map((month, index) => (

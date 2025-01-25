@@ -11,8 +11,8 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 
 // Icons
 import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
-import { TbMessageQuestion } from 'react-icons/tb';
-import { MdOndemandVideo, MdOutlineCollectionsBookmark } from "react-icons/md";
+import { TbMessageQuestion, TbPigMoney } from 'react-icons/tb';
+import { MdOndemandVideo } from "react-icons/md";
 import { LuBookCopy, LuGamepad2 } from 'react-icons/lu';
 import { FiUserPlus } from 'react-icons/fi';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -104,6 +104,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Professores",
       path: "/admin-dashboard/professores",
       icon: <PiChalkboardTeacherFill className="h-6 w-6"/>,
+    },
+    {
+      name: "Financeiro",
+      path: "/admin-dashboard/finances",
+      icon: <TbPigMoney className="h-6 w-6"/>,
     },
     {
       name: "Perguntas",
