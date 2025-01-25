@@ -84,11 +84,11 @@ export default function Lista() {
         } else {
             setFilteredAlunos(
                 alunos.filter(aluno =>
-                    aluno.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    aluno.professor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    aluno.idioma.toLowerCase().includes(searchQuery.toLowerCase())
+                    (aluno.name && aluno.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                    (aluno.professor && aluno.professor.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                    (aluno.idioma && aluno.idioma.toLowerCase().includes(searchQuery.toLowerCase()))
                 )
-            );
+            );            
         }
     }, [searchQuery, alunos]);
 

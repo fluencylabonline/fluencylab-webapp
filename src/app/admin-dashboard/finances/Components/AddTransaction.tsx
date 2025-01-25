@@ -34,71 +34,101 @@ export default function AddTransaction() {
   const [teachers, setTeachers] = useState<User[]>([]);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredStudents, setFilteredStudents] = useState<User[]>([]);
 
   const db = getFirestore(app);
   const storage = getStorage(app);
 
-  // Fetch students and teachers when the component mounts
+  // Inside your useEffect for fetching data
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchTeachers = async () => {
       try {
-        // Decide collection based on the category
-        const isCancellation = transaction.category === "cancelamento";
-        const collectionName = isCancellation ? "past_students" : "users";
-  
-        // Fetch students
-        const studentsQuery = query(
-          collection(db, collectionName),
-          where("role", "==", "student")
+        const teachersQuery = query(
+          collection(db, "users"), // Adjust the collection name if necessary
+          where("role", "==", "teacher")
         );
-        const studentSnapshot = await getDocs(studentsQuery);
-        const studentList = studentSnapshot.docs.map((doc) => ({
+        const snapshot = await getDocs(teachersQuery);
+        const teachersList = snapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name,
         })) as User[];
-        setStudents(studentList);
-  
-        // Fetch teachers only when the collection is "users"
-        if (!isCancellation) {
-          const teachersQuery = query(
-            collection(db, "users"),
-            where("role", "==", "teacher")
+
+        setTeachers(teachersList);
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      }
+    };
+
+    fetchTeachers();
+  }, [db]);
+
+
+  // Fetch students from both collections
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const fetchCollection = async (collectionName: string) => {
+          const studentsQuery = query(
+            collection(db, collectionName),
+            where("role", "==", "student")
           );
-          const teacherSnapshot = await getDocs(teachersQuery);
-          const teacherList = teacherSnapshot.docs.map((doc) => ({
+          const snapshot = await getDocs(studentsQuery);
+          return snapshot.docs.map((doc) => ({
             id: doc.id,
             name: doc.data().name,
           })) as User[];
-          setTeachers(teacherList);
-        }
+        };
+
+        // Fetch students from both collections
+        const [usersStudents, pastStudents] = await Promise.all([
+          fetchCollection("users"),
+          fetchCollection("past_students"),
+        ]);
+
+        // Combine and set unique students
+        setStudents([...usersStudents, ...pastStudents]);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching students:", error);
       }
     };
-  
-    fetchUsers();
-  }, [db, transaction.category]);  
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
+    fetchStudents();
+  }, [db]);
+
+  // Update filtered students based on search query
+  useEffect(() => {
+    if (searchQuery) {
+      setFilteredStudents(
+        students.filter((student) =>
+          student.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredStudents(students);
+    }
+  }, [searchQuery, students]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-  
+
     setTransaction({
       ...transaction,
       [name]: name === "value" ? (value === "" ? null : parseFloat(value.replace(',', '.'))) : value,
     });
-  };  
+  };
 
-  const handleStudentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedStudentId = e.target.value;
-    const selectedStudent = students.find((student) => student.id === selectedStudentId);
+  const handleStudentSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
+  const handleStudentSelect = (student: User) => {
     setTransaction({
       ...transaction,
-      name: selectedStudent?.name || "",
-      studentId: selectedStudentId, // Save the selected student ID
+      name: student.name,
+      studentId: student.id,
     });
+    setSearchQuery(""); // Clear the search field after selecting a student
   };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,43 +148,59 @@ export default function AddTransaction() {
   };
 
   const handleAddTransaction = async () => {
+    // Validate form fields
+    if (
+      !transaction.date || // Check if date is empty
+      !transaction.type || // Check if type is empty
+      !transaction.category || // Check if category is empty
+      transaction.value === null || transaction.value <= 0 || // Check if value is invalid
+      ((transaction.category === "mensalidade" || transaction.category === "cancelamento") &&
+        (!transaction.name || !transaction.studentId)) || // Validate student-related fields
+      (transaction.category === "professor" && !transaction.name) || // Validate professor-related fields
+      (transaction.category === "despesa" && !transaction.name) // Validate expense-related fields
+    ) {
+      toast.error("Preencha todos os campos obrigatórios corretamente!");
+      return; // Prevent form submission
+    }
+  
     try {
       const selectedDate = transaction.date;
       const transactionDate = new Date(`${selectedDate}T00:00:00`);
       const timestamp = Timestamp.fromDate(transactionDate);
-
+  
       let fileUrl = "";
       if (receiptFile) {
         const storageRef = ref(storage, `receipts/${receiptFile.name}`);
         const snapshot = await uploadBytes(storageRef, receiptFile);
         fileUrl = await getDownloadURL(snapshot.ref);
       }
-
+  
       const newTransaction = {
         ...transaction,
         date: timestamp,
         receiptUrl: fileUrl,
         studentId: transaction.studentId, // Include the student ID in the transaction
       };
-
+  
       await addDoc(collection(db, "transactions"), newTransaction);
-      toast.success("Transaction added successfully!");
-
+      toast.success("Transação adicionada com sucesso!");
+  
+      // Reset form
       setTransaction({
         date: "",
         type: "entrada",
         category: "mensalidade",
         value: null,
         name: "",
-        studentId: "", // Reset the student ID
+        studentId: "",
       });
       setReceiptFile(null);
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error adding transaction:", error);
-      toast.error("Failed to add transaction");
+      toast.error("Erro ao adicionar a transação!");
     }
-  };
+  };  
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   function openModal() {
@@ -173,7 +219,7 @@ export default function AddTransaction() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-end z-50">
-          <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark w-full max-w-[80vw] min-h-[90vh] max-h-[95vh] rounded-t-2xl p-8 overflow-y-auto shadow-lg transform transition-transform duration-300 ease-in-out">
+          <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark w-full max-w-[80vw] min-h-[95vh] max-h-[100vh] rounded-t-2xl p-8 overflow-y-auto shadow-lg transform transition-transform duration-300 ease-in-out">
             <div className="flex justify-center items-center mb-4">
               <h1 className="text-xl font-bold">Adicionar transação</h1>
               <IoClose
@@ -214,24 +260,49 @@ export default function AddTransaction() {
                 </select>
               </div>
 
-              {/* Conditional Select for Students or Teachers based on Category */}
-              {(transaction.category === "mensalidade" ||
-                transaction.category === "cancelamento") && (
-                  <select
-                    name="studentId"
-                    value={transaction.studentId}
-                    onChange={handleStudentChange}
-                    className="border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800 ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 font-medium transition-all"
-                  >
-                    <option value="">Selecione um aluno</option>
-                    {students.map((student) => (
-                      <option key={student.id} value={student.id}>
-                        {student.name}
-                      </option>
-                    ))}
-                  </select>
+              <div className="flex flex-row items-start gap-2 w-full">
+              <div className="w-full">
+              {(transaction.category === "mensalidade" || transaction.category === "cancelamento") && (
+                <div className="w-full">
+                  {transaction.name && transaction.studentId ? (
+                    <div className="flex items-center justify-between bg-fluency-gray-200 dark:bg-fluency-pages-dark p-2 rounded-md">
+                      <span className="text-gray-800 dark:text-white font-bold">{transaction.name}</span>
+                      <button
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() =>
+                          setTransaction({ ...transaction, name: "", studentId: "" })
+                        }
+                      >
+                        <IoClose className="w-5 h-5 bg-fluency-gray-100 dark:bg-fluency-bg-dark rounded-full p-1 text-blue-600 hover:text-red-600 duration-300 ease-in-out transition-all" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-full">
+                      <FluencyInput
+                        type="text"
+                        name="search"
+                        value={searchQuery}
+                        onChange={handleStudentSearchChange}
+                        placeholder="Procure por um aluno"
+                        className="w-full border p-2 rounded"
+                      />
+                      {filteredStudents.length > 0 && (
+                        <ul className="mt-2 bg-white dark:bg-fluency-pages-dark border rounded shadow-md max-h-60 overflow-auto">
+                          {filteredStudents.map((student) => (
+                            <li
+                              key={student.id}
+                              className="px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-fluency-bg-dark"
+                              onClick={() => handleStudentSelect(student)}
+                            >
+                              {student.name}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )}
+                </div>
               )}
-
               {transaction.category === "professor" && (
                 <select
                   name="name"
@@ -239,7 +310,7 @@ export default function AddTransaction() {
                   onChange={handleInputChange}
                   className="border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800 ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 font-medium transition-all"
                 >
-                  <option value="">Select a teacher</option>
+                  <option value="">Selecione um professor</option>
                   {teachers.map((teacher) => (
                     <option key={teacher.id} value={teacher.name}>
                       {teacher.name}
@@ -247,8 +318,6 @@ export default function AddTransaction() {
                   ))}
                 </select>
               )}
-
-              {/* Input for Name when Category is 'despesa' */}
               {transaction.category === "despesa" && (
                 <FluencyInput
                   type="text"
@@ -259,6 +328,7 @@ export default function AddTransaction() {
                   className="w-full border p-2 rounded"
                 />
               )}
+              </div>
 
               <input
                 type="number"
@@ -270,12 +340,14 @@ export default function AddTransaction() {
                 className="border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800 ease-in-out duration-300 w-full pl-3 py-2 rounded-lg border-2 font-medium transition-all"
               />
 
+              </div>
+
               {/* File Input for Receipt */}
               <div className="mb-4 bg-fluency-pages-light dark:bg-fluency-pages-dark">
                 <input type="file" name="file" id="file" className="sr-only" onChange={handleFileChange} />
                 <label
                   htmlFor="file"
-                  className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center"
+                  className="relative flex min-h-[200px] items-center justify-center border border-dashed border-[#e0e0e0] p-12 rounded-md text-center"
                 >
                   <div>
                     <span className="mb-2 block text-xl font-semibold text-black dark:text-white">

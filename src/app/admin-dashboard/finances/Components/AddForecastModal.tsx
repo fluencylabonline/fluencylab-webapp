@@ -187,7 +187,7 @@ export default function AddForecastModal({ selectedPeriod }: AddForecastModalPro
                   ))}
                 </ul>
               ) : (
-                <p className='mt-4'>Sem despesas variáveis para esse período.</p>
+                <div className='mt-4'>Sem despesas variáveis para esse período.</div>
               )}
             </div>
 
@@ -236,7 +236,7 @@ export default function AddForecastModal({ selectedPeriod }: AddForecastModalPro
                   ))}
                 </ul>
               ) : (
-                <p className='mt-4'>Sem despesas fixas para esse período.</p>
+                <div className='mt-4'>Sem despesas fixas para esse período.</div>
               )}
             </div>
 

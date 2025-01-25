@@ -76,8 +76,9 @@ export default function TransactionList() {
     return `${day}/${month}/${year}`;
   };
 
-  // Filter transactions based on selected month, year, and other criteria
-  const filteredTransactions = transactions.filter((transaction) => {
+// Filter and sort transactions based on selected criteria
+const filteredTransactions = transactions
+  .filter((transaction) => {
     const transactionDate = transaction.date.toDate();
     const transactionMonth = transactionDate.getMonth() + 1; // 1-based month
     const transactionYear = transactionDate.getFullYear();
@@ -102,11 +103,12 @@ export default function TransactionList() {
     }
 
     return (
-      transaction.name?.toLowerCase().includes(searchLower) || 
+      transaction.name?.toLowerCase().includes(searchLower) ||
       transaction.category?.toLowerCase().includes(searchLower) ||
       formattedDate.includes(searchLower) // Compare the formatted date
     );
-  });
+  })
+  .sort((a, b) => b.date.toMillis() - a.date.toMillis()); // Sort by date (newest to oldest)
 
   // Handle toggle for expanding/collapsing transaction details
   const handleToggle = (id: string) => {
@@ -201,7 +203,7 @@ export default function TransactionList() {
   };
 
   return (
-    <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-start w-full justify-around gap-2">
+    <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-center w-full justify-around gap-2 mt-3">
       <Toaster />
       <div className="w-full flex flex-col items-start gap-2 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-4">
         <div className="w-full lg:flex lg:flex-row md:flex md:flex-row flex flex-col items-center gap-2">
@@ -255,7 +257,7 @@ export default function TransactionList() {
           || filter === 'cancelamento' && "Cancelamentos"
           || filter === 'despesa' && "Gastos"}</p>
         
-        <ul className="w-full overflow-y-auto flex flex-col items-center gap-2">
+        <ul className="w-full h-[70vh] overflow-y-auto flex flex-col items-center gap-2">
           {filteredTransactions.map((transaction) => (
             <li
               key={transaction.id}

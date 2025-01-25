@@ -16,6 +16,7 @@
     };
 
     export type User = {
+        encerrouEm: any;
         id: string;
         name: string;
     };

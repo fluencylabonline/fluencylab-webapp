@@ -189,7 +189,7 @@ export default function FinancialOverview({
  });
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-4">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-4">
       <div className='flex flex-row items-center justify-between w-full gap-2'>
         <div></div>
         <p className="font-bold text-2xl">{formattedPeriod}</p>
