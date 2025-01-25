@@ -36,6 +36,7 @@ interface Aluno {
     classes: boolean;
     userName: string;
     profilePictureURL: any;
+    diaPagamento: any;
 }
 
 export default function Lista() {
@@ -66,7 +67,8 @@ export default function Lista() {
                     status: currentCollection === 'users' ? 'Ativo' : 'Desativado',
                     classes: doc.data().classes || false,
                     userName: doc.data().userName,
-                    profilePictureURL: doc.data().profilePictureURL
+                    profilePictureURL: doc.data().profilePictureURL,
+                    diaPagamento: doc.data().diaPagamento
                 };
                 updatedAlunos.push(aluno);
             });
