@@ -1,5 +1,6 @@
 import { db } from "@/app/firebase";
 import FluencyButton from "@/app/ui/Components/Button/button";
+import { Tooltip } from "@nextui-org/react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { RiMailSendFill } from "react-icons/ri";
@@ -114,12 +115,14 @@ const ConfirmAndEmail: React.FC<ConfirmAndEmailProps> = ({
 
   return (
     <div>
-      <button
-        onClick={handleComprovante}
-        className={`p-3 rounded-md bg-fluency-bg-dark ${tab === 'pago (mensalidade)' && 'text-green-500' || tab === 'cancelado' && 'text-yellow-400'}`}
-      >
-        <RiMailSendFill />
-      </button>
+      <Tooltip content='Enviar comprovante' className="px-2 py-1 rounded-md bg-fluency-gray-500 text-white font-bold">
+        <button
+          onClick={handleComprovante}
+          className={`p-3 rounded-md bg-fluency-bg-dark ${tab === 'pago (mensalidade)' && 'text-green-500 hover:text-green-700 duration-300 ease-in-out transition-all' || tab === 'cancelado' && 'text-yellow-400 hover:text-yellow-700 duration-300 ease-in-out transition-all'}`}
+        >
+          <RiMailSendFill />
+        </button>
+      </Tooltip>
     </div>
   );
 };

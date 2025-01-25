@@ -8,9 +8,9 @@ import Filter from "./Components/Filter";
 import { Timestamp } from "firebase/firestore";
 import FinancialOverview from "./Components/FinancialOverview";
 import FluencyButton from "@/app/ui/Components/Button/button";
-import { MdDelete } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 export interface Transaction {
   id: string;
@@ -119,14 +119,15 @@ export default function TransactionList() {
   };
 
   // Function to format the value based on the category
-  const formatTransactionValue = (type: string, value: number): string => {
+  const formatTransactionValue = (type: string, value: number | null | undefined): string => {
+    const safeValue = value ?? 0; // Default to 0 if value is null or undefined
     if (type === "gasto") {
-      return `-R$ ${value.toFixed(2).replace('.', ',')}`;
+      return `-R$ ${safeValue.toFixed(2).replace('.', ',')}`;
     } else if (type === "entrada") {
-      return `+R$ ${value.toFixed(2).replace('.', ',')}`;
+      return `+R$ ${safeValue.toFixed(2).replace('.', ',')}`;
     }
-    return `R$ ${value.toFixed(2).replace('.', ',')}`;
-  };
+    return `R$ ${safeValue.toFixed(2).replace('.', ',')}`;
+  };  
 
   // Function to set the text color based on the category
   const getTransactionValueColor = (type: string): string => {
@@ -162,11 +163,33 @@ export default function TransactionList() {
   const financialData = calculateFinancialData(); 
 
   // Function to delete a transaction from Firestore
-  const deleteTransaction = async (id: string) => {
+  const deleteTransaction = async (id: string, receiptUrl?: string) => {
     try {
       const transactionRef = doc(db, "transactions", id);
+  
+      // If a receiptUrl is provided, delete the file from Firebase Storage
+      if (receiptUrl) {
+        const storage = getStorage(app);
+        
+        // Extract the file path from the receiptUrl if necessary
+        const filePath = receiptUrl.split('/o/')[1]?.split('?')[0];  // Extract path from URL
+        
+        if (filePath) {
+          const fileRef = ref(storage, decodeURIComponent(filePath));  // Decode path if necessary
+  
+          try {
+            await deleteObject(fileRef);
+            console.log("File deleted successfully.");
+          } catch (fileError) {
+            console.error("Error deleting file from storage:", fileError);
+            toast.error("Failed to delete the file.");
+          }
+        }
+      }
+  
+      // Delete the transaction from Firestore
       await deleteDoc(transactionRef);
-      toast.success("Transaction deleted successfully!");
+      toast.success("Transaction and file deleted successfully!");
     } catch (error) {
       console.error("Error deleting transaction: ", error);
       toast.error("Failed to delete transaction.");
@@ -242,7 +265,7 @@ export default function TransactionList() {
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">Tem certeza que quer deletar {capitalizeFirstLetter(transaction.category)} de {transaction.name}?</span>
                   <FluencyButton
-                    onClick={() => deleteTransaction(transaction.id)}
+                    onClick={() => deleteTransaction(transaction.id, transaction.receiptUrl)}
                     variant="confirm"
                   >
                     Sim
@@ -270,12 +293,28 @@ export default function TransactionList() {
                 <div className="transition-all duration-300 ease-in-out max-h-screen overflow-hidden p-2 mt-4">
                   <p>Tipo de transação: {capitalizeFirstLetter(transaction.type)}</p>
                   <p>Categoria da transação: {capitalizeFirstLetter(transaction.category)}</p>
-                  {transaction.receiptUrl && <img
-                    width={10} 
-                    src={transaction.receiptUrl} 
-                    alt={`Image of ${transaction.name}`} 
-                    className="w-full h-auto object-cover rounded-md"
-                  />}
+                  {transaction.receiptUrl && (
+                    <>
+                      {transaction.receiptUrl.toLowerCase().includes('.pdf') ? (
+                        // PDF download link
+                        <a
+                          href={transaction.receiptUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-700 duration-300 ease-in-out transition-all font-bold"
+                        >
+                          Baixar PDF
+                        </a>
+                      ) : (
+                        // Image display
+                        <img
+                          src={transaction.receiptUrl}
+                          alt={`Receipt for ${transaction.name}`}
+                          className="w-full h-auto object-cover rounded-md"
+                        />
+                      )}
+                    </>
+                  )}
                 </div>
               )}
             </li>

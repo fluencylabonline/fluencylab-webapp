@@ -33,6 +33,7 @@ export default function AddTransaction() {
   const [students, setStudents] = useState<User[]>([]);
   const [teachers, setTeachers] = useState<User[]>([]);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const db = getFirestore(app);
   const storage = getStorage(app);
@@ -101,8 +102,18 @@ export default function AddTransaction() {
   };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     if (e.target.files && e.target.files[0]) {
-      setReceiptFile(e.target.files[0]);
+      const file = e.target.files[0];
+      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+
+      if (allowedTypes.includes(file.type)) {
+        setReceiptFile(file);
+        setLoading(false);
+      } else {
+        toast.error("Invalid file type. Only JPG, PNG, and PDF files are allowed.");
+        setLoading(false);
+      }
     }
   };
 
@@ -268,19 +279,17 @@ export default function AddTransaction() {
                 >
                   <div>
                     <span className="mb-2 block text-xl font-semibold text-black dark:text-white">
-                      Arraste aqui
+                      {receiptFile ? receiptFile.name : "Arraste aqui"}
                     </span>
-                    <span className="mb-2 block text-base font-medium text-[#6B7280]">
-                      Or
-                    </span>
-                    <span
-                      className="bg-fluency-bg-light dark:bg-fluency-bg-dark inline-flex rounded border py-2 px-7 text-base font-medium dark:text-white text-black"
-                    >
+                    <span className="mb-2 block text-base font-medium text-[#6B7280]">Ou</span>
+                    <span className="bg-fluency-bg-light dark:bg-fluency-bg-dark inline-flex rounded border py-2 px-7 text-base font-medium dark:text-white text-black">
                       Procurar
                     </span>
                   </div>
                 </label>
               </div>
+
+              {loading && <p className="text-blue-600">Uploading... Please wait.</p>}
 
             </div>
             <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col lg:justify-end md:justify-center justify-center gap-2 mt-4">
