@@ -15,8 +15,6 @@ import { LuGamepad2 } from 'react-icons/lu';
 import { RiCalendarScheduleLine } from 'react-icons/ri';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { PomodoroProvider, usePomodoro } from '../context/PomodoroContext';
-import PomodoroClock from '../ui/TipTap/Components/Pomodoro';
 
 interface ISidebarItem {
   name: string;
@@ -37,7 +35,6 @@ function LayoutContent({
   menuItems: ISidebarItem[];
   children: React.ReactNode; // Add children as a direct prop to LayoutContent
 }) {
-  const { isPomodoroVisible } = usePomodoro(); // Move the hook outside the conditional
 
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
@@ -48,7 +45,7 @@ function LayoutContent({
           </div>
           <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>
             <MobileHeader {...sidebarProps} />
-            {children} {/* Render children directly here */}
+            {children}
           </div>
         </div>
       ) : (
@@ -62,8 +59,7 @@ function LayoutContent({
             }`}
           >
             <Header {...sidebarProps} />
-            {isPomodoroVisible && <PomodoroClock />}
-            {children} {/* Render children directly here */}
+            {children}
           </div>
         </div>
       )}
@@ -163,15 +159,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <PomodoroProvider>
-      <LayoutContent
-        isMobile={isMobile}
-        isSidebarCollapsed={isSidebarCollapsed}
-        sidebarProps={sidebarProps}
-        menuItems={menuItems}
-      >
-        {children} {/* Render children directly here */}
-      </LayoutContent>
-    </PomodoroProvider>
+    <LayoutContent
+      isMobile={isMobile}
+      isSidebarCollapsed={isSidebarCollapsed}
+      sidebarProps={sidebarProps}
+      menuItems={menuItems}
+    >
+      {children} {/* Render children directly here */}
+    </LayoutContent>
   );
 }
