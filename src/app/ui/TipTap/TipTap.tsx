@@ -56,6 +56,8 @@ import { usePomodoro } from '@/app/context/PomodoroContext';
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const { data: session } = useSession();
+  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
+  
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -175,8 +177,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   if (!editor) {
     return null;
   }
-
-  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>

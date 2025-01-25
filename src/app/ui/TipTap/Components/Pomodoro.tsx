@@ -17,6 +17,8 @@ const PomodoroClock: React.FC = () => {
 
     if (timeLeft === 0) {
       setMessage("Sessão de estudo finalizada");
+      const sound = new Audio("/sounds/pomodoro.wav");
+      sound.play();
       return;
     }
 
@@ -48,14 +50,14 @@ const PomodoroClock: React.FC = () => {
   const toggleTimer = () => {
     setIsRunning((prev) => !prev);
     const sound = new Audio("/sounds/pomodoro.wav");
-      sound.play();
+    sound.play();
   };
 
   if (!isPomodoroVisible) return null;
 
   return (
     <Draggable defaultPosition={{ x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 }}>
-      <div className="z-[9999] absolute flex flex-col justify-center items-center overflow-hidden bg-fluency-pages-light dark:bg-fluency-pages-dark w-44 h-44 rounded-xl p-4">
+      <div className="z-[9999] fixed flex flex-col justify-center items-center overflow-hidden bg-fluency-pages-light dark:bg-fluency-pages-dark w-44 h-44 rounded-xl p-4">
           <div
             className={`-z-10 absolute bottom-0 left-0 w-full transition-all duration-1000 bg-fluency-gray-200 dark:bg-fluency-gray-700 ${
               isRunning ? "transition-height" : "bg-indigo-500 dark:bg-indigo-900"
