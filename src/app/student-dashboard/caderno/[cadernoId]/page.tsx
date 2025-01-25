@@ -131,7 +131,7 @@ export default function CadernoID() {
         return slide.name.toLowerCase().includes(searchLower);
     });
 
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSortOrder(e.target.value as 'asc' | 'desc');
@@ -240,7 +240,6 @@ export default function CadernoID() {
     return (
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
-                <h1 className='text-3xl font-bold'>Aulas</h1>
                 <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-around gap-4 items-center w-full'>
                     <FluencyInput placeholder='Procure por uma aula específica...'
                         value={searchQuery}

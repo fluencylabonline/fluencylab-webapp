@@ -25,19 +25,19 @@ interface ISidebarItem {
 }
 
 function LayoutContent({
-  children,
   isMobile,
   isSidebarCollapsed,
   sidebarProps,
   menuItems,
+  children, // Pass children directly here, not as a prop
 }: {
-  children: React.ReactNode;
   isMobile: boolean;
   isSidebarCollapsed: boolean;
   sidebarProps: any;
   menuItems: ISidebarItem[];
+  children: React.ReactNode; // Add children as a direct prop to LayoutContent
 }) {
-  const { isPomodoroVisible } = usePomodoro();
+  const { isPomodoroVisible } = usePomodoro(); // Move the hook outside the conditional
 
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
@@ -48,7 +48,7 @@ function LayoutContent({
           </div>
           <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>
             <MobileHeader {...sidebarProps} />
-            {children}
+            {children} {/* Render children directly here */}
           </div>
         </div>
       ) : (
@@ -63,7 +63,7 @@ function LayoutContent({
           >
             <Header {...sidebarProps} />
             {isPomodoroVisible && <PomodoroClock />}
-            {children}
+            {children} {/* Render children directly here */}
           </div>
         </div>
       )}
@@ -165,12 +165,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <PomodoroProvider>
       <LayoutContent
-        children={children}
         isMobile={isMobile}
         isSidebarCollapsed={isSidebarCollapsed}
         sidebarProps={sidebarProps}
         menuItems={menuItems}
-      />
+      >
+        {children} {/* Render children directly here */}
+      </LayoutContent>
     </PomodoroProvider>
   );
 }

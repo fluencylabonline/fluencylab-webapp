@@ -379,7 +379,7 @@ export default function Caderno(){
         );
     });
 
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSortOrder(e.target.value as 'asc' | 'desc');
     };

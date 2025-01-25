@@ -21,11 +21,9 @@ type SidebarProps = {
 //IMAGES
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
-import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { db } from '@/app/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { MdOndemandVideo } from 'react-icons/md';
-import PomodoroClock from '../TipTap/Components/PomodoroClock';
 
 export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: SidebarProps) {
   const router = useRouter();
@@ -140,18 +138,6 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
                   )}
                 </>
               )}
-
-              <div>
-                {isCollapsed ? (
-                  <div className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`} onClick={handleLogout}>
-                    <BsFillDoorOpenFill className='w-6 h-6'/>
-                  </div>
-                ) : (
-                  <div className={`flex cursor-pointer gap-2 justify-center font-bold text-md text-fluency-text-light dark:text-fluency-text-dark py-3  ${selectedItem === 'sair' ? 'font-600 text-fluency-blue-400 dark:text-fluency-blue-400' : 'hover:bg-fluency-blue-200 hover:dark:bg-fluency-blue-500 rounded-md px-4'}`} onClick={handleLogout}>
-                    <BsFillDoorOpenFill className='w-6 h-6'/> Sair
-                  </div>
-                )}
-              </div>
 
             <div className='fixed bottom-2'>
               <Avatar isCollapsed={isCollapsed} />

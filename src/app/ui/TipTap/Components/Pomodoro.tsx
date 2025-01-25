@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import FluencyCloseButton from "../../Components/ModalComponents/closeModal";
 import { usePomodoro } from "@/app/context/PomodoroContext";
-import { MdPause, MdStart } from "react-icons/md";
+import { MdPause } from "react-icons/md";
 import { VscDebugStart } from "react-icons/vsc";
 
 const PomodoroClock: React.FC = () => {
@@ -47,6 +47,8 @@ const PomodoroClock: React.FC = () => {
 
   const toggleTimer = () => {
     setIsRunning((prev) => !prev);
+    const sound = new Audio("/sounds/pomodoro.wav");
+      sound.play();
   };
 
   if (!isPomodoroVisible) return null;

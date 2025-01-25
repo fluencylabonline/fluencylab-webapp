@@ -8,12 +8,9 @@ import { useSession } from 'next-auth/react';
 //IMAGES
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar  from '@/app/ui/Components/Avatar/avatar'
-import { BsFillDoorOpenFill } from 'react-icons/bs';
-import { MdOndemandVideo, MdOutlineDarkMode } from 'react-icons/md';
+import { MdOndemandVideo } from 'react-icons/md';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
-import { FaUserCircle } from 'react-icons/fa';
-import { FiLogOut } from 'react-icons/fi';
 
 interface ISidebarItem {
     name: string;
