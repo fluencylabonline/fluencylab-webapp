@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import MobileHeader from '@/app/ui/Dashboard/mobileheader';
 import MobileSidebar from '@/app/ui/Dashboard/mobilesidebar';
@@ -131,18 +131,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <LuBookCopy  className="h-6 w-6"/>,
     },
     {
-      name: "Prática",
-      path: "/admin-dashboard/pratica",
-      icon: <LuGamepad2 className="h-6 w-6"/>,
-    },
-    {
       name: "Aulas Gravadas",
       path: "/admin-dashboard/aulas-gravadas",
       icon: <MdOndemandVideo className="h-6 w-6"/>,
     },
   ];
 
-  const router = useRouter();
   const [showAnimation, setShowAnimation] = useState(true);
   useEffect(() => {
     if (!session || session.user.role !== "admin") {

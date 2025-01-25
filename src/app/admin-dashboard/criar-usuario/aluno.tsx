@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, arrayUnion, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs, query, where, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { auth, db } from "@/app/firebase";
 import { FaEye, FaEyeSlash, FaKey, FaRegCircleUser, FaRegCreditCard, FaUser } from "react-icons/fa6";
@@ -13,6 +13,7 @@ import { LuCalendarClock, LuUserPlus2 } from "react-icons/lu";
 import { RiTimeLine } from "react-icons/ri";
 import { toast, Toaster } from 'react-hot-toast';
 import FluencyButton from "@/app/ui/Components/Button/button";
+import { CiMoneyBill } from "react-icons/ci";
 
 interface Professor {
     id: string;
@@ -31,6 +32,7 @@ export default function CreateAluno(){
     const [selectedDays, setSelectedDays] = useState<string[]>([]); // State to store selected days
     const [showPassword, setShowPassword] = useState(false);
     const [cnpj, setCnpj] = useState<string>('');
+    const [meioPagamento, setMeioPagamento] = useState('cartao'); // Novo estado
 
     const handleCnpjChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setCnpj(e.target.value);
@@ -65,7 +67,6 @@ export default function CreateAluno(){
         setProfessor(e.target.value);
     };
     
-
     const handleSignUpAluno = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -103,7 +104,8 @@ export default function CreateAluno(){
                 ContratoAssinado: false,
                 NivelamentoPermitido: true,
                 CNPJ: cnpj,
-                diaPagamento: '10'
+                diaPagamento: '10',
+                meioPagamento,
             });
     
             /*
@@ -154,6 +156,7 @@ export default function CreateAluno(){
             setSelectedDays([]);
             setComecouEm('');
             setCnpj('');
+            setMeioPagamento('cartao');
 
             // Sign out the user
             await auth.signOut();
@@ -349,7 +352,6 @@ export default function CreateAluno(){
             </div>
         </div>
 
-
         <div className='flex flex-col items-stretch'>
                 <div className="flex -mx-3">
                 <div className="w-full px-3 mb-4">
@@ -411,6 +413,26 @@ export default function CreateAluno(){
                             className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800" 
                             placeholder="Começou em..." 
                         />
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex -mx-3">
+                    <div className="w-full px-3 mb-4">
+                    <label className="text-xs font-semibold px-1 text-fluency-text-light dark:text-fluency-gray-300">Meio de pagamento</label>
+                    <div className="flex">  
+                    <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
+                        <CiMoneyBill />
+                    </div>
+                    <select 
+                        value={meioPagamento}
+                        onChange={(e) => setMeioPagamento(e.target.value)}
+                        className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"                        
+                    >
+                        <option value="">Selecione meio de pagamento</option>
+                        <option value="cartao">Cartão</option>
+                        <option value="pix">PIX</option>
+                    </select>
                     </div>
                 </div>
             </div>
