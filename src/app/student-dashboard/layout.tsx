@@ -48,7 +48,8 @@ function LayoutContent({
           </div>
           <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>
             <MobileHeader {...sidebarProps} />
-            {children} {/* Render children directly here */}
+            {isPomodoroVisible && <PomodoroClock />}
+            {children}
           </div>
         </div>
       ) : (
@@ -63,7 +64,7 @@ function LayoutContent({
           >
             <Header {...sidebarProps} />
             {isPomodoroVisible && <PomodoroClock />}
-            {children} {/* Render children directly here */}
+            {children}
           </div>
         </div>
       )}

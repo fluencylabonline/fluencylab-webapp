@@ -27,7 +27,7 @@ const PomodoroClock: React.FC = () => {
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        const newTime = prev - 10;
+        const newTime = prev - 1;
         setProgress(((20 * 60 - newTime) / (20 * 60)) * 100);
         return newTime;
       });
