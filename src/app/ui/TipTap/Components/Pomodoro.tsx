@@ -4,6 +4,7 @@ import FluencyCloseButton from "../../Components/ModalComponents/closeModal";
 import { usePomodoro } from "@/app/context/PomodoroContext";
 import { MdPause } from "react-icons/md";
 import { VscDebugStart } from "react-icons/vsc";
+import { TbClockRecord, TbClockShare } from "react-icons/tb";
 
 const PomodoroClock: React.FC = () => {
   const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
@@ -11,9 +12,12 @@ const PomodoroClock: React.FC = () => {
   const [isRunning, setIsRunning] = useState(true);
   const [timeLeft, setTimeLeft] = useState(20 * 60);
   const [message, setMessage] = useState("Vamos estudar");
+  const [isRetracted, setIsRetracted] = useState(false); // New state for retract/expand
 
   // Create a ref for the Draggable container
   const dragRef = useRef(null);
+  const expandedSize = 176; // Corresponding to w-44 h-44
+  const retractedSize = 48; // Corresponding to w-12 h-12
 
   useEffect(() => {
     if (!isRunning) return;
@@ -58,18 +62,56 @@ const PomodoroClock: React.FC = () => {
 
   if (!isPomodoroVisible) return null;
 
+  // Calculate the draggable bounds based on current mode (expanded vs. retracted)
+  const bounds = {
+    left: 0,
+    top: 0,
+    right: window.innerWidth - (isRetracted ? retractedSize : expandedSize),
+    bottom: window.innerHeight - (isRetracted ? retractedSize : expandedSize),
+  };
+
+  // When retracted, show only a small draggable icon.
+  if (isRetracted) {
+    return (
+      <Draggable nodeRef={dragRef} bounds={bounds} defaultPosition={{ x: window.innerWidth / 2 - 20, y: window.innerHeight / 2 - 20 }}>
+        <div
+          ref={dragRef}
+          className="z-[9999] fixed flex items-center justify-center bg-fluency-pages-light dark:bg-fluency-pages-dark w-12 h-12 rounded-full p-2 cursor-pointer shadow-md overflow-hidden"
+        >
+          <div
+            className={`-z-10 absolute bottom-0 left-0 w-full transition-all duration-1000 bg-fluency-gray-200 dark:bg-fluency-gray-700 ${
+              isRunning ? "transition-height" : "bg-indigo-500 dark:bg-indigo-900"
+            }`}
+            style={{
+              height: `${progress}%`
+            }}
+          ></div>
+          <TbClockShare onClick={() => setIsRetracted(false)} className="icon w-5 h-5 hover:text-blue-500 transition-colors" />
+        </div>
+      </Draggable>
+    );
+  }
+
+  // Expanded clock view.
   return (
-    <Draggable nodeRef={dragRef} defaultPosition={{ x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 }}>
-      <div ref={dragRef} className="z-[9999] fixed flex flex-col justify-center items-center overflow-hidden bg-fluency-pages-light dark:bg-fluency-pages-dark w-44 h-44 rounded-xl p-4">
+    <Draggable nodeRef={dragRef} bounds={bounds} defaultPosition={{ x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 }}>
+      <div
+        ref={dragRef}
+        className="z-[9999] fixed flex flex-col justify-center items-center overflow-hidden bg-fluency-pages-light dark:bg-fluency-pages-dark w-44 h-44 rounded-xl p-4 shadow-lg"
+      >
         <div
           className={`-z-10 absolute bottom-0 left-0 w-full transition-all duration-1000 bg-fluency-gray-200 dark:bg-fluency-gray-700 ${
             isRunning ? "transition-height" : "bg-indigo-500 dark:bg-indigo-900"
           }`}
           style={{
-            height: `${progress}%`,
+            height: `${progress}%`
           }}
         ></div>
+
         <FluencyCloseButton onClick={togglePomodoroVisibility} />
+        <button onClick={() => setIsRetracted(true)} title="Retract Clock">
+          <TbClockRecord className="absolute mt-2 mr-2 top-1 right-0 w-[22px] h-[22px] hover:text-blue-500 transition-colors" />
+        </button>
         <h2 className={`mt-3 text-md font-semibold text-center ${timeLeft === 0 && 'text-white'}`}>{message}</h2>
         <div className={`text-2xl font-bold ${timeLeft === 0 && 'text-white'}`}>{formatTime(timeLeft)}</div>
         <button
