@@ -9,6 +9,7 @@ import { getDocs, collection } from 'firebase/firestore';
 import { RiNotification4Line } from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
 import { useSession } from 'next-auth/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type MobileHeaderProps = {
   isCollapsed: boolean;
@@ -39,16 +40,23 @@ export default function MobileHeader({ toggleMenu }: MobileHeaderProps) {
         return `/${constructedPath}`;
     };
 
-    const [isAnimating, setIsAnimating] = useState(false);
     const [notifications, setNotifications] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
     const closeModal = () => {
-        setIsAnimating(true); // Trigger the slide-down animation
-        setTimeout(() => {
-          setIsModalOpen(false); // Close the modal after animation
-          setIsAnimating(false);
-        }, 300); // Match the animation duration
-      };
+        setIsModalOpen(false);
+    };
+
+    // Bottom sheet animation variants
+    const bottomSheetVariants = {
+        hidden: { y: "100%", transition: { duration: 0.3 } },
+        visible: { y: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } },
+    };
+
+    // Backdrop animation variants
+    const backdropVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+    };
       
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -139,32 +147,57 @@ return(
             </nav>
         </header>
 
-        {isModalOpen && (
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-end z-50">
-                <div
-                    id='modalNotification'
-                    className={`bg-white dark:bg-gray-800 w-full min-h-[70vh] max-h-[90vh] rounded-t-2xl p-4 overflow-y-auto shadow-lg transform transition-transform duration-300 ease-in-out ${
-                    isAnimating ? 'animate-slideDown' : 'animate-slideUp'
-                    }`}
+        <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div
+                        key="backdrop"
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={backdropVariants}
+                        className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-end z-50"
                     >
-                    <div className="flex justify-center items-center mb-4">
-                        <h1 className="text-xl font-bold">Notificações</h1>
-                        <IoClose onClick={closeModal} className="icon cursor-pointer absolute top-0 right-4 mt-2 ml-2 transition-all text-gray-500 hover:text-blue-600 w-7 h-7 ease-in-out duration-300" />
-                    </div>
-                    <div className="w-full flex flex-col overflow-y-auto justify-center mt-4">
-                        {getFilteredNotifications().length > 0 ? (
-                        getFilteredNotifications().map((notification) => (
-                            <div key={notification.id} className={`flex flex-row items-start w-[97%] justify-between p-3 mb-1 rounded-lg ${getBackgroundColor(notification.status)}`}>
-                                <p>{notification.content}</p>                
+                        <motion.div
+                            key="modal"
+                            initial="hidden"
+                            animate="visible"
+                            exit="hidden"
+                            variants={bottomSheetVariants}
+                            className="bg-white dark:bg-gray-800 w-full max-w-[80vw] min-h-[70vh] max-h-[90vh] rounded-t-2xl p-4 overflow-y-auto shadow-lg"
+                            drag="y"
+                            dragConstraints={{ top: 0 }}
+                            dragElastic={{ top: 0, bottom: 0.2 }}
+                            onDragEnd={(_, info) => {
+                                if (info.offset.y > 100) {
+                                    closeModal();
+                                }
+                            }}
+                        >
+                            <div className="flex justify-center items-center mb-4">
+                                <h1 className="text-xl font-bold">Notificações</h1>
+                                <IoClose 
+                                    onClick={closeModal} 
+                                    className="icon cursor-pointer absolute top-0 right-4 mt-2 ml-2 transition-all text-gray-500 hover:text-blue-600 w-7 h-7 ease-in-out duration-300" 
+                                />
                             </div>
-                            ))
-                        ) : (
-                        <p className="text-center text-gray-500 dark:text-gray-300">Nenhuma notificação nova para mostrar.</p>
-                            )}
-                    </div>
-                </div>
-            </div>
-        )}
+                            <div className="w-full flex flex-col overflow-y-auto justify-center mt-4">
+                                {getFilteredNotifications().length > 0 ? (
+                                    getFilteredNotifications().map((notification) => (
+                                        <div 
+                                            key={notification.id} 
+                                            className={`flex flex-row items-start w-[97%] justify-between p-3 mb-1 rounded-lg ${getBackgroundColor(notification.status)}`}
+                                        >
+                                            <p>{notification.content}</p>                
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-center text-gray-500 dark:text-gray-300">Nenhuma notificação nova para mostrar.</p>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
         </div>
     );

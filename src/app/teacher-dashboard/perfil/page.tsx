@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 //Firebase
-import { collection, doc, DocumentData, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, DocumentData, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { auth, db } from '@/app/firebase';
 import { ref, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage';
 import { storage } from '@/app/firebase';
@@ -14,7 +14,6 @@ import FluencyInput from '@/app/ui/Components/Input/input';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 
 //Next Imports
-import {Accordion, AccordionItem} from "@nextui-org/accordion";
 import { useSession } from 'next-auth/react';
 
 //Notification
@@ -23,8 +22,7 @@ import { toast, Toaster } from 'react-hot-toast';
 //Icons
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { FaUserCircle } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
-import { Link, Tooltip } from '@nextui-org/react';
+import { Tooltip } from '@nextui-org/react';
 import { PiExam } from 'react-icons/pi';
 import { MdEditCalendar } from 'react-icons/md';
 import { LuCalendarX2 } from 'react-icons/lu';

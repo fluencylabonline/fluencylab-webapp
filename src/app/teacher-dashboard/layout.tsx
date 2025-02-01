@@ -164,7 +164,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           <div
             className={`p-1 min-h-screen transition-all duration-300 ease-in-out ${
-              isSidebarCollapsed ? 'ml-[5rem]' : 'ml-[14.5rem] pl-4'
+              isSidebarCollapsed ? 'ml-[5rem] pr-4' : 'ml-[14.5rem] pl-4'
             }`}
           >
             <Header {...sidebarProps} />

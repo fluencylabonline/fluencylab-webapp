@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Modals
 import { Editor } from '@tiptap/react';
@@ -87,6 +88,16 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
       setAnimating(false);
     }, 200);
     setOpenDescription(null);
+  };
+
+  const toggleBottomSheet = () => {
+    setBottomSheetOpen(!isBottomSheetOpen);
+  };
+
+  const bottomSheetVariants = {
+    hidden: { y: '100%', opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.3, ease: 'easeOut' } },
+    exit: { y: '100%', opacity: 0, transition: { duration: 0.2, ease: 'easeIn' } }
   };
 
   const [openDescription, setOpenDescription] = useState<string | null>(null);
@@ -264,18 +275,28 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
 
       {/* Mobile Bottom Sheet */}
       <div
-        onClick={openBottomSheet}
+        onClick={toggleBottomSheet}
         className="fixed bottom-16 right-5 bg-fluency-pages-light dark:bg-fluency-pages-dark p-2 rounded-full"
       >
         <FiTool className="w-6 h-6 text-black dark:text-white hover:text-fluency-blue-500 dark:hover:text-fluency-blue-500 transition-all cursor-pointer" />
       </div>
 
-      {isBottomSheetOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-end z-50">
-          <div
-            className={`bg-white dark:bg-gray-800 w-full max-w-[100vw] min-h-[85vh] max-h-[95vh] overflow-y-auto rounded-t-2xl p-4 shadow-lg transform transition-transform duration-300 ${
-              isAnimating ? 'animate-slideDown' : 'animate-slideUp'
-              }`}
+     <AnimatePresence>
+        {isBottomSheetOpen && (
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            onClick={toggleBottomSheet}
+          >
+            <motion.div
+              className="bg-white dark:bg-gray-800 w-full max-w-[100vw] min-h-[85vh] max-h-[95vh] overflow-y-auto rounded-t-2xl p-4 shadow-lg"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={bottomSheetVariants}
+              onClick={(e) => e.stopPropagation()}
             >
             <div className="flex justify-center items-center mb-4">
                 <h1 className="text-2xl font-bold">Ferramentas</h1>
@@ -300,9 +321,10 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
                 <DescriptionChange />
               </div>
             </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

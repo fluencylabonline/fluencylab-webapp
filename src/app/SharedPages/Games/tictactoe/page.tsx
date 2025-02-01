@@ -80,8 +80,8 @@ const TicTacToe: React.FC = () => {
       winner: null // Initialize winner field
     });
     
-    // Copy game code to clipboard
-    navigator.clipboard.writeText(id).then(() => {
+      // Copy game code to clipboard
+      navigator.clipboard.writeText(id).then(() => {
       toast.success(`Jogo criado! O ID foi copiado para a área de transferência: ${id}`);
     }).catch(err => {
       console.error('Failed to copy game ID: ', err);
