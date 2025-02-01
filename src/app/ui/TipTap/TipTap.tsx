@@ -3,8 +3,8 @@ import React from 'react';
 
 //Other imports
 import { Toaster } from 'react-hot-toast';
-import './styles.scss'
 import { useSession } from 'next-auth/react';
+import { usePomodoro } from '@/app/context/PomodoroContext';
 
 //TipTap Imports
 import Toolbar from "./Toolbar";
@@ -46,13 +46,21 @@ import GoalExtension from './Components/Extensions/Goal/GoalExtension';
 import VocabulabExtension from './Components/Extensions/Vocabulab/VocabulabExtension';
 import DownloadExtension from './Components/Extensions/Download/DownloadExtension';
 
+//Icons
+import { FiTool } from 'react-icons/fi';
+import { LuTimerOff, LuTimer } from 'react-icons/lu';
+
+//Style
+import './styles.scss'
+
 //Tools
 import Tools from './Components/Tools';
 import Bubble from './Components/Bubble';
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
   const { data: session } = useSession();
-  
+  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
+
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -178,7 +186,16 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  /> 
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
-      {session?.user.role === 'teacher' &&<Tools editor={editor}/>}
+      {session?.user.role === 'teacher' && <Tools editor={editor}/>}
+      {session?.user.role === 'student' && (
+        <div className='fixed bottom-5 right-5'>
+          {isPomodoroVisible ? (
+           <LuTimerOff onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-red-500 duration-300 ease-in-out transition-all" />
+          ):(
+           <LuTimer onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-green-500 duration-300 ease-in-out transition-all" />
+          )}
+        </div>
+      )}
       <Toaster />
     </div>
   );

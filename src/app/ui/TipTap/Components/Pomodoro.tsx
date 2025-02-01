@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import FluencyCloseButton from "../../Components/ModalComponents/closeModal";
 import { usePomodoro } from "@/app/context/PomodoroContext";
@@ -11,6 +11,9 @@ const PomodoroClock: React.FC = () => {
   const [isRunning, setIsRunning] = useState(true);
   const [timeLeft, setTimeLeft] = useState(20 * 60);
   const [message, setMessage] = useState("Vamos estudar");
+
+  // Create a ref for the Draggable container
+  const dragRef = useRef(null);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -56,16 +59,16 @@ const PomodoroClock: React.FC = () => {
   if (!isPomodoroVisible) return null;
 
   return (
-    <Draggable defaultPosition={{ x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 }}>
-      <div className="z-[9999] fixed flex flex-col justify-center items-center overflow-hidden bg-fluency-pages-light dark:bg-fluency-pages-dark w-44 h-44 rounded-xl p-4">
-          <div
-            className={`-z-10 absolute bottom-0 left-0 w-full transition-all duration-1000 bg-fluency-gray-200 dark:bg-fluency-gray-700 ${
-              isRunning ? "transition-height" : "bg-indigo-500 dark:bg-indigo-900"
-            }`}
-            style={{
-              height: `${progress}%`,
-            }}
-          ></div>
+    <Draggable nodeRef={dragRef} defaultPosition={{ x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 }}>
+      <div ref={dragRef} className="z-[9999] fixed flex flex-col justify-center items-center overflow-hidden bg-fluency-pages-light dark:bg-fluency-pages-dark w-44 h-44 rounded-xl p-4">
+        <div
+          className={`-z-10 absolute bottom-0 left-0 w-full transition-all duration-1000 bg-fluency-gray-200 dark:bg-fluency-gray-700 ${
+            isRunning ? "transition-height" : "bg-indigo-500 dark:bg-indigo-900"
+          }`}
+          style={{
+            height: `${progress}%`,
+          }}
+        ></div>
         <FluencyCloseButton onClick={togglePomodoroVisibility} />
         <h2 className={`mt-3 text-md font-semibold text-center ${timeLeft === 0 && 'text-white'}`}>{message}</h2>
         <div className={`text-2xl font-bold ${timeLeft === 0 && 'text-white'}`}>{formatTime(timeLeft)}</div>
