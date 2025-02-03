@@ -48,50 +48,6 @@ import TableRow from '@tiptap/extension-table-row'
 import Gapcursor from '@tiptap/extension-gapcursor'
 
 //TipTap Components
-import Embed from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/Embed';
-import EmbedSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/EmbedComponent/EmbedSelectionModal';
-
-import ReactComponent from '@/app/SharedPages/Apostilas/editor/Components/AudioComponent/Extension';
-import AudioSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/AudioComponent/AudioSelectionModal';
-
-import SpeakingExtension from '@/app/SharedPages/Apostilas/editor/Components/SpeakingComponent/SpeakingExtension';
-import SpeakingSelectionModal from '@/app/SharedPages/Apostilas/editor/Components/SpeakingComponent/SpeakingSelectionModal';
-
-import TextDisplayModal from '@/app/SharedPages/Apostilas/editor/Components/StudentComponent/StudentModal';
-import StudentExtension from '@/app/SharedPages/Apostilas/editor/Components/StudentComponent/StudentExtension';
-
-import TextDisplayModalTeacher from '@/app/SharedPages/Apostilas/editor/Components/TeacherComponent/TeacherModal';
-import TeacherExtension from '@/app/SharedPages/Apostilas/editor/Components/TeacherComponent/TeacherExtension';
-
-import TextDisplayModalGoal from '@/app/SharedPages/Apostilas/editor/Components/GoalComponent/GoalModal';
-import GoalExtension from '@/app/SharedPages/Apostilas/editor/Components/GoalComponent/GoalExtension';
-
-import ReviewModal from '@/app/SharedPages/Apostilas/editor/Components/ReviewComponent/ReviewModal';
-import ReviewNode from '@/app/SharedPages/Apostilas/editor/Components/ReviewComponent/ReviewNode';
-
-import TextDisplayModalTip from '@/app/SharedPages/Apostilas/editor/Components/TipComponent/TipModal';
-import TipExtension from '@/app/SharedPages/Apostilas/editor/Components/TipComponent/TipExtension';
-
-import ExerciseModal from '@/app/SharedPages/Apostilas/editor/Components/ExerciseModal/ExerciseModal';
-import ExerciseExtension from '@/app/SharedPages/Apostilas/editor/Components/ExerciseModal/ExerciseExtension';
-
-import MultipleChoiceModal from '@/app/SharedPages/Apostilas/editor/Components/MultipleChoice/MultipleChoiceModal';
-import MultipleChoiceExtension from '@/app/SharedPages/Apostilas/editor/Components/MultipleChoice/MultipleChoiceExtension';
-
-import TranslationModal from '@/app/SharedPages/Apostilas/editor/Components/TranslationComponent/TranslationModal';
-import TranslationNode from '@/app/SharedPages/Apostilas/editor/Components/TranslationComponent/TranslationNode';
-
-import VocabulabModal from '@/app/SharedPages/Apostilas/editor/Components/VocabuLabComponent/VocabulabModal';
-import VocabulabNode from '@/app/SharedPages/Apostilas/editor/Components/VocabuLabComponent/VocabulabNode';
-
-import ImageTextModal from '@/app/SharedPages/Apostilas/editor/Components/ImageComponent/ImageTextModal';
-import ImageTextNode from '@/app/SharedPages/Apostilas/editor/Components/ImageComponent/ImageTextNode';
-
-import FileSnippetNode from '@/app/SharedPages/Apostilas/editor/Components/FileComponent/FileSnippetNode';
-import FileUploadSnippet from '@/app/SharedPages/Apostilas/editor/Components/FileComponent/FileUploadSnippet';
-
-import SentencesModal from '@/app/SharedPages/Apostilas/editor/Components/SentencesComponent/SentencesModal';
-import SentencesNode from '@/app/SharedPages/Apostilas/editor/Components/SentencesComponent/SentencesNode';
 import ReactDOM from 'react-dom';
 
 import Collaboration from '@tiptap/extension-collaboration';
@@ -488,21 +444,6 @@ const TiptapMobile = ({ onChange, content, provider, studentID, role, notebookID
       }),
       Highlight,
       Color,
-      ReactComponent,
-      Embed,
-      SpeakingExtension,
-      StudentExtension,
-      TeacherExtension,
-      TipExtension,
-      GoalExtension,
-      ExerciseExtension,
-      MultipleChoiceExtension,
-      TranslationNode,
-      VocabulabNode,
-      ReviewNode,
-      ImageTextNode,
-      FileSnippetNode,
-      SentencesNode,
 
       //Placeholder
       Placeholder.configure({
@@ -549,21 +490,6 @@ const TiptapMobile = ({ onChange, content, provider, studentID, role, notebookID
         <ToolbarMobile editor={editor} /> 
 
         <Popovers editor={editor} />
-        <TextDisplayModal isOpen={isModalTextOpen} onClose={handleCloseModal} initialText={initialText} editor={editor} />
-        <TextDisplayModalTeacher isOpen={isModalTextTeacherOpen} onClose={handleCloseModalTeacher} initialTextTeacher={initialTextTeacher} editor={editor} />
-        <TextDisplayModalGoal isOpen={isModalTextGoalOpen} onClose={handleCloseModalGoal} editor={editor} />
-        <TextDisplayModalTip isOpen={isModalTextTipOpen} onClose={handleCloseModalTip} initialTextTip={initialTextTip} editor={editor} />
-        <VocabulabModal isOpen={isModalVocabulabOpen} onClose={closeVocabulabModal} editor={editor} />
-        <ReviewModal isOpen={isModalTextReviewOpen} onClose={handleCloseModalReview} editor={editor} />
-        <ImageTextModal isOpen={isModalImageTextOpen} onClose={closeImageTextModal} editor={editor} />
-        <FileUploadSnippet isOpen={isModalFileOpen} onClose={closeFileModal} editor={editor} />
-        <SentencesModal isOpen={isModalSentencesOpen} onClose={closeSentencesModal} editor={editor} />
-        <AudioSelectionModal isOpen={isModalAudioOpen} onClose={() => setIsModalAudioOpen(false)} onSelectAudio={handleSelectAudio} />
-        <SpeakingSelectionModal isOpen={isModalTranscriptOpen} onClose={() => setIsModalTranscriptOpen(false)} onSelectAudio={handleSelectTranscript} />
-        <EmbedSelectionModal isEmbedOpen={isModalEmbedOpen} onEmbedClose={() => setIsModalEmbedOpen(false)} onSelectVideo={handleSelectVideo} />
-        <ExerciseModal isOpen={isModalExerciseOpen} onClose={handleCloseModalExercise} editor={editor} />
-        <MultipleChoiceModal isOpen={isModalOpen} onClose={closeMultipleChoiceModal} editor={editor} />
-        <TranslationModal isOpen={isModalTranslationOpen} onClose={closeTranslationModal} editor={editor} />
 
         {role == 'teacher' && (
           <div className="fixed top-[6.5rem] right-2">
