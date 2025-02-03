@@ -45,7 +45,7 @@ export default function ShowGames() {
       {loading ? (
         <p>Carregando jogos...</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto h-[50vh]">
           {games.map(game => (
             <div key={game.id} className="flex justify-between items-center p-4 border border-black dark:border-white rounded-lg hover:bg-fluency-blue-600 hover:border-fluency-blue-600 dark:hover:bg-fluency-blue-1100 dark:hover:border-fluency-blue-1100 duration-300 ease-in-out transition-all">
               <Link href={{ pathname: `vocabulary/${encodeURIComponent(game.name)}`, query: { aloneGameID: game.id } }} passHref>

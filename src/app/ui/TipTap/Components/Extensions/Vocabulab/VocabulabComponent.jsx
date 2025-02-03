@@ -51,7 +51,7 @@ const VocabLabComponent = ({ node }) => {
             
               <div className='flex flex-col items-center justify-center gap-4'>
                 <p className='font-bold text-xl mb-4'>FluencyWords</p>
-                  <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-x-20 gap-y-8 mb-2">
+                  <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-x-12 gap-y-8 mb-2">
                     {wordList.map((word, index) => (
                       <SpeakWord key={index} word={word.trim()} />
                     ))}
@@ -59,7 +59,7 @@ const VocabLabComponent = ({ node }) => {
               </div>
           </div>
 
-          <div className='flex flex-row items-center justify-center bg-fluency-gray-100 dark:bg-fluency-gray-700 text-black dark:text-white w-full h-min rounded-3xl px-4 mb-8'>
+          <div className='flex flex-row items-center justify-center bg-fluency-gray-100 dark:bg-fluency-gray-500 text-black dark:text-white w-full h-min rounded-3xl px-4 mb-8'>
             <div className='w-full lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-between items-center'>
               <Image src={TipImage} alt="Teacher" className='lg:w-[13%] w-[16%] h-auto !rounded-none' />
               <p className='lg:p-7 md:p-5 p-3 text-md text-start w-full max-w-[95%] font-semibold'>Para conseguir lembrar e falar bem as palavras pronuncie cada uma com bastante convicção. Não precisa ter vergonha!</p>

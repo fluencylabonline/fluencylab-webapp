@@ -47,7 +47,6 @@ import VocabulabExtension from './Components/Extensions/Vocabulab/VocabulabExten
 import DownloadExtension from './Components/Extensions/Download/DownloadExtension';
 
 //Icons
-import { FiTool } from 'react-icons/fi';
 import { LuTimerOff, LuTimer } from 'react-icons/lu';
 
 //Style
@@ -57,7 +56,7 @@ import './styles.scss'
 import Tools from './Components/Tools';
 import Bubble from './Components/Bubble';
 
-const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor }: any) => {
+const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, isEditable }: any) => {
   const { data: session } = useSession();
   const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
 
@@ -70,6 +69,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   })
 
   const editor = useEditor({
+    editable: isEditable,
     extensions: [
       TextStudentExtension,
       TextTeacherExtension,
@@ -115,7 +115,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       }),
       Highlight,
       Color,
-      
+
       /*
       //Part of collaboration that might work now
       Collaboration.configure({
@@ -183,10 +183,11 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
-      <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  /> 
+      
+      {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  />}
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
-      {session?.user.role === 'teacher' && <Tools editor={editor}/>}
+      {session?.user.role !== 'student' && isEditable && <Tools editor={editor}/>}
       {session?.user.role === 'student' && (
         <div className='fixed bottom-5 right-5'>
           {isPomodoroVisible ? (

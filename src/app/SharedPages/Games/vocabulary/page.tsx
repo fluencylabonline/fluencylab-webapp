@@ -178,7 +178,7 @@ export default function Vocabulary() {
     };
 
     return (
-        <div className="w-full h-[75vh] rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark">
+        <div className="w-full h-[90vh] rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark overflow-hidden">
             <Toaster />
             <div className="flex flex-col items-center justify-center p-4 gap-4">
 

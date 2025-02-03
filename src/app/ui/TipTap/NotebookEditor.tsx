@@ -135,6 +135,7 @@ const NotebookEditor = () => {
         buttonColor={buttonColor}
         animation={animation}
         timeLeft={timeLeft}
+        isEditable={true}
       />
     </div>
   );
