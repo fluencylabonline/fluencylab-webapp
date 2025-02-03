@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import MobileHeader from '@/app/ui/Dashboard/mobileheader';
 import MobileSidebar from '@/app/ui/Dashboard/mobilesidebar';
@@ -17,6 +17,8 @@ import { LuGamepad2 } from 'react-icons/lu';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { PomodoroProvider, usePomodoro } from '../context/PomodoroContext';
+import PomodoroClock from '../ui/TipTap/Components/Pomodoro';
 
 interface ISidebarItem {
   name: string;
@@ -24,12 +26,60 @@ interface ISidebarItem {
   icon: any;
 }
 
+function LayoutContent({
+  isMobile,
+  isSidebarCollapsed,
+  sidebarProps,
+  menuItems,
+  children, // Pass children directly here, not as a prop
+}: {
+  isMobile: boolean;
+  isSidebarCollapsed: boolean;
+  sidebarProps: any;
+  menuItems: ISidebarItem[];
+  children: React.ReactNode; // Add children as a direct prop to LayoutContent
+}) {
+  const { isPomodoroVisible } = usePomodoro(); // Move the hook outside the conditional
+
+  return (
+    <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
+      {isMobile ? (
+        <div>
+          <div>
+            <MobileSidebar isSidebarCollapsed={false} {...sidebarProps} menuItems={menuItems} />
+          </div>
+          <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>
+            <MobileHeader {...sidebarProps} />
+            {isPomodoroVisible && <PomodoroClock />}
+            {children}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div>
+            <Sidebar {...sidebarProps} menuItems={menuItems} />
+          </div>
+          <div
+            className={`p-1 min-h-screen transition-all duration-300 ease-in-out ${
+              isSidebarCollapsed ? 'ml-[5rem]' : 'ml-[14.5rem] pl-4'
+            }`}
+          >
+            <Header {...sidebarProps} />
+            {isPomodoroVisible && <PomodoroClock />}
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/signin')
-    }
+      redirect('/signin');
+    },
   });
 
   useEffect(() => {
@@ -39,9 +89,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         const userDocRef = doc(db, 'users', user.id);
 
         try {
-          await updateDoc(userDocRef, {
-            status
-          });
+          await updateDoc(userDocRef, { status });
           console.log(`User status updated to ${status}`);
         } catch (error) {
           console.error(`Error updating user status to ${status}:`, error);
@@ -60,7 +108,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [session]);
-  
+
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isMenuHidden, setIsMenuHidden] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -89,9 +137,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const sidebarProps = {
     isCollapsed: isSidebarCollapsed,
     isMenuHidden: isMenuHidden,
-    toggleSidebar: toggleSidebar,
-    toggleMenu: toggleMenu,
-    isMobile: isMobile,
+    toggleSidebar,
+    toggleMenu,
+    isMobile,
   };
 
   const menuItems: ISidebarItem[] = [
@@ -128,50 +176,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   const [showAnimation, setShowAnimation] = useState(true);
+
   useEffect(() => {
-    if (!session || session.user.role !== "teacher") {
-        setShowAnimation(true);
-        const timer = setTimeout(() => {
-        signOut({ callbackUrl: '/' })
-      }, 5000); // 5000 milliseconds = 5 seconds
+    if (!session || session.user.role !== 'teacher') {
+      setShowAnimation(true);
+      const timer = setTimeout(() => {
+        signOut({ callbackUrl: '/' });
+      }, 5000);
 
       return () => clearTimeout(timer);
-  }
+    }
   }, [session]);
 
-  if (!session || session.user.role !== "teacher") {
-      return showAnimation ? <RedirectinAnimation /> : null;
+  if (!session || session.user.role !== 'teacher') {
+    return showAnimation ? <RedirectinAnimation /> : null;
   }
 
   return (
-    <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
-      {isMobile ? (
-        <div>
-          <div>
-            <MobileSidebar isSidebarCollapsed={false} {...sidebarProps} menuItems={menuItems}/>
-          </div>
-
-          <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>
-            <MobileHeader {...sidebarProps} />
-            {children}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div>
-            <Sidebar {...sidebarProps} menuItems={menuItems}/>
-          </div>
-
-          <div
-            className={`p-1 min-h-screen transition-all duration-300 ease-in-out ${
-              isSidebarCollapsed ? 'ml-[5rem] pr-4' : 'ml-[14.5rem] pl-4'
-            }`}
-          >
-            <Header {...sidebarProps} />
-            {children}
-          </div>
-        </div>
-      )}
-    </div>
+    <PomodoroProvider>
+      <LayoutContent
+        isMobile={isMobile}
+        isSidebarCollapsed={isSidebarCollapsed}
+        sidebarProps={sidebarProps}
+        menuItems={menuItems}
+      >
+        {children} {/* Render children directly here */}
+      </LayoutContent>
+    </PomodoroProvider>
   );
 }
