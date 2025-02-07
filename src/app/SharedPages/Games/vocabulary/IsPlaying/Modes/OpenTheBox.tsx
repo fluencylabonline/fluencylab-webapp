@@ -5,18 +5,19 @@ import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { AnimatePresence, motion } from 'framer-motion';
+import externalOptions from '../../Components/options.json';
 
 interface VocabularyEntry {
   imageURL: string;
   vocab: string;
-  options?: string[]; // Optional for singleplayer
+  options?: string[];
   clickedOption?: string | null;
   isCorrect?: boolean | null;
 }
 
 export default function OpenTheBox({ gameID }: { gameID: string }) {
   const [vocabularies, setVocabularies] = useState<VocabularyEntry[]>([]);
-  const [selectedWords, setSelectedWords] = useState<string[]>(new Array(8).fill(''));
+  const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -24,6 +25,13 @@ export default function OpenTheBox({ gameID }: { gameID: string }) {
 
   const params = new URLSearchParams(window.location.search);
   const singleplayer = params.get('aloneGameID');
+
+  // When vocabularies change, initialize selectedWords with the same length:
+  useEffect(() => {
+    if (vocabularies.length > 0) {
+      setSelectedWords(new Array(vocabularies.length).fill(''));
+    }
+  }, [vocabularies]);
 
   useEffect(() => {
     setIsSingleplayer(!!singleplayer);
@@ -59,14 +67,16 @@ export default function OpenTheBox({ gameID }: { gameID: string }) {
   }, [gameID, isSingleplayer]);
 
   const generateOptions = (vocab: string): string[] => {
-    const incorrectOptions = ['cat', 'dog', 'car', 'banana', 'table', 'pen'].filter(
-      (option) => option !== vocab
+    // Remove any option that matches the correct word (case-insensitive)
+    const filteredOptions = externalOptions.filter(
+      (option: string) => option.toLowerCase() !== vocab.toLowerCase()
     );
-    const randomOptions = [
-      vocab,
-      ...incorrectOptions.sort(() => 0.5 - Math.random()).slice(0, 2),
-    ];
-    return randomOptions.sort(() => 0.5 - Math.random());
+    
+    // Randomize and select a fixed number (e.g., 2) of incorrect options.
+    const incorrectOptions = filteredOptions.sort(() => 0.5 - Math.random()).slice(0, 2);
+    
+    // Combine the correct answer with the incorrect ones and shuffle the result.
+    return [vocab, ...incorrectOptions].sort(() => 0.5 - Math.random());
   };
 
   // Multiplayer mode: handles box click with Firebase update
@@ -249,7 +259,7 @@ export default function OpenTheBox({ gameID }: { gameID: string }) {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                           >
-                            {option}
+                            {option.toLowerCase()}
                           </motion.button>
                         );
                     })
@@ -269,7 +279,7 @@ export default function OpenTheBox({ gameID }: { gameID: string }) {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                           >
-                            {option}
+                            {option.toLowerCase()}
                           </motion.button>
                         );
                       })

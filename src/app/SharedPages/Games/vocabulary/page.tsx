@@ -11,6 +11,9 @@ import { useRouter } from 'next/navigation';
 import CriarJogo from "./Components/CriarJogo";
 import ShowGames from "./Components/ShowGames";
 
+// Import external options from options.json (ensure it contains 300 lowercase words)
+import externalOptions from './Components/options.json';
+
 export default function Vocabulary() {
     const { data: session } = useSession();
     const userId = session?.user?.id || '';
@@ -18,7 +21,7 @@ export default function Vocabulary() {
     const [joinGameCode, setJoinGameCode] = useState('');
     const [availableGames, setAvailableGames] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
 
     const generateGameId = () => {
         return Math.random().toString(36).substr(2, 9);
@@ -42,20 +45,25 @@ export default function Vocabulary() {
         setIsModalOpen(false);
     };
 
-    const randomWords = ["Apple", "Banana", "Carrot", "Dog", "Elephant", "Friday", "Monday", "Tuesday", "Sunday"];
+    // Remove the old randomWords array
+    // const randomWords = ["Apple", "Banana", "Carrot", "Dog", "Elephant", "Friday", "Monday", "Tuesday", "Sunday"];
 
+    // Use externalOptions to generate options in open-the-box mode
     const generateOpenTheBoxMode = (vocabularyData: any[]) => {
         return vocabularyData.map((item) => {
-            const correctOption = item.vocab;
-            const randomOptions = [...randomWords.filter(word => word !== correctOption)]; // Filter out the correct word from randomWords
+            // Ensure the correct option is lowercase
+            const correctOption = item.vocab.toLowerCase();
+            // Filter out the correct option from externalOptions
+            const randomOptions = externalOptions.filter((word: string) => word !== correctOption);
+            // Randomly select two incorrect options and combine them with the correct option
             const shuffledOptions = [
                 correctOption,
-                ...randomOptions.sort(() => 0.5 - Math.random()).slice(0, 2),  // Get two random options and shuffle
-            ].sort(() => 0.5 - Math.random());  // Shuffle the options
+                ...randomOptions.sort(() => 0.5 - Math.random()).slice(0, 2),
+            ].sort(() => 0.5 - Math.random());
 
             return {
                 imageURL: item.imageURL,
-                vocab: item.vocab,
+                vocab: correctOption,
                 options: shuffledOptions,
                 clickedOption: null,
                 isCorrect: null,
@@ -63,18 +71,19 @@ export default function Vocabulary() {
         });
     };
 
+    // Use externalOptions to generate options in what-is-image mode
     const generateWhatIsImageMode = (vocabularyData: any[]) => {
         return vocabularyData.map((item) => {
-            const correctOption = item.vocab;
-            const randomOptions = [...randomWords.filter(word => word !== correctOption)]; // Filter out the correct word from randomWords
+            const correctOption = item.vocab.toLowerCase();
+            const randomOptions = externalOptions.filter((word: string) => word !== correctOption);
             const shuffledOptions = [
                 correctOption,
-                ...randomOptions.sort(() => 0.5 - Math.random()).slice(0, 2),  // Get two random options and shuffle
-            ].sort(() => 0.5 - Math.random());  // Shuffle the options
-    
+                ...randomOptions.sort(() => 0.5 - Math.random()).slice(0, 2),
+            ].sort(() => 0.5 - Math.random());
+
             return {
                 imageURL: item.imageURL,
-                vocab: item.vocab,
+                vocab: correctOption,
                 options: shuffledOptions,
                 clickedOption: null,
                 isCorrect: null,
@@ -82,25 +91,24 @@ export default function Vocabulary() {
             };
         });
     };
-    
+
     const createGame = async (vocabGameId: string) => {
         const id = generateGameId();
-    
+
         try {
             // Fetch the VocabularyGame data from the db using vocabGameId
             const vocabGameRef = doc(db, 'VocabularyGame', vocabGameId);
             const vocabGameSnapshot = await getDoc(vocabGameRef);
-    
+
             if (!vocabGameSnapshot.exists()) {
                 toast.error('Jogo de vocabulário não encontrado.');
                 return;
             }
-    
+
             const vocabGameData = vocabGameSnapshot.data();
-            
             // Assuming vocabGameData.vocabularies contains an array of objects
-            const vocabularyData = vocabGameData.vocabularies || [];  // Ensure to handle the vocabularies array
-    
+            const vocabularyData = vocabGameData.vocabularies || [];
+
             // Create a new game document in the 'games' collection
             await setDoc(doc(db, 'games', id), {
                 creatorId: userId,
@@ -111,38 +119,38 @@ export default function Vocabulary() {
                 VocabularyGameID: vocabGameId,
                 gameName: 'VocabularyGame',
             });
-    
+
             // Create a sub-collection for modes inside the game document
             const modesRef = collection(db, 'games', id, 'modes');
-    
+
             // Create the 'anagram' mode with vocabulary data inside the sub-collection
             await setDoc(doc(modesRef, 'anagram'), {
-                vocabularydata: vocabularyData,  // Populate with vocabulary data from the VocabularyGame
+                vocabularydata: vocabularyData,
             });
-    
-            // Create the 'openthebox' mode
+
+            // Create the 'openthebox' mode using externalOptions for generating options
             const opentheboxData = generateOpenTheBoxMode(vocabularyData);
             await setDoc(doc(modesRef, 'openthebox'), {
-                vocabularydata: opentheboxData,  // Populate with the open the box data
+                vocabularydata: opentheboxData,
             });
-    
-            // Create the 'whatisimage' mode
+
+            // Create the 'whatisimage' mode using externalOptions for generating options
             const whatisimageData = generateWhatIsImageMode(vocabularyData);
             await setDoc(doc(modesRef, 'whatisimage'), {
                 currentIndex: 0,
                 score: 0,
-                vocabularydata: whatisimageData,  // Populate with the whatisimage data
+                vocabularydata: whatisimageData,
             });
-    
+
             setGameId(id);
             navigator.clipboard.writeText(id).then(() => {
                 toast.success(`Jogo criado com sucesso! O código da sala foi copiado: ${id}`);
             });
-    
+
         } catch (error) {
             toast.error('Erro ao criar o jogo. Tente novamente.');
         }
-    };    
+    };
 
     const handleJoinGame = async () => {
         if (!joinGameCode) {
@@ -163,14 +171,14 @@ export default function Vocabulary() {
             const players = gameData.players;
             if (players.includes(userId)) {
                 toast.success("Você já está no jogo.");
-                router.push(`vocabulary/Jogando?gameID=${joinGameCode}`); // Navigate to the new URL
+                router.push(`vocabulary/Jogando?gameID=${joinGameCode}`);
                 return;
             }
 
             players.push(userId);
             await setDoc(gameRef, { ...gameData, players }, { merge: true });
 
-            router.push(`vocabulary/Jogando?gameID=${joinGameCode}`); // Navigate to the new URL
+            router.push(`vocabulary/Jogando?gameID=${joinGameCode}`);
             toast.success("Você entrou no jogo com sucesso!");
         } catch (error) {
             toast.error("Erro ao entrar no jogo. Tente novamente.");
