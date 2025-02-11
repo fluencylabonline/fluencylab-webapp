@@ -91,7 +91,7 @@ const QuestionsModal = ({ isOpen, onClose, editor }) => {
               <button onClick={addSentence} className='p-3'><IoIosAdd className='bg-fluency-green-500 hover:bg-fluency-green-600 duration-200 transition-all ease-in-out text-[2rem] text-white rounded-md w-full h-full' /></button>
             </div>
             <div className="flex justify-center gap-2 mt-4">
-              <FluencyButton variant="confirm" onClick={handleSave}>Salvar</FluencyButton>
+              <FluencyButton variant="confirm" onClick={handleSave}>Inserir</FluencyButton>
               <FluencyButton variant="gray" onClick={() => { clearInputs(); onClose(); }}>Cancelar</FluencyButton>
             </div>
           </div>

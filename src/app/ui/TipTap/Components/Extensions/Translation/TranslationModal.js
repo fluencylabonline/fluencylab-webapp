@@ -89,7 +89,7 @@ const TranslationModal = ({ isOpen, onClose, editor }) => {
             </FluencyButton>
 
             <div className="flex justify-center gap-2 mt-4">
-              <FluencyButton variant="confirm" onClick={handleSave}>Salvar</FluencyButton>
+              <FluencyButton variant="confirm" onClick={handleSave}>Inserir</FluencyButton>
               <FluencyButton variant="gray" onClick={() => { clearInputs(); onClose(); }}>Cancelar</FluencyButton>
             </div>
           </div>

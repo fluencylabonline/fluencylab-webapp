@@ -45,6 +45,7 @@ import ReviewExtension from './Components/Extensions/Review/ReviewExtension';
 import GoalExtension from './Components/Extensions/Goal/GoalExtension';
 import VocabulabExtension from './Components/Extensions/Vocabulab/VocabulabExtension';
 import DownloadExtension from './Components/Extensions/Download/DownloadExtension';
+import FlashcardExtension from './Components/Extensions/Flashcards/FlashcardExtension';
 
 //Icons
 import { LuTimerOff, LuTimer } from 'react-icons/lu';
@@ -86,6 +87,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       GoalExtension,
       VocabulabExtension,
       DownloadExtension,
+      FlashcardExtension,
       Document,
       Image,
       History,

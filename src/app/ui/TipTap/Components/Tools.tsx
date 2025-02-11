@@ -40,6 +40,7 @@ import Goal from './Extensions/Goal/GoalModal';
 import Vocabulab from './Extensions/Vocabulab/VocabulabModal';
 import Download from './Extensions/Download/DownloadModal';
 import StudentTasks from './StudentTasks';
+import FlashcardModal from './Extensions/Flashcards/FlashcardModal'
 
 interface ToolsProps {
   editor: Editor;
@@ -64,12 +65,13 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
     goal: false,
     vocabulab: false,
     download: false,
+    flashcard: false,
 
     workbooksList: false,
     versions: false,
     description: false,
 
-    tasks: false
+    tasks: false,
   });
 
   const toggleModal = (modalName: keyof typeof modals, state: boolean) => {
@@ -153,6 +155,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
     { label: 'Exercício', icon: <LuBookOpen className='text-xl'/>, modal: 'question', description: 'Um exercício que o aluno precisa completar o que falta' },
     { label: 'Áudio', icon: <LuFileAudio className='text-xl'/>, modal: 'audio', description: 'Áudio para treinar o ouvido' },
     { label: 'Pronúncia', icon: <CgTranscript className='text-xl'/>, modal: 'pronounce', description: 'Um texto para treinar a pronúncia' },
+    { label: 'Flashcards', icon: <LuBookOpen className='text-xl'/>, modal: 'flashcard', description: 'Add interactive flashcards' },
   ];
 
   const exercises = () =>
@@ -272,7 +275,12 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
       <Workbooks editor={editor} isOpen={modals.workbooksList} onClose={() => toggleModal('workbooksList', false)} />
       <VersionsModal editor={editor} isOpen={modals.versions} onClose={() => toggleModal('versions', false)} />
       <StudentTasks isOpen={modals.tasks} onClose={() => toggleModal('tasks', false)} />
-
+      <FlashcardModal 
+        isOpen={modals.flashcard} 
+        onClose={() => toggleModal('flashcard', false)} 
+        editor={editor} 
+      />
+      
       {/* Mobile Bottom Sheet */}
       <div
         onClick={toggleBottomSheet}

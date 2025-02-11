@@ -10,7 +10,6 @@ const SentencesModal = ({ isOpen, onClose, editor }) => {
       alert('Please enter a valid text.');
       return;
     }
-
     editor.chain().focus().insertContent(`<sentences-component text="${text}" sentences="[]" feedback="[]"></sentences-component>`).run();
     onClose();
   };
@@ -25,16 +24,16 @@ const SentencesModal = ({ isOpen, onClose, editor }) => {
         </div>
         <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-black dark:text-white rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-28 h-auto p-5">
           <div className="flex flex-col items-center justify-center">
-            <h3 className="text-lg leading-6 font-medium p-1">Coloque o texto principal</h3>
+            <h3 className="text-lg leading-6 font-medium p-1">Exercício de escrita</h3>
             <textarea
               className="w-full mt-2 border rounded p-2 bg-gray-200 dark:bg-fluency-pages-dark"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Texto vai aqui"
+              placeholder="Coloque um texto ou frase de exemplo aqui. Seu aluno terá que fazer frases baseadas no exemplo que você prover. Quantas ele conseguir."
               rows={4}
             />
             <div className="flex justify-center gap-2 mt-4">
-              <FluencyButton variant="confirm" onClick={handleSave}>Salvar</FluencyButton>
+              <FluencyButton variant="confirm" onClick={handleSave}>Inserir</FluencyButton>
               <FluencyButton variant="gray" onClick={onClose}>Cancelar</FluencyButton>
             </div>
           </div>

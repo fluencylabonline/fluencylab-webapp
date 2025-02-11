@@ -5,7 +5,7 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 
 const GoalModal = ({ isOpen, onClose, editor }) => {
   const [title, setTitle] = useState('Weekly Goals');
-  const [description, setDescription] = useState('Objetivo: Estudar todos os dias pelo menos 10 minutos.');
+  const [description, setDescription] = useState('Estudar todos os dias pelo menos 10 minutos.');
   const [schedule, setSchedule] = useState('Dia 1 - Criar Flashcards dos pronomes.\nDia 2 - Ler os flashcards em voz alta.\nDia 3 - Fazer atividade 1.\nDia 4 - Revisar anotações e flashcards.\nDia 5 - Fazer atividade 2.\nDia 6 - Revisar flashcards e terminar o homework.');
 
   const handleInsert = () => {
