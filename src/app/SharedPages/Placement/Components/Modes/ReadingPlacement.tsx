@@ -158,7 +158,7 @@ export function ReadingPlacement({ onClose, testId }: ReadingPlacementProps) {
 
     // Atualiza o Firestore
     await updateDoc(placementDocRef, updatePayload)
-  }, [readingQuestions, currentQuestionIndex, score, userId, testId, answered]);
+  }, [readingQuestions, currentQuestionIndex, score, userId, testId]);
 
   // Handle next button click
   const handleNext = useCallback(async () => {

@@ -337,7 +337,7 @@ return (
           className='w-full bg-fluency-gray-300 dark:bg-fluency-gray-800 p-4 text-justify rounded-md gap-2 relative'
           >
             <div className='flex flex-col items-center justify-center gap-4'>
-              <p className='w-full'>Escute o áudio clicando no botão 'Ouvir' e tente responder às perguntas com base nele. Você terá duas tentativas.</p>
+              <p className='w-full'>Escute o áudio clicando no botão Ouvir e tente responder às perguntas com base nele. Você terá duas tentativas.</p>
             <FluencyButton variant="purple" onClick={() => setIsExplanationOpen(false)}>
               Voltar
             </FluencyButton>

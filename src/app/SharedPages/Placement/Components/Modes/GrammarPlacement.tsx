@@ -110,19 +110,19 @@ const GrammarPlacement: React.FC<GrammarPlacementProps> = ({ onClose, testId }) 
       case "multiple-choice":
         return (
           <p className="text-center">
-            Escolha a melhor opção para <span className="text-indigo-500">"{item.option}"</span>
+            Escolha a melhor opção para <span className="text-indigo-500">{item.option}</span>
           </p>
         );
       case "true_or_false":
         return (
           <p className="text-center">
-            Decida se o enunciado <span className="text-indigo-500">"{item.option}"</span> é verdadeiro ou falso
+            Decida se o enunciado <span className="text-indigo-500">{item.option}</span> é verdadeiro ou falso
           </p>
         );
       case "tense-aspect":
         return (
           <p className="text-center">
-            Complete: <span className="text-indigo-500">"{item.option}"</span>?
+            Complete: <span className="text-indigo-500">{item.option}</span>?
           </p>
         );
       default:

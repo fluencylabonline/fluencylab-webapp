@@ -110,19 +110,19 @@ const VocabularyPlacement: React.FC<VocabularyPlacementProps> = ({ onClose, test
       case "better_translation":
         return (
           <p className="text-center">
-            Escolha a melhor tradução para <span className="text-indigo-500">"{item.option}"</span>
+            Escolha a melhor tradução para <span className="text-indigo-500">{item.option}</span>
           </p>
         );
       case "true_or_false":
         return (
           <p className="text-center">
-            Decida se o enunciado <span className="text-indigo-500">"{item.option}"</span> é verdadeiro ou falso
+            Decida se o enunciado <span className="text-indigo-500">{item.option}</span> é verdadeiro ou falso
           </p>
         );
       case "context_translation":
         return (
           <p className="text-center">
-            Qual a tradução de <span className="text-indigo-500">"{item.option}"</span>?
+            Qual a tradução de <span className="text-indigo-500">{item.option}</span>?
           </p>
         );
       default:

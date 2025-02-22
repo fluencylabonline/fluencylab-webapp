@@ -281,6 +281,7 @@ useEffect(() => {
     }
   };
 
+  /*
   const handleNext = () => {
     if (currentWritingIndex < writingQuestions.length - 1) {
       setCurrentWritingIndex(prev => prev + 1);
@@ -314,7 +315,41 @@ useEffect(() => {
       handleNext(); // Proceed to the next question
     }
   }, [writingQuestions, currentWritingIndex, saveResults, onClose, router, handleNext]);
+*/
 
+const handleNext = useCallback(() => {
+  if (currentWritingIndex < writingQuestions.length - 1) {
+    setCurrentWritingIndex(prev => prev + 1);
+    setIsTextAreaDisabled(false);
+    setAnalysisStatus(null)
+    document.querySelector<HTMLTextAreaElement>('textarea[name="prompt"]')!.value = ""; // Clear the text area
+  } else {
+    onClose();
+    router.refresh();
+  }
+}, [currentWritingIndex, writingQuestions, onClose, router]);
+
+const handleSkip = useCallback(async () => {
+  const updatedQuestions = [...writingQuestions];
+  updatedQuestions[currentWritingIndex] = {
+    ...updatedQuestions[currentWritingIndex],
+    completed: true,
+    answer: null,
+    analysis: null,
+    score: 0, // Score 0 for skipped questions
+  };
+
+  setWritingQuestions(updatedQuestions);
+  setIsTextAreaDisabled(true); // Disable textarea after skipping
+  await saveResults(updatedQuestions); // Save progress to Firestore - important to save completion status
+
+  if (currentWritingIndex === writingQuestions.length - 1) {
+    onClose();
+    router.refresh();
+  } else {
+    handleNext(); // Proceed to the next question
+  }
+}, [writingQuestions, currentWritingIndex, saveResults, onClose, router, handleNext]);
 
   if (isLoading) {
     return (
