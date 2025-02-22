@@ -1,0 +1,1472 @@
+[
+    {
+      "type": "multiple-choice",
+      "options": ["am", "is", "are", "be"],
+      "option": "I ___ a student.",
+      "correct": "am",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["cat", "cats", "cat's", "cats's"],
+      "option": "There are two ___ in the garden.",
+      "correct": "cats",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["a", "an", "the", "-"],
+      "option": "She is wearing ___ red dress.",
+      "correct": "a",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["big", "bigger", "biggest", "more big"],
+      "option": "An elephant is ___ than a mouse.",
+      "correct": "bigger",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["two", "second", "twos", "to"],
+      "option": "I have ___ brothers.",
+      "correct": "two",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["are", "is", "am", "been"],
+      "option": "Where ___ you from?",
+      "correct": "are",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["he", "his", "him", "himself"],
+      "option": "___ name is John.",
+      "correct": "His",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["this", "that", "these", "those"],
+      "option": "___ is my book.",
+      "correct": "This",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["good", "well", "better", "best"],
+      "option": "She is a ___ student.",
+      "correct": "good",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["on", "in", "at", "under"],
+      "option": "The pen is ___ the table.",
+      "correct": "on",
+      "difficulty": "1"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["play", "plays", "playing", "played"],
+      "option": "He ___ football every Sunday.",
+      "correct": "plays",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["do", "does", "did", "doing"],
+      "option": "___ she like ice cream?",
+      "correct": "Does",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["is running", "runs", "run", "ran"],
+      "option": "They ___ in the park now.",
+      "correct": "are running",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["have", "has", "had", "having"],
+      "option": "She ___ a new car.",
+      "correct": "has",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["there is", "there are", "is there", "are there"],
+      "option": "___ a book on the desk.",
+      "correct": "There is",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["I goes", "I go", "He go", "She going"],
+      "option": "___ to school by bus.",
+      "correct": "I go",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["can", "could", "may", "might"],
+      "option": "___ you help me, please?",
+      "correct": "Can",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["in", "on", "at", "to"],
+      "option": "The meeting is ___ 3 PM.",
+      "correct": "at",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["eating", "eats", "ate", "will eat"],
+      "option": "Yesterday, we ___ pizza.",
+      "correct": "ate",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["much", "many", "a lot", "lots"],
+      "option": "How ___ books do you read?",
+      "correct": "many",
+      "difficulty": "2"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["will go", "goes", "went", "going"],
+      "option": "They ___ to the beach tomorrow.",
+      "correct": "will go",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["have been", "has been", "are being", "is being"],
+      "option": "I ___ waiting for you for an hour.",
+      "correct": "have been",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["would", "will", "can", "should"],
+      "option": "You ___ see a doctor if you feel sick.",
+      "correct": "should",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["between", "among", "in", "beside"],
+      "option": "The house is ___ the trees.",
+      "correct": "among",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["have", "having", "has", "had"],
+      "option": "By next year, I ___ lived here for ten years.",
+      "correct": "will have",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["that", "which", "who", "whose"],
+      "option": "The book ___ I borrowed is very interesting.",
+      "correct": "that",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["despite", "although", "because", "therefore"],
+      "option": "___ it rained, we went for a walk.",
+      "correct": "Although",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["being", "been", "be", "to be"],
+      "option": "It is important ___ punctual.",
+      "correct": "to be",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["unless", "if", "when", "because"],
+      "option": "___ you study hard, you will fail.",
+      "correct": "Unless",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["any", "no", "none", "not"],
+      "option": "There is ___ milk left in the fridge.",
+      "correct": "no",
+      "difficulty": "3"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["is liking", "likes", "like", "liked"],
+      "option": "She ___ chocolate very much.",
+      "correct": "likes",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["Did he went", "Did he go", "He went", "He goes"],
+      "option": "___ to the cinema last night?",
+      "correct": "Did he go",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["am cooking", "cook", "is cooking", "cooked"],
+      "option": "My mother ___ dinner now.",
+      "correct": "is cooking",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["have", "has", "had", "having"],
+      "option": "They ___ been to Paris before.",
+      "correct": "have",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["There are", "There is", "Are there", "Is there"],
+      "option": "___ any chairs in this room?",
+      "correct": "Are there",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["She don't", "She doesn't", "He don't", "He doesn't"],
+      "option": "___ speak Spanish.",
+      "correct": "She doesn't",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["may", "should", "could", "might"],
+      "option": "It ___ rain later today.",
+      "correct": "might",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["in", "at", "on", "by"],
+      "option": "We live ___ a small village.",
+      "correct": "in",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["seen", "saw", "see", "seeing"],
+      "option": "Have you ___ that movie?",
+      "correct": "seen",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["less", "fewer", "little", "few"],
+      "option": "I have ___ friends than you.",
+      "correct": "fewer",
+      "difficulty": "4"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["would go", "will go", "went", "gone"],
+      "option": "If I were you, I ___ home now.",
+      "correct": "would go",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["has been working", "have been working", "had been working", "will have been working"],
+      "option": "She ___ on this project since last year.",
+      "correct": "has been working",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["must have", "should have", "could have", "might have"],
+      "option": "You ___ told me earlier!",
+      "correct": "should have",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["because of", "due to", "although", "in spite of"],
+      "option": "___ the rain, the game was cancelled.",
+      "correct": "Due to",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["will have finished", "will finish", "has finished", "had finished"],
+      "option": "By the end of the month, I ___ this book.",
+      "correct": "will have finished",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["where", "when", "why", "how"],
+      "option": "I don't know ___ he is.",
+      "correct": "where",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["unless", "if not", "providing", "as long as"],
+      "option": "___ you hurry, you'll miss the bus.",
+      "correct": "Unless",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["to go", "going", "go", "gone"],
+      "option": "I am looking forward ___ to the party.",
+      "correct": "to going",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["neither", "either", "both", "also"],
+      "option": "___ he nor I am going to the meeting.",
+      "correct": "Neither",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["a few", "few", "a little", "little"],
+      "option": "I have ___ patience with rude people.",
+      "correct": "little",
+      "difficulty": "5"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["would have gone", "will go", "would go", "went"],
+      "option": "If I had known, I ___ to the party.",
+      "correct": "would have gone",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["have been being", "have been", "had been being", "had been"],
+      "option": "They ___ married for 20 years next month.",
+      "correct": "will have been",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["must have been", "should have been", "could have been", "might have been"],
+      "option": "He ___ very tired after such a long journey.",
+      "correct": "must have been",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["in spite", "despite of", "although of", "because"],
+      "option": "___ of all our efforts, we failed.",
+      "correct": "In spite of",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["will have been finishing", "will have finished", "will be finished", "will finished"],
+      "option": "By the end of next year, the project ___ .",
+      "correct": "will have finished",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["whoever", "whomever", "anyone", "everyone"],
+      "option": "___ wants to come is welcome.",
+      "correct": "Whoever",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["providing that", "unless that", "if that", "in case that"],
+      "option": "I will go ___ the weather is good.",
+      "correct": "providing that",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["to hearing", "to hear", "hearing", "hear"],
+      "option": "I am used ___ loud music.",
+      "correct": "to hearing",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["both of", "both", "either of", "neither of"],
+      "option": "___ my parents are doctors.",
+      "correct": "Both of",
+      "difficulty": "6"
+    },
+    {
+      "type": "multiple-choice",
+      "options": ["much", "many", "amount", "number"],
+      "option": "A large ___ of time was spent on this task.",
+      "correct": "amount",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["the more I study", "more I study", "more study", "more to study"],
+      "option": "___, the less I understand.",
+      "correct": "The more I study",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["being", "been", "to be", "be"],
+      "option": "Having ___ a teacher, she understands students.",
+      "correct": "been",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["however", "therefore", "moreover", "nevertheless"],
+      "option": "It was raining; ___, we decided to stay home.",
+      "correct": "therefore",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["until", "by", "for", "since"],
+      "option": "I will wait here ___ you come back.",
+      "correct": "until",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["hardly", "hard", "almost no", "nearly no"],
+      "option": "There is ___ any difference between these two options.",
+      "correct": "hardly",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["such as", "like as", "as like", "similar to"],
+      "option": "He enjoys winter sports, ___ skiing and snowboarding.",
+      "correct": "such as",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["had known", "knew", "would know", "known"],
+      "option": "If I ___ his number, I would call him.",
+      "correct": "knew",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["Despite of", "In spite", "Although", "Even though"],
+      "option": "___ her efforts, she couldn't win.",
+      "correct": "Despite",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["the less you eat", "less you eat", "the less eat", "less to eat"],
+      "option": "___, the more weight you lose.",
+      "correct": "The less you eat",
+      "difficulty": "6"
+    },
+      {
+      "type": "multiple-choice",
+      "options": ["to have seen", "having seen", "see", "seeing"],
+      "option": "___ the movie before, I didn't want to go again.",
+      "correct": "Having seen",
+      "difficulty": "6"
+    },
+        {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I is a student.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Cats are animals.",
+        "correct": "true",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A apple is a fruit.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Big elephant is animal.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Two plus two is four.",
+        "correct": "true",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Where you are from?",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "His name is Peter.",
+        "correct": "true",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "This are my books.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "She is student good.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The book is on table.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "He plays football every Sunday.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Does she likes ice cream?",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "They are running in the park now.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "She have a new car.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "There are a book on the desk.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I goes to school by bus.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Can you to help me?",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The meeting is at 3PM.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Yesterday, we eat pizza.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "How much books do you read?",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "They will going to the beach tomorrow.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I have been wait for you for an hour.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "You should to see a doctor.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The house is between the trees.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "By next year, I will have living here for ten years.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The book which I borrowed is very interesting.",
+        "correct": "true",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Despite it rained, we went for a walk.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "It is important being punctual.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Unless you study hard, you will fail.",
+        "correct": "true",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "There is not milk left.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "She liking chocolate very much.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Did he went to the cinema?",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "My mother is cook dinner now.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "They has been to Paris before.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Is there any chairs in this room?",
+        "correct": "true",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "She don't speak Spanish.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "It may be rain later.",
+        "correct": "true",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "We live at a small village.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Have you saw that movie?",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I have less friends than you.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "If I was you, I would go home.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "She has been working on this project since last year.",
+        "correct": "true",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "You should have to told me earlier!",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Due to of the rain, the game was cancelled.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "By the end of the month, I will have finish this book.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I don't know where is he.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Unless you hurry, you will miss the bus.",
+        "correct": "true",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I am looking forward to hear from you.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Neither he or I am going.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I have a little patience with rude people.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "If I had known, I would went to the party.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "They will have been married for 20 years next month.",
+        "correct": "true",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "He must been very tired.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "In spite of the rain, but the game was cancelled.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "By the end of next year, the project will be finish.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Whomever wants to come is welcome.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Providing that if the weather is good, I will go.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I am used to hearing to loud music.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Both of my parents is doctors.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A large number of time was spent.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "More I study, less I understand.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Been a teacher, she understands students.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "It was raining, however we stayed home.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "I will wait here since you come back.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "There is hardly no difference.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "He enjoys winter sports, similar to skiing.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "If I would knew his number, I would call.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+        {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Although of her efforts, she won.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+        {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Less you eat, the more you lose weight.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+        {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "To seeing the movie, I didn't want to go.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["is", "are", "am"],
+        "option": "My name ___ John.",
+        "correct": "is",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["have", "has"],
+        "option": "I ___ a pen.",
+        "correct": "have",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["This", "These"],
+        "option": "___ is my chair.",
+        "correct": "This",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["one", "two"],
+        "option": "I have ___ sister.",
+        "correct": "one",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["a", "an"],
+        "option": "It is ___ apple.",
+        "correct": "an",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["am", "is", "are"],
+        "option": "They ___ happy.",
+        "correct": "are",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["cat", "cats"],
+        "option": "I see one ___.",
+        "correct": "cat",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["good", "well"],
+        "option": "She is a ___ girl.",
+        "correct": "good",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["in", "on"],
+        "option": "The book is ___ the desk.",
+        "correct": "on",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["I", "Me"],
+        "option": "___ am tall.",
+        "correct": "I",
+        "difficulty": "1"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["play", "plays"],
+        "option": "He ___ football.",
+        "correct": "plays",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["do", "does"],
+        "option": "___ you like tea?",
+        "correct": "Do",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["is running", "are running"],
+        "option": "The dogs ___ now.",
+        "correct": "are running",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["have", "has"],
+        "option": "She ___ a bike.",
+        "correct": "has",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["There is", "There are"],
+        "option": "___ a car outside.",
+        "correct": "There is",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["go", "goes"],
+        "option": "We ___ to school.",
+        "correct": "go",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["can", "can to"],
+        "option": "You ___ swim.",
+        "correct": "can",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["at", "on", "in"],
+        "option": "See you ___ Monday.",
+        "correct": "on",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["ate", "eated"],
+        "option": "We ___ pizza yesterday.",
+        "correct": "ate",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["many", "much"],
+        "option": "How ___ books?",
+        "correct": "many",
+        "difficulty": "2"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["will go", "is going to go"],
+        "option": "I ___ to London.",
+        "correct": "am going to go",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["have been", "has been"],
+        "option": "They ___ waiting.",
+        "correct": "have been",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["should", "must"],
+        "option": "You ___ be quiet.",
+        "correct": "should",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["among", "between"],
+        "option": "Divide it ___ you three.",
+        "correct": "among",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["will have", "will has"],
+        "option": "By 2025, I ___ a degree.",
+        "correct": "will have",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["who", "which", "that"],
+        "option": "The man ___ came is tall.",
+        "correct": "who",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Although", "Because"],
+        "option": "___ it was late, I went.",
+        "correct": "Although",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["to be", "being"],
+        "option": "It is nice ___ here.",
+        "correct": "to be",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["If", "Unless"],
+        "option": "___ you run, you'll miss it.",
+        "correct": "Unless",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["any", "some", "no"],
+        "option": "There is ___ sugar left.",
+        "correct": "no",
+        "difficulty": "3"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["like", "likes"],
+        "option": "My sister ___ music.",
+        "correct": "likes",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Did he go", "Went he"],
+        "option": "___ to the park?",
+        "correct": "Did he go",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["is cooking", "cooks"],
+        "option": "She ___ dinner now.",
+        "correct": "is cooking",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["has been", "have been"],
+        "option": "They ___ friends since kids.",
+        "correct": "have been",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Are there", "Is there"],
+        "option": "___ any questions?",
+        "correct": "Are there",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["doesn't", "don't"],
+        "option": "He ___ know.",
+        "correct": "doesn't",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["might", "must"],
+        "option": "It ___ be true.",
+        "correct": "might",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["in", "on"],
+        "option": "I live ___ the city.",
+        "correct": "in",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["seen", "see"],
+        "option": "Have you ever ___ snow?",
+        "correct": "seen",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["fewer", "less"],
+        "option": "I have ___ time now.",
+        "correct": "less",
+        "difficulty": "4"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["would go", "will go"],
+        "option": "If I were rich, I ___ abroad.",
+        "correct": "would go",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["has been working", "have been working"],
+        "option": "She ___ here for years.",
+        "correct": "has been working",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["should have", "must have"],
+        "option": "You ___ called earlier.",
+        "correct": "should have",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Because of", "Despite"],
+        "option": "___ the rain, we stayed in.",
+        "correct": "Because of",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["will have finished", "will finish"],
+        "option": "By next week, I ___ it.",
+        "correct": "will have finished",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["where", "when"],
+        "option": "Tell me ___ you live.",
+        "correct": "where",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Unless", "If"],
+        "option": "___ you try, you won't know.",
+        "correct": "Unless",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["to going", "to go"],
+        "option": "I look forward ___ there.",
+        "correct": "to going",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Neither", "Either"],
+        "option": "___ of them came.",
+        "correct": "Neither",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["little", "few"],
+        "option": "There is very ___ water.",
+        "correct": "little",
+        "difficulty": "5"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["would have gone", "would go"],
+        "option": "If I had time, I ___ .",
+        "correct": "would have gone",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["will have been", "will be"],
+        "option": "Next year, they ___ married 10 years.",
+        "correct": "will have been",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["must have been", "could be"],
+        "option": "He ___ tired after the run.",
+        "correct": "must have been",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["In spite of", "Because"],
+        "option": "___ her efforts, she failed.",
+        "correct": "In spite of",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["will have finished", "will finish"],
+        "option": "By June, I ___ the course.",
+        "correct": "will have finished",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Whoever", "Anyone"],
+        "option": "___ wants to join can come.",
+        "correct": "Whoever",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Providing that", "Unless"],
+        "option": "___ it rains, we'll go out.",
+        "correct": "Providing that",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["to hearing", "hearing"],
+        "option": "I am used ___ this noise.",
+        "correct": "to hearing",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Both of", "Both"],
+        "option": "___ them are here.",
+        "correct": "Both of",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["amount", "number"],
+        "option": "A large ___ of people came.",
+        "correct": "number",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["The more", "More"],
+        "option": "___ you practice, the better you get.",
+        "correct": "The more",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Having been", "Been"],
+        "option": "___ a student, I know this.",
+        "correct": "Having been",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Therefore", "However"],
+        "option": "It's cold, ___ wear a coat.",
+        "correct": "Therefore",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["until", "since"],
+        "option": "Wait ___ I call you.",
+        "correct": "until",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["hardly", "almost"],
+        "option": "There is ___ any food left.",
+        "correct": "hardly",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["such as", "like"],
+        "option": "I like fruits ___ apples.",
+        "correct": "such as",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["knew", "had known"],
+        "option": "If I ___ that, I'd have helped.",
+        "correct": "had known",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Despite", "Although of"],
+        "option": "___ her efforts, she lost.",
+        "correct": "Despite",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["The less", "Less"],
+        "option": "___ you worry, the happier you are.",
+        "correct": "The less",
+        "difficulty": "6"
+    },
+    {
+        "type": "tense-aspect",
+        "options": ["Seeing", "To see"],
+        "option": "___ him, I smiled.",
+        "correct": "Seeing",
+        "difficulty": "6"
+    }
+]

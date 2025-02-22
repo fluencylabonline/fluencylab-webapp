@@ -1,0 +1,191 @@
+[
+    {
+        "type": "better_translation",
+        "options": ["correu", "corria", "correrá", "corre"],
+        "option": "ran",
+        "correct": "correu",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela está feliz", "Ela está triste", "Ela está cansada", "Ela está brava"],
+        "option": "She is happy",
+        "correct": "Ela está feliz",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The sun rises in the west.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "better_translation",
+        "options": ["escreveu", "escrevia", "escreverá", "escreve"],
+        "option": "wrote",
+        "correct": "escreveu",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu vou ao mercado", "Eu vou à escola", "Eu vou ao parque", "Eu vou ao cinema"],
+        "option": "I am going to the market",
+        "correct": "Eu vou ao mercado",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Water boils at 100 degrees Celsius at sea level.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["viu", "via", "verá", "vê"],
+        "option": "saw",
+        "correct": "viu",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está com fome", "Ele está com sede", "Ele está com sono", "Ele está com frio"],
+        "option": "He is hungry",
+        "correct": "Ele está com fome",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The Earth is the third planet from the sun.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["fez", "fazia", "fará", "faz"],
+        "option": "did",
+        "correct": "fez",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela gosta de ler", "Ela gosta de dançar", "Ela gosta de cantar", "Ela gosta de nadar"],
+        "option": "She likes to read",
+        "correct": "Ela gosta de ler",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The capital of France is Berlin.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "better_translation",
+        "options": ["comeu", "comia", "comerá", "come"],
+        "option": "ate",
+        "correct": "comeu",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está estudando", "Ele está trabalhando", "Ele está dormindo", "Ele está cozinhando"],
+        "option": "He is studying",
+        "correct": "Ele está estudando",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The human body has 206 bones.",
+        "correct": "true",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["falou", "falava", "falará", "fala"],
+        "option": "spoke",
+        "correct": "falou",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela está viajando", "Ela está trabalhando", "Ela está descansando", "Ela está cozinhando"],
+        "option": "She is traveling",
+        "correct": "Ela está viajando",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The moon is made of cheese.",
+        "correct": "false",
+        "difficulty": "1"
+    },
+    {
+        "type": "better_translation",
+        "options": ["bebeu", "bebia", "beberá", "bebe"],
+        "option": "drank",
+        "correct": "bebeu",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está assistindo TV", "Ele está lendo um livro", "Ele está jogando futebol", "Ele está nadando"],
+        "option": "He is watching TV",
+        "correct": "Ele está assistindo TV",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The Great Wall of China is visible from space.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["andou", "andava", "andará", "anda"],
+        "option": "walked",
+        "correct": "andou",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela está ouvindo música", "Ela está cantando", "Ela está dançando", "Ela está tocando violão"],
+        "option": "She is listening to music",
+        "correct": "Ela está ouvindo música",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The Amazon rainforest produces 20% of the world's oxygen.",
+        "correct": "true",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["leu", "lia", "lerá", "lê"],
+        "option": "read",
+        "correct": "leu",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está correndo", "Ele está caminhando", "Ele está pedalando", "Ele está nadando"],
+        "option": "He is running",
+        "correct": "Ele está correndo",
+        "difficulty": "1"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The human brain weighs about 1.4 kilograms.",
+        "correct": "true",
+        "difficulty": "3"
+    }
+]

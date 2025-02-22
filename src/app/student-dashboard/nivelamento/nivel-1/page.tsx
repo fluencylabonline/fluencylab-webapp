@@ -8,11 +8,8 @@ import Frases from '../../../../../public/images/nivelamento/frases.png';
 import TrueOrFalse from '../../../../../public/images/nivelamento/trueorfalse.png';
 import Compreensao from '../../../../../public/images/nivelamento/compreensao.png';
 
-import { CiCircleQuestion } from "react-icons/ci";
-
 export default function One(){
     const { data: session } = useSession();
-
     return(
         <div>
             {session?.user.role === 'teacher' && (
@@ -20,7 +17,6 @@ export default function One(){
                     Teacher show all teachers students and their scores
                 </div>
             )}
-
 
             {session?.user.role === 'student' && (
                 <div className="flex flex-wrap justify-center gap-3 p-10">
@@ -59,7 +55,6 @@ export default function One(){
                     Admin show all students and their scores
                 </div>
             )}
-
         </div>
     )
 }

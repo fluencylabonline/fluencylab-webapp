@@ -55,7 +55,8 @@ declare module "next-auth/jwt" {
 declare global {
     interface Window {
       $MPC_loaded?: boolean;
-    }
+  }
+    
   }
   
   export {};

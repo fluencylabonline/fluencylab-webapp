@@ -28,6 +28,7 @@ const navigation = [
     { name: 'Nosso Time', href: '#ourteam' },
     { name: 'Perguntas Frequentes', href: '#faq' },
     { name: 'Games', href: '/games' },
+    { name: 'Nivelamento', href: '/u/placement' },
   ]
 
     export default function Header(){

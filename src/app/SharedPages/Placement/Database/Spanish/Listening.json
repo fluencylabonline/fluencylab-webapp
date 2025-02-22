@@ -1,0 +1,16 @@
+[
+    {
+        "text": "Lucy is visiting her grandparents' farm. She helps feed the chickens and collect eggs. Then, she picks fresh vegetables from the garden for dinner.",
+        "question": "What does Lucy do on the farm?",
+        "options": ["A) Play video games", "B) Watch TV", "C) Feed chickens and collect eggs", "D) Read books"],
+        "correct": "C) Feed chickens and collect eggs",
+        "difficulty": "2"
+    },
+    {
+        "text": "Anna is visiting her grandparents' farm. She helps feed the chickens and collect eggs. Then, she picks fresh vegetables from the garden for dinner.",
+        "question": "What does Anna do on the farm?",
+        "options": ["A) Play video games", "B) Watch TV", "C) Feed chickens and collect eggs", "D) Read books"],
+        "correct": "C) Feed chickens and collect eggs",
+        "difficulty": "1"
+    }
+]

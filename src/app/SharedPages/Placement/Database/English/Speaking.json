@@ -1,0 +1,602 @@
+[
+    {
+      "type": "speaking",
+      "text": "Hello. My name is Tom.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "I like to eat apples.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "The cat is on the chair.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "John has a red ball.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "Mary reads a book at home.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "It is sunny and hot today.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "Peter plays in the park.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "Lisa has a happy dog.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "David drinks cold water.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "Emily wears a warm coat.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "My house has four rooms.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "We eat lunch at noon.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "My mother is a teacher at school.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "The book is on the table near the lamp.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "I go to bed at night.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "My father drives a blue car.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "We drink coffee in the morning.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "My sister is tall and older.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "The colorful flowers are in the garden.",
+      "difficulty": "1"
+    },
+    {
+      "type": "speaking",
+      "text": "I like to listen to nice music.",
+      "difficulty": "1"
+    },
+    {
+        "type": "speaking",
+        "text": "My house is near the park.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "She works in a big office.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "We go to school by bus.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "He plays football with friends.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "They eat lunch at school every day.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "I like to drink juice in the morning.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "The weather is very nice today.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "She is wearing a blue jacket.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "He reads books in the evening.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "We have a cat and a dog at home.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "They are going to the beach on Sunday.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "I study English at university.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "My mother cooks dinner for us.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "He works as a teacher in a school.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "She likes to listen to music and dance.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "We live in a small apartment in the city.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "They are planning a trip to Italy.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "I usually have coffee with breakfast.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "My favorite color is blue, like the sky.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "She goes to the gym three times a week.",
+        "difficulty": "2"
+    },
+    {
+        "type": "speaking",
+        "text": "In my free time, I enjoy playing the guitar and listening to music.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "My job involves working with a team on different projects every week.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "When I travel, I prefer to stay in small hotels because they are usually quieter.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "Learning a new language is challenging, but it's also very rewarding.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "I usually start my day with a cup of coffee and some toast for breakfast.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "This summer, I'm planning to visit my family in the countryside.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "My favorite type of movie is comedy because I like to laugh.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "To stay healthy, I try to exercise at least twice a week.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "If I have some free time on the weekend, I often go for a walk in the park.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "I think it's important to recycle to protect the environment for the future.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "My friends and I sometimes meet at a café to chat and drink coffee.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "Before going on holiday, I always check the weather forecast and pack accordingly.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "I believe that reading books is a great way to learn new things and relax.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "My brother is studying to become an engineer at university.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "When I feel stressed, listening to music usually helps me calm down.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "Our apartment is quite small, but it's comfortable for two people.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "They are organizing a birthday party for their daughter next month.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "I am currently taking an online course to improve my English skills.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "My favorite food to cook is pasta because it's quick and easy.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "She is thinking about changing her job to find a more challenging role.",
+        "difficulty": "3"
+    },
+    {
+        "type": "speaking",
+        "text": "Describe a time when you faced a challenging situation and how you overcame it.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Talk about your favorite hobby and explain why you enjoy it so much.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Imagine you are planning a surprise birthday party for a friend. What arrangements would you make?",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the advantages and disadvantages of using social media in today's society.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Describe your ideal job and explain what aspects of it appeal to you.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Talk about a book or film that has had a significant impact on you and why.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Explain the importance of learning English in today's globalized world, from your perspective.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Describe a memorable cultural event you have attended and what made it special.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the benefits of traveling to new places and experiencing different cultures.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Imagine you are giving advice to someone who wants to improve their health. What would you suggest?",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Talk about a skill you would like to learn in the future and why you are interested in it.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Describe a situation where you had to work in a team and what you learned from that experience.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the role of technology in education and whether you think it's beneficial.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Describe a place you have visited that you found particularly beautiful or interesting, and why.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Talk about a significant change that has happened in your life and how you adapted to it.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Explain why you think it is important for people to protect the environment.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Imagine you are recommending a restaurant to a friend. Describe the restaurant and why you recommend it.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Talk about a time when you had to make an important decision and how you made your choice.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the advantages and disadvantages of living in a big city versus living in the countryside.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Describe your plans for the next holiday and what you are looking forward to the most.",
+        "difficulty": "4"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the ethical implications of artificial intelligence surpassing human intelligence. Consider potential benefits and existential risks.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the impact of globalization on cultural identity. Is it leading to homogenization or hybridity? Justify your perspective.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "To what extent does social media contribute to or detract from genuine human connection? Argue for your position.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically evaluate the concept of 'work-life balance' in contemporary society. Is it achievable, or an unrealistic aspiration?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the philosophical implications of extending human lifespan significantly through technological or biological advancements. What are the societal and ethical considerations?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the role of misinformation and disinformation in shaping public opinion and political discourse in the digital age. How can societies effectively combat this?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the concept of 'national sovereignty' in an increasingly interconnected and interdependent world. Is it becoming obsolete, or does it remain fundamentally important?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically assess the effectiveness of different approaches to addressing climate change on a global scale. Which strategies are most promising, and what are the major obstacles?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "To what extent do individual freedoms need to be restricted for the sake of collective security and public health in modern societies? Explore the balance between these competing values.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the long-term consequences of automation and artificial intelligence on the future of employment and the global economy. Consider both potential opportunities and challenges.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the ethical dilemmas surrounding genetic engineering and gene editing technologies. Where should societies draw the line in terms of modifying the human genome?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically evaluate the role of art and culture in challenging societal norms and promoting social change. Provide specific examples to support your arguments.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the philosophical implications of consciousness and self-awareness in non-human entities, including animals and artificial intelligence. How does this challenge our understanding of what it means to be human?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the impact of political polarization on democratic societies. What are the root causes, and what measures can be taken to foster greater civic unity and constructive dialogue?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the concept of 'existential risk' and evaluate the most pressing existential threats facing humanity in the 21st century. How should societies prioritize and mitigate these risks?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically assess the role of historical narratives and collective memory in shaping national identity and international relations. How can societies reconcile conflicting historical interpretations?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the ethical and practical challenges of space exploration and colonization. Is it a necessary frontier for humanity, or a distraction from pressing terrestrial issues?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the changing nature of privacy in the digital age. To what extent have we sacrificed privacy for convenience and connectivity, and what are the long-term implications?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the concept of 'moral progress.' Is humanity demonstrably progressing morally over time, or is this an illusion? Justify your position with historical and contemporary examples.",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically evaluate the role of economic inequality in contemporary societies. What are its primary drivers, and what policies are most effective in promoting greater economic justice?",
+        "difficulty": "5"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically analyze the proposition that technological advancements invariably lead to societal progress. To what extent is this assertion a valid reflection of historical and contemporary realities, and what counterarguments might be raised?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the philosophical underpinnings of moral responsibility in the context of collective action, particularly concerning global challenges such as climate change or pandemics. How should individual and collective accountability be apportioned and justified?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Evaluate the claim that the nation-state is becoming an obsolete political unit in an era of intensified globalization and transnational flows of capital, information, and migration.  To what extent do alternative models of governance offer viable frameworks for addressing contemporary challenges?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the epistemological implications of 'deepfakes' and advanced AI-generated content for the erosion of trust in information sources and the destabilization of shared realities. How can societies adapt to maintain epistemic integrity in this evolving landscape?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the concept of 'ontological security' in international relations theory, considering its relevance to understanding contemporary geopolitical anxieties and interstate conflicts.  How do states and societies construct and maintain a sense of existential stability in an inherently uncertain global order?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically assess the ethical frameworks employed to justify interventions in sovereign states for humanitarian purposes. What are the inherent tensions between universal human rights and the principles of national sovereignty and non-intervention?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the long-term societal consequences of algorithmic bias and discriminatory AI systems, particularly in domains such as criminal justice, finance, and healthcare.  What systemic and regulatory approaches are necessary to mitigate these risks and ensure algorithmic fairness?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Evaluate the proposition that art serves as a crucial form of social commentary and resistance against dominant power structures. To what extent can artistic expression effectively challenge and subvert established norms and ideologies?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the philosophical debates surrounding the nature of consciousness and the possibility of artificial consciousness.  What criteria might be used to determine consciousness in non-biological entities, and what ethical implications arise from such possibilities?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the evolving dynamics of power in the digital public sphere, considering the influence of social media platforms, algorithms, and online communities. How are traditional power structures being reshaped and challenged in this new environment?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically assess the concept of 'cultural appropriation' and its implications for intercultural exchange and artistic expression.  Where is the line between legitimate cultural borrowing and ethically problematic appropriation, and how should these distinctions be navigated?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the philosophical challenges posed by quantum mechanics to classical intuitions about reality, causality, and determinism. How might interpretations of quantum phenomena reshape our fundamental understanding of the universe?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Evaluate the efficacy of various economic models in addressing global inequality and promoting sustainable development. Which theoretical frameworks and policy approaches offer the most promising pathways towards a more equitable and ecologically sound future?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the ethical and legal complexities arising from advancements in biotechnology and genetic modification, particularly concerning human enhancement and reproductive technologies. What principles should guide the responsible governance of these transformative capabilities?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the psychological and sociological factors contributing to the polarization of political discourse and the erosion of social cohesion in contemporary democracies. How can societies foster greater civic dialogue and bridge ideological divides?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Critically assess the limitations and biases inherent in quantitative metrics and data-driven approaches to evaluating complex social phenomena, such as well-being, progress, or social impact.  What alternative qualitative methodologies offer valuable complementary insights?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Discuss the philosophical implications of considering non-human animals as moral agents with intrinsic rights and ethical standing. How might such a perspective reshape human-animal relations and environmental ethics?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Evaluate the long-term consequences of space colonization and extraterrestrial resource extraction, considering both potential benefits and risks for humanity and the broader cosmos. What ethical principles should govern humanity's expansion beyond Earth?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Explore the evolving nature of identity in a fluid and interconnected globalized world, considering the interplay of local, national, and transnational affiliations. How are individuals and communities negotiating and constructing identities in this dynamic context?",
+        "difficulty": "6"
+    },
+    {
+        "type": "speaking",
+        "text": "Analyze the concept of 'the Anthropocene' as a proposed new geological epoch, considering its implications for our understanding of human agency, planetary responsibility, and the future trajectory of the human-Earth relationship. Is 'Anthropocene' a useful framework, or a mischaracterization of our current predicament?",
+        "difficulty": "6"
+    }
+    ]

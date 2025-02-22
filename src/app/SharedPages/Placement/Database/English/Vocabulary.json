@@ -1,0 +1,1262 @@
+[
+    {
+      "type": "better_translation",
+      "options": ["gato", "cão", "pássaro", "peixe"],
+      "option": "cat",
+      "correct": "gato",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["maçã", "banana", "laranja", "uva"],
+      "option": "apple",
+      "correct": "maçã",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["livro", "caderno", "caneta", "lápis"],
+      "option": "book",
+      "correct": "livro",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["casa", "apartamento", "quarto", "sala"],
+      "option": "house",
+      "correct": "casa",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["carro", "autocarro", "bicicleta", "comboio"],
+      "option": "car",
+      "correct": "carro",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["água", "sumo", "leite", "chá"],
+      "option": "water",
+      "correct": "água",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["sol", "lua", "estrela", "nuvem"],
+      "option": "sun",
+      "correct": "sol",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["bom", "mau", "grande", "pequeno"],
+      "option": "good",
+      "correct": "bom",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["sim", "não", "talvez", "olá"],
+      "option": "yes",
+      "correct": "sim",
+      "difficulty": "1"
+    },
+    {
+      "type": "better_translation",
+      "options": ["ir", "vir", "ficar", "ter"],
+      "option": "go",
+      "correct": "ir",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Eu gosto de café.", "Eu gosto de chá.", "Eu gosto de leite.", "Eu gosto de água."],
+      "option": "I like coffee.",
+      "correct": "Eu gosto de café.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Ele é alto.", "Ele é baixo.", "Ele é rápido.", "Ele é lento."],
+      "option": "He is tall.",
+      "correct": "Ele é alto.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Nós somos amigos.", "Nós somos irmãos.", "Nós somos primos.", "Nós somos vizinhos."],
+      "option": "We are friends.",
+      "correct": "Nós somos amigos.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Elas estão a ler.", "Elas estão a escrever.", "Elas estão a dormir.", "Elas estão a comer."],
+      "option": "They are reading.",
+      "correct": "Elas estão a ler.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Tu és estudante.", "Tu és professor.", "Tu és médico.", "Tu és engenheiro."],
+      "option": "You are a student.",
+      "correct": "Tu és estudante.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Está frio hoje.", "Está calor hoje.", "Está chuvoso hoje.", "Está ventoso hoje."],
+      "option": "It is cold today.",
+      "correct": "Está frio hoje.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Nós moramos em Lisboa.", "Nós moramos no Porto.", "Nós moramos em Faro.", "Nós moramos em Coimbra."],
+      "option": "We live in Lisbon.",
+      "correct": "Nós moramos em Lisboa.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Eu tenho um livro.", "Eu tenho um carro.", "Eu tenho um gato.", "Eu tenho uma casa."],
+      "option": "I have a book.",
+      "correct": "Eu tenho um livro.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Ela gosta de música.", "Ela gosta de dançar.", "Ela gosta de cozinhar.", "Ela gosta de ler."],
+      "option": "She likes music.",
+      "correct": "Ela gosta de música.",
+      "difficulty": "1"
+    },
+    {
+      "type": "context_translation",
+      "options": ["Ele vai ao parque.", "Ele vai à escola.", "Ele vai ao trabalho.", "Ele vai ao cinema."],
+      "option": "He goes to the park.",
+      "correct": "Ele vai ao parque.",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Dogs can fly.",
+      "correct": "false",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Apples are fruits.",
+      "correct": "true",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Books are for eating.",
+      "correct": "false",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Houses are for living.",
+      "correct": "true",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Cars are for walking.",
+      "correct": "false",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Water is for drinking.",
+      "correct": "true",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "The sun is cold.",
+      "correct": "false",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Good is the opposite of bad.",
+      "correct": "true",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "Yes means no.",
+      "correct": "false",
+      "difficulty": "1"
+    },
+    {
+      "type": "true_or_false",
+      "options": ["true", "false"],
+      "option": "To go is to stay.",
+      "correct": "false",
+      "difficulty": "1"
+    },
+    {
+        "type": "better_translation",
+        "options": ["pequeno", "grande", "alto", "baixo"],
+        "option": "small",
+        "correct": "pequeno",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["mulher", "homem", "criança", "bebé"],
+        "option": "woman",
+        "correct": "mulher",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["comer", "beber", "cozinhar", "dormir"],
+        "option": "eat",
+        "correct": "comer",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["escola", "trabalho", "casa", "loja"],
+        "option": "school",
+        "correct": "escola",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["roupa", "sapatos", "camisa", "calças"],
+        "option": "clothes",
+        "correct": "roupa",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["rápido", "lento", "fácil", "difícil"],
+        "option": "fast",
+        "correct": "rápido",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["feliz", "triste", "irritado", "cansado"],
+        "option": "happy",
+        "correct": "feliz",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["dinheiro", "cartão", "cheque", "nota"],
+        "option": "money",
+        "correct": "dinheiro",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["família", "amigos", "vizinhos", "colegas"],
+        "option": "family",
+        "correct": "família",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["tempo", "hora", "minuto", "segundo"],
+        "option": "time",
+        "correct": "tempo",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu quero água.", "Eu quero café.", "Eu quero chá.", "Eu quero leite."],
+        "option": "I want water.",
+        "correct": "Eu quero água.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está a correr.", "Ele está a andar.", "Ele está a saltar.", "Ele está a nadar."],
+        "option": "He is running.",
+        "correct": "Ele está a correr.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós gostamos de pizza.", "Nós gostamos de hambúrgueres.", "Nós gostamos de massa.", "Nós gostamos de salada."],
+        "option": "We like pizza.",
+        "correct": "Nós gostamos de pizza.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Elas vivem numa cidade.", "Elas vivem numa vila.", "Elas vivem no campo.", "Elas vivem na praia."],
+        "option": "They live in a city.",
+        "correct": "Elas vivem numa cidade.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Tu precisas de ajuda?", "Tu queres ajuda?", "Tu tens ajuda?", "Tu dás ajuda?"],
+        "option": "Do you need help?",
+        "correct": "Tu precisas de ajuda?",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Está a chover muito.", "Está a nevar muito.", "Está a trovejar muito.", "Está a ventar muito."],
+        "option": "It is raining a lot.",
+        "correct": "Está a chover muito.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós vamos ao cinema amanhã.", "Nós vamos ao teatro amanhã.", "Nós vamos ao museu amanhã.", "Nós vamos ao parque amanhã."],
+        "option": "We are going to the cinema tomorrow.",
+        "correct": "Nós vamos ao cinema amanhã.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu posso falar inglês.", "Eu posso falar francês.", "Eu posso falar espanhol.", "Eu posso falar alemão."],
+        "option": "I can speak English.",
+        "correct": "Eu posso falar inglês.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela tem um carro novo.", "Ela tem uma casa nova.", "Ela tem um telemóvel novo.", "Ela tem um computador novo."],
+        "option": "She has a new car.",
+        "correct": "Ela tem um carro novo.",
+        "difficulty": "2"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele gosta de desporto.", "Ele gosta de música.", "Ele gosta de livros.", "Ele gosta de filmes."],
+        "option": "He likes sports.",
+        "correct": "Ele gosta de desporto.",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Cats are bigger than elephants.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Bananas are yellow fruits.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "We read newspapers to eat.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Apartments are types of houses.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Bicycles are faster than cars.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Juice is a type of drink.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The moon is bigger than the sun.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Happy is the opposite of sad.",
+        "correct": "true",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "No means yes.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Time is something we cannot count.",
+        "correct": "false",
+        "difficulty": "2"
+    },
+    {
+        "type": "better_translation",
+        "options": ["problema", "solução", "questão", "resposta"],
+        "option": "problem",
+        "correct": "problema",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["viagem", "ferias", "turismo", "excursão"],
+        "option": "trip",
+        "correct": "viagem",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["trabalho", "emprego", "profissão", "ocupação"],
+        "option": "job",
+        "correct": "trabalho",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["decisão", "escolha", "opção", "votação"],
+        "option": "decision",
+        "correct": "decisão",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["importante", "necessário", "essencial", "fundamental"],
+        "option": "important",
+        "correct": "importante",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["possível", "provável", "hipotético", "viável"],
+        "option": "possible",
+        "correct": "possível",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["mudar", "alterar", "transformar", "converter"],
+        "option": "change",
+        "correct": "mudar",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["desenvolver", "crescer", "evoluir", "expandir"],
+        "option": "develop",
+        "correct": "desenvolver",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["informação", "notícia", "dado", "comunicação"],
+        "option": "information",
+        "correct": "informação",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["cultura", "arte", "sociedade", "tradição"],
+        "option": "culture",
+        "correct": "cultura",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu preciso de mais tempo.", "Eu preciso de mais dinheiro.", "Eu preciso de mais ajuda.", "Eu preciso de mais espaço."],
+        "option": "I need more time.",
+        "correct": "Eu preciso de mais tempo.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está a tentar aprender inglês.", "Ele está a tentar aprender francês.", "Ele está a tentar aprender espanhol.", "Ele está a tentar aprender alemão."],
+        "option": "He is trying to learn English.",
+        "correct": "Ele está a tentar aprender inglês.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós vamos viajar no próximo verão.", "Nós vamos viajar no próximo inverno.", "Nós vamos viajar na próxima primavera.", "Nós vamos viajar no próximo outono."],
+        "option": "We are going to travel next summer.",
+        "correct": "Nós vamos viajar no próximo verão.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Elas gostariam de comprar uma casa nova.", "Elas gostariam de comprar um carro novo.", "Elas gostariam de comprar um telemóvel novo.", "Elas gostariam de comprar um computador novo."],
+        "option": "They would like to buy a new house.",
+        "correct": "Elas gostariam de comprar uma casa nova.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Tu deves falar com o teu chefe.", "Tu deves falar com o teu professor.", "Tu deves falar com o teu médico.", "Tu deves falar com o teu advogado."],
+        "option": "You should talk to your boss.",
+        "correct": "Tu deves falar com o teu chefe.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Está a tornar-se mais frio.", "Está a tornar-se mais quente.", "Está a tornar-se mais escuro.", "Está a tornar-se mais claro."],
+        "option": "It is becoming colder.",
+        "correct": "Está a tornar-se mais frio.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós precisamos de encontrar uma solução.", "Nós precisamos de encontrar um problema.", "Nós precisamos de encontrar uma questão.", "Nós precisamos de encontrar uma resposta."],
+        "option": "We need to find a solution.",
+        "correct": "Nós precisamos de encontrar uma solução.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu estou interessado em aprender mais.", "Eu estou interessado em comer mais.", "Eu estou interessado em dormir mais.", "Eu estou interessado em trabalhar mais."],
+        "option": "I am interested in learning more.",
+        "correct": "Eu estou interessado em aprender mais.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela tem uma decisão importante para tomar.", "Ela tem um problema importante para resolver.", "Ela tem uma questão importante para perguntar.", "Ela tem uma resposta importante para dar."],
+        "option": "She has an important decision to make.",
+        "correct": "Ela tem uma decisão importante para tomar.",
+        "difficulty": "3"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está a desenvolver um novo projeto.", "Ele está a mudar um novo projeto.", "Ele está a transformar um novo projeto.", "Ele está a expandir um novo projeto."],
+        "option": "He is developing a new project.",
+        "correct": "Ele está a desenvolver um novo projeto.",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Problems are always easy to solve.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Trips are usually for relaxing or exploring.",
+        "correct": "true",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Jobs are only for making money and not for enjoyment.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Decisions are always simple to make.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Important things are always expensive.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Everything is possible if you try hard enough.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Changes are always bad.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Development is usually about getting worse, not better.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Information is always correct and true.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Culture is only about old traditions, not modern life.",
+        "correct": "false",
+        "difficulty": "3"
+    },
+    {
+        "type": "better_translation",
+        "options": ["eficaz", "eficiente", "produtivo", "apto"],
+        "option": "effective",
+        "correct": "eficaz",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["considerar", "pensar", "acreditar", "imaginar"],
+        "option": "consider",
+        "correct": "considerar",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["ambiente", "meio", "circunstância", "entorno"],
+        "option": "environment",
+        "correct": "ambiente",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["responsabilidade", "dever", "obrigação", "culpa"],
+        "option": "responsibility",
+        "correct": "responsabilidade",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["oportunidade", "chance", "possibilidade", "ocasião"],
+        "option": "opportunity",
+        "correct": "oportunidade",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["significativo", "importante", "relevante", "notável"],
+        "option": "significant",
+        "correct": "significativo",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["influência", "efeito", "impacto", "consequência"],
+        "option": "influence",
+        "correct": "influência",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["complexo", "complicado", "difícil", "intrincado"],
+        "option": "complex",
+        "correct": "complexo",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["melhorar", "aperfeiçoar", "otimizar", "refinar"],
+        "option": "improve",
+        "correct": "melhorar",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["avaliar", "estimar", "julgar", "apreciar"],
+        "option": "evaluate",
+        "correct": "avaliar",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós precisamos de analisar os dados.", "Nós precisamos de ignorar os dados.", "Nós precisamos de criar os dados.", "Nós precisamos de apagar os dados."],
+        "option": "We need to analyze the data.",
+        "correct": "Nós precisamos de analisar os dados.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está a demonstrar grande potencial.", "Ele está a esconder grande potencial.", "Ele está a perder grande potencial.", "Ele está a ignorar grande potencial."],
+        "option": "He is demonstrating great potential.",
+        "correct": "Ele está a demonstrar grande potencial.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Elas estão a desenvolver uma estratégia inovadora.", "Elas estão a copiar uma estratégia inovadora.", "Elas estão a evitar uma estratégia inovadora.", "Elas estão a criticar uma estratégia inovadora."],
+        "option": "They are developing an innovative strategy.",
+        "correct": "Elas estão a desenvolver uma estratégia inovadora.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Tu deves considerar as consequências.", "Tu deves ignorar as consequências.", "Tu deves evitar as consequências.", "Tu deves criar as consequências."],
+        "option": "You should consider the consequences.",
+        "correct": "Tu deves considerar as consequências.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Está essencialmente correto.", "Está completamente errado.", "Está parcialmente correto.", "Está provavelmente correto."],
+        "option": "It is essentially correct.",
+        "correct": "Está essencialmente correto.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós precisamos de melhorar a eficiência.", "Nós precisamos de reduzir a eficiência.", "Nós precisamos de ignorar a eficiência.", "Nós precisamos de medir a eficiência."],
+        "option": "We need to improve efficiency.",
+        "correct": "Nós precisamos de melhorar a eficiência.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu estou a avaliar as opções.", "Eu estou a escolher as opções.", "Eu estou a criar as opções.", "Eu estou a ignorar as opções."],
+        "option": "I am evaluating the options.",
+        "correct": "Eu estou a avaliar as opções.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela tem uma influência significativa.", "Ela tem uma influência limitada.", "Ela tem uma influência negativa.", "Ela tem uma influência positiva."],
+        "option": "She has a significant influence.",
+        "correct": "Ela tem uma influência significativa.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele está a resolver um problema complexo.", "Ele está a ignorar um problema complexo.", "Ele está a criar um problema complexo.", "Ele está a evitar um problema complexo."],
+        "option": "He is solving a complex problem.",
+        "correct": "Ele está a resolver um problema complexo.",
+        "difficulty": "4"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Nós precisamos de proteger o ambiente.", "Nós precisamos de destruir o ambiente.", "Nós precisamos de ignorar o ambiente.", "Nós precisamos de mudar o ambiente."],
+        "option": "We need to protect the environment.",
+        "correct": "Nós precisamos de proteger o ambiente.",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Effective solutions are always expensive.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Considering different perspectives is usually helpful.",
+        "correct": "true",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "The environment is not important for our lives.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Responsibility is only for adults, not children.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Opportunities are always easy to find.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Significant events are always positive.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Influence only comes from power and authority.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Complex problems have simple solutions.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Improvement is always a quick process.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Evaluation is not needed if you are sure you are right.",
+        "correct": "false",
+        "difficulty": "4"
+    },
+    {
+        "type": "better_translation",
+        "options": ["engraçado", "curioso", "estranho", "cômico"],
+        "option": "funny",
+        "correct": "engraçado",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["atual", "presente", "corrente", "moderno"],
+        "option": "current",
+        "correct": "atual",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["costume", "hábito", "fato", "vestuário"],
+        "option": "custom",
+        "correct": "costume",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["sensível", "razoável", "prático", "judicioso"],
+        "option": "sensible",
+        "correct": "sensato",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["particular", "específico", "próprio", "individual"],
+        "option": "particular",
+        "correct": "específico",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["realizar", "perceber", "notar", "compreender"],
+        "option": "realize",
+        "correct": "perceber",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["elaborar", "desenvolver", "preparar", "trabalhar"],
+        "option": "elaborate",
+        "correct": "desenvolver",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["frequente", "assíduo", "regular", "comum"],
+        "option": "frequent",
+        "correct": "frequente",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["assistir", "ajudar", "auxiliar", "frequentar"],
+        "option": "assist",
+        "correct": "ajudar",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["intenção", "propósito", "objetivo", "pretensão"],
+        "option": "intention",
+        "correct": "intenção",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["O ator foi realmente engraçado.", "O ator foi realmente curioso.", "O ator foi realmente estranho.", "O ator foi realmente cômico."],
+        "option": "The actor was really funny.",
+        "correct": "O ator foi realmente engraçado.",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Qual é a sua morada atual?", "Qual é a sua morada presente?", "Qual é a sua morada corrente?", "Qual é a sua morada moderna?"],
+        "option": "What is your current address?",
+        "correct": "Qual é a sua morada atual?",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["É um costume local celebrar assim.", "É um hábito local celebrar assim.", "É um fato local celebrar assim.", "É um vestuário local celebrar assim."],
+        "option": "It is a local custom to celebrate like this.",
+        "correct": "É um costume local celebrar assim.",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Foi sensato da tua parte fazer isso.", "Foi sensível da tua parte fazer isso.", "Foi prático da tua parte fazer isso.", "Foi judicioso da tua parte fazer isso."],
+        "option": "It was sensible of you to do that.",
+        "correct": "Foi sensato da tua parte fazer isso.",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Tenho um problema particular.", "Tenho um problema específico.", "Tenho um problema próprio.", "Tenho um problema individual."],
+        "option": "I have a particular problem.",
+        "correct": "Tenho um problema específico.",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Eu percebi que estava errado.", "Eu realizei que estava errado.", "Eu notei que estava errado.", "Eu compreendi que estava errado."],
+        "option": "I realize I was wrong.",
+        "correct": "Eu percebi que estava errado.",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Podes desenvolver este ponto?", "Podes elaborar este ponto?", "Podes preparar este ponto?", "Podes trabalhar este ponto?"],
+        "option": "Can you elaborate on this point?",
+        "correct": "Podes desenvolver este ponto?",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele visita o museu frequentemente.", "Ele visita o museu assiduamente.", "Ele visita o museu regularmente.", "Ele visita o museu comummente."],
+        "option": "He visits the museum frequently.",
+        "correct": "Ele visita o museu frequentemente.",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Podes ajudar-me com isto?", "Podes assistir-me com isto?", "Podes auxiliar-me com isto?", "Podes frequentar-me com isto?"],
+        "option": "Can you assist me with this?",
+        "correct": "Podes ajudar-me com isto?",
+        "difficulty": "5"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Qual é a tua intenção ao dizer isso?", "Qual é o teu propósito ao dizer isso?", "Qual é o teu objetivo ao dizer isso?", "Qual é a tua pretensão ao dizer isso?"],
+        "option": "What is your intention in saying that?",
+        "correct": "Qual é a tua intenção ao dizer isso?",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'funny' story is always curious.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "'Current' events are events from the present time.",
+        "correct": "true",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "'Custom' clothes are designed especially for you.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'sensible' person is always very sensitive.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'particular' person is always very special and unique.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "To 'realize' something is the same as to make it real.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "To 'elaborate' a plan is to make it more laborious.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'frequent' visitor is someone who is always arguing.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "To 'assist' someone is to attend them at an event.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "'Intention' is the same as pretension.",
+        "correct": "false",
+        "difficulty": "5"
+    },
+    {
+        "type": "better_translation",
+        "options": ["prevenção", "antecipação", "impedimento", "precaução"],
+        "option": "prevention",
+        "correct": "prevenção",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["elogio", "cumprimento", "complemento", "louvor"],
+        "option": "compliment",
+        "correct": "elogio",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["discussão", "argumento", "debate", "contenda"],
+        "option": "argument",
+        "correct": "argumento",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["conveniente", "oportuno", "adequado", "cômodo"],
+        "option": "convenient",
+        "correct": "conveniente",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["suportar", "padecer", "sofrer", "manter"],
+        "option": "suffer",
+        "correct": "sofrer",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["requerimento", "pedido", "insistência", "exigência"],
+        "option": "request",
+        "correct": "pedido",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["suceder", "acontecer", "decorrer", "ter sucesso"],
+        "option": "succeed",
+        "correct": "ter sucesso",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["notório", "conhecido", "célebre", "infame"],
+        "option": "notorious",
+        "correct": "infame",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["preservativo", "protetor", "seguro", "conservante"],
+        "option": "preservative",
+        "correct": "conservante",
+        "difficulty": "6"
+    },
+    {
+        "type": "better_translation",
+        "options": ["fábrica", "manufactura", "indústria", "tecido"],
+        "option": "fabric",
+        "correct": "tecido",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["A prevenção é melhor que a cura.", "A antecipação é melhor que a cura.", "O impedimento é melhor que a cura.", "A precaução é melhor que a cura."],
+        "option": "Prevention is better than cure.",
+        "correct": "A prevenção é melhor que a cura.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele fez-lhe um elogio sobre o seu vestido.", "Ele fez-lhe um cumprimento sobre o seu vestido.", "Ele fez-lhe um complemento sobre o seu vestido.", "Ele fez-lhe um louvor sobre o seu vestido."],
+        "option": "He paid her a compliment on her dress.",
+        "correct": "Ele fez-lhe um elogio sobre o seu vestido.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Tiveram um grande argumento sobre política.", "Tiveram uma grande discussão sobre política.", "Tiveram um grande debate sobre política.", "Tiveram uma grande contenda sobre política."],
+        "option": "They had a big argument about politics.",
+        "correct": "Tiveram um grande argumento sobre política.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["É muito conveniente ter uma loja perto.", "É muito oportuno ter uma loja perto.", "É muito adequado ter uma loja perto.", "É muito cômodo ter uma loja perto."],
+        "option": "It is very convenient to have a shop nearby.",
+        "correct": "É muito conveniente ter uma loja perto.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele sofre de dores de cabeça frequentes.", "Ele suporta dores de cabeça frequentes.", "Ele padece de dores de cabeça frequentes.", "Ele mantém dores de cabeça frequentes."],
+        "option": "He suffers from frequent headaches.",
+        "correct": "Ele sofre de dores de cabeça frequentes.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Fez um pedido formal à empresa.", "Fez um requerimento formal à empresa.", "Fez uma insistência formal à empresa.", "Fez uma exigência formal à empresa."],
+        "option": "He made a formal request to the company.",
+        "correct": "Fez um pedido formal à empresa.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ela espera ter sucesso na sua carreira.", "Ela espera suceder na sua carreira.", "Ela espera acontecer na sua carreira.", "Ela espera decorrer na sua carreira."],
+        "option": "She hopes to succeed in her career.",
+        "correct": "Ela espera ter sucesso na sua carreira.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["Ele é um criminoso notório.", "Ele é um criminoso conhecido.", "Ele é um criminoso célebre.", "Ele é um criminoso infame."],
+        "option": "He is a notorious criminal.",
+        "correct": "Ele é um criminoso infame.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["O preservante impede que a comida se estrague.", "O preservativo impede que a comida se estrague.", "O protetor impede que a comida se estrague.", "O seguro impede que a comida se estrague."],
+        "option": "The preservative prevents food from spoiling.",
+        "correct": "O conservante impede que a comida se estrague.",
+        "difficulty": "6"
+    },
+    {
+        "type": "context_translation",
+        "options": ["A fábrica deste casaco é macia.", "A manufactura deste casaco é macia.", "A indústria deste casaco é macia.", "O tecido deste casaco é macio."],
+        "option": "The fabric of this jacket is soft.",
+        "correct": "O tecido deste casaco é macio.",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "'Prevention' always means to anticipate something.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'compliment' is the same as a complement.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "An 'argument' in English always implies a debate with polite discussion.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Something 'convenient' is always opportune and adequate.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "To 'suffer' always implies physical pain.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'request' is a strong demand or insistence.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "To 'succeed' always means to follow in sequence.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "Someone 'notorious' is generally well-known and celebrated.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "A 'preservative' always means something that protects you from pregnancy.",
+        "correct": "false",
+        "difficulty": "6"
+    },
+    {
+        "type": "true_or_false",
+        "options": ["true", "false"],
+        "option": "'Fabric' refers to a place where things are made.",
+        "correct": "false",
+        "difficulty": "6"
+    }
+]

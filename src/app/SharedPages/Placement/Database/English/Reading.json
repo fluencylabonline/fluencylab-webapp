@@ -1,0 +1,835 @@
+[
+    {
+      "text": "Tom wakes up. He eats breakfast. He goes to school.",
+      "question": "What does Tom do in the morning?",
+      "options": ["A) Sleep", "B) Eat breakfast and go to school", "C) Play games", "D) Watch TV"],
+      "correct": "B) Eat breakfast and go to school",
+      "difficulty": "1"
+    },
+    {
+      "text": "Sara likes fruit. She eats an apple. She eats a banana. Fruit is good.",
+      "question": "What does Sara like to eat?",
+      "options": ["A) Candy", "B) Cake", "C) Fruit", "D) Ice cream"],
+      "correct": "C) Fruit",
+      "difficulty": "1"
+    },
+    {
+      "text": "The cat is small. It is black. It sleeps on the chair.",
+      "question": "Where does the cat sleep?",
+      "options": ["A) Bed", "B) Chair", "C) Table", "D) Floor"],
+      "correct": "B) Chair",
+      "difficulty": "1"
+    },
+    {
+      "text": "John has a ball. The ball is red. He plays with the ball.",
+      "question": "What color is John's ball?",
+      "options": ["A) Blue", "B) Green", "C) Red", "D) Yellow"],
+      "correct": "C) Red",
+      "difficulty": "1"
+    },
+    {
+      "text": "Mary is at home. She reads a book. The book is interesting.",
+      "question": "What is Mary doing at home?",
+      "options": ["A) Playing outside", "B) Reading a book", "C) Watching TV", "D) Sleeping"],
+      "correct": "B) Reading a book",
+      "difficulty": "1"
+    },
+    {
+      "text": "It is sunny today. The sun is hot. People wear sunglasses.",
+      "question": "What is the weather like?",
+      "options": ["A) Rainy", "B) Snowy", "C) Sunny", "D) Cloudy"],
+      "correct": "C) Sunny",
+      "difficulty": "1"
+    },
+    {
+      "text": "Peter goes to the park. He plays with his friends. They run and jump.",
+      "question": "Where does Peter play?",
+      "options": ["A) School", "B) Home", "C) Park", "D) Shop"],
+      "correct": "C) Park",
+      "difficulty": "1"
+    },
+    {
+      "text": "Lisa has a dog. The dog is happy. It wags its tail.",
+      "question": "What animal does Lisa have?",
+      "options": ["A) Cat", "B) Bird", "C) Dog", "D) Fish"],
+      "correct": "C) Dog",
+      "difficulty": "1"
+    },
+    {
+      "text": "David drinks water. He is thirsty. Water is cold.",
+      "question": "What is David drinking?",
+      "options": ["A) Juice", "B) Milk", "C) Water", "D) Tea"],
+      "correct": "C) Water",
+      "difficulty": "1"
+    },
+    {
+      "text": "Emily wears a coat. It is cold outside. The coat is warm.",
+      "question": "Why does Emily wear a coat?",
+      "options": ["A) It is hot", "B) It is cold", "C) It is sunny", "D) It is rainy"],
+      "correct": "B) It is cold",
+      "difficulty": "1"
+    },
+    {
+      "text": "My house is big. It has four rooms. I like my house.",
+      "question": "How many rooms are in the house?",
+      "options": ["A) Two", "B) Three", "C) Four", "D) Five"],
+      "correct": "C) Four",
+      "difficulty": "1"
+    },
+    {
+      "text": "We eat lunch at school. Lunch is at noon. We eat sandwiches.",
+      "question": "When do they eat lunch?",
+      "options": ["A) Morning", "B) Noon", "C) Afternoon", "D) Evening"],
+      "correct": "B) Noon",
+      "difficulty": "1"
+    },
+    {
+      "text": "My mother is a teacher. She works at a school. She likes her job.",
+      "question": "What is my mother's job?",
+      "options": ["A) Doctor", "B) Teacher", "C) Nurse", "D) Driver"],
+      "correct": "B) Teacher",
+      "difficulty": "1"
+    },
+    {
+      "text": "The book is on the table. It is near the lamp. I read the book.",
+      "question": "Where is the book?",
+      "options": ["A) Chair", "B) Floor", "C) Table", "D) Bed"],
+      "correct": "C) Table",
+      "difficulty": "1"
+    },
+    {
+      "text": "I go to bed at night. I sleep in my bed. Night is dark.",
+      "question": "When do I go to bed?",
+      "options": ["A) Morning", "B) Afternoon", "C) Night", "D) Noon"],
+      "correct": "C) Night",
+      "difficulty": "1"
+    },
+    {
+      "text": "My father drives a car. The car is blue. He goes to work by car.",
+      "question": "What color is my father's car?",
+      "options": ["A) Black", "B) Blue", "C) White", "D) Red"],
+      "correct": "B) Blue",
+      "difficulty": "1"
+    },
+    {
+      "text": "We drink coffee in the morning. Coffee is hot. I like coffee with milk.",
+      "question": "When do we drink coffee?",
+      "options": ["A) Afternoon", "B) Evening", "C) Morning", "D) Night"],
+      "correct": "C) Morning",
+      "difficulty": "1"
+    },
+    {
+      "text": "My sister is tall. She is older than me. We play together.",
+      "question": "Who is tall and older?",
+      "options": ["A) Brother", "B) Sister", "C) Mother", "D) Father"],
+      "correct": "B) Sister",
+      "difficulty": "1"
+    },
+    {
+      "text": "The flowers are in the garden. They are colorful. Bees like flowers.",
+      "question": "Where are the flowers?",
+      "options": ["A) House", "B) Garden", "C) Park", "D) School"],
+      "correct": "B) Garden",
+      "difficulty": "1"
+    },
+    {
+      "text": "I listen to music. Music is nice. I like to sing too.",
+      "question": "What do I like to do?",
+      "options": ["A) Dance", "B) Sleep", "C) Listen to music", "D) Cook"],
+      "correct": "C) Listen to music",
+      "difficulty": "1"
+    },
+    {
+        "text": "My name is Peter and I live in a small town.  Every day I walk to the bakery to buy bread for my family.",
+        "question": "Where does Peter go every day?",
+        "options": ["A) School", "B) Bakery", "C) Park", "D) Supermarket"],
+        "correct": "B) Bakery",
+        "difficulty": "2"
+    },
+    {
+        "text": "Susan works in a shop. She sells clothes for men and women.  She likes to help people choose nice outfits.",
+        "question": "What does Susan sell in her shop?",
+        "options": ["A) Food", "B) Books", "C) Clothes", "D) Toys"],
+        "correct": "C) Clothes",
+        "difficulty": "2"
+    },
+    {
+        "text": "The children are playing in the garden. They are happy.  They are playing with a big red ball and their dog.",
+        "question": "Where are the children playing?",
+        "options": ["A) In the house", "B) In the garden", "C) In the street", "D) In the school"],
+        "correct": "B) In the garden",
+        "difficulty": "2"
+    },
+    {
+        "text": "My brother is a student. He studies English and Maths at university.  He wants to be a teacher in the future.",
+        "question": "What does my brother study?",
+        "options": ["A) Science and Art", "B) English and Maths", "C) History and Music", "D) Sport and Geography"],
+        "correct": "B) English and Maths",
+        "difficulty": "2"
+    },
+    {
+        "text": "It is Sunday today.  My family and I are going to the zoo. We want to see the lions and the elephants.",
+        "question": "Where are they going on Sunday?",
+        "options": ["A) To the cinema", "B) To the beach", "C) To the zoo", "D) To the park"],
+        "correct": "C) To the zoo",
+        "difficulty": "2"
+    },
+    {
+        "text": "My grandmother likes to cook.  She makes delicious cakes and cookies.  We often visit her to eat her treats.",
+        "question": "What does my grandmother like to make?",
+        "options": ["A) Soup and salad", "B) Cakes and cookies", "C) Meat and fish", "D) Pasta and rice"],
+        "correct": "B) Cakes and cookies",
+        "difficulty": "2"
+    },
+    {
+        "text": "John is at the bus stop. He is waiting for the number 25 bus to go to the city center.  He wants to go shopping.",
+        "question": "Where does John want to go?",
+        "options": ["A) To the airport", "B) To the train station", "C) To the city center", "D) To the hospital"],
+        "correct": "C) To the city center",
+        "difficulty": "2"
+    },
+    {
+        "text": "Maria is talking to her friend on the phone. They are making plans to meet for coffee next week.  They want to go to a new café.",
+        "question": "What are Maria and her friend planning to do?",
+        "options": ["A) Go to the cinema", "B) Meet for coffee", "C) Go to the beach", "D) Have dinner"],
+        "correct": "B) Meet for coffee",
+        "difficulty": "2"
+    },
+    {
+        "text": "My father works in an office. He is a manager in a big company.  He travels to different countries for his work.",
+        "question": "What is my father's job?",
+        "options": ["A) Doctor", "B) Teacher", "C) Manager", "D) Driver"],
+        "correct": "C) Manager",
+        "difficulty": "2"
+    },
+    {
+        "text": "The weather today is rainy.  It is grey and cloudy.  People are using umbrellas outside.",
+        "question": "What is the weather like today?",
+        "options": ["A) Sunny", "B) Snowy", "C) Rainy", "D) Windy"],
+        "correct": "C) Rainy",
+        "difficulty": "2"
+    },
+    {
+        "text": "We live in a flat in a tall building. Our flat is on the tenth floor.  We have a nice view of the city from our window.",
+        "question": "Where is their flat located?",
+        "options": ["A) In a house", "B) In a small building", "C) In a tall building", "D) In the countryside"],
+        "correct": "C) In a tall building",
+        "difficulty": "2"
+    },
+    {
+        "text": "Sarah is learning to play the guitar. She has lessons every Wednesday evening. She enjoys playing music.",
+        "question": "What is Sarah learning to play?",
+        "options": ["A) Piano", "B) Drums", "C) Guitar", "D) Violin"],
+        "correct": "C) Guitar",
+        "difficulty": "2"
+    },
+    {
+        "text": "My favorite sport is swimming. I go to the swimming pool twice a week.  It is good exercise and I feel refreshed after.",
+        "question": "What is my favorite sport?",
+        "options": ["A) Football", "B) Basketball", "C) Swimming", "D) Tennis"],
+        "correct": "C) Swimming",
+        "difficulty": "2"
+    },
+    {
+        "text": "The cat is sleeping on the sofa in the living room. It is a very lazy cat. It sleeps most of the day.",
+        "question": "Where is the cat sleeping?",
+        "options": ["A) In the kitchen", "B) In the bedroom", "C) In the living room", "D) In the garden"],
+        "correct": "C) In the living room",
+        "difficulty": "2"
+    },
+    {
+        "text": "My friends and I like to go to the cinema on Fridays. We usually watch action movies or comedies. We buy popcorn too.",
+        "question": "When do they usually go to the cinema?",
+        "options": ["A) Mondays", "B) Wednesdays", "C) Fridays", "D) Sundays"],
+        "correct": "C) Fridays",
+        "difficulty": "2"
+    },
+    {
+        "text": "My uncle is a doctor. He works in a hospital. He helps sick people to get better. He is a very kind man.",
+        "question": "Where does my uncle work?",
+        "options": ["A) School", "B) Office", "C) Hospital", "D) Shop"],
+        "correct": "C) Hospital",
+        "difficulty": "2"
+    },
+    {
+        "text": "Every morning, I drink a cup of tea for breakfast. I like to have it with milk and sugar.  It wakes me up.",
+        "question": "What does I drink for breakfast?",
+        "options": ["A) Coffee", "B) Juice", "C) Tea", "D) Water"],
+        "correct": "C) Tea",
+        "difficulty": "2"
+    },
+    {
+        "text": "The park near my house is very beautiful. There are many trees and flowers.  People like to walk and relax there.",
+        "question": "What is in the park?",
+        "options": ["A) Deserts and sand", "B) Trees and flowers", "C) Buildings and shops", "D) Cars and buses"],
+        "correct": "B) Trees and flowers",
+        "difficulty": "2"
+    },
+    {
+        "text": "My sister loves to read books. She has a big collection of books in her room. She reads every night before bed.",
+        "question": "What does my sister love to do?",
+        "options": ["A) Watch TV", "B) Play sports", "C) Read books", "D) Cook meals"],
+        "correct": "C) Read books",
+        "difficulty": "2"
+    },
+    {
+        "text": "We are having a party at our house next Saturday. We are inviting all our friends.  We will have music and food and dance.",
+        "question": "What are they having next Saturday?",
+        "options": ["A) A picnic", "B) A party", "C) A meeting", "D) A trip"],
+        "correct": "B) A party",
+        "difficulty": "2"
+    },
+    {
+        "text": "Last summer, I decided to volunteer at a local animal shelter. It was hard work cleaning cages and feeding animals, but also very rewarding.  I especially enjoyed playing with the dogs and cats who needed attention.",
+        "question": "What did I do last summer?",
+        "options": ["A) Worked in a shop", "B) Travelled to Europe", "C) Volunteered at an animal shelter", "D) Studied at university"],
+        "correct": "C) Volunteered at an animal shelter",
+        "difficulty": "3"
+    },
+    {
+        "text": "When you visit our city, you should definitely try the local market on Saturdays. You can find fresh fruits, vegetables, homemade bread, and delicious cheeses. It’s always busy and full of life.",
+        "question": "What is recommended to do in our city on Saturdays?",
+        "options": ["A) Visit a museum", "B) Go to the local market", "C) Watch a movie", "D) Go to the beach"],
+        "correct": "B) Go to the local market",
+        "difficulty": "3"
+    },
+    {
+        "text": "I'm planning a weekend trip to the mountains next month. I want to go hiking and enjoy nature. I hope the weather will be good so I can take some nice photos.",
+        "question": "What am I planning to do next month?",
+        "options": ["A) Visit the seaside", "B) Go to the mountains", "C) Go to the city", "D) Stay at home"],
+        "correct": "B) Go to the mountains",
+        "difficulty": "3"
+    },
+    {
+        "text": "My favorite hobby is playing the piano. I started taking lessons five years ago and now I can play many songs. It helps me relax after a long day at work.",
+        "question": "What is my favorite hobby?",
+        "options": ["A) Playing football", "B) Playing the piano", "C) Reading books", "D) Watching films"],
+        "correct": "B) Playing the piano",
+        "difficulty": "3"
+    },
+    {
+        "text": "Excuse me, could you tell me how to get to the train station? I'm a bit lost. Is it far from here or should I take a bus?",
+        "question": "What does the person want to know?",
+        "options": ["A) Where is the bus stop?", "B) How to get to the train station", "C) Where to buy tickets", "D) What time is it"],
+        "correct": "B) How to get to the train station",
+        "difficulty": "3"
+    },
+    {
+        "text": "For my birthday, my friends organized a surprise party. I was really shocked and happy when I walked into the room and everyone shouted ‘Happy Birthday!’ It was a wonderful evening.",
+        "question": "What happened for my birthday?",
+        "options": ["A) I had a quiet dinner", "B) I received a surprise party", "C) I went on holiday", "D) I worked all day"],
+        "correct": "B) I received a surprise party",
+        "difficulty": "3"
+    },
+    {
+        "text": "Learning a new language can be challenging but also very rewarding. It opens up new opportunities and allows you to communicate with people from different cultures.",
+        "question": "What are the benefits of learning a new language?",
+        "options": ["A) It is very easy", "B) It is very expensive", "C) It opens up new opportunities", "D) It is only for young people"],
+        "correct": "C) It opens up new opportunities",
+        "difficulty": "3"
+    },
+    {
+        "text": "I usually have a busy week at work, but I always make time for exercise. I go jogging three times a week and it helps me stay healthy and manage stress.",
+        "question": "How often do I go jogging?",
+        "options": ["A) Once a week", "B) Twice a week", "C) Three times a week", "D) Every day"],
+        "correct": "C) Three times a week",
+        "difficulty": "3"
+    },
+    {
+        "text": "When I travel, I prefer staying in small hotels or guesthouses. They are usually more personal and you can experience the local atmosphere better than in big chain hotels.",
+        "question": "What kind of accommodation do I prefer when travelling?",
+        "options": ["A) Big chain hotels", "B) Small hotels or guesthouses", "C) Apartments", "D) Camping sites"],
+        "correct": "B) Small hotels or guesthouses",
+        "difficulty": "3"
+    },
+    {
+        "text": "If you are interested in art, you should visit the National Gallery. It has a fantastic collection of paintings from different periods.  You can easily spend a whole day there.",
+        "question": "What is recommended for art lovers?",
+        "options": ["A) The Science Museum", "B) The National Gallery", "C) The History Museum", "D) The Botanical Gardens"],
+        "correct": "B) The National Gallery",
+        "difficulty": "3"
+    },
+    {
+        "text": "My dream is to travel around the world one day. I want to visit different continents, experience new cultures and see famous landmarks like the Eiffel Tower and the Great Wall of China.",
+        "question": "What is my dream?",
+        "options": ["A) To buy a new car", "B) To travel around the world", "C) To learn a new language", "D) To get a new job"],
+        "correct": "B) To travel around the world",
+        "difficulty": "3"
+    },
+    {
+        "text": "I believe that recycling is very important for the environment. We should all try to recycle paper, plastic and glass to reduce waste and protect our planet.",
+        "question": "What is considered important for the environment?",
+        "options": ["A) Driving cars more often", "B) Recycling", "C) Using more plastic", "D) Cutting down trees"],
+        "correct": "B) Recycling",
+        "difficulty": "3"
+    },
+    {
+        "text": "This weekend, I'm planning to cook a special dinner for my family. I'm going to make lasagna, which is my mother's favorite dish. I hope it will be delicious.",
+        "question": "What am I planning to cook this weekend?",
+        "options": ["A) Pizza", "B) Lasagna", "C) Sushi", "D) Burgers"],
+        "correct": "B) Lasagna",
+        "difficulty": "3"
+    },
+    {
+        "text": "I'm learning to drive at the moment. It’s quite challenging to coordinate everything, but I’m making progress and I hope to pass my test soon.",
+        "question": "What am I learning to do?",
+        "options": ["A) To swim", "B) To ride a bike", "C) To drive", "D) To cook"],
+        "correct": "C) To drive",
+        "difficulty": "3"
+    },
+    {
+        "text": "If you are feeling stressed, I recommend listening to relaxing music or going for a walk in nature. These are simple but effective ways to calm down.",
+        "question": "What are recommended ways to reduce stress?",
+        "options": ["A) Working harder", "B) Listening to music or walking in nature", "C) Drinking coffee", "D) Watching TV all day"],
+        "correct": "B) Listening to music or walking in nature",
+        "difficulty": "3"
+    },
+    {
+        "text": "I enjoy reading books in my free time, especially novels and biographies.  I find it’s a great way to escape from everyday life and learn new things.",
+        "question": "What type of books do I enjoy reading?",
+        "options": ["A) Cookbooks", "B) Science textbooks", "C) Novels and biographies", "D) Travel guides"],
+        "correct": "C) Novels and biographies",
+        "difficulty": "3"
+    },
+    {
+        "text": "The best time to visit this island is in the spring or autumn.  The weather is pleasant, not too hot and not too cold, and there are fewer tourists than in the summer.",
+        "question": "When is the best time to visit this island?",
+        "options": ["A) Summer", "B) Winter", "C) Spring or autumn", "D) Only in July"],
+        "correct": "C) Spring or autumn",
+        "difficulty": "3"
+    },
+    {
+        "text": "At weekends, I like to meet up with friends for brunch. We usually go to a café near the park and chat for hours. It’s a great way to catch up and relax.",
+        "question": "What do I like to do with friends at weekends?",
+        "options": ["A) Go to the cinema", "B) Meet for brunch", "C) Go shopping", "D) Play sports"],
+        "correct": "B) Meet for brunch",
+        "difficulty": "3"
+    },
+    {
+        "text": "Before going on holiday, it’s important to check your passport expiry date and arrange travel insurance.  These are essential things to do to ensure a smooth trip.",
+        "question": "What is important to check before going on holiday?",
+        "options": ["A) The weather forecast", "B) Passport expiry date and travel insurance", "C) Local restaurants", "D) Bus timetables"],
+        "correct": "B) Passport expiry date and travel insurance",
+        "difficulty": "3"
+    },
+    {
+        "text": "I’m thinking of changing my job because I’m looking for more challenges and opportunities for career progression. I want to work in a more dynamic and international environment.",
+        "question": "Why am I thinking of changing my job?",
+        "options": ["A) I want to earn less money", "B) I am looking for more challenges", "C) I like my current job very much", "D) I want to work fewer hours"],
+        "correct": "B) I am looking for more challenges",
+        "difficulty": "3"
+    },
+    {
+        "text": "Many companies are now embracing remote work policies, offering employees the flexibility to work from home. While this can improve work-life balance and reduce commuting time, it also presents challenges.  Managers need to adapt their leadership styles to ensure team cohesion and productivity in a virtual environment, and employees must be disciplined to manage their time effectively without direct supervision.",
+        "question": "What is a key challenge of remote work for managers?",
+        "options": ["A) Increased office space costs", "B) Difficulty in adapting leadership styles for virtual teams", "C) Reduced employee flexibility", "D) Simpler communication methods"],
+        "correct": "B) Difficulty in adapting leadership styles for virtual teams",
+        "difficulty": "4"
+    },
+    {
+        "text": "When choosing a book to read, I often look for recommendations from friends or online reviews. I enjoy novels that are thought-provoking and well-written, but I also appreciate a light-hearted comedy after a stressful day. Recently, I read 'The Midnight Library' and I would highly recommend it to anyone who enjoys stories about life choices and second chances.",
+        "question": "What kind of books does the speaker recommend?",
+        "options": ["A) Only comedies", "B) Thought-provoking novels like 'The Midnight Library'", "C) Only biographies", "D)  Books with negative reviews"],
+        "correct": "B) Thought-provoking novels like 'The Midnight Library'",
+        "difficulty": "4"
+    },
+    {
+        "text": "Navigating social situations requires a certain level of emotional intelligence.  For instance, if a colleague shares disappointing news, expressing sympathy is appropriate. A simple phrase like, 'I'm so sorry to hear that,' can be meaningful. Conversely, when a team member achieves success, offering sincere praise such as, 'That's fantastic news, well done!' can boost morale and strengthen team relationships.",
+        "question": "What is an appropriate way to respond to a colleague's success?",
+        "options": ["A) Ignore their achievement", "B) Offer sincere praise like 'Well done!'", "C) Express sympathy", "D) Change the subject"],
+        "correct": "B) Offer sincere praise like 'Well done!'",
+        "difficulty": "4"
+    },
+    {
+        "text": "My career path hasn't been linear. I started in marketing, but I soon realized my strengths lay in data analysis. I decided to pursue further education in statistics and eventually transitioned into a data science role.  My experience in marketing actually gives me a unique perspective in understanding consumer behavior through data, which is quite valuable in my current job.",
+        "question": "What is unique about the speaker's background as a data scientist?",
+        "options": ["A) They have always worked in data science", "B) They have no experience in marketing", "C) Their marketing background gives them a unique perspective", "D) They dislike data analysis"],
+        "correct": "C) Their marketing background gives them a unique perspective",
+        "difficulty": "4"
+    },
+    {
+        "text": "Political discussions can often become heated, especially when different ideologies clash. It's interesting to observe how politicians sometimes resort to personal attacks rather than focusing on policy debates.  This behavior can unfortunately erode public trust in the political process, making it harder to find common ground and solve societal problems.",
+        "question": "What negative consequence can arise from politicians resorting to personal attacks?",
+        "options": ["A) Increased public trust in politics", "B) Easier resolution of societal problems", "C) Erosion of public trust in the political process", "D) More focused policy debates"],
+        "correct": "C) Erosion of public trust in the political process",
+        "difficulty": "4"
+    },
+    {
+        "text": "Leadership qualities are diverse, but one trait I admire is resilience.  Consider Nelson Mandela, who demonstrated incredible strength and perseverance during his imprisonment and afterwards led South Africa through a challenging transition.  His ability to forgive and unite a divided nation is a testament to true leadership.",
+        "question": "What leadership quality is exemplified by Nelson Mandela?",
+        "options": ["A) Aggressiveness", "B) Impatience", "C) Resilience and forgiveness", "D) Authoritarianism"],
+        "correct": "C) Resilience and forgiveness",
+        "difficulty": "4"
+    },
+    {
+        "text": "Regarding personal finances, it's crucial to manage expenses wisely.  A piece of advice I often give to friends is to track their spending for a month to understand where their money actually goes.  Often, small daily expenses add up significantly.  Creating a budget based on this awareness is the first step towards financial control.",
+        "question": "What financial advice does the speaker give to friends?",
+        "options": ["A) Invest in risky stocks", "B) Ignore daily expenses", "C) Track spending and create a budget", "D) Borrow money from friends"],
+        "correct": "C) Track spending and create a budget",
+        "difficulty": "4"
+    },
+    {
+        "text": "Gender perceptions of rudeness can vary significantly across cultures. What might be considered assertive in one culture, and thus acceptable for both genders, could be perceived as aggressive or rude in another, particularly if displayed by a woman. Understanding these cultural nuances is essential in international business and communication.",
+        "question": "Why is understanding cultural nuances in gender perceptions of rudeness important?",
+        "options": ["A) To promote aggressive behavior", "B) To standardize rudeness across cultures", "C) For effective international business and communication", "D) To reinforce gender stereotypes"],
+        "correct": "C) For effective international business and communication",
+        "difficulty": "4"
+    },
+    {
+        "text": "In a recent team meeting, we were discussing project timelines. There was a point of confusion about deadlines. I stepped in to clarify the schedule, referencing the project management software and restating the key milestones.  It helped to ensure everyone was on the same page and avoided potential delays.",
+        "question": "What was the speaker's role in the team meeting?",
+        "options": ["A) To create confusion", "B) To ignore project timelines", "C) To clarify project deadlines and milestones", "D) To cause potential delays"],
+        "correct": "C) To clarify project deadlines and milestones",
+        "difficulty": "4"
+    },
+    {
+        "text": "To improve job effectiveness, understanding your own mental processes is key.  For instance, if you're prone to procrastination, techniques like the Pomodoro Technique, breaking tasks into smaller steps, or setting realistic daily goals can be incredibly helpful in boosting productivity and reducing stress.",
+        "question": "What is suggested as a technique to improve job effectiveness for someone who procrastinates?",
+        "options": ["A) Increase distractions", "B) Work longer hours without breaks", "C) Use the Pomodoro Technique or break down tasks", "D) Avoid setting goals"],
+        "correct": "C) Use the Pomodoro Technique or break down tasks",
+        "difficulty": "4"
+    },
+    {
+        "text": "My professional lifestyle is quite demanding.  I typically work long hours, often starting early and finishing late. However, I try to balance this with personal time on weekends, pursuing hobbies like hiking and painting to de-stress and recharge for the week ahead.",
+        "question": "How does the speaker balance a demanding professional lifestyle?",
+        "options": ["A) By working even longer hours on weekends", "B) By pursuing hobbies like hiking and painting on weekends", "C) By ignoring personal time", "D) By increasing stress levels"],
+        "correct": "B) By pursuing hobbies like hiking and painting on weekends",
+        "difficulty": "4"
+    },
+    {
+        "text": "Dealing with awkward situations is part of both social and business life. Imagine accidentally spilling coffee on a client during a meeting.  A calm and apologetic approach is crucial. Immediately offering to help clean up and perhaps offering to replace any damaged items can mitigate the awkwardness and show professionalism.",
+        "question": "What is a recommended approach when accidentally creating an awkward situation in a business context?",
+        "options": ["A) Ignore the situation completely", "B) Panic and leave the meeting", "C) Calmly apologize and offer to help", "D) Blame someone else"],
+        "correct": "C) Calmly apologize and offer to help",
+        "difficulty": "4"
+    },
+    {
+        "text": "My educational background includes a bachelor's degree in economics and a master's in business administration.  This combination has provided me with a strong foundation in both theoretical understanding and practical application in the business world. I believe this interdisciplinary approach is a significant strength in my career.",
+        "question": "What is the speaker's educational background?",
+        "options": ["A) Only a bachelor's degree in economics", "B) Only a master's in business administration", "C) A bachelor's in economics and a master's in business administration", "D) No formal education"],
+        "correct": "C) A bachelor's in economics and a master's in business administration",
+        "difficulty": "4"
+    },
+    {
+        "text": "One of my weaknesses is that I can sometimes be overly critical of my own work, leading to perfectionism and occasional delays in project completion.  However, I'm working on this by setting realistic deadlines and focusing on progress over perfection, which is gradually improving my efficiency.",
+        "question": "What weakness is the speaker trying to overcome?",
+        "options": ["A) Lack of attention to detail", "B) Overly critical self-assessment and perfectionism", "C) Poor time management skills", "D) Inability to work in teams"],
+        "correct": "B) Overly critical self-assessment and perfectionism",
+        "difficulty": "4"
+    },
+    {
+        "text": "Imagine you're at a social gathering and you accidentally overhear a rumor about a colleague.  It's a complex situation. The appropriate response is generally to avoid engaging with the gossip, and certainly not to spread it further. Maintaining confidentiality and respect in professional relationships is paramount.",
+        "question": "What is the recommended response to overhearing a rumor about a colleague?",
+        "options": ["A) Spread the rumor immediately", "B) Confront the colleague directly", "C) Avoid engaging with or spreading the gossip", "D) Investigate the rumor further"],
+        "correct": "C) Avoid engaging with or spreading the gossip",
+        "difficulty": "4"
+    },
+    {
+        "text": "Discussing common political situations often reveals a spectrum of opinions.  For example, in debates about economic policy, politicians may advocate for different approaches, ranging from increased government intervention to free market principles. Understanding these differing viewpoints is key to engaging in informed civic discourse.",
+        "question": "What does discussing political situations often reveal?",
+        "options": ["A) Complete agreement on all issues", "B) A spectrum of different opinions", "C) Only one correct political viewpoint", "D) A lack of interest in economic policy"],
+        "correct": "B) A spectrum of different opinions",
+        "difficulty": "4"
+    },
+    {
+        "text": "Attending meetings in my area of expertise is generally manageable, though occasionally understanding very nuanced technical points can be challenging, especially if presenters use highly specialized jargon.  Having access to presentation materials beforehand or being able to ask clarifying questions is extremely helpful in these situations.",
+        "question": "What makes meetings in the speaker's expertise area sometimes challenging?",
+        "options": ["A) Lack of expertise in the topic", "B) Overly simplistic presentations", "C) Highly specialized jargon and nuanced technical points", "D) Meetings are always too short"],
+        "correct": "C) Highly specialized jargon and nuanced technical points",
+        "difficulty": "4"
+    },
+    {
+        "text": "My strengths include strong analytical skills and the ability to problem-solve effectively under pressure. I'm also a good communicator and team player, which I believe are essential in collaborative work environments.  These strengths have been instrumental in my career progression and project successes.",
+        "question": "What are identified as the speaker's strengths?",
+        "options": ["A) Poor communication skills", "B) Lack of analytical skills", "C) Strong analytical skills and effective problem-solving", "D) Difficulty working in teams"],
+        "correct": "C) Strong analytical skills and effective problem-solving",
+        "difficulty": "4"
+    },
+    {
+        "text": "If a friend were seeking financial advice, I would suggest starting with setting clear financial goals, whether it's saving for a down payment on a house, retirement, or just building an emergency fund.  Having defined goals makes it easier to stay motivated and make informed financial decisions.",
+        "question": "What is the first step in financial planning advice the speaker would give?",
+        "options": ["A) Investing in cryptocurrency", "B) Setting clear financial goals", "C) Ignoring financial planning altogether", "D) Spending all available income"],
+        "correct": "B) Setting clear financial goals",
+        "difficulty": "4"
+    },
+    {
+        "text": "My life at work is fast-paced and dynamic.  I work on multiple projects simultaneously, often involving cross-functional teams.  While it can be demanding, I thrive on the variety and the opportunity to constantly learn and develop new skills in a rapidly evolving industry.",
+        "question": "How is the speaker's work life described?",
+        "options": ["A) Slow and monotonous", "B) Relaxed and predictable", "C) Fast-paced and dynamic with variety", "D) Simple and unchanging"],
+        "correct": "C) Fast-paced and dynamic with variety",
+        "difficulty": "4"
+    },
+    {
+        "text": "The post-structuralist critique of grand narratives, epitomized by thinkers like Lyotard, fundamentally challenges the Enlightenment's faith in universal, overarching systems of meaning and progress.  This perspective posits that such narratives, whether political ideologies or scientific paradigms, are ultimately constructions, reflecting specific power dynamics and historical contexts rather than objective truths.  Consequently, post-structuralism advocates for a deconstruction of these narratives, revealing their inherent contradictions and ambiguities, and embracing a more fragmented, localized, and contingent understanding of knowledge and reality.  This paradigm shift has profound implications for fields ranging from literary theory to political science, urging a more critical and reflexive engagement with dominant discourses.",
+        "question": "What is the core argument of the post-structuralist critique of grand narratives?",
+        "options": ["A) Grand narratives are objective truths that guide societal progress.", "B) Enlightenment ideals are inherently flawed and should be entirely rejected.", "C) Grand narratives are constructions reflecting power dynamics rather than universal truths, necessitating deconstruction.", "D)  Scientific paradigms offer universally valid frameworks for understanding reality."],
+        "correct": "C) Grand narratives are constructions reflecting power dynamics rather than universal truths, necessitating deconstruction.",
+        "difficulty": "5"
+    },
+    {
+        "text": "Epistemological debates in contemporary philosophy often grapple with the problem of radical skepticism – the notion that genuine knowledge is unattainable, and that all beliefs are ultimately unjustified.  This skeptical challenge forces us to confront the limits of human cognition and the fragility of our epistemic foundations.  Responses range from attempts to refute skepticism through foundationalist or coherentist theories of justification, to more nuanced approaches that acknowledge the inherent uncertainties of knowledge while still striving for reasoned and warranted belief.  The ongoing engagement with radical skepticism underscores the enduring quest for epistemic certainty in an inherently uncertain world.",
+        "question": "What is the central challenge posed by radical skepticism in epistemology?",
+        "options": ["A) It demonstrates the absolute certainty of human knowledge.", "B) It questions the attainability of genuine knowledge and the justification of all beliefs.", "C) It advocates for abandoning the pursuit of knowledge altogether.", "D)  It promotes a purely pragmatic approach to belief formation, disregarding justification."],
+        "correct": "B) It questions the attainability of genuine knowledge and the justification of all beliefs.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The concept of 'performativity,' as articulated by Judith Butler, transcends the common understanding of performance as mere theatrical pretense.  Instead, Butler argues that gender, and indeed identity itself, is performatively constituted through repeated citational practices.  These practices, often unconsciously enacted and culturally ingrained, create the illusion of a stable, pre-existing identity, when in fact, identity is constantly being re-produced and negotiated through these very performances.  This radical reconceptualization of identity has had a transformative impact on feminist theory, queer theory, and our understanding of social construction.",
+        "question": "According to Judith Butler's theory of performativity, what is the nature of identity?",
+        "options": ["A) Identity is a fixed and inherent biological essence.", "B) Identity is consciously chosen and deliberately enacted.", "C) Identity is performatively constituted through repeated, often unconscious, practices.", "D)  Identity is primarily determined by individual psychological traits, independent of social context."],
+        "correct": "C) Identity is performatively constituted through repeated, often unconscious, practices.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In contemporary legal philosophy, the tension between legal positivism and natural law theory continues to be a central point of contention.  Legal positivism, championed by figures like H.L.A. Hart, emphasizes the separation of law from morality, arguing that law's validity derives from its social sources and established rules of recognition, not from its inherent moral content.  Conversely, natural law theory, with roots in classical philosophy and religious thought, posits that law must be grounded in universal moral principles to be truly legitimate.  This enduring debate shapes our understanding of legal validity, justice, and the relationship between law and ethics.",
+        "question": "What is the fundamental distinction between legal positivism and natural law theory?",
+        "options": ["A) Legal positivism prioritizes morality over legal rules, while natural law theory does the opposite.", "B) Legal positivism sees law's validity as separate from morality, based on social sources, while natural law theory grounds it in universal moral principles.", "C) Both legal positivism and natural law theory agree on the inherent moral content of law.", "D)  Legal positivism is primarily concerned with international law, while natural law theory focuses on domestic legal systems."],
+        "correct": "B) Legal positivism sees law's validity as separate from morality, based on social sources, while natural law theory grounds it in universal moral principles.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The concept of 'the Anthropocene' marks a proposed new geological epoch, characterized by the profound and pervasive impact of human activities on the Earth's geology and ecosystems.  This perspective challenges the traditional Holocene epoch, arguing that humanity has become a primary geological force, altering climate patterns, biodiversity, and biogeochemical cycles on a planetary scale.  The Anthropocene debate compels us to confront the magnitude of human influence on the planet, prompting critical reflections on sustainability, responsibility, and the future trajectory of the human-Earth relationship.  Its implications extend across scientific disciplines, environmental policy, and ethical considerations for future generations.",
+        "question": "What is the defining characteristic of the proposed Anthropocene epoch?",
+        "options": ["A) A period of minimal human impact on Earth's systems.", "B) A geological epoch solely defined by natural climatic variations.", "C) The profound and pervasive impact of human activities on Earth's geology and ecosystems.", "D)  A return to pre-industrial environmental conditions and ecological balance."],
+        "correct": "C) The profound and pervasive impact of human activities on Earth's geology and ecosystems.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In quantum mechanics, the concept of entanglement presents a profound challenge to classical intuitions about locality and separability.  Entangled particles, despite spatial separation, exhibit correlations that defy classical explanation, suggesting a non-local interconnectedness that Einstein famously termed 'spooky action at a distance.'  This phenomenon, experimentally verified and theoretically robust, has far-reaching implications for our understanding of the fundamental nature of reality, causality, and the limits of classical physics.  Its potential applications range from quantum computing to quantum cryptography, highlighting its significance in both fundamental science and emerging technologies.",
+        "question": "What is the core counter-intuitive aspect of quantum entanglement?",
+        "options": ["A) Entangled particles behave entirely independently and predictably.", "B) Quantum entanglement is only a theoretical concept without experimental evidence.", "C) Entangled particles exhibit non-local correlations defying classical notions of separability and locality.", "D)  Classical physics fully explains all phenomena observed in quantum mechanics, including entanglement."],
+        "correct": "C) Entangled particles exhibit non-local correlations defying classical notions of separability and locality.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The ongoing evolution of digital media has significantly altered the landscape of public discourse and democratic participation.  While affording unprecedented opportunities for citizen engagement and information access, the digital sphere also presents challenges related to algorithmic filter bubbles, echo chambers, and the proliferation of misinformation.  Navigating this complex terrain requires critical media literacy, robust fact-checking mechanisms, and a renewed emphasis on fostering deliberative spaces for reasoned dialogue and informed civic engagement.  The future of democratic societies may hinge on their capacity to effectively harness the benefits of digital media while mitigating its inherent risks to public discourse.",
+        "question": "What is a significant challenge posed by the evolution of digital media for public discourse and democracy?",
+        "options": ["A) Digital media has solely enhanced democratic participation without any negative consequences.", "B) The primary challenge is the lack of access to digital media for certain populations.", "C) Algorithmic filter bubbles, echo chambers, and misinformation undermine informed public discourse.", "D)  Digital media has led to a complete homogenization of public opinion, eliminating diverse perspectives."],
+        "correct": "C) Algorithmic filter bubbles, echo chambers, and misinformation undermine informed public discourse.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In literary criticism, the 'intentional fallacy' refers to the problematic assumption that an author's intended meaning is the sole or definitive interpretation of a literary work.  New Criticism, and later post-structuralist approaches, challenged this notion, arguing that meaning is not solely located in the author's intention but is also constructed through the text itself and the reader's interpretive engagement.  This shift in perspective has broadened the scope of literary analysis, emphasizing the polysemous nature of texts and the multiplicity of valid interpretations, rather than seeking a single, authoritative authorial intention.",
+        "question": "What is the 'intentional fallacy' in literary criticism?",
+        "options": ["A) The belief that authorial intention is irrelevant to literary interpretation.", "B) The mistaken assumption that an author's intended meaning is the sole definitive interpretation.", "C) The assertion that literary works have no inherent meaning beyond reader response.", "D)  The argument that literary criticism should solely focus on biographical information about the author."],
+        "correct": "B) The mistaken assumption that an author's intended meaning is the sole definitive interpretation.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The ethical implications of genetic engineering and CRISPR technology are profoundly complex and far-reaching, extending beyond therapeutic applications to encompass the potential for human enhancement and germline editing.  While offering unprecedented opportunities to eradicate genetic diseases and improve human health, these technologies also raise concerns about eugenics, unintended consequences, and the potential for exacerbating social inequalities.  Navigating this ethical landscape requires careful consideration of beneficence, non-maleficence, autonomy, and justice, demanding robust public discourse and regulatory frameworks to guide responsible innovation and application.",
+        "question": "What are some key ethical concerns associated with genetic engineering and CRISPR technology?",
+        "options": ["A) Primarily concerns about the high cost and limited accessibility of these technologies.", "B)  Exclusively therapeutic applications without any ethical dilemmas.", "C)  Concerns about eugenics, unintended consequences, potential for social inequality, and germline editing.", "D)  Ethical considerations are fully resolved by current regulatory frameworks, ensuring safe and equitable use."],
+        "correct": "C)  Concerns about eugenics, unintended consequences, potential for social inequality, and germline editing.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In macroeconomics, the Phillips curve, depicting an inverse relationship between inflation and unemployment, has been a subject of ongoing debate and empirical scrutiny.  While historically observed in certain periods, the stability and predictability of the Phillips curve have been challenged by phenomena such as stagflation and shifts in expectations.  Contemporary macroeconomic models often incorporate more nuanced understandings of inflation dynamics, considering factors beyond unemployment rates, such as supply shocks, global factors, and the credibility of monetary policy.  The enduring debate surrounding the Phillips curve underscores the complexities of managing inflation and unemployment in dynamic economic systems.",
+        "question": "What is a key challenge to the traditional Phillips curve relationship in macroeconomics?",
+        "options": ["A) The Phillips curve has consistently and accurately predicted inflation and unemployment across all historical periods.", "B)  Empirical evidence strongly supports the stability and predictability of the Phillips curve.", "C)  Phenomena like stagflation and shifts in expectations have challenged its stability and predictability.", "D)  Contemporary macroeconomic models have completely abandoned the Phillips curve as irrelevant."],
+        "correct": "C)  Phenomena like stagflation and shifts in expectations have challenged its stability and predictability.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The philosophical problem of free will versus determinism has occupied thinkers for millennia, probing the fundamental question of whether human actions are genuinely free or causally determined by prior events.  Determinism argues that all events, including human choices, are predetermined by prior causes, negating genuine freedom.  Libertarianism, conversely, asserts the existence of free will, arguing that humans possess genuine agency and can make choices independent of causal necessity.  Compatibilism attempts to reconcile these seemingly incompatible positions, proposing that free will and determinism can coexist in certain senses.  This enduring philosophical debate continues to shape our understanding of agency, responsibility, and the nature of human action.",
+        "question": "What is the central question in the philosophical debate of free will versus determinism?",
+        "options": ["A) Whether determinism is inherently morally superior to libertarianism.", "B) Whether free will is a purely illusory concept without any real-world implications.", "C) Whether human actions are genuinely free or causally determined by prior events.", "D)  Whether compatibilism offers a definitive resolution to the conflict between free will and determinism."],
+        "correct": "C) Whether human actions are genuinely free or causally determined by prior events.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In the field of artificial intelligence, the 'symbol grounding problem' highlights a fundamental challenge in bridging the gap between abstract symbolic representations and the sensorimotor experiences that ground meaning in the real world.  Traditional AI approaches often rely on symbolic systems that lack direct connection to embodied perception and action, raising questions about the true understanding and semantic content of these symbols.  Embodied and grounded approaches to AI attempt to address this problem by emphasizing the crucial role of embodiment, interaction, and sensorimotor experience in the development of genuine intelligence and meaning-making.",
+        "question": "What is the 'symbol grounding problem' in artificial intelligence?",
+        "options": ["A) The problem of creating AI systems that can manipulate abstract symbols effectively.", "B) The challenge of connecting abstract symbolic representations to real-world sensorimotor experiences and meaning.", "C) The difficulty in programming AI systems to understand and use natural language.", "D)  The problem of ensuring that AI systems can reason logically and deductively using symbolic representations."],
+        "correct": "B) The challenge of connecting abstract symbolic representations to real-world sensorimotor experiences and meaning.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The ethical considerations surrounding algorithmic decision-making in areas such as criminal justice and loan applications are particularly acute due to the potential for perpetuating and amplifying existing societal biases.  If algorithms are trained on datasets that reflect historical or systemic inequalities, they may inadvertently automate and scale discriminatory outcomes, even without explicit discriminatory intent in their design.  Ensuring fairness and equity in algorithmic systems requires rigorous auditing, bias detection and mitigation techniques, and ongoing ethical oversight to prevent the entrenchment of societal injustices through technological automation.",
+        "question": "Why are ethical considerations in algorithmic decision-making particularly acute in areas like criminal justice?",
+        "options": ["A) Algorithmic decision-making always eliminates human bias, ensuring fairer outcomes.", "B)  Algorithms are inherently neutral and objective, posing no ethical challenges.", "C)  Algorithms can perpetuate and amplify existing societal biases if trained on biased data, leading to discriminatory outcomes.", "D)  Ethical concerns are primarily relevant to human decision-makers, not to automated algorithmic systems."],
+        "correct": "C)  Algorithms can perpetuate and amplify existing societal biases if trained on biased data, leading to discriminatory outcomes.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The concept of 'emergence' in complex systems theory describes the phenomenon where macroscopic properties and patterns arise spontaneously from the interactions of simpler, lower-level components, in ways that are often unpredictable and not easily reducible to the properties of the individual parts.  Examples range from the flocking behavior of birds to the self-organization of social structures.  Emergence challenges reductionist approaches that seek to explain complex phenomena solely by analyzing their constituent elements, highlighting the importance of considering interaction dynamics and system-level properties to understand emergent behaviors.",
+        "question": "What is the core idea of 'emergence' in complex systems theory?",
+        "options": ["A) Complex systems can be fully understood by simply analyzing their individual components in isolation.", "B)  Emergent properties are always predictable and easily derivable from the properties of lower-level components.", "C)  Macroscopic properties and patterns arise spontaneously from interactions of simpler components, often unpredictably and not reducible to individual parts.", "D)  Reductionist approaches are always sufficient to explain all phenomena in complex systems, rendering emergence irrelevant."],
+        "correct": "C)  Macroscopic properties and patterns arise spontaneously from interactions of simpler components, often unpredictably and not reducible to individual parts.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In the philosophy of science, the demarcation problem refers to the ongoing challenge of establishing clear and universally accepted criteria to distinguish between genuine scientific theories and pseudoscientific claims.  Karl Popper's falsifiability criterion, proposing that scientific theories must be falsifiable in principle, has been influential but also subject to critiques and refinements.  The demarcation problem highlights the nuanced and often contested nature of scientific knowledge, underscoring the importance of critical thinking, methodological rigor, and ongoing philosophical reflection in evaluating scientific claims and distinguishing them from pseudoscience.",
+        "question": "What is the 'demarcation problem' in the philosophy of science?",
+        "options": ["A) The problem of distinguishing between different scientific disciplines.", "B)  The difficulty in communicating scientific findings to the general public.", "C)  The challenge of establishing clear criteria to differentiate between science and pseudoscience.", "D)  The problem of funding and resource allocation within the scientific community."],
+        "correct": "C)  The challenge of establishing clear criteria to differentiate between science and pseudoscience.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The ethical considerations surrounding autonomous weapons systems (AWS), often referred to as 'killer robots,' raise profound moral and legal dilemmas.  Deploying weapons capable of selecting and engaging targets without human intervention challenges fundamental principles of human control, accountability, and the laws of armed conflict.  Critics express concerns about the potential for unintended escalation, algorithmic bias in targeting decisions, and the erosion of human responsibility in warfare.  The debate over AWS necessitates urgent international dialogue and regulatory frameworks to address the ethical and security implications of these rapidly developing technologies.",
+        "question": "What is a primary ethical concern regarding autonomous weapons systems?",
+        "options": ["A) AWS are inherently incapable of causing any harm or unintended consequences.", "B)  The main concern is solely about the technological feasibility of developing reliable AWS.", "C)  Deploying AWS challenges human control, accountability, and existing laws of armed conflict.", "D)  AWS are ethically superior to human soldiers because they are less prone to emotional biases."],
+        "correct": "C)  Deploying AWS challenges human control, accountability, and existing laws of armed conflict.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In contemporary political theory, deliberative democracy emphasizes the importance of reasoned public deliberation and inclusive dialogue in legitimate democratic decision-making.  Moving beyond purely aggregative models of democracy that focus on vote counting, deliberative democrats argue that democratic legitimacy requires robust public discourse, informed participation, and the justification of political decisions through public reason.  This approach aims to foster more inclusive, rational, and ethically grounded democratic processes, enhancing the quality of public decision-making and promoting civic engagement.",
+        "question": "What is a key emphasis of deliberative democracy in political theory?",
+        "options": ["A) Solely focusing on efficient vote counting and majority rule in democratic processes.", "B)  Prioritizing elite decision-making over public deliberation for greater efficiency.", "C)  Emphasizing reasoned public deliberation, inclusive dialogue, and justification through public reason for democratic legitimacy.", "D)  Minimizing public participation in political decision-making to avoid delays and inefficiencies."],
+        "correct": "C)  Emphasizing reasoned public deliberation, inclusive dialogue, and justification through public reason for democratic legitimacy.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The concept of 'planetary boundaries' provides a framework for understanding the safe operating space for humanity within the Earth system.  It identifies nine key Earth system processes, such as climate change, biodiversity loss, and nitrogen and phosphorus cycles, and proposes quantitative boundaries within which human activities can operate without risking abrupt or irreversible environmental changes.  This framework underscores the interconnectedness of Earth system processes and the need for integrated, planetary-scale environmental governance to ensure long-term sustainability and planetary resilience.",
+        "question": "What is the primary purpose of the 'planetary boundaries' framework?",
+        "options": ["A) To solely focus on mitigating climate change without considering other environmental processes.", "B)  To propose a framework for understanding the safe operating space for humanity within the Earth system across nine key processes.", "C)  To advocate for completely halting all human activities to restore pristine pre-industrial environmental conditions.", "D)  To provide a purely economic model for optimizing resource extraction and economic growth, disregarding environmental constraints."],
+        "correct": "B)  To propose a framework for understanding the safe operating space for humanity within the Earth system across nine key processes.",
+        "difficulty": "5"
+    },
+    {
+        "text": "In behavioral economics, the concept of 'cognitive biases' highlights systematic deviations from rational decision-making, often stemming from heuristics, mental shortcuts, and emotional influences.  Examples include confirmation bias, anchoring bias, and availability heuristic.  Understanding these biases is crucial for designing more effective policies, interventions, and choice architectures that can help individuals make better decisions in areas ranging from health and finance to environmental behavior.  Behavioral economics challenges traditional assumptions of perfect rationality in economic models, providing a more psychologically realistic account of human decision-making.",
+        "question": "What is the central idea of 'cognitive biases' in behavioral economics?",
+        "options": ["A) Humans consistently make perfectly rational decisions in all contexts.", "B)  Cognitive biases are random and unpredictable errors in human judgment.", "C)  Cognitive biases represent systematic deviations from rational decision-making due to heuristics and mental shortcuts.", "D)  Traditional economic models accurately capture all aspects of human decision-making, rendering behavioral economics unnecessary."],
+        "correct": "C)  Cognitive biases represent systematic deviations from rational decision-making due to heuristics and mental shortcuts.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The philosophical debate surrounding moral relativism versus moral universalism centers on the fundamental question of whether moral values are culturally relative or objectively universal.  Moral relativism posits that morality is culturally constructed and varies across different societies, lacking universal validity.  Moral universalism, conversely, argues for the existence of universal moral principles that apply to all people, regardless of cultural context.  This enduring debate has profound implications for ethics, cross-cultural understanding, and the possibility of establishing universal human rights and ethical norms.",
+        "question": "What is the core question in the philosophical debate between moral relativism and moral universalism?",
+        "options": ["A) Whether morality is primarily determined by individual preferences or societal norms.", "B)  Whether moral judgments are inherently subjective and incapable of objective validation.", "C)  Whether moral values are culturally relative or objectively universal.", "D)  Whether moral philosophy should focus solely on descriptive analysis of existing moral practices, rather than normative prescriptions."],
+        "correct": "C)  Whether moral values are culturally relative or objectively universal.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The evolving understanding of consciousness in neuroscience increasingly emphasizes integrated information theory (IIT) as a promising framework.  IIT proposes that consciousness is fundamentally identical to integrated information, quantified as 'Phi,' which measures the degree to which a system is both integrated and differentiated.  This theory offers a potentially unified account of consciousness, linking subjective experience to objective physical properties of complex systems, and providing a framework for exploring consciousness across different biological and artificial systems.  While still under development and empirical testing, IIT represents a significant advancement in our scientific understanding of consciousness.",
+        "question": "What is the central proposition of integrated information theory (IIT) regarding consciousness?",
+        "options": ["A) Consciousness is solely a product of complex brain activity and cannot be quantified.", "B)  IIT proposes that consciousness is fundamentally identical to integrated information ('Phi'), linking subjective experience to objective system properties.", "C)  Consciousness is an emergent property solely of biological organisms and cannot be present in artificial systems.", "D)  Traditional philosophical approaches offer a more comprehensive and scientifically valid understanding of consciousness than neuroscience."],
+        "correct": "B)  IIT proposes that consciousness is fundamentally identical to integrated information ('Phi'), linking subjective experience to objective system properties.",
+        "difficulty": "5"
+    },
+    {
+        "text": "The concept of 'hyperreality,' as theorized by Jean Baudrillard, posits a condition in postmodern culture wherein simulations have become so seamlessly integrated into our experience that they precede and determine the 'real.' In hyperreality, signs and symbols no longer represent an external reality but rather become self-referential, creating a simulacrum that is more 'real' than real itself. This blurring of the boundaries between simulation and reality has profound implications for our understanding of truth, authenticity, and the nature of experience in contemporary society, leading to a potential crisis of meaning as the distinction between the genuine and the fabricated becomes increasingly opaque. The proliferation of digital media and virtual environments arguably exemplifies this hyperreal condition, where constructed experiences often eclipse and shape our perceptions of the tangible world.",
+        "question": "According to Baudrillard's concept of hyperreality, what is the primary characteristic of postmodern culture?",
+        "options": ["A) A renewed emphasis on objective truth and authenticity in representation.", "B) The clear and distinct separation between simulations and tangible reality.", "C) The dominance of simulations that precede and determine our experience of the 'real'.", "D) A cultural condition where simulations faithfully reflect an underlying, external reality."],
+        "correct": "C) The dominance of simulations that precede and determine our experience of the 'real'.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The philosophical problem of induction, famously articulated by David Hume, challenges the very foundation of empirical knowledge.  Induction, the process of reasoning from specific observations to general conclusions, is central to scientific inquiry and everyday reasoning. However, Hume argued that there is no logically necessary justification for inductive inferences.  Just because the sun has risen every day in the past, there is no guarantee, based on reason alone, that it will rise tomorrow.  This skeptical critique raises fundamental questions about the reliability of our empirical beliefs and the limits of human understanding in predicting future events based on past experiences. Responses to Hume's problem have shaped centuries of epistemology, seeking to either justify induction or to accommodate its inherent uncertainties.",
+        "question": "What is the central challenge posed by Hume's problem of induction?",
+        "options": ["A) It questions the validity of deductive reasoning in philosophical inquiry.", "B) It demonstrates the absolute certainty of scientific predictions about the future.", "C) It argues that there is no logically necessary justification for inductive inferences.", "D) It advocates for abandoning empirical observation in favor of purely rationalist approaches to knowledge."],
+        "correct": "C) It argues that there is no logically necessary justification for inductive inferences.",
+        "difficulty": "6"
+    },
+    {
+        "text": "Contemporary debates in political ecology increasingly interrogate the intrinsic limitations of anthropocentric environmental ethics.  Traditional ethical frameworks often prioritize human interests and values when considering environmental issues, viewing nature primarily as a resource to be managed for human benefit.  However, ecocentric perspectives challenge this anthropocentrism, arguing for the inherent value of non-human entities and ecosystems, independent of their utility to humans.  This paradigm shift necessitates a re-evaluation of our moral obligations to the natural world, prompting discussions about animal rights, biodiversity conservation, and the ethical implications of human actions on planetary ecosystems.  Moving beyond anthropocentrism requires a fundamental rethinking of our place within, and relationship to, the more-than-human world.",
+        "question": "What is the primary critique leveled against anthropocentric environmental ethics by political ecology?",
+        "options": ["A) Anthropocentric ethics overly emphasizes the importance of biodiversity conservation.", "B) Anthropocentric ethics fails to adequately consider the economic benefits of environmental protection.", "C) Anthropocentric ethics inherently limits moral consideration to human interests, neglecting the intrinsic value of nature.", "D) Anthropocentric ethics is too focused on abstract philosophical principles and lacks practical application."],
+        "correct": "C) Anthropocentric ethics inherently limits moral consideration to human interests, neglecting the intrinsic value of nature.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The linguistic turn in 20th-century philosophy marked a profound shift in intellectual inquiry, redirecting philosophical attention towards language as the primary medium through which reality is understood and constituted.  Thinkers like Wittgenstein and Austin argued that philosophical problems are often rooted in misunderstandings of language, and that careful analysis of linguistic usage can dissolve or reframe these problems.  This emphasis on language and meaning revolutionized fields ranging from epistemology and metaphysics to ethics and political theory, underscoring the constitutive role of language in shaping our conceptual frameworks and our engagement with the world.  The linguistic turn continues to exert a significant influence on contemporary philosophy, highlighting the inextricable link between language, thought, and reality.",
+        "question": "What is the central tenet of the 'linguistic turn' in 20th-century philosophy?",
+        "options": ["A) A renewed focus on metaphysical inquiries into the fundamental nature of reality, independent of language.", "B) The assertion that language is merely a tool for representing pre-existing, objective realities.", "C) The redirection of philosophical inquiry towards language as the primary medium for understanding and constituting reality.", "D) A rejection of linguistic analysis in favor of purely logical and mathematical approaches to philosophical problems."],
+        "correct": "C) The redirection of philosophical inquiry towards language as the primary medium for understanding and constituting reality.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The burgeoning field of neuroethics grapples with the ethical, legal, and social implications of advancements in neuroscience and neurotechnology.  As our capacity to understand and manipulate the brain expands, profound ethical dilemmas arise concerning issues such as cognitive enhancement, neural privacy, and the ethical use of brain-computer interfaces.  Neuroethics seeks to develop normative frameworks for guiding the responsible development and application of neurotechnologies, addressing questions about personal identity, autonomy, and the potential societal impacts of these powerful tools.  The interdisciplinary nature of neuroethics, bridging neuroscience, philosophy, law, and public policy, underscores the complexity and urgency of these emerging ethical challenges.",
+        "question": "What is the primary focus of the field of neuroethics?",
+        "options": ["A) To promote the unrestricted development and application of neurotechnologies for cognitive enhancement.", "B) To solely focus on the neurological basis of moral decision-making, disregarding ethical considerations.", "C) To address the ethical, legal, and social implications of advancements in neuroscience and neurotechnology.", "D) To primarily explore the therapeutic applications of neurotechnologies for treating neurological disorders."],
+        "correct": "C) To address the ethical, legal, and social implications of advancements in neuroscience and neurotechnology.",
+        "difficulty": "6"
+    },
+    {
+        "text": "Postcolonial theory critically examines the enduring legacies of colonialism and imperialism, particularly in the realms of culture, identity, and knowledge production.  It challenges Eurocentric perspectives and power structures that historically marginalized and subjugated non-Western societies.  Postcolonial scholarship analyzes the complex interplay of colonial domination and resistance, exploring the ways in which colonial histories continue to shape contemporary global inequalities and cultural dynamics.  It advocates for a decolonization of knowledge, seeking to amplify marginalized voices and perspectives, and to foster a more equitable and inclusive understanding of global history and culture.  The ongoing relevance of postcolonial theory lies in its capacity to illuminate the persistent effects of colonialism in the present and to inform struggles for social justice and cultural liberation.",
+        "question": "What is the central aim of postcolonial theory?",
+        "options": ["A) To celebrate the positive cultural and economic impacts of European colonialism.", "B) To promote a return to pre-colonial social structures and cultural practices in post-colonial societies.", "C) To critically examine and challenge the enduring legacies of colonialism and Eurocentrism.", "D) To advocate for the complete assimilation of post-colonial societies into Western cultural norms and values."],
+        "correct": "C) To critically examine and challenge the enduring legacies of colonialism and Eurocentrism.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The concept of 'biopower,' as developed by Michel Foucault, refers to the ways in which modern states and institutions exert power over individuals and populations through the management and regulation of life itself.  Biopower operates at the level of bodies and populations, encompassing techniques and strategies for controlling birth rates, health, mortality, and other biological processes.  This form of power is characterized by its productive and regulatory nature, shaping and normalizing individuals according to societal norms and imperatives.  Foucault's analysis of biopower has been influential in understanding the historical transformations of power relations in modern societies, highlighting the increasing politicization of life itself and the subtle mechanisms through which power operates in contemporary contexts.",
+        "question": "According to Foucault's concept of biopower, how do modern states primarily exert power?",
+        "options": ["A) Through overt forms of repression and direct coercion, as in pre-modern societies.", "B) Primarily through economic policies and financial control over individuals and populations.", "C) Through the management and regulation of life itself, operating at the level of bodies and populations.", "D) Solely through ideological indoctrination and the manipulation of public opinion, without direct intervention in biological processes."],
+        "correct": "C) Through the management and regulation of life itself, operating at the level of bodies and populations.",
+        "difficulty": "6"
+    },
+    {
+        "text": "Climate change, increasingly recognized as an existential threat multiplier, exacerbates existing social, economic, and political vulnerabilities, amplifying risks of conflict, displacement, and resource scarcity.  The cascading effects of rising temperatures, extreme weather events, and sea-level rise disproportionately impact marginalized communities and fragile states, potentially destabilizing already precarious regions and intensifying humanitarian crises.  Addressing climate change, therefore, necessitates not only mitigation efforts to reduce greenhouse gas emissions, but also robust adaptation strategies that build resilience, promote social equity, and address the complex interplay between environmental change and societal vulnerabilities.  Effective climate action requires a holistic and integrated approach that recognizes the profound interconnections between environmental sustainability and human security.",
+        "question": "Why is climate change increasingly recognized as an 'existential threat multiplier'?",
+        "options": ["A) Because it primarily poses a direct threat to wealthy and industrialized nations, undermining their global power.", "B) Because it primarily impacts remote and uninhabited regions, with minimal consequences for human societies.", "C) Because it exacerbates existing social, economic, and political vulnerabilities, amplifying risks of conflict and instability.", "D) Because it primarily presents technological challenges that can be readily resolved through geoengineering and technological innovation."],
+        "correct": "C) Because it exacerbates existing social, economic, and political vulnerabilities, amplifying risks of conflict and instability.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The philosophical concept of the 'sublime,' particularly as explored by Kant and Burke, describes an aesthetic experience characterized by a mixture of awe and terror, evoked by encounters with phenomena that overwhelm our sensory and cognitive capacities.  Unlike beauty, which is associated with harmony and proportion, the sublime is characterized by boundlessness, immensity, and a sense of overwhelming power, challenging our ability to fully comprehend or represent it.  This experience of cognitive and perceptual limit, paradoxically, can be both unsettling and profoundly exhilarating, prompting reflection on the limits of human understanding and the vastness of the universe.  The sublime continues to be a significant concept in aesthetics and art theory, illuminating the complex relationship between human perception, emotion, and the experience of the overwhelming.",
+        "question": "What is the defining characteristic of the 'sublime' in aesthetic philosophy?",
+        "options": ["A) An experience of pure pleasure and harmonious beauty, devoid of any negative emotion.", "B) An aesthetic experience characterized by a mixture of awe and terror, evoked by overwhelming phenomena.", "C) An experience primarily associated with cognitive clarity and a sense of mastery over the perceived object.", "D) An aesthetic category that is essentially indistinguishable from the concept of beauty, differing only in degree."],
+        "correct": "B) An aesthetic experience characterized by a mixture of awe and terror, evoked by overwhelming phenomena.",
+        "difficulty": "6"
+    },
+    {
+        "text": "In contemporary discourse on globalization, the concept of 'glocalization' highlights the complex interplay between global and local dynamics, challenging simplistic notions of cultural homogenization.  Glocalization recognizes that globalization does not simply lead to a uniform, globalized culture, but rather interacts with and is reshaped by local contexts, traditions, and identities.  This process involves the adaptation and modification of global products, ideas, and practices to suit specific local conditions, resulting in hybrid forms and cultural expressions that reflect both global influences and local particularities.  Understanding glocalization is crucial for navigating the complexities of contemporary cultural flows and recognizing the enduring significance of local diversity in an increasingly interconnected world.",
+        "question": "What does the concept of 'glocalization' primarily emphasize in the context of globalization?",
+        "options": ["A) The complete homogenization of global cultures and the disappearance of local distinctiveness.", "B) The straightforward imposition of global products and practices onto local contexts without modification.", "C) The complex interplay between global and local dynamics, leading to hybrid cultural forms.", "D) The primary focus on global economic integration, with minimal attention to cultural dimensions of globalization."],
+        "correct": "C) The complex interplay between global and local dynamics, leading to hybrid cultural forms.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The philosophical zombie argument, a thought experiment in the philosophy of mind, challenges the materialist view that consciousness is solely determined by physical properties.  A philosophical zombie is conceived as a hypothetical being that is physically and behaviorally identical to a conscious human being, but lacks any subjective experience or qualia.  Such a being, if conceivable, would suggest that consciousness is not reducible to physical processes alone, and that there is a distinct phenomenal aspect of experience that cannot be explained solely in material terms.  The philosophical zombie argument remains a contentious point of debate in consciousness studies, raising fundamental questions about the nature of subjective experience and the relationship between mind and matter.",
+        "question": "What is the primary purpose of the philosophical zombie argument in philosophy of mind?",
+        "options": ["A) To demonstrate conclusively that consciousness is entirely reducible to physical properties and processes.", "B) To argue that consciousness is an illusion and that subjective experience does not actually exist.", "C) To challenge the materialist view by suggesting the conceivability of beings physically identical to humans but lacking consciousness.", "D) To provide a definitive empirical test for distinguishing between conscious and non-conscious beings based on physical criteria."],
+        "correct": "C) To challenge the materialist view by suggesting the conceivability of beings physically identical to humans but lacking consciousness.",
+        "difficulty": "6"
+    },
+    {
+        "text": "Contemporary urban theory increasingly grapples with the phenomenon of 'urban sprawl,' characterized by the outward expansion of low-density development and the fragmentation of urban landscapes.  Urban sprawl often results in increased car dependency, longer commute times, environmental degradation, and social segregation.  Counteracting the negative consequences of sprawl necessitates strategies for promoting compact, mixed-use development, investing in public transportation, and fostering walkable and cyclable urban environments.  Sustainable urban development requires a paradigm shift away from car-centric sprawl towards more integrated and resilient urban forms that prioritize social equity, environmental sustainability, and quality of life.",
+        "question": "What are some of the key negative consequences associated with 'urban sprawl'?",
+        "options": ["A) Increased urban density and overcrowding, leading to social unrest and infrastructure strain.", "B) Enhanced public transportation systems and reduced car dependency in urban areas.", "C) Environmental degradation, increased car dependency, longer commute times, and social segregation.", "D) Improved social equity and enhanced quality of life due to the expansion of housing options in suburban areas."],
+        "correct": "C) Environmental degradation, increased car dependency, longer commute times, and social segregation.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The ongoing debate surrounding artificial general intelligence (AGI) revolves around the hypothetical possibility of creating AI systems with human-level cognitive abilities across a wide range of domains.  While current AI excels in narrow, specialized tasks, achieving AGI remains a formidable scientific and engineering challenge.  Proponents of AGI research envision transformative potential in areas ranging from scientific discovery to economic productivity, while critics raise concerns about existential risks, job displacement, and ethical dilemmas associated with superintelligent machines.  The pursuit of AGI continues to be a highly speculative and contested field, with profound implications for the future of technology and humanity.",
+        "question": "What is the central question driving the debate surrounding artificial general intelligence (AGI)?",
+        "options": ["A) How to optimize narrow AI for specific, limited tasks, without pursuing broader cognitive abilities.", "B) Whether current AI technologies already possess human-level general intelligence, rendering AGI research obsolete.", "C) Whether it is possible to create AI systems with human-level cognitive abilities across a wide range of domains.", "D) How to ensure that narrow AI systems remain confined to specific tasks, preventing any potential for general intelligence to emerge."],
+        "correct": "C) Whether it is possible to create AI systems with human-level cognitive abilities across a wide range of domains.",
+        "difficulty": "6"
+    },
+    {
+        "text": "In the realm of aesthetics, the concept of 'kitsch' denotes art or cultural objects characterized by sentimentality, superficiality, and a lack of genuine artistic merit, often designed for mass appeal and commercial success.  Kitsch typically appropriates and trivializes established aesthetic forms and conventions, reducing complex emotions and experiences to clichéd and easily digestible formulas.  Critics of kitsch often associate it with inauthenticity, bad taste, and a decline in cultural standards, contrasting it with 'high art' that is deemed to possess genuine artistic value and depth.  The ongoing debate surrounding kitsch highlights the complex and often contested boundaries between popular culture, mass culture, and artistic authenticity.",
+        "question": "What are the defining characteristics of 'kitsch' in aesthetics?",
+        "options": ["A) Artistic innovation, originality, and a challenging engagement with complex emotions.", "B) Profound emotional depth, intellectual rigor, and a rejection of mass appeal.", "C) Sentimentality, superficiality, lack of genuine artistic merit, and design for mass appeal.", "D)  Faithful adherence to traditional artistic conventions and a commitment to established aesthetic standards."],
+        "correct": "C) Sentimentality, superficiality, lack of genuine artistic merit, and design for mass appeal.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The phenomenon of 'confirmation bias,' a pervasive cognitive bias in human reasoning, describes the tendency to selectively attend to information that confirms pre-existing beliefs or hypotheses, while disregarding or downplaying contradictory evidence.  Confirmation bias can operate unconsciously, influencing our perception, interpretation, and recall of information, leading to skewed judgments and flawed decision-making.  Mitigating the effects of confirmation bias requires conscious effort to seek out diverse perspectives, critically evaluate evidence, and actively challenge one's own assumptions and preconceptions.  Understanding and addressing confirmation bias is crucial for promoting more rational and objective thinking in both individual and collective contexts.",
+        "question": "What is the core cognitive mechanism underlying 'confirmation bias'?",
+        "options": ["A) The tendency to systematically reject information that aligns with pre-existing beliefs and hypotheses.", "B) The selective attention to information that confirms pre-existing beliefs, while disregarding contradictory evidence.", "C) A conscious and deliberate effort to seek out diverse perspectives and challenge one's own assumptions.", "D)  The ability to objectively evaluate all information, regardless of its alignment with pre-existing beliefs."],
+        "correct": "B) The selective attention to information that confirms pre-existing beliefs, while disregarding contradictory evidence.",
+        "difficulty": "6"
+    },
+    {
+        "text": "In the philosophy of language, the distinction between 'sense' (Sinn) and 'reference' (Bedeutung), introduced by Gottlob Frege, is fundamental to understanding how meaning functions.  'Reference' refers to the actual object or entity in the world that a word or expression denotes, while 'sense' refers to the mode of presentation or way of thinking about that object or entity.  Different expressions can have the same reference but different senses, or vice versa, highlighting the complex relationship between language, thought, and the world.  Frege's sense/reference distinction has been highly influential in semantics and philosophy of language, providing a framework for analyzing meaning beyond simple denotation and exploring the nuances of linguistic understanding.",
+        "question": "According to Frege's sense/reference distinction, what does 'sense' primarily refer to?",
+        "options": ["A) The actual object or entity in the world denoted by a word or expression.", "B) The purely subjective and emotional connotations associated with a linguistic term.", "C) The mode of presentation or way of thinking about the object or entity denoted by a word or expression.", "D) The grammatical structure and syntactic properties of a linguistic expression, independent of its meaning."],
+        "correct": "C) The mode of presentation or way of thinking about the object or entity denoted by a word or expression.",
+        "difficulty": "6"
+    },
+    {
+        "text": "The ethical debate surrounding the 'trolley problem,' a classic thought experiment in moral philosophy, highlights the tension between consequentialist and deontological ethical frameworks.  The trolley problem presents a scenario where one must choose between actively intervening to divert a runaway trolley, saving multiple lives at the cost of one, or remaining passive and allowing the trolley to continue on its course, resulting in greater harm overall.  Consequentialist ethics might favor intervention, prioritizing the maximization of overall well-being, while deontological ethics might emphasize the inherent wrongness of actively causing harm, even to minimize greater harm.  The trolley problem and its variations continue to be debated in ethics and moral psychology, illuminating the complexities of moral decision-making and the persistent challenges of reconciling competing ethical principles.",
+        "question": "What is the central ethical dilemma highlighted by the 'trolley problem'?",
+        "options": ["A) The conflict between individual rights and the collective good in resource allocation.", "B) The tension between consequentialist ethics focused on outcomes and deontological ethics focused on moral duties.", "C) The problem of determining the most efficient and economically optimal course of action in crisis situations.", "D) The challenge of applying abstract ethical principles to real-world scenarios with clear-cut moral solutions."],
+        "correct": "B) The tension between consequentialist ethics focused on outcomes and deontological ethics focused on moral duties.",
+        "difficulty": "6"
+    },
+    {
+        "text": "Contemporary sociological theory increasingly engages with the concept of 'intersectionality,' originally developed by Kimberlé Crenshaw, to analyze the interconnected nature of social categorizations such as race, class, gender, and sexuality.  Intersectionality posits that these categories are not独立 and mutually exclusive but rather interact to create overlapping and interdependent systems of discrimination or disadvantage.  Experiences of inequality are shaped by the simultaneous interaction of multiple social identities, producing unique and complex forms of oppression and marginalization.  Understanding intersectionality is crucial for developing more nuanced and inclusive analyses of social inequality and for informing social justice movements that address the multifaceted nature of power and discrimination.",
+        "question": "What is the core proposition of 'intersectionality' in sociological theory?",
+        "options": ["A) Social categories like race, class, and gender operate as entirely separate and independent systems of social stratification.", "B)  Experiences of inequality are primarily determined by a single, dominant social category, such as class or race.", "C) Social categorizations are interconnected and interact to create overlapping and interdependent systems of discrimination and disadvantage.", "D) The primary focus of sociological analysis should be on universal experiences of oppression, rather than specific social identities."],
+        "correct": "C) Social categorizations are interconnected and interact to create overlapping and interdependent systems of discrimination and disadvantage.",
+        "difficulty": "6"
+    }
+    ]

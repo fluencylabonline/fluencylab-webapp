@@ -1,0 +1,9 @@
+[
+    {
+    "text": "Anna is going on a picnic with her friends. She is bringing sandwiches, fruit, and juice. They will play games and enjoy the sunny weather.",
+    "question": "What will they do at the picnic?",
+    "options": ["A) Eat ice cream", "B) Play games", "C) Sleep", "D) Watch TV"],
+    "correct": "B) Play games",
+    "difficulty": "2"
+    }
+]

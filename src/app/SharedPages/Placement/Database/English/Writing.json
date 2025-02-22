@@ -1,0 +1,482 @@
+[
+    {
+      "topic": "Write about your family.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Describe your house or apartment.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What is your favorite food?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Write about your best friend.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What do you do every day?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Describe your school or work.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What is your favorite color?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Write about your pet.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What do you like to do in your free time?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Describe the weather today.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Write about your bedroom.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What do you eat for breakfast?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Write about your favorite animal.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What clothes are you wearing now?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Describe your favorite room in your house.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What is your favorite drink?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Write about your teacher.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What do you do on weekends?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Describe your city or town.",
+      "difficulty": "1"
+    },
+    {
+      "topic": "What is your favorite subject at school?",
+      "difficulty": "1"
+    },
+    {
+      "topic": "Write about your daily routine.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe your favorite weekend activity.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "What do you like to do in your city?",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Write about your favorite type of music.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe a typical school day.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "What is your favorite season and why?",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Write about your hobbies and interests.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe your best friend's appearance.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "What do you usually eat for dinner?",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Write about a place you like to visit.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe your bedroom furniture.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "What subjects do you study at school?",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Write about your favorite sport.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe what you do after school or work.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "What is your favorite movie or TV show?",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Write about your last holiday.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe the people in your family.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "What kind of food do you like to cook?",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Write about your favorite shop.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe your journey to school or work.",
+      "difficulty": "2"
+    },
+    {
+      "topic": "Describe your favorite type of restaurant and explain why you like it.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a teacher who has influenced you and how.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "What are the advantages and disadvantages of living in your hometown?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Describe a film or TV series you have recently watched and enjoyed. What was it about and why did you like it?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a skill you would like to improve and how you plan to do it.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Describe a memorable day you have had recently.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "What do you think are the benefits of learning a foreign language?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a tradition or festival from your country that you find interesting.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Describe your favorite place to relax and why it is special to you.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "What are your opinions on using public transportation in cities?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a personal possession that is important to you and explain why.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Describe a time when you helped someone and how it made you feel.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "What are your views on the importance of environmental protection?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a type of music you dislike and explain why.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Describe your plans for the next weekend.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "What do you think are the most important qualities for a good friend?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a change you would like to make in your life.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Describe a place you would like to travel to in the future and why.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "What are your opinions on online shopping?",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Write about a funny or embarrassing experience you have had.",
+      "difficulty": "3"
+    },
+    {
+      "topic": "Discuss the impact of technology on modern relationships. Has it strengthened or weakened our connections with others?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Compare and contrast the advantages and disadvantages of living in a rural area versus an urban area.",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Evaluate the role of social media in today's society. Is it primarily a positive or negative influence?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Describe a significant learning experience you have had outside of formal education. What did you learn and how did it change you?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "To what extent do you believe advertising influences our choices and desires? Provide examples to support your view.",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Analyze the importance of cultural traditions in maintaining identity in a globalized world.",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Discuss the challenges and rewards of learning a new language as an adult.",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Compare and contrast two different forms of entertainment, such as movies and books, or concerts and theater. Which do you prefer and why?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Evaluate the effectiveness of recycling as a solution to environmental problems. Are there more impactful actions individuals and societies should take?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Describe a time when you had to adapt to a new situation or environment. What strategies did you use to cope and succeed?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "What are your views on the increasing popularity of online education? Is it a viable alternative to traditional classroom learning?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Analyze the role of the arts in society. Do you believe art has a practical purpose, or is its value primarily aesthetic?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Discuss the ethical considerations surrounding the use of artificial intelligence in everyday life.",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Compare and contrast the leadership styles of two different historical figures or contemporary leaders. Which style do you find more effective and why?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Evaluate the statement: 'Money cannot buy happiness.' To what extent do you agree or disagree with this statement?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Describe a personal goal you are currently working towards. What steps are you taking to achieve it, and what challenges do you anticipate?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "What are your opinions on the role of government in ensuring the health and well-being of its citizens?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Analyze the impact of globalization on the job market in your country. Are the effects primarily positive or negative?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Discuss the importance of critical thinking skills in navigating the complexities of the modern world.",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Compare and contrast the values and priorities of different generations in your society. Are there significant generational differences, and if so, what are they?",
+      "difficulty": "4"
+    },
+    {
+      "topic": "Discuss the ethical implications of gene editing technologies.  Consider the potential benefits for humanity alongside the risks of unforeseen consequences and social inequalities.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Analyze the role of collective memory in shaping national identity and international relations. How can differing historical narratives contribute to both unity and conflict?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "To what extent is globalization leading to cultural homogenization versus hybridity?  Argue your perspective, providing examples from diverse cultural contexts.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Critically evaluate the concept of 'sustainable development.' Is it a viable path forward, or an inherently contradictory paradigm in a world of finite resources?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Explore the philosophical implications of artificial intelligence achieving or surpassing human-level consciousness.  How would this challenge our understanding of humanity and our place in the universe?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Discuss the tension between individual privacy and national security in the digital age.  Where should the balance lie, and what safeguards are necessary?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Analyze the impact of misinformation and disinformation on democratic processes and social cohesion.  What are the most effective strategies for combating these challenges in the 21st century?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Compare and contrast different philosophical approaches to ethics (e.g., consequentialism, deontology, virtue ethics). Which framework do you find most compelling and why?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Evaluate the effectiveness of current international efforts to address climate change. Are current commitments and strategies sufficient, or are more radical transformations required?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Describe a significant societal trend you have observed in recent years (e.g., urbanization, increasing political polarization, rise of social media activism). Analyze its potential long-term consequences.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "What is the role of art and culture in challenging societal norms and promoting social change?  Provide specific examples to illustrate your points.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Discuss the concept of 'free will' in light of advancements in neuroscience and our growing understanding of the brain.  To what extent are our choices truly free?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Analyze the evolving nature of work in the 21st century, considering the rise of automation, the gig economy, and changing societal values regarding employment.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Compare and contrast the concepts of justice and equality. Are these inherently compatible goals, or can they sometimes be in conflict?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Evaluate the argument that economic inequality is the most pressing challenge facing contemporary societies.  Justify your position with evidence and reasoning.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Describe a complex ethical dilemma you have considered or encountered.  Analyze the different perspectives and potential resolutions, and explain your own stance.",
+      "difficulty": "5"
+    },
+    {
+      "topic": "What are your views on the future of democracy in an increasingly interconnected and technologically advanced world?  Are democratic institutions adapting effectively to contemporary challenges?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Analyze the impact of consumer culture on individual identity and societal values. Is consumerism primarily a force for individual expression or conformity?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Discuss the ethical considerations surrounding space exploration and the potential colonization of other planets. What responsibilities do humans have as they expand beyond Earth?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Compare and contrast different philosophical perspectives on the meaning of life (e.g., nihilism, existentialism, hedonism). Which perspective resonates most with you, and why?",
+      "difficulty": "5"
+    },
+    {
+      "topic": "Critically evaluate the assertion that the pursuit of technological singularity represents a logical and inevitable progression of human development.  Analyze the potential utopian and dystopian implications, considering philosophical, ethical, and societal dimensions.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Discuss the philosophical implications of quantum entanglement and non-locality for our understanding of causality, spacetime, and the fundamental nature of reality.  Explore interpretations that challenge classical deterministic paradigms.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Analyze the efficacy of cosmopolitanism as a viable ethical framework for navigating contemporary global challenges, such as climate change, economic inequality, and mass migration.  Consider both its strengths and inherent limitations in achieving global justice and cooperation.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "To what extent does the concept of 'post-truth' represent a fundamental shift in the nature of knowledge and public discourse in the 21st century?  Investigate the epistemological and societal consequences of the erosion of objective truth and the rise of subjective narratives.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Critically evaluate the ethical permissibility of human germline editing, considering arguments for and against its application in preventing hereditary diseases or enhancing human capabilities.  Address the potential for unintended consequences and the long-term impact on the human gene pool.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Discuss the implications of extending legal personhood to non-human entities, such as artificial intelligences or advanced animal species.  Explore the philosophical and legal challenges of redefining personhood and extending moral rights beyond biological humanity.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Analyze the concept of 'existential risk' from a multidisciplinary perspective, integrating insights from philosophy, science, and political theory.  Evaluate the most pressing existential threats facing humanity and propose strategies for mitigation and long-term survival.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Compare and contrast different theoretical frameworks for understanding consciousness (e.g., integrated information theory, global workspace theory, higher-order thought theory).  Assess their explanatory power and limitations in accounting for the subjective nature of experience.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Evaluate the role of digital technologies in shaping contemporary political power dynamics and modes of governance.  Consider the impact of algorithms, social media, and surveillance technologies on democratic institutions and civic engagement.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Describe a hypothetical scenario in which humanity achieves interstellar travel.  Explore the potential philosophical, sociological, and ethical challenges and transformations that interstellar colonization might entail for the human species.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "What are the limitations of purely rational approaches to ethical decision-making in complex real-world scenarios?  Investigate the role of emotions, intuition, and embodied cognition in moral judgment and action.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Discuss the philosophical and societal implications of radical life extension and the potential for human immortality.  Consider the ethical, existential, and resource-related challenges of significantly prolonging human lifespan.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Analyze the concept of 'cultural relativism' and its implications for cross-cultural understanding and ethical judgment.  To what extent can and should cultural practices be evaluated based on universal moral principles?",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Compare and contrast different philosophical perspectives on the nature of time (e.g., presentism, eternalism, growing block theory).  Explore the implications of these perspectives for our understanding of causality, free will, and the possibility of time travel.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Evaluate the argument that the increasing reliance on algorithms and artificial intelligence for decision-making poses a fundamental threat to human autonomy and agency.  Consider the potential for algorithmic determinism and the erosion of human control.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Describe a future scenario where virtual reality and augmented reality technologies are seamlessly integrated into everyday life.  Analyze the potential psychological, social, and philosophical consequences of living in such a hyper-mediated environment.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "What are the ethical and political implications of geoengineering proposals aimed at mitigating climate change?  Consider the potential risks and unintended consequences of large-scale environmental manipulation and the question of global governance.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Discuss the philosophical challenges posed by the Fermi Paradox and the apparent absence of extraterrestrial civilizations.  Explore potential explanations and their implications for our understanding of life, intelligence, and the future of humanity.",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Analyze the concept of 'moral luck' and its implications for our judgments of moral responsibility and desert.  To what extent are individuals morally accountable for outcomes that are influenced by factors beyond their control?",
+      "difficulty": "6"
+    },
+    {
+      "topic": "Compare and contrast different philosophical approaches to achieving a meaningful and fulfilling life (e.g., stoicism, hedonism, existentialism, eudaimonism). Which approach do you find most compelling and why, considering the challenges of the 21st century?",
+      "difficulty": "6"
+    }
+  ]
