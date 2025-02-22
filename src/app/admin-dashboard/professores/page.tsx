@@ -521,7 +521,15 @@ export default function Professors() {
                     <ul className='bg-fluency-gray-100 dark:bg-fluency-gray-700 p-2 rounded'>
                       {timeSlots.map((slot, index) => (
                         <li className='flex flex-row gap-2 items-center' key={index}>
-                          {slot.day} às {slot.hour}: {slot.status?.studentId === "disponivel" ? <p className='font-semibold text-fluency-green-500'>Disponível</p> : <p className='font-semibold'>{slot.status?.studentName}</p> || "Não disponível"}
+                          {slot.day} às {slot.hour}: {
+                            slot.status?.studentId === "disponivel" ? (
+                              <p className='font-semibold text-fluency-green-500'>Disponível</p>
+                            ) : slot.status?.studentName ? (
+                              <p className='font-semibold'>{slot.status?.studentName}</p>
+                            ) : (
+                              "Não disponível"
+                            )
+                          }                       
                         </li>
                       ))}
                     </ul>
