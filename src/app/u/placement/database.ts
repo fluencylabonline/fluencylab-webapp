@@ -1,36 +1,30 @@
 // database.ts
 const database = {
     "en": {
-          "vocabulary": [
-            // Difficulty 1 (4 questions)
-            { "id": "en-vocab-1-1", "difficulty": 1, "type": "mcq" as const, "question": "Escolha o sinônimo de 'big'", "options": ["pequeno", "grande", "minúsculo", "curto"], "answer": "large" },
-            { "id": "en-vocab-1-2", "difficulty": 1, "type": "mcq" as const, "question": "Qual é o significado de 'cold'?", "options": ["temperatura quente", "temperatura baixa", "temperatura morna", "temperatura normal"], "answer": "low temperature" },
-            { "id": "en-vocab-1-3", "difficulty": 1, "type": "mcq" as const, "question": "Selecione o oposto de 'up'", "options": ["para baixo", "alto", "topo", "sobre"], "answer": "down" },
-            { "id": "en-vocab-1-4", "difficulty": 1, "type": "mcq" as const, "question": "Qual palavra significa 'fazer uma pergunta'?", "options": ["responder", "replicar", "pergunta", "dizer"], "answer": "question" },
-            // Difficulty 2 (4 questions)
-            { "id": "en-vocab-2-1", "difficulty": 2, "type": "mcq" as const, "question": "Escolha o sinônimo para 'quick'", "options": ["lento", "rápido", "veloz", "letárgico"], "answer": "fast" },
-            { "id": "en-vocab-2-2", "difficulty": 2, "type": "mcq" as const, "question": "O que significa 'beautiful'?", "options": ["feio", "bonito", "comum", "caseiro"], "answer": "pretty" },
-            { "id": "en-vocab-2-3", "difficulty": 2, "type": "mcq" as const, "question": "Selecione o antônimo de 'easy'", "options": ["simples", "difícil", "descomplicado", "leve"], "answer": "hard" },
-            { "id": "en-vocab-2-4", "difficulty": 2, "type": "mcq" as const, "question": "Qual palavra descreve algo que acontece todos os dias?", "options": ["semanalmente", "mensalmente", "diariamente", "anualmente"], "answer": "daily" },
-            // Difficulty 3 (4 questions)
-            { "id": "en-vocab-3-1", "difficulty": 3, "type": "mcq" as const, "question": "Escolha o sinônimo de 'intelligent'", "options": ["estúpido", "inteligente", "tolo", "burro"], "answer": "clever" },
-            { "id": "en-vocab-3-2", "difficulty": 3, "type": "mcq" as const, "question": "O que significa 'essential'?", "options": ["desnecessário", "importante", "opcional", "extra"], "answer": "important" },
-            { "id": "en-vocab-3-3", "difficulty": 3, "type": "mcq" as const, "question": "Selecione o antônimo de 'generous'", "options": ["gentil", "egoísta", "caridoso", "benevolente"], "answer": "selfish" },
-            { "id": "en-vocab-3-4", "difficulty": 3, "type": "mcq" as const, "question": "Qual palavra descreve um sentimento de grande felicidade?", "options": ["tristeza", "alegria", "raiva", "medo"], "answer": "joy" },
-            // Difficulty 4 (4 questions)
-            { "id": "en-vocab-4-1", "difficulty": 4, "type": "mcq" as const, "question": "Escolha o sinônimo para 'significant'", "options": ["menor", "importante", "trivial", "negligenciável"], "answer": "important" },
-            { "id": "en-vocab-4-2", "difficulty": 4, "type": "mcq" as const, "question": "O que significa 'meticulous'?", "options": ["descuidado", "detalhado", "desleixado", "apressado"], "answer": "detailed" },
-            { "id": "en-vocab-4-3", "difficulty": 4, "type": "mcq" as const, "question": "Selecione o antônimo de 'optimistic'", "options": ["esperançoso", "pessimista", "positivo", "otimista"], "answer": "pessimistic" },
-            { "id": "en-vocab-4-4", "difficulty": 4, "type": "mcq" as const, "question": "Qual palavra significa 'tornar algo melhor'?", "options": ["piorar", "danificar", "melhorar", "reduzir"], "answer": "improve" },
-            // Difficulty 5 (4 questions) - False Cognates (Portuguese Speaker Focus) + True/False
-            { "id": "en-vocab-5-1", "difficulty": 5, "type": "mcq" as const, "question": "Escolha a melhor tradução para 'actually' em 'Actually, I am tired.'", "options": ["atualmente", "na verdade", "pretender", "fabricar"], "answer": "na verdade" },
-            { "id": "en-vocab-5-2", "difficulty": 5, "type": "mcq" as const, "question": "Qual opção usa 'intend' corretamente?", "options": ["Eu pretendo ir à festa.", "Eu tenho a intenção de ir à festa.", "Eu fabrico ir à festa.", "Eu realizo ir à festa."], "answer": "I intend to go to the party." },
+        "vocabulary": [
+            { "id": "en-vocab-1-1", "difficulty": 1, "type": "mcq", "question": "Escolha o sinônimo para 'big'", "options": ["small", "large", "tiny", "short"], "answer": "large" },
+            { "id": "en-vocab-1-2", "difficulty": 1, "type": "mcq", "question": "Qual é o significado de 'cold'?", "options": ["hot temperature", "low temperature", "warm temperature", "normal temperature"], "answer": "low temperature" },
+            { "id": "en-vocab-1-3", "difficulty": 1, "type": "mcq", "question": "Selecione o oposto de 'up'", "options": ["down", "high", "top", "over"], "answer": "down" },
+            { "id": "en-vocab-1-4", "difficulty": 1, "type": "mcq", "question": "Qual palavra significa 'fazer uma pergunta'?", "options": ["answer", "reply", "ask", "say"], "answer": "ask" },
+            { "id": "en-vocab-2-1", "difficulty": 2, "type": "mcq", "question": "Escolha o sinônimo para 'quick'", "options": ["slow", "fast", "rapid", "lethargic"], "answer": "fast" },
+            { "id": "en-vocab-2-2", "difficulty": 2, "type": "mcq", "question": "O que significa 'beautiful'?", "options": ["ugly", "pretty", "common", "homely"], "answer": "pretty" },
+            { "id": "en-vocab-2-3", "difficulty": 2, "type": "mcq", "question": "Selecione o antônimo de 'easy'", "options": ["simple", "hard", "uncomplicated", "light"], "answer": "hard" },
+            { "id": "en-vocab-2-4", "difficulty": 2, "type": "mcq", "question": "Qual palavra descreve algo que acontece todos os dias?", "options": ["weekly", "monthly", "daily", "yearly"], "answer": "daily" },
+            { "id": "en-vocab-3-1", "difficulty": 3, "type": "mcq", "question": "Escolha o sinônimo para 'intelligent'", "options": ["stupid", "clever", "foolish", "dumb"], "answer": "clever" },
+            { "id": "en-vocab-3-2", "difficulty": 3, "type": "mcq", "question": "O que significa 'essential'?", "options": ["unnecessary", "important", "optional", "extra"], "answer": "important" },
+            { "id": "en-vocab-3-3", "difficulty": 3, "type": "mcq", "question": "Selecione o antônimo de 'generous'", "options": ["kind", "selfish", "charitable", "benevolent"], "answer": "selfish" },
+            { "id": "en-vocab-3-4", "difficulty": 3, "type": "mcq", "question": "Qual palavra descreve um sentimento de grande felicidade?", "options": ["sadness", "joy", "anger", "fear"], "answer": "joy" },
+            { "id": "en-vocab-4-1", "difficulty": 4, "type": "mcq", "question": "Escolha o sinônimo para 'significantly'", "options": ["minor", "important", "trivial", "negligible"], "answer": "important" },
+            { "id": "en-vocab-4-2", "difficulty": 4, "type": "mcq", "question": "O que significa 'meticulous'?", "options": ["careless", "detailed", "sloppy", "hasty"], "answer": "detailed" },
+            { "id": "en-vocab-4-3", "difficulty": 4, "type": "mcq", "question": "Selecione o antônimo de 'optimistic'", "options": ["hopeful", "pessimistic", "positive", "optimistic"], "answer": "pessimistic" },
+            { "id": "en-vocab-4-4", "difficulty": 4, "type": "mcq", "question": "Qual palavra significa 'melhorar algo'?", "options": ["worsen", "damage", "improve", "reduce"], "answer": "improve" },
+            { "id": "en-vocab-5-1", "difficulty": 5, "type": "mcq", "question": "Escolha a melhor tradução para 'actually' na frase 'Actually, I am tired.'", "options": ["currently", "in fact", "to intend", "to manufacture"], "answer": "in fact" },
+            { "id": "en-vocab-5-2", "difficulty": 5, "type": "mcq", "question": "Qual opção usa 'intend' corretamente?", "options": ["I intend to go to the party.", "I have the intention to go to the party.", "I manufacture to go to the party.", "I realize to go to the party."], "answer": "I intend to go to the party." },
             { "id": "en-vocab-5-3", "difficulty": 5, "type": "true_false", "statement": "Afirmação: 'Fabric' em inglês significa 'fábrica' em português.", "correctAnswer": false },
             { "id": "en-vocab-5-4", "difficulty": 5, "type": "true_false", "statement": "Afirmação: 'Realize' em inglês geralmente se traduz para 'realizar' em português.", "correctAnswer": false },
-            // Difficulty 6 (4 questions) - Hard False Cognates + True/False
-            { "id": "en-vocab-6-1", "difficulty": 6, "type": "mcq" as const, "question": "Selecione a melhor tradução em português para 'successful' em 'He was a successful businessman.'", "options": ["sucessoso", "exitoso", "afortunado", "consecutivos"], "answer": "exitoso" },
-            { "id": "en-vocab-6-2", "difficulty": 6, "type": "mcq" as const, "question": "Qual frase usa corretamente a palavra inglesa 'sensible' (no sentido de 'razoável')?", "options": ["Ele é uma pessoa sensível, ele sente tudo.", "Ele tomou uma decisão sensata de ficar em casa durante a tempestade.", "O vestido é muito sensível, você pode tocá-lo.", "Ela é sensível à luz solar."], "answer": "He made a sensible decision to stay home in the storm." },
-            { "id": "en-vocab-6-3", "difficulty": 6, "type": "true_false", "statement": "Afirmação: 'Costume' em inglês, quando se refere a vestuário, significa 'costume' em português.", "correctAnswer": false },
+            { "id": "en-vocab-6-1", "difficulty": 6, "type": "mcq", "question": "Selecione a melhor tradução em português para 'successful' na frase 'He was a successful businessman.'", "options": ["successful (as a direct translation)", "successful", "fortunate", "consecutive"], "answer": "successful" },
+            { "id": "en-vocab-6-2", "difficulty": 6, "type": "mcq", "question": "Qual frase usa corretamente a palavra inglesa 'sensible'?", "options": ["He is a sensitive person, he feels everything.", "He made a sensible decision to stay home in the storm.", "The dress is very sensitive, you can touch it.", "She is sensitive to sunlight."], "answer": "He made a sensible decision to stay home in the storm." },
+            { "id": "en-vocab-6-3", "difficulty": 6, "type": "true_false", "statement": "Afirmação: 'Costume' em inglês, quando se refere a roupa, significa 'costume' em português.", "correctAnswer": false },
             { "id": "en-vocab-6-4", "difficulty": 6, "type": "true_false", "statement": "Afirmação: 'Parents' em inglês se traduz para 'parentes' em português.", "correctAnswer": false }
         ],
         "reading": [
@@ -160,7 +154,8 @@ const database = {
             { "id": "en-grammar-6-1", "difficulty": 6, "type": "mcq" as const, "question": "If it ____ (rain), we will stay home.", "options": ["rain", "rains", "rained", "will rain"], "answer": "rains" }
         ]
     },
-"es": {
+
+    "es": {
         "vocabulary": [
             // Difficulty 1 (4 questions)
             { "id": "es-vocab-1-1", "difficulty": 1, "type": "mcq" as const, "question": "Elige el sinónimo de 'grande'", "options": ["pequeño", "enorme", "diminuto", "corto"], "answer": "enorme" },
@@ -183,17 +178,17 @@ const database = {
             { "id": "es-vocab-4-3", "difficulty": 4, "type": "mcq" as const, "question": "Selecciona el antónimo de 'optimista'", "options": ["esperanzado", "pesimista", "positivo", "alegre"], "answer": "pesimista" },
             { "id": "es-vocab-4-4", "difficulty": 4, "type": "mcq" as const, "question": "¿Qué palabra significa 'mejorar algo'?", "options": ["empeorar", "dañar", "mejorar", "reducir"], "answer": "mejorar" },
             // Difficulty 5 (4 questions) - Falsos Cognados (Portuguese Speaker Focus) + True/False
-            { "id": "es-vocab-5-1", "difficulty": 5, "type": "mcq" as const, "question": "Elige la mejor traducción para 'actually' en 'Actually, estoy cansado.'", "options": ["actualmente", "en realidad", "pretender", "fabricar"], "answer": "en realidad" },
-            { "id": "es-vocab-5-2", "difficulty": 5, "type": "mcq" as const, "question": "¿Qué opción usa correctamente 'intend'?", "options": ["Yo pretendo ir a la fiesta.", "Yo intento ir a la fiesta.", "Yo fabrico ir a la fiesta.", "Yo realizo ir a la fiesta."], "answer": "Yo intento ir a la fiesta." },
-            { "id": "es-vocab-5-3", "difficulty": 5, "type": "true_false", "statement": "Afirmación: 'Fabric' en inglés significa 'fábrica' en español.", "correctAnswer": false },
-            { "id": "es-vocab-5-4", "difficulty": 5, "type": "true_false", "statement": "Afirmación: 'Realize' en inglés usualmente se traduce como 'realizar' en español.", "correctAnswer": false },
+            { "id": "es-vocab-5-1", "difficulty": 5, "type": "mcq" as const, "question": "Elige la mejor opción que NO significa 'apellido'", "options": ["nombre de familia", "sobrenombre", "apellido", "nombre"], "answer": "sobrenombre" },
+            { "id": "es-vocab-5-2", "difficulty": 5, "type": "mcq" as const, "question": "¿Qué significa 'largo' en español?", "options": ["estrecho", "ancho", "comprido", "extenso"], "answer": "comprido" },
+            { "id": "es-vocab-5-3", "difficulty": 5, "type": "true_false", "statement": "Afirmación: 'Rato' en español significa 'rato' (animal) en portugués.", "correctAnswer": true },
+            { "id": "es-vocab-5-4", "difficulty": 5, "type": "true_false", "statement": "Afirmación: 'Copo' en español solo se refiere a vaso para beber, como en portugués.", "correctAnswer": false },
             // Difficulty 6 (4 questions) - Falsos Cognados Difíciles + True/False
-            { "id": "es-vocab-6-1", "difficulty": 6, "type": "mcq" as const, "question": "Selecciona la mejor traducción al español para 'successful' en 'Él fue un hombre de negocios successful.'", "options": ["sucessoso", "exitoso", "afortunado", "consecutivos"], "answer": "exitoso" },
-            { "id": "es-vocab-6-2", "difficulty": 6, "type": "mcq" as const, "question": "¿Qué oración usa correctamente la palabra en inglés 'sensible' (en el sentido de 'razonable')?", "options": ["Él es una persona sensible, él siente todo.", "Él tomó una decisión sensible de quedarse en casa durante la tormenta.", "El vestido es muy sensible, puedes tocarlo.", "Ella es sensible a la luz solar."], "answer": "Él tomó una decisión sensible de quedarse en casa durante la tormenta." },
-            { "id": "es-vocab-6-3", "difficulty": 6, "type": "true_false", "statement": "Afirmación: 'Costume' en inglés, cuando se refiere a ropa, significa 'costume' en español.", "correctAnswer": false },
-            { "id": "es-vocab-6-4", "difficulty": 6, "type": "true_false", "statement": "Afirmación: 'Parents' en inglés se traduce como 'parientes' en español.", "correctAnswer": false }
-        ],
-        "reading": [
+            { "id": "es-vocab-6-1", "difficulty": 6, "type": "mcq" as const, "question": "Selecciona la mejor opción que NO significa 'embarazada'", "options": ["preñada", "gestante", "encinta", "avergonzada"], "answer": "avergonzada" },
+            { "id": "es-vocab-6-2", "difficulty": 6, "type": "mcq" as const, "question": "¿Qué significa 'vaso' en español?", "options": ["urinario", "floreiro", "excremento", "retrete"], "answer": "floreiro" },
+            { "id": "es-vocab-6-3", "difficulty": 6, "type": "true_false", "statement": "Afirmación: 'Codo' en español se refiere a la articulación del brazo, similar a 'codo' en portugués.", "correctAnswer": true },
+            { "id": "es-vocab-6-4", "difficulty": 6, "type": "true_false", "statement": "Afirmación: 'Propina' en español significa cuota escolar, similar a 'propina' en portugués.", "correctAnswer": false }
+          ],
+          "reading": [
             // Difficulty 1 (4 questions)
             { "id": "es-read-1-1", "difficulty": 1, "type": "mcq" as const, "text": "El gato se sentó en la alfombra.", "question": "¿Dónde se sentó el gato?", "options": ["En la silla", "En el suelo", "En la alfombra", "En la mesa"], "answer": "En la alfombra" },
             { "id": "es-read-1-2", "difficulty": 1, "type": "mcq" as const, "text": "Los pájaros vuelan en el cielo.", "question": "¿Dónde vuelan los pájaros?", "options": ["En el mar", "En el suelo", "En el cielo", "En los árboles"], "answer": "En el cielo" },
@@ -224,7 +219,8 @@ const database = {
             { "id": "es-read-6-2", "difficulty": 6, "type": "mcq" as const, "text": "El entrelazamiento cuántico, un fenómeno en la física, describe un estado donde las partículas están vinculadas sin importar la distancia. Este concepto desafía la física clásica.", "question": "¿Qué concepto desafía la física clásica?", "options": ["Gravedad", "Electromagnetismo", "Entrelazamiento cuántico", "Termodinámica"], "answer": "Entrelazamiento cuántico" },
             { "id": "es-read-6-3", "difficulty": 6, "type": "mcq" as const, "text": "La recesión económica provocó una disminución significativa en el mercado de valores. Los inversores se muestran cautelosos y los analistas financieros predicen una recuperación lenta.", "question": "¿Qué causó una disminución en el mercado de valores?", "options": ["Elecciones políticas", "Innovación tecnológica", "Recesión económica", "Desastres naturales"], "answer": "Recesión económica" },
             { "id": "es-read-6-4", "difficulty": 6, "type": "mcq" as const, "text": "La ingeniería genética tiene un inmenso potencial para tratar enfermedades. Sin embargo, las consideraciones éticas con respecto a su aplicación son muy debatidas.", "question": "¿Qué es muy debatido con respecto a la ingeniería genética?", "options": ["Su rentabilidad", "Su complejidad", "Consideraciones éticas", "Su popularidad"], "answer": "Consideraciones éticas" }
-        ],"listening": [
+          ],
+          "listening": [
             // Difficulty 1 (4 questions)
             { "id": "es-listen-1-1", "difficulty": 1, "type": "listening", "text": "El sol está brillando.", "question": "¿Qué tiempo hace?", "options": ["Lluvioso", "Nublado", "Soleado", "Nevado"], "answer": "Soleado" },
             { "id": "es-listen-1-2", "difficulty": 1, "type": "listening", "text": "Tengo una camisa azul.", "question": "¿De qué color es mi camisa?", "options": ["Roja", "Azul", "Verde", "Amarilla"], "answer": "Azul" },
@@ -255,8 +251,8 @@ const database = {
             { "id": "es-listen-6-2", "difficulty": 6, "type": "listening", "text": "Su comprensión matizada de los contextos históricos enriqueció su análisis.", "question": "¿Qué enriqueció su análisis?", "options": ["Opiniones personales", "Datos limitados", "Comprensión matizada de contextos históricos", "Creencias populares"], "answer": "Comprensión matizada de contextos históricos" },
             { "id": "es-listen-6-3", "difficulty": 6, "type": "listening", "text": "Los dilemas éticos planteados por la inteligencia artificial son cada vez más pertinentes.", "question": "¿Qué es cada vez más pertinente?", "options": ["Beneficios de la IA", "Desafíos técnicos de la IA", "Dilemas éticos planteados por la IA", "Interés público en la IA"], "answer": "Dilemas éticos planteados por la IA" },
             { "id": "es-listen-6-4", "difficulty": 6, "type": "listening", "text": "Las ramificaciones sociológicas de la rápida urbanización requieren una cuidadosa consideración.", "question": "¿Qué requiere una cuidadosa consideración?", "options": ["Beneficios de la urbanización", "Velocidad del desarrollo", "Ramificaciones sociológicas de la urbanización", "Crecimiento económico de la urbanización"], "answer": "Ramificaciones sociológicas de la urbanización" }
-        ],
-        "speaking": [
+          ],
+          "speaking": [
             // Difficulty 1 (4 questions)
             { "id": "es-speak-1-1", "difficulty": 1, "type": "text", "text": "Un saludo cordial. Es un placer reconocer tu presencia.", "referenceText": "Hola." },
             { "id": "es-speak-1-2", "difficulty": 1, "type": "text", "text": "Expreso mi gratitud por tu ayuda.", "referenceText": "Gracias." },
@@ -287,7 +283,7 @@ const database = {
             { "id": "es-speak-6-2", "difficulty": 6, "type": "text", "text": "La globalización presenta desafíos como la desigualdad económica y la homogeneización cultural, pero también ofrece oportunidades para la cooperación global.", "referenceText": "Discute los desafíos de la globalización." },
             { "id": "es-speak-6-3", "difficulty": 6, "type": "text", "text": "El desarrollo sostenible implica equilibrar el crecimiento económico, la equidad social y la protección ambiental para el bienestar a largo plazo.", "referenceText": "Explica los principios del desarrollo sostenible." },
             { "id": "es-speak-6-4", "difficulty": 6, "type": "text", "text": "La ética de la inteligencia artificial plantea preguntas sobre la autonomía, el sesgo y el impacto potencial en el empleo y la sociedad.", "referenceText": "Debate la ética de la inteligencia artificial." }
-        ],
+          ],
         "grammar": [
             // Grammar questions - Spanish
             // Difficulty 1 (4 questions) - Presente Simple
