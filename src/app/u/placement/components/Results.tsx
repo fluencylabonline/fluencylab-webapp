@@ -14,8 +14,8 @@ interface ResultsProps {
     const levelMap = {
         "A1": "Iniciante - A1",
         "A2": "Básico - A2",
-        "B1": "Intermediário - B2",
-        "B2": "Intermediário Avançado - B3",
+        "B1": "Intermediário - B1",
+        "B2": "Intermediário Avançado - B2",
         "C1": "Avançado - C1",
         "C2": "Proficiente - C2"
     };
