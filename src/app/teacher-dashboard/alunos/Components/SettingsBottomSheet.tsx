@@ -131,7 +131,7 @@ const SettingBottomSheet: React.FC<SettingBottomSheetProps> = ({ studentId, stud
                     </div>
 
                     {/*REPORT*/}
-                    <div className=" hidden flex-col items-center justify-center gap-4 bg-gray-300 dark:bg-gray-900 p-2 rounded-md">
+                    <div className="flex-col items-center justify-center gap-4 bg-gray-300 dark:bg-gray-900 p-2 rounded-md">
                         <Link href={{ pathname: `alunos/relatorio/${encodeURIComponent(studentName)}`, query: { id: studentId } }} passHref className="bg-gray-300 dark:bg-gray-900 p-2 px-3 rounded-md font-bold flex flex-row items-center justify-center gap-1 hover:text-indigo-700 duration-300 ease-in-out transition-all">Relatório <TbReport className="text-indigo-700 w-5 h-auto" /></Link>
                     </div>
 

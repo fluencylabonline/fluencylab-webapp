@@ -63,12 +63,12 @@
       }
     
       pre {
-        background: #d3b313;
+        background: #ecca1e;
         text-align: center;
         color: #FFF;
         font-weight: 700;
-        font-family: "Quicksand", serif !important;
         padding: 0.75rem 1rem;
+        font-family: 'Quicksand', sans-serif !important;
         border-radius: 0.5rem;
         margin-top: 8px;
         margin-bottom: 8px;
@@ -179,7 +179,7 @@
     cursor: ew-resize;
     cursor: col-resize;
   }
-
+  
 }
   
   .Popover {
@@ -343,3 +343,12 @@
     font-weight: 900;
   }
 
+  .tiptap ::selection {
+    background-color: #3F51B5ec; /* The background color when text is selected */
+    color: white;
+  }
+  
+  .tiptap {
+    caret-color: #3F51B5 !important; /* Change to your desired color */
+  }
+  

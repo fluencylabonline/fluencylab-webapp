@@ -57,7 +57,7 @@ import './styles.scss'
 import Tools from './Components/Tools';
 import Bubble from './Components/Bubble';
 
-const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, isEditable }: any) => {
+const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, isEditable, isTeacherNotebook }: any) => {
   const { data: session } = useSession();
   const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
 
@@ -117,9 +117,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       }),
       Highlight,
       Color,
-
       /*
-      //Part of collaboration that might work now
+      //Part of collaboration that might work now, but I'm not using yet
       Collaboration.configure({
         document: ydoc,
       }),
@@ -154,7 +153,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
             return headingPlaceholders[node.attrs.level];
           }
           if (node.type.name === 'paragraph') {
-            return "O que vamos aprender..."
+            return "..."
           }
           return '/'
         },
@@ -168,6 +167,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     },
     autofocus: true,
     content: content,
+
+    //Mark this one when real-time
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -189,7 +190,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  />}
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
-      {session?.user.role !== 'student' && isEditable && <Tools editor={editor}/>}
+      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor}/>}
       {session?.user.role === 'student' && (
         <div className='fixed bottom-5 right-5'>
           {isPomodoroVisible ? (

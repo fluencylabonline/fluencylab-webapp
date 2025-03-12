@@ -17,6 +17,8 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { PomodoroProvider, usePomodoro } from '../context/PomodoroContext';
 import PomodoroClock from '../ui/TipTap/Components/Pomodoro';
+import { CallProvider, useCallContext } from '../context/CallContext';
+import VideoHome from '../SharedPages/Video/VideoHome';
 
 interface ISidebarItem {
   name: string;
@@ -38,7 +40,8 @@ function LayoutContent({
   children: React.ReactNode; // Add children as a direct prop to LayoutContent
 }) {
   const { isPomodoroVisible } = usePomodoro(); // Move the hook outside the conditional
-
+  const { callData, setCallData } = useCallContext();
+  
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
       {isMobile ? (
@@ -64,6 +67,7 @@ function LayoutContent({
           >
             <Header {...sidebarProps} />
             {isPomodoroVisible && <PomodoroClock />}
+            {callData?.callId && <VideoHome />}
             {children}
           </div>
         </div>
@@ -164,15 +168,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <PomodoroProvider>
-      <LayoutContent
-        isMobile={isMobile}
-        isSidebarCollapsed={isSidebarCollapsed}
-        sidebarProps={sidebarProps}
-        menuItems={menuItems}
-      >
-        {children} {/* Render children directly here */}
-      </LayoutContent>
-    </PomodoroProvider>
+    <CallProvider>
+      <PomodoroProvider>
+        <LayoutContent
+          isMobile={isMobile}
+          isSidebarCollapsed={isSidebarCollapsed}
+          sidebarProps={sidebarProps}
+          menuItems={menuItems}
+        >
+          {children}
+        </LayoutContent>
+      </PomodoroProvider>
+    </CallProvider>
   );
 }

@@ -168,53 +168,53 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
         onSkipQuestion();
         onAnswer(currentQuestion.id, null, false, currentQuestion.difficulty, currentQuestionIndex, true); // null answer for skipped, isCorrect: false, skipped: true
     };
-
-    // Levenshtein distance for fuzzy matching.
-    const levenshteinDistance = (a: string, b: string): number => {
-        const matrix: number[][] = [];
-        const aLen = a.length;
-        const bLen = b.length;
-
-        for (let i = 0; i <= bLen; i++) {
-            matrix[i] = [i];
-        }
-        for (let j = 0; j <= aLen; j++) {
-            matrix[0][j] = j;
-        }
-        for (let i = 1; i <= bLen; i++) {
-            for (let j = 1; j <= aLen; j++) {
-                if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                    matrix[i][j] = matrix[i - 1][j - 1];
-                } else {
-                    matrix[i][j] = Math.min(
-                        matrix[i - 1][j - 1] + 1, // substitution
-                        matrix[i][j - 1] + 1,     // insertion
-                        matrix[i - 1][j] + 1      // deletion
-                    );
+    
+    const computeScore = useCallback(() => {
+        if (currentQuestion.type === 'text' && currentQuestion.text) {
+            // Normalize texts: lower case, trim, and remove punctuation/extra spaces.
+            const normalizeText = (text: string): string => {
+                return text
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+                    .replace(/\s{2,}/g, " ");
+            };
+    
+            const refText = normalizeText(currentQuestion.text);
+            const spokenText = normalizeText(userTranscript);
+    
+            // Split texts into words.
+            const refWords = refText.split(" ");
+            const spokenWords = spokenText.split(" ");
+    
+            // Compare each word in order.
+            let matches = 0;
+            for (let i = 0; i < refWords.length; i++) {
+                if (spokenWords[i] && spokenWords[i] === refWords[i]) {
+                    matches++;
                 }
             }
-        }
-        return matrix[bLen][aLen];
-    };
-
-    const computeScore = useCallback(() => {
-        if (currentQuestion.type === 'text' && currentQuestion.referenceText) {
-            const distance = levenshteinDistance(currentQuestion.referenceText.toLowerCase(), userTranscript.toLowerCase());
-            const maxLength = Math.max(currentQuestion.referenceText.length, userTranscript.length);
-            let calculatedScore = 0;
-            if (maxLength === 0) {
-                calculatedScore = 100; // Both strings are empty, consider it a perfect match
-            } else {
-                calculatedScore = Math.max(0, 100 - (distance / maxLength) * 100); // Ensure score is not negative
-            }
-            setSpeakingScore(Math.round(calculatedScore)); // Store calculated score
-            const isCorrect = calculatedScore >= 70; // Example threshold for considering "correct"
+    
+            // Calculate a percentage score (100 means perfect match).
+            const score = refWords.length === 0 ? 100 : (matches / refWords.length) * 100;
+            const roundedScore = Math.round(score);
+    
+            setSpeakingScore(roundedScore);
+            const isCorrect = roundedScore >= 70;
             setShowCorrectAnswer(isCorrect);
-            setShowSpeakingNextButton(true); // Show Next button after scoring
-            setShowSpeakingSkipButton(false); // Hide Skip button after recording attempt
-            onAnswer(currentQuestion.id, userTranscript, isCorrect, currentQuestion.difficulty, currentQuestionIndex, false); // Use userTranscript as userAnswer for speaking
+            setShowSpeakingNextButton(true);
+            setShowSpeakingSkipButton(false);
+            onAnswer(
+                currentQuestion.id,
+                userTranscript,
+                isCorrect,
+                currentQuestion.difficulty,
+                currentQuestionIndex,
+                false
+            );
         }
     }, [userTranscript, currentQuestion, onAnswer, currentQuestionIndex]);
+    
 
     // Start recording with realtime transcript updates.
     const startRecording = useCallback(() => {

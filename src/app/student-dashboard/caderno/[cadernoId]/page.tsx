@@ -7,9 +7,9 @@ import { BsFilePdfFill } from "react-icons/bs";
 import { IoFilter } from 'react-icons/io5';
 import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
-import { getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import StudentCallButton from '@/app/SharedPages/Video/StudentCallButton';
 
 interface Notebook {
     studentName: string;
@@ -49,7 +49,6 @@ interface Slide {
 export default function CadernoID() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
-
     const [studentData, setStudentData] = useState<Aluno | null>(null);
     useEffect(() => {
         const fetchStudentData = async () => {
@@ -241,7 +240,8 @@ export default function CadernoID() {
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
                 <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-around gap-4 items-center w-full'>
-                    <FluencyInput placeholder='Procure por uma aula específica...'
+                
+                <FluencyInput placeholder='Procure por uma aula específica...'
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)} />
                     <div className="flex min-w-max">
@@ -257,6 +257,7 @@ export default function CadernoID() {
                             <option value="desc">Decrescente</option>
                         </select>
                     </div>
+
                 </div>
             </div>
 

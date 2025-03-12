@@ -2,8 +2,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import {   
     addDoc,
     getDoc,
@@ -18,7 +16,7 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { MdDeleteSweep } from 'react-icons/md';
 import { GiSchoolBag } from "react-icons/gi";
-import { IoFilter } from 'react-icons/io5';
+import { IoFilter, IoVideocam } from 'react-icons/io5';
 import Link from 'next/link';
 
 import { toast, Toaster } from 'react-hot-toast';
@@ -26,6 +24,7 @@ import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
 import { IoMdHelpCircleOutline } from 'react-icons/io';
 import { HiOutlineDocumentReport } from 'react-icons/hi';
 import { Tooltip } from '@nextui-org/react';
+import TeacherCallButton from '@/app/SharedPages/Video/TeacherCallButton';
 
 interface Notebook {
     studentName: string;
@@ -62,7 +61,6 @@ export default function Caderno(){
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-    
     const [studentData, setStudentData] = useState<Aluno | null>(null);
     useEffect(() => {
         const fetchStudentData = async () => {
@@ -401,19 +399,18 @@ export default function Caderno(){
             return dateB.getTime() - dateA.getTime();  // Descending order
         }
     });
-    
 
     return(
         <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3'>
             <div className='flex flex-col items-center w-full gap-2'>
-                <h1 className='text-3xl font-bold'>Aulas</h1>
                 <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-around gap-4 items-center w-full'>
                     <FluencyInput placeholder='Procure por uma aula específica...' 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}/>
                        <div className='flex flex-row gap-2 items-center justify-center'>
-                        <FluencyButton variant='confirm' className='min-w-max' onClick={handleOpenModalDescription}>Começar aula</FluencyButton>
-                        <FluencyButton variant='warning' className='min-w-max' onClick={handleOpenModal}>Aula com Slides</FluencyButton>
+                        {/*<TeacherCallButton student={{ studentID: id}} />*/}
+                        <FluencyButton variant='confirm' className='min-w-max' onClick={handleOpenModalDescription}>Criar caderno</FluencyButton>
+                        <FluencyButton variant='warning' className='min-w-max' onClick={handleOpenModal}>Criar slide</FluencyButton>
                        </div>
                         <div className="flex min-w-max">  
                             <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">

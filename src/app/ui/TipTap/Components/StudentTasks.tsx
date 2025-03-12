@@ -1,7 +1,7 @@
 import { db } from "@/app/firebase";
 import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
 import toast from "react-hot-toast";
-import { MdDelete, MdOutlineAddTask } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import FluencyCloseButton from "../../Components/ModalComponents/closeModal";
 import FluencyButton from "../../Components/Button/button";
 import { useState, useEffect } from "react";

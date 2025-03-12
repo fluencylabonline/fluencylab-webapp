@@ -12,13 +12,18 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { PiStudentFill } from 'react-icons/pi';
 import { TbMessageQuestion } from 'react-icons/tb';
-import { MdOndemandVideo, MdOutlineSupportAgent } from "react-icons/md";
+import { MdOndemandVideo, MdOutlineClass, MdOutlineSupportAgent } from "react-icons/md";
 import { LuGamepad2 } from 'react-icons/lu';
-import { IoChatbubblesOutline } from 'react-icons/io5';
+
+//Firebase
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+
+//Context
 import { PomodoroProvider, usePomodoro } from '../context/PomodoroContext';
 import PomodoroClock from '../ui/TipTap/Components/Pomodoro';
+import { CallProvider, useCallContext } from '../context/CallContext';
+import VideoHome from '../SharedPages/Video/VideoHome';
 
 interface ISidebarItem {
   name: string;
@@ -39,8 +44,9 @@ function LayoutContent({
   menuItems: ISidebarItem[];
   children: React.ReactNode; // Add children as a direct prop to LayoutContent
 }) {
-  const { isPomodoroVisible } = usePomodoro(); // Move the hook outside the conditional
-
+  const { isPomodoroVisible } = usePomodoro();
+  const { callData, setCallData } = useCallContext();
+  
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
       {isMobile ? (
@@ -66,6 +72,7 @@ function LayoutContent({
           >
             <Header {...sidebarProps} />
             {isPomodoroVisible && <PomodoroClock />}
+            {callData?.callId && <VideoHome />}
             {children}
           </div>
         </div>
@@ -169,9 +176,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <MdOutlineSupportAgent className="h-6 w-6"/>,
     },
     {
-      name: "Conversas",
-      path: "/teacher-dashboard/conversas",
-      icon: <IoChatbubblesOutline className="h-6 w-6"/>,
+      name: "Suas aulas",
+      path: "/teacher-dashboard/aulas",
+      icon: <MdOutlineClass className="h-6 w-6"/>,
     },
   ];
 
@@ -193,15 +200,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <PomodoroProvider>
-      <LayoutContent
-        isMobile={isMobile}
-        isSidebarCollapsed={isSidebarCollapsed}
-        sidebarProps={sidebarProps}
-        menuItems={menuItems}
-      >
-        {children} {/* Render children directly here */}
-      </LayoutContent>
-    </PomodoroProvider>
+    <CallProvider>
+      <PomodoroProvider>
+        <LayoutContent
+          isMobile={isMobile}
+          isSidebarCollapsed={isSidebarCollapsed}
+          sidebarProps={sidebarProps}
+          menuItems={menuItems}
+        >
+          {children}
+        </LayoutContent>
+      </PomodoroProvider>
+    </CallProvider>
   );
 }

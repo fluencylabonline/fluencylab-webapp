@@ -7,11 +7,13 @@ import { Editor } from '@tiptap/react';
 import Workbooks from './Workbooks';
 import DescriptionChange from './DescriptionChange';
 import VersionsModal from './VersionsModal';
+import Report from './Report'
+import AulasPreparadas from './AulasPreparadas';
 
 // Icons
 import { IoClose, IoCloudDownloadOutline } from 'react-icons/io5';
 import { PiChalkboardTeacher, PiNotebookBold, PiStudentFill } from 'react-icons/pi';
-import { MdOutlineTipsAndUpdates } from 'react-icons/md';
+import { MdOutlineClass, MdOutlineTipsAndUpdates } from 'react-icons/md';
 import { AiFillYoutube } from 'react-icons/ai';
 import { FiTool } from 'react-icons/fi';
 import { FaHistory, FaRegImage, FaTasks } from 'react-icons/fa';
@@ -44,9 +46,10 @@ import FlashcardModal from './Extensions/Flashcards/FlashcardModal'
 
 interface ToolsProps {
   editor: Editor;
+  isTeacherNotebook: boolean;
 }
 
-const Tools: React.FC<ToolsProps> = ({ editor }) => {
+const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook }) => {
   const [modals, setModals] = useState({
     textStudent: false,
     textTeacher: false,
@@ -70,7 +73,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
     workbooksList: false,
     versions: false,
     description: false,
-
+    yourclasses: false,
     tasks: false,
   });
 
@@ -126,7 +129,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
         <button
           className="bg-gray-200 dark:bg-gray-950 p-2 px-3 rounded-md flex flex-col items-center justify-start gap-2 w-full"
         >
-          <div className="flex flex-row items-center gap-2 font-bold text-black dark:text-white dark:hover:text-fluency-orange-500 hover:text-fluency-orange-600 duration-300 ease-in-out transition-all cursor-pointer">
+          <div className="flex flex-row items-center gap-2 font-bold text-black dark:text-white dark:hover:text-fluency-red-500 hover:text-fluency-red-600 duration-300 ease-in-out transition-all cursor-pointer">
             <p onClick={() => toggleModal(tool.modal as keyof typeof modals, true)}>{tool.label}</p>
             {openDescription === tool.label ? 
             (<IoIosArrowUp onClick={() => handleItemClick(tool.label)} />):
@@ -225,6 +228,7 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
     { label: 'Apostilas', icon: <PiNotebookBold className='text-xl'/>, modal: 'workbooksList', description: 'Apostilas disponíveis para usar em aula' },
     { label: 'Histórico', icon: <FaHistory className='text-xl'/>, modal: 'versions', description: 'Histórico das modificações feitas neste documento' },
     { label: 'Tarefas', icon: <FaTasks className='text-xl'/>, modal: 'tasks', description: 'Adicionar tarefas para o aluno' },
+    { label: 'Suas Aulas', icon: <MdOutlineClass  className='text-xl'/>, modal: 'yourclasses', description: 'Aqui estão aulas feitas e salvas pelos professores' },
   ];
 
   const workbooksItems = () =>
@@ -273,13 +277,10 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
       <Vocabulab isOpen={modals.vocabulab} onClose={() => toggleModal('vocabulab', false)} editor={editor} />
       <Download isOpen={modals.download} onClose={() => toggleModal('download', false)} editor={editor} />
       <Workbooks editor={editor} isOpen={modals.workbooksList} onClose={() => toggleModal('workbooksList', false)} />
+      <AulasPreparadas editor={editor} isOpen={modals.yourclasses} onClose={() => toggleModal('yourclasses', false)} />
       <VersionsModal editor={editor} isOpen={modals.versions} onClose={() => toggleModal('versions', false)} />
       <StudentTasks isOpen={modals.tasks} onClose={() => toggleModal('tasks', false)} />
-      <FlashcardModal 
-        isOpen={modals.flashcard} 
-        onClose={() => toggleModal('flashcard', false)} 
-        editor={editor} 
-      />
+      <FlashcardModal isOpen={modals.flashcard} onClose={() => toggleModal('flashcard', false)} editor={editor} />
       
       {/* Mobile Bottom Sheet */}
       <div
@@ -311,23 +312,32 @@ const Tools: React.FC<ToolsProps> = ({ editor }) => {
                 <IoClose onClick={closeBottomSheet} className="icon cursor-pointer absolute top-0 right-4 mt-2 ml-2 transition-all text-gray-500 hover:text-blue-600 w-7 h-7 ease-in-out duration-300" />
             </div>
             <div className='flex flex-row items-start justify-center flex-wrap gap-2'>
-              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
-                <h1 className="text-xl font-bold text-fluency-orange-500">Faixas</h1>
+              <div className="min-w-[17%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+                <h1 className="text-xl font-bold text-fluency-red-500">Faixas</h1>
                 {bands()}
               </div>
-              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+              <div className="min-w-[17%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
                 <h1 className="text-xl font-bold text-fluency-blue-500">Recursos</h1>
                 {others()}
               </div>
-              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+              <div className="min-w-[17%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
                 <h1 className="text-xl font-bold text-fluency-green-500">Exercícios</h1>
                 {exercises()}
               </div>
-              <div className="min-w-[20%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
-                <h1 className="text-xl font-bold text-indigo-700">Apostila</h1>
-                {workbooksItems()}
-                <DescriptionChange />
-              </div>
+              {!isTeacherNotebook && (
+                <>
+                  <div className="min-w-[17%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+                    <h1 className="text-xl font-bold text-indigo-700">Apostila</h1>
+                    {workbooksItems()}
+                    <DescriptionChange />
+                    
+                  </div>
+                  <div className="min-w-[17%] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-2 pb-4 px-6">
+                    <h1 className="text-xl font-bold text-amber-500">Relatório</h1>
+                    <Report />
+                  </div>
+                </>
+              )}
             </div>
             </motion.div>
           </motion.div>
