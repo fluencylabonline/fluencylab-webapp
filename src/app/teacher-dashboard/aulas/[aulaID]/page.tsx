@@ -1,4 +1,3 @@
-
 'use client'
 import React, { useEffect, useState } from 'react';
 
@@ -10,19 +9,19 @@ import { db } from '@/app/firebase';
 import Tiptap from '../../../ui/TipTap/TipTap';
 import DocumentAnimation from '../../../ui/Animations/DocumentAnimation';
 
-// CSS for button animation
+// Autenticação
 import { useSession } from 'next-auth/react';
 
 const NotebookEditor = () => {
   const { data: session } = useSession();
-    if (!session) {
-        return "Sem sessão iniciada";
-  }
 
+  // Declaração dos hooks (sempre executados)
   const professorID = session?.user.id;
-  const params = new URLSearchParams(window.location.search);
+  // Usa guard para acesso ao objeto window, caso seja renderizado no lado do servidor
+  const params = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search)
+    : new URLSearchParams('');
   const notebookID = params.get('notebook');
-
   const isTeacherNotebook = true;
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -32,6 +31,11 @@ const NotebookEditor = () => {
   const [buttonColor, setButtonColor] = useState<string>('black');
   const [animation, setAnimation] = useState<boolean>(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  // Se não houver sessão, exibe mensagem (agora após os hooks)
+  if (!session) {
+    return <p>Sem sessão iniciada</p>;
+  }
 
   useEffect(() => {
     const fetchNotebookContent = async () => {
@@ -48,7 +52,9 @@ const NotebookEditor = () => {
       }
     };
 
-    fetchNotebookContent();
+    if (professorID && notebookID) {
+      fetchNotebookContent();
+    }
   }, [professorID, notebookID]);
 
   const handleContentChange = async (newContent: string) => {
@@ -65,7 +71,11 @@ const NotebookEditor = () => {
     }, 3000);
 
     try {
-      await setDoc(doc(db, `users/${professorID}/Notebooks/${notebookID}`), { content: newContent }, { merge: true });
+      await setDoc(
+        doc(db, `users/${professorID}/Notebooks/${notebookID}`),
+        { content: newContent },
+        { merge: true }
+      );
     } catch (error) {
       console.error('Error saving notebook content: ', error);
     }
