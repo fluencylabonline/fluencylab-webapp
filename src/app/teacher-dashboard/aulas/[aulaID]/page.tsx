@@ -15,9 +15,8 @@ import { useSession } from 'next-auth/react';
 const NotebookEditor = () => {
   const { data: session } = useSession();
 
-  // Declaração dos hooks (sempre executados)
+  // Todos os hooks são declarados sempre, independentemente da sessão
   const professorID = session?.user.id;
-  // Usa guard para acesso ao objeto window, caso seja renderizado no lado do servidor
   const params = typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search)
     : new URLSearchParams('');
@@ -32,18 +31,17 @@ const NotebookEditor = () => {
   const [animation, setAnimation] = useState<boolean>(false);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  // Se não houver sessão, exibe mensagem (agora após os hooks)
-  if (!session) {
-    return <p>Sem sessão iniciada</p>;
-  }
-
   useEffect(() => {
     const fetchNotebookContent = async () => {
       try {
         setLoading(true);
-        const notebookDoc = await getDoc(doc(db, `users/${professorID}/Notebooks/${notebookID}`));
-        if (notebookDoc.exists()) {
-          setContent(notebookDoc.data().content);
+        if (professorID && notebookID) {
+          const notebookDoc = await getDoc(
+            doc(db, `users/${professorID}/Notebooks/${notebookID}`)
+          );
+          if (notebookDoc.exists()) {
+            setContent(notebookDoc.data().content);
+          }
         }
       } catch (error) {
         console.error('Error fetching notebook content: ', error);
@@ -52,9 +50,7 @@ const NotebookEditor = () => {
       }
     };
 
-    if (professorID && notebookID) {
-      fetchNotebookContent();
-    }
+    fetchNotebookContent();
   }, [professorID, notebookID]);
 
   const handleContentChange = async (newContent: string) => {
@@ -71,37 +67,47 @@ const NotebookEditor = () => {
     }, 3000);
 
     try {
-      await setDoc(
-        doc(db, `users/${professorID}/Notebooks/${notebookID}`),
-        { content: newContent },
-        { merge: true }
-      );
+      if (professorID && notebookID) {
+        await setDoc(
+          doc(db, `users/${professorID}/Notebooks/${notebookID}`),
+          { content: newContent },
+          { merge: true }
+        );
+      }
     } catch (error) {
       console.error('Error saving notebook content: ', error);
     }
   };
 
+  // Renderiza animação enquanto carrega
   if (loading) {
     return <DocumentAnimation />;
   }
 
+  // Na renderização, condicione a exibição de acordo com a sessão
   return (
-    <div className='lg:px-6 lg:py-4 md:px-6 md:py-4 px-2 py-1'>
-      <Tiptap
-        content={content}
-        onChange={(newContent: string) => {
-          setContent(newContent);
-          handleContentChange(newContent);
-        }}
-        isTyping={isTyping}
-        lastSaved={lastSaved}
-        buttonColor={buttonColor}
-        animation={animation}
-        timeLeft={timeLeft}
-        isEditable={true}
-        isTeacherNotebook={isTeacherNotebook}
-      />
-    </div>
+    <>
+      {!session ? (
+        <p>Sem sessão iniciada</p>
+      ) : (
+        <div className='lg:px-6 lg:py-4 md:px-6 md:py-4 px-2 py-1'>
+          <Tiptap
+            content={content}
+            onChange={(newContent: string) => {
+              setContent(newContent);
+              handleContentChange(newContent);
+            }}
+            isTyping={isTyping}
+            lastSaved={lastSaved}
+            buttonColor={buttonColor}
+            animation={animation}
+            timeLeft={timeLeft}
+            isEditable={true}
+            isTeacherNotebook={isTeacherNotebook}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
