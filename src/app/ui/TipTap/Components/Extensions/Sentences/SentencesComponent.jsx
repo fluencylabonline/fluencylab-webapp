@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { NodeViewWrapper } from '@tiptap/react';
 
-const MODEL_NAME = 'gemini-1.0-pro';
+const MODEL_NAME = process.env.NEXT_PUBLIC_GEMINI_MODEL;
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
 const SentencesComponent = ({ node, updateAttributes }) => {

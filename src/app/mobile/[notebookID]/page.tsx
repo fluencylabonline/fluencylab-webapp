@@ -6,7 +6,7 @@ import * as Y from 'yjs';
 import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
 import { firebaseApp } from './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import TiptapMobile from '../Editor/TipTapMobile';
+import TiptapMobile from '@/app/ui/TipTap/TipTap';
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 function NotebookEditor() {

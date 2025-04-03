@@ -38,7 +38,7 @@ const questionVariants = {
   exit: { opacity: 0, y: -10 }
 };
 
-const MODEL_NAME = "gemini-1.0-pro";
+const MODEL_NAME = process.env.NEXT_PUBLIC_GEMINI_MODEL as string;
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
 
 interface WritingQuestion {
