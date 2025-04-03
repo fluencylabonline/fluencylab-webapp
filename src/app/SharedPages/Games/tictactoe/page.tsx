@@ -11,7 +11,7 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyInput from '@/app/ui/Components/Input/input';
 import { CiCircleQuestion } from 'react-icons/ci';
 import FluencyCloseButton from '@/app/ui/Components/ModalComponents/closeModal';
-const MODEL_NAME = process.env.NEXT_PUBLIC_GEMINI_MODEL as string;
+const MODEL_NAME = "gemini-1.5-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
 
 const TicTacToe: React.FC = () => {

@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { TbPencilCheck } from "react-icons/tb";
 
-const MODEL_NAME = process.env.NEXT_PUBLIC_GEMINI_MODEL;
+const MODEL_NAME = "gemini-1.5-pro";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
 const TranslationComponent = ({ node, updateAttributes }) => {
