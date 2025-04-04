@@ -5,25 +5,37 @@ import { getDoc, doc, updateDoc, collection, addDoc, getDocs } from 'firebase/fi
 import { db, firebaseApp } from './firebase'; // Assuming firebaseApp is your initialized Firebase app
 import * as Y from 'yjs';
 import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+// Removed Firebase Auth imports: import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Your component imports
 import TiptapMobile from '../Editor/TipTapMobile'; // Assuming this is the correct path
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation'; // Assuming correct path
 
+// --- CRITICAL SECURITY NOTE ---
+// Removing client-side authentication checks means your Firestore Security Rules
+// MUST allow unauthenticated access to the relevant paths:
+// - `users/{studentID}/Notebooks/{notebookID}` (for Yjs data sync)
+// - `users/{studentID}/Notebooks/{notebookID}/versions` (for version saving)
+// Failure to update security rules will likely result in PERMISSION_DENIED errors.
+// Example (simplistic, adjust for your needs):
+// match /users/{userId}/Notebooks/{notebookId}/{document=**} {
+//   allow read, write: if true; // Allows anyone - BE CAREFUL in production
+// }
+// Consider more specific rules if possible, perhaps validating the structure
+// of studentID/notebookID if they follow a predictable pattern accessible publicly.
+
 // Main Component
 function NotebookEditor() {
     // State Hooks
-    const [content, setContent] = useState(''); // Keep for now if needed elsewhere, but Yjs is source of truth for editor
-    const [loading, setLoading] = useState(true);
+    const [content, setContent] = useState(''); // Keep if needed, but Yjs is source of truth
+    const [loading, setLoading] = useState(true); // Now primarily tracks provider sync
     const [lastSaved, setLastSaved] = useState<string | null>(null);
     const [timeLeft, setTimeLeft] = useState<number>(600000); // 10 minutes in ms
-    const [userName, setUserName] = useState<string | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // Removed auth state: const [userName, setUserName] = useState<string | null>(null);
+    // Removed auth state: const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isChecked, setIsChecked] = useState(false); // Theme state
 
     // Get URL Params
-    // Using useEffect to safely access window object after component mounts
     const [notebookID, setNotebookID] = useState<string | null>(null);
     const [studentID, setStudentID] = useState<string | null>(null);
     const [role, setRole] = useState<string | null>(null);
@@ -50,74 +62,64 @@ function NotebookEditor() {
         document.body.classList.toggle('dark', isChecked);
     }, [isChecked]);
 
-    // --- Yjs Initialization (Done ONCE using useState initializer) ---
+    // --- Yjs Initialization ---
     const [ydoc] = useState(() => new Y.Doc());
-
     const [provider, setProvider] = useState<FirestoreProvider | null>(null);
 
     useEffect(() => {
         // Initialize provider only when IDs are available
         if (studentID && notebookID && !provider) {
             const basePath: string[] = ["users", studentID, "Notebooks", notebookID];
-            console.log("Initializing FirestoreProvider for path:", basePath.join('/'));
-            const firestoreProvider = new FirestoreProvider(firebaseApp, ydoc, basePath);
+            console.log("Initializing FirestoreProvider (unauthenticated) for path:", basePath.join('/'));
+            try {
+                const firestoreProvider = new FirestoreProvider(firebaseApp, ydoc, basePath);
 
-            firestoreProvider.on('synced', (isSynced: boolean) => {
-                console.log('Provider synced:', isSynced);
-                // If synced, we can potentially stop the main loading state
-                if (isSynced) {
-                    setLoading(false); // Assuming sync means initial content is loaded
-                     // Trigger initial version check after sync
-                    const currentContent = ydoc.getText('content').toString();
-                    checkAndSaveVersion(currentContent);
-                }
-            });
+                firestoreProvider.on('synced', (isSynced: boolean) => {
+                    console.log('Provider synced:', isSynced);
+                    if (isSynced) {
+                        setLoading(false); // Content loaded/synced
+                        // Trigger initial version check after sync
+                        const currentContent = ydoc.getText('content').toString();
+                        checkAndSaveVersion(currentContent);
+                    }
+                });
 
-            firestoreProvider.on('update', (update: any) => {
-                // console.log('Update detected by FirestoreProvider:', update); // Can be verbose
-            });
+                firestoreProvider.on('update', (update: any) => {
+                    // console.log('Update detected by FirestoreProvider:', update);
+                });
 
-             firestoreProvider.on('error', (error: any) => {
-                 console.error('FirestoreProvider Error:', error);
-                 // Handle provider errors appropriately (e.g., show message to user)
-                 setLoading(false); // Stop loading on error too
-             });
+                firestoreProvider.on('error', (error: any) => {
+                    console.error('FirestoreProvider Error:', error);
+                    // Check for permission errors specifically
+                    if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
+                         console.error("PERMISSION DENIED: Check Firestore Security Rules to allow unauthenticated access for this path.");
+                         // Optionally show an error message to the user
+                    }
+                    setLoading(false); // Stop loading on error too
+                });
 
-            setProvider(firestoreProvider);
+                setProvider(firestoreProvider);
 
-            // Cleanup function for when component unmounts or IDs change
-            return () => {
-                console.log("Destroying FirestoreProvider...");
-                firestoreProvider.destroy();
-                setProvider(null); // Reset provider state
-            };
-        }
-    }, [studentID, notebookID, ydoc, firebaseApp]); // Re-run if IDs, ydoc, or firebaseApp change
-
-
-    // --- Firebase Authentication ---
-    const auth = getAuth(firebaseApp);
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setIsAuthenticated(true);
-                setUserName(user.displayName || 'Anonymous');
-                console.log("User authenticated:", user.displayName || 'Anonymous');
-            } else {
-                setIsAuthenticated(false);
-                setUserName(null);
-                 // Optional: Handle unauthenticated state (e.g., redirect)
-                console.log("User not authenticated");
+                // Cleanup function
+                return () => {
+                    console.log("Destroying FirestoreProvider...");
+                    firestoreProvider.destroy();
+                    setProvider(null);
+                };
+            } catch (error) {
+                 console.error("Error creating FirestoreProvider:", error);
+                 setLoading(false); // Stop loading if provider creation fails
             }
-            // Removed setLoading(false) here; loading depends on provider sync now
-        });
-        return () => unsubscribe(); // Cleanup listener
-    }, [auth]);
+        }
+    }, [studentID, notebookID, ydoc, firebaseApp]); // Dependencies remain the same
 
+    // --- Firebase Authentication Effect (REMOVED) ---
+    // const auth = getAuth(firebaseApp); // Removed
+    // useEffect(() => { ... onAuthStateChanged logic ... }, [auth]); // Removed
 
     // --- Version Saving Helper ---
     const checkAndSaveVersion = async (currentContent: string) => {
-         if (!studentID || !notebookID) return; // Need IDs
+       if (!studentID || !notebookID) return; // Need IDs
         try {
             const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
             const versionSnapshot = await getDocs(versionRef);
@@ -130,62 +132,60 @@ function NotebookEditor() {
                 const timestamp = new Date();
                 await addDoc(versionRef, {
                     content: currentContent,
-                    date: timestamp.toLocaleDateString(), // Consider UTC or ISO strings for consistency
-                    time: timestamp.toLocaleTimeString(), // Consider UTC or ISO strings for consistency
+                    date: timestamp.toLocaleDateString(),
+                    time: timestamp.toLocaleTimeString(),
                 });
-                setLastSaved(timestamp.toLocaleString()); // Update UI feedback
+                setLastSaved(timestamp.toLocaleString());
             } else if (isAlreadySaved) {
-                // console.log('Current content is already saved as a version, skipping...'); // Less verbose logging
+                // console.log('Current content is already saved as a version, skipping...');
             } else {
                 // console.log('No content to save yet.');
             }
         } catch (error) {
             console.error('Error checking/saving version:', error);
+             // Check for permission errors specifically here too
+             if ((error as any).code === 'permission-denied') {
+                  console.error("PERMISSION DENIED writing version: Check Firestore Security Rules.");
+             }
         }
     };
 
-
     // --- Content Change Handler (Triggered by Tiptap's onUpdate) ---
-    // NOTE: This NO LONGER writes to Firestore directly. Yjs handles sync.
     const handleContentChange = (newContent: string) => {
-        // setContent(newContent); // Only needed if you use the 'content' state elsewhere in this component
-        // console.log("Tiptap content updated (sync handled by Yjs)"); // Can be noisy
-        // DO NOT do this: await updateDoc(...) - Let the provider handle it.
+        // Yjs provider handles the synchronization automatically.
+        // This function might still be useful for triggering other side effects if needed.
+        // setContent(newContent); // Only if 'content' state is used elsewhere
     };
-
 
     // --- Auto-Save and Countdown Logic ---
     useEffect(() => {
-        // Function to save a version based on Yjs doc content
         const saveVersion = async () => {
-            // Ensure provider is connected and IDs are available
-            // CORRECTED:
-            if (!provider || !studentID || !notebookID) { // Removed !provider.synced check
-              console.log("Skipping auto-save: Provider not initialized or IDs missing.");
-              return;
+             // Ensure provider is created and IDs are available (sync status isn't strictly required to attempt save)
+            if (!provider || !studentID || !notebookID) {
+                console.log("Skipping auto-save: Provider not initialized or IDs missing.");
+                return;
             }
 
             try {
-                const currentContent = ydoc.getText('content').toString(); // Get content from Yjs doc
+                const currentContent = ydoc.getText('content').toString();
 
                 if (!currentContent) {
                     // console.log("Skipping auto-save: No content.");
                     return;
                 }
 
-                // Check if this content is already the latest saved version to avoid redundant writes
-                 const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
-                 const versionSnapshot = await getDocs(versionRef); // Consider ordering/limiting for efficiency
-                 const isAlreadySaved = versionSnapshot.docs.some(
-                     (doc) => doc.data().content === currentContent
-                 );
+                const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
+                // Consider ordering/limiting for efficiency if versions list gets long
+                const versionSnapshot = await getDocs(versionRef);
+                const isAlreadySaved = versionSnapshot.docs.some(
+                    (doc) => doc.data().content === currentContent
+                );
 
-                 if (isAlreadySaved) {
+                if (isAlreadySaved) {
                     // console.log("Skipping auto-save: Content unchanged since last saved version.");
                     return;
-                 }
+                }
 
-                // Proceed to save if content is new
                 const timestamp = new Date();
                 console.log(`Auto-saving version at ${timestamp.toLocaleString()}`);
                 await addDoc(versionRef, {
@@ -193,10 +193,14 @@ function NotebookEditor() {
                     date: timestamp.toLocaleDateString(),
                     time: timestamp.toLocaleTimeString(),
                 });
-                setLastSaved(timestamp.toLocaleString()); // Update feedback state
+                setLastSaved(timestamp.toLocaleString());
 
             } catch (error) {
                 console.error('Error auto-saving version: ', error);
+                // Check for permission errors
+                 if ((error as any).code === 'permission-denied') {
+                      console.error("PERMISSION DENIED during auto-save: Check Firestore Security Rules.");
+                 }
             }
         };
 
@@ -208,30 +212,29 @@ function NotebookEditor() {
 
         // Countdown timer interval
         const countdownInterval = setInterval(() => {
-            setTimeLeft(prev => Math.max(prev - 1000, 0)); // Decrease every second
+            setTimeLeft(prev => Math.max(prev - 1000, 0));
         }, 1000);
 
         // Save on page unload
         const handleBeforeUnload = () => {
             console.log("Attempting to save version before unload...");
-            saveVersion(); // Attempt synchronous save if possible, or flag for next load
+            saveVersion(); // Attempt save
         };
         window.addEventListener('beforeunload', handleBeforeUnload);
 
-        // Cleanup intervals and event listener
+        // Cleanup
         return () => {
             clearInterval(saveInterval);
             clearInterval(countdownInterval);
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-        // Dependencies: Include everything used inside the effect's functions
-    }, [provider, ydoc, studentID, notebookID]);
-
+    }, [provider, ydoc, studentID, notebookID]); // Dependencies updated slightly
 
     // --- Render Logic ---
-    // Show loading animation until authenticated AND provider is initialized and synced
-    if (loading || !isAuthenticated || !provider) {
-        console.log("Showing loading animation:", { loading, isAuthenticated, provider: !!provider });
+    // Show loading animation until provider is initialized and has attempted sync/load
+    if (loading || !provider) {
+         // Still loading if the provider hasn't been created yet OR if the loading state is true (waiting for sync/error)
+        console.log("Showing loading animation:", { loading, provider: !!provider });
         return <DocumentAnimation />;
     }
 
@@ -242,19 +245,15 @@ function NotebookEditor() {
             role={role}
             provider={provider} // Pass the stable provider instance
             studentID={studentID}
-            notebookID={notebookID} // Pass IDs if needed by TiptapMobile/Tiptap itself
-            userName={userName}
-            onChange={handleContentChange} // Pass the (now passive) handler
-            // Pass other states needed for UI elements within TiptapMobile/Toolbar
+            notebookID={notebookID}
+            // userName={userName} // Removed prop
+            onChange={handleContentChange}
             lastSaved={lastSaved}
             timeLeft={timeLeft}
-            // Determine editability based on role (example)
+            // Determine editability based on role (remains unchanged)
             isEditable={role === 'teacher' || role === 'admin'} // Adjust as needed
-            // Add any other props TiptapMobile expects
-            // isTyping={isTyping} // Example: if you implement typing indicators
-            // animation={animation} // Example
-            // buttonColor={buttonColor} // Example
-            // isTeacherNotebook={role === 'teacher'} // Example
+            // Pass other props TiptapMobile expects
+            isChecked={isChecked} // Pass theme state if needed inside
         />
     );
 }
