@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { getDoc, doc, updateDoc, collection, addDoc, getDocs } from 'firebase/firestore';
-import { db } from '@/app/firebase';
+import { db } from './firebase';
 import * as Y from 'yjs';
 import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
 import { firebaseApp } from './firebase';
@@ -21,9 +21,10 @@ function NotebookEditor() {
   const notebookID = params.get('notebook');
   const studentID = params.get('student');
   const role = params.get('role');
-  const isDarkModeParam = params.get('darkMode') === 'true';
-  const [isChecked, setIsChecked] = useState(isDarkModeParam !== null ? isDarkModeParam : true);
-
+  const themeParam = params.get('theme');
+  const isDarkMode = themeParam === 'dark';
+  const [isChecked, setIsChecked] = useState(isDarkMode);
+  
   useEffect(() => {
     document.body.classList.toggle('dark', isChecked);
   }, [isChecked]);

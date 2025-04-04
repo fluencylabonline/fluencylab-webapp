@@ -3,7 +3,6 @@ import React from 'react';
 
 //Other imports
 import { Toaster } from 'react-hot-toast';
-import { useSession } from 'next-auth/react';
 import { usePomodoro } from '@/app/context/PomodoroContext';
 
 //TipTap Imports
@@ -60,7 +59,6 @@ import Tools from '@/app/ui/TipTap/Components//Tools';
 import Bubble from '@/app/ui/TipTap/Components//Bubble';
 
 const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, isEditable, isTeacherNotebook }: any) => {
-  const { data: session } = useSession();
   const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
 
   const CustomBulletList = BulletList.extend({
@@ -115,6 +113,7 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
       }),
       Highlight,
       Color,
+      
       StarterKit.configure({
         history: false
       }),
@@ -128,11 +127,6 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
           color: 'blue'
         },
       }),
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-      Highlight,
-      Color,
 
       //Placeholder
       Placeholder.configure({
@@ -174,21 +168,10 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
   }
 
   return (
-    <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
-      
+    <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'> 
       {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  />}
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
-      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor}/>}
-      {session?.user.role === 'student' && (
-        <div className='fixed bottom-5 right-5'>
-          {isPomodoroVisible ? (
-           <LuTimerOff onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-red-500 duration-300 ease-in-out transition-all" />
-          ):(
-           <LuTimer onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-green-500 duration-300 ease-in-out transition-all" />
-          )}
-        </div>
-      )}
       <Toaster />
     </div>
   );
