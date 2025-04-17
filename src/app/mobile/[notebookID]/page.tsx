@@ -1,241 +1,234 @@
-"use client"; // Keep this directive if necessary for your Next.js setup
-
-import React, { useState, useEffect } from 'react';
+'use client'
+import { useEffect, useState, useRef } from 'react';
 import { getDoc, doc, updateDoc, collection, addDoc, getDocs } from 'firebase/firestore';
-import { db, firebaseApp } from './firebase'; // Assuming firebaseApp is your initialized Firebase app
+import { db } from '@/app/firebase';
 import * as Y from 'yjs';
 import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
-
-// Your component imports
-import TiptapMobile from '../Editor/TipTapMobile'; // Assuming this is the correct path
-import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation'; // Assuming correct path
-import { PomodoroProvider } from '@/app/context/PomodoroContext';
+import { firebaseApp } from '../Firebase/firebase';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import TiptapMobile from '../Editor/TipTapMobile';
+import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
 
 function NotebookEditor() {
-    // State Hooks
-    const [content, setContent] = useState(''); // Keep if needed, but Yjs is source of truth
-    const [loading, setLoading] = useState(true); // Now primarily tracks provider sync
-    const [lastSaved, setLastSaved] = useState<string | null>(null);
-    const [timeLeft, setTimeLeft] = useState<number>(600000); // 10 minutes in ms
-    // Removed auth state: const [userName, setUserName] = useState<string | null>(null);
-    // Removed auth state: const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isChecked, setIsChecked] = useState(false); // Theme state
+  const [content, setContent] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState<number>(600000);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [provider, setProvider] = useState<FirestoreProvider | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Get URL Params
-    const [notebookID, setNotebookID] = useState<string | null>(null);
-    const [studentID, setStudentID] = useState<string | null>(null);
-    const [role, setRole] = useState<string | null>(null);
+  const isDarkModeParam = true;
+  const [isChecked, setIsChecked] = useState<boolean>(isDarkModeParam !== null ? isDarkModeParam : true);
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const notebookParam = params.get('notebook');
-        const studentParam = params.get('student');
-        const roleParam = params.get('role');
-        const themeParam = params.get('theme');
-        const isDarkMode = themeParam === 'dark';
+  const [notebookID, setNotebookID] = useState<string | null>(null);
+  const [studentID, setStudentID] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  
+  const auth = getAuth(firebaseApp);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, [auth]);
 
-        setNotebookID(notebookParam);
-        setStudentID(studentParam);
-        setRole(roleParam);
-        setIsChecked(isDarkMode);
-
-        // Initial theme setup
-        document.body.classList.toggle('dark', isDarkMode);
-    }, []); // Empty dependency array ensures this runs once on mount
-
-    // Update theme when isChecked changes
-    useEffect(() => {
-        document.body.classList.toggle('dark', isChecked);
-    }, [isChecked]);
-
-    // --- Yjs Initialization ---
-    const [ydoc] = useState(() => new Y.Doc());
-    const [provider, setProvider] = useState<FirestoreProvider | null>(null);
-
-    useEffect(() => {
-        // Initialize provider only when IDs are available
-        if (studentID && notebookID && !provider) {
-            const basePath: string[] = ["users", studentID, "Notebooks", notebookID];
-            console.log("Initializing FirestoreProvider (unauthenticated) for path:", basePath.join('/'));
-            try {
-                const firestoreProvider = new FirestoreProvider(firebaseApp, ydoc, basePath);
-
-                firestoreProvider.on('synced', (isSynced: boolean) => {
-                    console.log('Provider synced:', isSynced);
-                    if (isSynced) {
-                        setLoading(false); // Content loaded/synced
-                        // Trigger initial version check after sync
-                        const currentContent = ydoc.getText('content').toString();
-                        checkAndSaveVersion(currentContent);
-                    }
-                });
-
-                firestoreProvider.on('update', (update: any) => {
-                    // console.log('Update detected by FirestoreProvider:', update);
-                });
-
-                firestoreProvider.on('error', (error: any) => {
-                    console.error('FirestoreProvider Error:', error);
-                    // Check for permission errors specifically
-                    if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
-                         console.error("PERMISSION DENIED: Check Firestore Security Rules to allow unauthenticated access for this path.");
-                         // Optionally show an error message to the user
-                    }
-                    setLoading(false); // Stop loading on error too
-                });
-
-                setProvider(firestoreProvider);
-
-                // Cleanup function
-                return () => {
-                    console.log("Destroying FirestoreProvider...");
-                    firestoreProvider.destroy();
-                    setProvider(null);
-                };
-            } catch (error) {
-                 console.error("Error creating FirestoreProvider:", error);
-                 setLoading(false); // Stop loading if provider creation fails
-            }
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!auth.currentUser) return;
+  
+      const uid = auth.currentUser.uid;
+      try {
+        const userDoc = await getDoc(doc(db, "users", uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setUserName(data.name || 'Anônimo');
         }
-    }, [studentID, notebookID, ydoc, firebaseApp]); // Dependencies remain the same
+      } catch (error) {
+        console.error("Erro ao buscar nome do usuário:", error);
+      }
+    };
+  
+    if (isAuthenticated) {
+      fetchUserName();
+    }
+  }, [isAuthenticated]);
 
-    // --- Firebase Authentication Effect (REMOVED) ---
-    // const auth = getAuth(firebaseApp); // Removed
-    // useEffect(() => { ... onAuthStateChanged logic ... }, [auth]); // Removed
+  
+  // Use refs to hold these values so they don't trigger re-renders
+  const ydocRef = useRef<Y.Doc | null>(null);
 
-    // --- Version Saving Helper ---
-    const checkAndSaveVersion = async (currentContent: string) => {
-       if (!studentID || !notebookID) return; // Need IDs
-        try {
-            const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
-            const versionSnapshot = await getDocs(versionRef);
-            const isAlreadySaved = versionSnapshot.docs.some(
-                (doc) => doc.data().content === currentContent
-            );
+  // Parse URL parameters and set state
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      setNotebookID(params.get('notebookID'));
+      setStudentID(params.get('studentID'));
+      setRole(params.get('role'));
+    }
+  }, []);
 
-            if (!isAlreadySaved && currentContent) {
-                console.log('Content changed since last version, saving new version...');
-                const timestamp = new Date();
-                await addDoc(versionRef, {
-                    content: currentContent,
-                    date: timestamp.toLocaleDateString(),
-                    time: timestamp.toLocaleTimeString(),
-                });
-                setLastSaved(timestamp.toLocaleString());
-            } else if (isAlreadySaved) {
-                // console.log('Current content is already saved as a version, skipping...');
-            } else {
-                // console.log('No content to save yet.');
-            }
-        } catch (error) {
-            console.error('Error checking/saving version:', error);
-             // Check for permission errors specifically here too
-             if ((error as any).code === 'permission-denied') {
-                  console.error("PERMISSION DENIED writing version: Check Firestore Security Rules.");
-             }
+  // Handle dark mode
+  useEffect(() => {
+    document.body.classList.toggle('dark', isChecked);
+  }, [isChecked]);
+
+  // Set up Yjs document and provider when IDs are available
+  useEffect(() => {
+    // Only proceed if both IDs are available
+    if (!studentID || !notebookID) return;
+
+    // Create the Yjs document only once
+    if (!ydocRef.current) {
+      ydocRef.current = new Y.Doc();
+    }
+
+    // Define basePath with non-null values
+    const basePath: string[] = ["users", studentID, "Notebooks", notebookID];
+    
+    // Create provider
+    const newProvider = new FirestoreProvider(firebaseApp, ydocRef.current, basePath);
+    
+    newProvider.on('synced', (isSynced: boolean) => {
+      console.log('Provider synced:', isSynced);
+    });
+    
+    newProvider.on('update', (update: any) => {
+      console.log('Update sent to Firestore:', update);
+    });
+
+    setProvider(newProvider);
+
+    // Cleanup function
+    return () => {
+      if (newProvider) {
+        newProvider.destroy();
+      }
+    };
+  }, [studentID, notebookID]);
+
+  // Fetch notebook content
+  useEffect(() => {
+    const fetchNotebookContent = async () => {
+      if (!studentID || !notebookID) return;
+
+      try {
+        setLoading(true);
+        const notebookDoc = await getDoc(doc(db, `users/${studentID}/Notebooks/${notebookID}`));
+        
+        if (notebookDoc.exists()) {
+          const fetchedContent = notebookDoc.data().content;
+          const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
+          const versionSnapshot = await getDocs(versionRef);
+    
+          const isAlreadySaved = versionSnapshot.docs.some(
+            (doc) => doc.data().content === fetchedContent
+          );
+    
+          if (!isAlreadySaved) {
+            const timestamp = new Date();
+            await addDoc(versionRef, {
+              content: fetchedContent,
+              date: timestamp.toLocaleDateString(),
+              time: timestamp.toLocaleTimeString(),
+            });
+          } else {
+            console.log('Fetched content is already saved, skipping...');
+          }
+    
+          if (ydocRef.current) {
+            ydocRef.current.getText('content').delete(0, ydocRef.current.getText('content').length);
+            ydocRef.current.getText('content').insert(0, fetchedContent);
+          }
+          
+          setContent(fetchedContent);
         }
+      } catch (error) {
+        console.error('Error fetching notebook content:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    // --- Content Change Handler (Triggered by Tiptap's onUpdate) ---
-    const handleContentChange = (newContent: string) => {
-        // Yjs provider handles the synchronization automatically.
-        // This function might still be useful for triggering other side effects if needed.
-        // setContent(newContent); // Only if 'content' state is used elsewhere
+    fetchNotebookContent();
+  }, [studentID, notebookID]);
+
+  // Handle content changes
+  const handleContentChange = async (newContent: string) => {
+    setContent(newContent);
+    
+    if (!studentID || !notebookID) return;
+    
+    try {
+      await updateDoc(doc(db, `users/${studentID}/Notebooks/${notebookID}`), {
+        content: newContent,
+      });
+    } catch (error) {
+      console.error('Error saving content to Firestore:', error);
+    }
+  };
+  
+  // Auto-save functionality
+  useEffect(() => {
+    if (!studentID || !notebookID || !content) return;
+    
+    const saveVersion = async () => {
+      try {
+        const timestamp = new Date();
+        await addDoc(collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`), {
+          content,
+          date: timestamp.toLocaleDateString(),
+          time: timestamp.toLocaleTimeString(),
+        });
+        setLastSaved(timestamp.toLocaleString());
+      } catch (error) {
+        console.error('Error saving version: ', error);
+      }
     };
+  
+    // Auto-save every 10 minutes
+    const saveInterval = setInterval(() => {
+      saveVersion();
+      setTimeLeft(600000); // Reset timeLeft to 10 minutes
+    }, 600000);
+  
+    // Countdown timer
+    const countdownInterval = setInterval(() => {
+      setTimeLeft(prev => Math.max(prev - 1000, 0)); // Decrease by 1 second
+    }, 1000);
+  
+    // Save on page unload
+    const handleBeforeUnload = () => {
+      saveVersion();
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      clearInterval(saveInterval);
+      clearInterval(countdownInterval);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [content, studentID, notebookID]);
+  
+  if (loading) return <DocumentAnimation />;
 
-    // --- Auto-Save and Countdown Logic ---
-    useEffect(() => {
-        const saveVersion = async () => {
-             // Ensure provider is created and IDs are available (sync status isn't strictly required to attempt save)
-            if (!provider || !studentID || !notebookID) {
-                console.log("Skipping auto-save: Provider not initialized or IDs missing.");
-                return;
-            }
-
-            try {
-                const currentContent = ydoc.getText('content').toString();
-
-                if (!currentContent) {
-                    // console.log("Skipping auto-save: No content.");
-                    return;
-                }
-
-                const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
-                // Consider ordering/limiting for efficiency if versions list gets long
-                const versionSnapshot = await getDocs(versionRef);
-                const isAlreadySaved = versionSnapshot.docs.some(
-                    (doc) => doc.data().content === currentContent
-                );
-
-                if (isAlreadySaved) {
-                    // console.log("Skipping auto-save: Content unchanged since last saved version.");
-                    return;
-                }
-
-                const timestamp = new Date();
-                console.log(`Auto-saving version at ${timestamp.toLocaleString()}`);
-                await addDoc(versionRef, {
-                    content: currentContent,
-                    date: timestamp.toLocaleDateString(),
-                    time: timestamp.toLocaleTimeString(),
-                });
-                setLastSaved(timestamp.toLocaleString());
-
-            } catch (error) {
-                console.error('Error auto-saving version: ', error);
-                // Check for permission errors
-                 if ((error as any).code === 'permission-denied') {
-                      console.error("PERMISSION DENIED during auto-save: Check Firestore Security Rules.");
-                 }
-            }
-        };
-
-        // Auto-save interval
-        const saveInterval = setInterval(() => {
-            saveVersion();
-            setTimeLeft(600000); // Reset timer
-        }, 600000); // 10 minutes
-
-        // Countdown timer interval
-        const countdownInterval = setInterval(() => {
-            setTimeLeft(prev => Math.max(prev - 1000, 0));
-        }, 1000);
-
-        // Save on page unload
-        const handleBeforeUnload = () => {
-            console.log("Attempting to save version before unload...");
-            saveVersion(); // Attempt save
-        };
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        // Cleanup
-        return () => {
-            clearInterval(saveInterval);
-            clearInterval(countdownInterval);
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, [provider, ydoc, studentID, notebookID]); // Dependencies updated slightly
-
-
-    // Render the editor once ready
-    return (
-        <PomodoroProvider>
-        <TiptapMobile
-            // content={content} // Likely NOT needed if Tiptap reads from provider.doc
-            role={role}
-            provider={provider} // Pass the stable provider instance
-            studentID={studentID}
-            notebookID={notebookID}
-            // userName={userName} // Removed prop
-            onChange={handleContentChange}
-            lastSaved={lastSaved}
-            timeLeft={timeLeft}
-            // Determine editability based on role (remains unchanged)
-            isEditable={role === 'teacher' || role === 'admin'} // Adjust as needed
-            // Pass other props TiptapMobile expects
-            isChecked={isChecked} // Pass theme state if needed inside
-        /></PomodoroProvider>
-    );
+  return (
+    <TiptapMobile
+      content={content}
+      role={role}
+      provider={provider}
+      studentID={studentID}
+      notebookID={notebookID}
+      userName={userName}
+      onChange={handleContentChange}
+    />
+  );
 }
 
 export default NotebookEditor;

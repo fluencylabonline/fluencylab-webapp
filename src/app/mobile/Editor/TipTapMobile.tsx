@@ -1,12 +1,7 @@
 "use client";
-import React from 'react';
-
-//Other imports
-import { Toaster } from 'react-hot-toast';
-import { usePomodoro } from '@/app/context/PomodoroContext';
+import React, { useState } from 'react';
 
 //TipTap Imports
-import Toolbar from "@/app/ui/TipTap/Toolbar";
 import Link from '@tiptap/extension-link'
 import History from '@tiptap/extension-history'
 import Highlight from '@tiptap/extension-highlight'
@@ -27,40 +22,15 @@ import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
+import Gapcursor from '@tiptap/extension-gapcursor'
+
+import './StylesTipTapMobile.scss'
+
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import Toolbar from '@/app/ui/TipTap/Toolbar';
 
-//Extensions
-import TextStudentExtension from '@/app/ui/TipTap/Components/Extensions/TextStudent/TextStudentExtension';
-import TextTeacherExtension from '@/app/ui/TipTap/Components/Extensions/TextTeacher/TextTeacherExtension';
-import TextTipExtension from '@/app/ui/TipTap/Components/Extensions/TextTip/TextTipExtension';
-import BandImageExtension from '@/app/ui/TipTap/Components/Extensions/BandImage/BandImageExtension';
-import BandVideoExtension from '@/app/ui/TipTap/Components/Extensions/BandVideo/BandVideoExtension';
-import SentencesExtension from '@/app/ui/TipTap/Components/Extensions/Sentences/SentencesExtension';
-import TranslationExtension from '@/app/ui/TipTap/Components/Extensions/Translation/TranslationExtension';
-import MultipleChoiceExtension from '@/app/ui/TipTap/Components/Extensions/MultipleChoice/MultipleChoiceExtension';
-import QuestionsExtension from '@/app/ui/TipTap/Components/Extensions/Question/QuestionsExtension';
-import AudioExtension from '@/app/ui/TipTap/Components/Extensions/Audio/AudioExtension';
-import PronounceExtension from '@/app/ui/TipTap/Components/Extensions/Pronounce/PronounceExtension';
-import ReviewExtension from '@/app/ui/TipTap/Components/Extensions/Review/ReviewExtension';
-import GoalExtension from '@/app/ui/TipTap/Components/Extensions/Goal/GoalExtension';
-import VocabulabExtension from '@/app/ui/TipTap/Components/Extensions/Vocabulab/VocabulabExtension';
-import DownloadExtension from '@/app/ui/TipTap/Components/Extensions/Download/DownloadExtension';
-import FlashcardExtension from '@/app/ui/TipTap/Components/Extensions/Flashcards/FlashcardExtension';
-
-//Icons
-import { LuTimerOff, LuTimer } from 'react-icons/lu';
-
-//Style
-import '@/app/ui/TipTap/styles.scss'
-
-//Tools
-import Tools from '@/app/ui/TipTap/Components//Tools';
-import Bubble from '@/app/ui/TipTap/Components//Bubble';
-
-const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, isEditable, isTeacherNotebook }: any) => {
-  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
-
+const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -69,31 +39,17 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
     },
   })
 
+  const userColor = userName === 'Matheus' ? '#21B5DE' : '#DE5916';
+
   const editor = useEditor({
-    editable: isEditable,
     extensions: [
-      TextStudentExtension,
-      TextTeacherExtension,
-      TextTipExtension,
-      BandImageExtension,
-      BandVideoExtension,
-      SentencesExtension,
-      TranslationExtension,
-      MultipleChoiceExtension,
-      QuestionsExtension,
-      AudioExtension,
-      PronounceExtension,
-      ReviewExtension,
-      GoalExtension,
-      VocabulabExtension,
-      DownloadExtension,
-      FlashcardExtension,
       Document,
       Image,
       History,
       TextStyle, 
       FontFamily,
       Typography,
+      Gapcursor,
       Table.configure({
         resizable: true,
       }),
@@ -108,12 +64,6 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
       Link.configure({
         openOnClick: true,
       }),
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-      Highlight,
-      Color,
-      
       StarterKit.configure({
         history: false
       }),
@@ -124,11 +74,14 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
         provider: provider,
         user: {
           name: userName,
-          color: 'blue'
+          color: userColor
         },
       }),
-
-      //Placeholder
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Highlight,
+      Color,
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
@@ -152,7 +105,7 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
     editorProps: {
       attributes: {
         class:
-          "max-w-[100vw] min-w-[100vw] min-h-screen p-3 outline-none bg-white",
+          "max-w-[100vw] min-w-[100vw] min-h-screen p-3 outline-none bg-black",
       },
     },
     autofocus: true,
@@ -161,20 +114,18 @@ const Tiptap = ({ userName, studentID, provider, onChange, content, isTyping, la
       const newContent = editor.getHTML();
       onChange(newContent);
     },
-  }) 
+  });
 
   if (!editor) {
     return null;
   }
 
   return (
-    <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'> 
-      {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  />}
-      <EditorContent editor={editor} />
-      <Bubble editor={editor}/>
-      <Toaster />
+    <div className='flex flex-col justify-center items-center text-white dark:text-white'>
+        <EditorContent editor={editor} />
+        <Toolbar editor={editor} content={content} isTyping={''} lastSaved={''} buttonColor={''} animation={false} timeLeft={0} />
     </div>
   );
 };
 
-export default Tiptap;
+export default TiptapMobile;
