@@ -5,26 +5,12 @@ import { getDoc, doc, updateDoc, collection, addDoc, getDocs } from 'firebase/fi
 import { db, firebaseApp } from './firebase'; // Assuming firebaseApp is your initialized Firebase app
 import * as Y from 'yjs';
 import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
-// Removed Firebase Auth imports: import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Your component imports
 import TiptapMobile from '../Editor/TipTapMobile'; // Assuming this is the correct path
 import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation'; // Assuming correct path
+import { PomodoroProvider } from '@/app/context/PomodoroContext';
 
-// --- CRITICAL SECURITY NOTE ---
-// Removing client-side authentication checks means your Firestore Security Rules
-// MUST allow unauthenticated access to the relevant paths:
-// - `users/{studentID}/Notebooks/{notebookID}` (for Yjs data sync)
-// - `users/{studentID}/Notebooks/{notebookID}/versions` (for version saving)
-// Failure to update security rules will likely result in PERMISSION_DENIED errors.
-// Example (simplistic, adjust for your needs):
-// match /users/{userId}/Notebooks/{notebookId}/{document=**} {
-//   allow read, write: if true; // Allows anyone - BE CAREFUL in production
-// }
-// Consider more specific rules if possible, perhaps validating the structure
-// of studentID/notebookID if they follow a predictable pattern accessible publicly.
-
-// Main Component
 function NotebookEditor() {
     // State Hooks
     const [content, setContent] = useState(''); // Keep if needed, but Yjs is source of truth
@@ -230,16 +216,10 @@ function NotebookEditor() {
         };
     }, [provider, ydoc, studentID, notebookID]); // Dependencies updated slightly
 
-    // --- Render Logic ---
-    // Show loading animation until provider is initialized and has attempted sync/load
-    if (loading || !provider) {
-         // Still loading if the provider hasn't been created yet OR if the loading state is true (waiting for sync/error)
-        console.log("Showing loading animation:", { loading, provider: !!provider });
-        return <DocumentAnimation />;
-    }
 
     // Render the editor once ready
     return (
+        <PomodoroProvider>
         <TiptapMobile
             // content={content} // Likely NOT needed if Tiptap reads from provider.doc
             role={role}
@@ -254,7 +234,7 @@ function NotebookEditor() {
             isEditable={role === 'teacher' || role === 'admin'} // Adjust as needed
             // Pass other props TiptapMobile expects
             isChecked={isChecked} // Pass theme state if needed inside
-        />
+        /></PomodoroProvider>
     );
 }
 
