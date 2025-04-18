@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 
 //TipTap Imports
 import Link from '@tiptap/extension-link'
@@ -24,15 +24,32 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Gapcursor from '@tiptap/extension-gapcursor'
 
+//Extensions
+import TextStudentExtension from '@/app/ui/TipTap/Components/Extensions/TextStudent/TextStudentExtension';
+import TextTeacherExtension from '@/app/ui/TipTap/Components/Extensions/TextTeacher/TextTeacherExtension';
+import TextTipExtension from '@/app/ui/TipTap/Components/Extensions/TextTip/TextTipExtension';
+import BandImageExtension from '@/app/ui/TipTap/Components/Extensions/BandImage/BandImageExtension';
+import BandVideoExtension from '@/app/ui/TipTap/Components/Extensions/BandVideo/BandVideoExtension';
+import SentencesExtension from '@/app/ui/TipTap/Components/Extensions/Sentences/SentencesExtension';
+import TranslationExtension from '@/app/ui/TipTap/Components/Extensions/Translation/TranslationExtension';
+import MultipleChoiceExtension from '@/app/ui/TipTap/Components/Extensions/MultipleChoice/MultipleChoiceExtension';
+import QuestionsExtension from '@/app/ui/TipTap/Components/Extensions/Question/QuestionsExtension';
+import AudioExtension from '@/app/ui/TipTap/Components/Extensions/Audio/AudioExtension';
+import PronounceExtension from '@/app/ui/TipTap/Components/Extensions/Pronounce/PronounceExtension';
+import ReviewExtension from '@/app/ui/TipTap/Components/Extensions/Review/ReviewExtension';
+import GoalExtension from '@/app/ui/TipTap/Components/Extensions/Goal/GoalExtension';
+import VocabulabExtension from '@/app/ui/TipTap/Components/Extensions/Vocabulab/VocabulabExtension';
+import DownloadExtension from '@/app/ui/TipTap/Components/Extensions/Download/DownloadExtension';
+import FlashcardExtension from '@/app/ui/TipTap/Components/Extensions/Flashcards/FlashcardExtension';
+import Tools from '@/app/ui/TipTap/Components/Tools';
+
 import './StylesTipTapMobile.scss'
 
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
-import Toolbar from '@/app/ui/TipTap/Toolbar';
 import ToolbarMobile from './ToolbarMobile';
-import Tools from '@/app/ui/TipTap/Components/Tools';
 
-const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
+const TiptapMobile = ({ onChange, content, provider, role, userName, currentUser  }: any) => {
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -41,10 +58,28 @@ const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
     },
   })
 
-  const userColor = userName === 'Matheus' ? '#21B5DE' : '#DE5916';
+  const userColor = currentUser?.displayName === 'SomeOtherName'
+    ? '#21B5DE'
+    : '#DE5916';
 
   const editor = useEditor({
     extensions: [
+      TextStudentExtension,
+      TextTeacherExtension,
+      TextTipExtension,
+      BandImageExtension,
+      BandVideoExtension,
+      SentencesExtension,
+      TranslationExtension,
+      MultipleChoiceExtension,
+      QuestionsExtension,
+      AudioExtension,
+      PronounceExtension,
+      ReviewExtension,
+      GoalExtension,
+      VocabulabExtension,
+      DownloadExtension,
+      FlashcardExtension,
       Document,
       Image,
       History,
@@ -65,9 +100,6 @@ const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
       CustomBulletList,
       Link.configure({
         openOnClick: true,
-      }),
-      StarterKit.configure({
-        history: false
       }),
       Collaboration.configure({
         document: provider.doc,

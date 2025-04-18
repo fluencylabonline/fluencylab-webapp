@@ -7,7 +7,7 @@ import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
 import { firebaseApp } from '../Firebase/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import TiptapMobile from '../Editor/TipTapMobile';
-import DocumentAnimation from '@/app/ui/Animations/DocumentAnimation';
+import LoadingAnimation from '../Loading/LoadingAnimation';
 
 function NotebookEditor() {
   const [content, setContent] = useState<string>('');
@@ -229,7 +229,7 @@ function NotebookEditor() {
     };
   }, [content, studentID, notebookID]);
   
-  if (loading) return <DocumentAnimation />;
+  if (loading || !isAuthenticated) return <LoadingAnimation />;
 
   return (
     <TiptapMobile
@@ -238,7 +238,8 @@ function NotebookEditor() {
       provider={provider}
       studentID={studentID}
       notebookID={notebookID}
-      userName={userName}
+      userName={auth.currentUser?.displayName}
+      currentUser={auth.currentUser}
       onChange={handleContentChange}
     />
   );

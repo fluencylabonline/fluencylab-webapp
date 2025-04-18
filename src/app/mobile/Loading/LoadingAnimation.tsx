@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const RedirectingPage = () => {
+const LoadingAnimation = () => {
   const isLocalStorageAvailable = typeof window !== 'undefined' && window.localStorage;
 
   const [isChecked, setIsChecked] = useState(() => {
@@ -21,7 +21,7 @@ const RedirectingPage = () => {
   }, [isChecked, isLocalStorageAvailable]);
 
   return (
-    <div className="fixed fade-in fade-out top-0 left-0 w-screen h-screen bg-transparent dark:bg-transparent z-50">
+    <div className="fixed fade-in fade-out top-0 left-0 w-screen h-screen bg-[#E6E6F8] dark:bg-[#0D0D0D] z-50">
 
       <div className='min-h-screen flex flex-row justify-around'> 
       <iframe className='w-auto h-auto' src="https://lottie.host/embed/0642876f-5984-458c-965d-837bd42ddb72/mrsk5b9kjh.json"></iframe>
@@ -30,4 +30,4 @@ const RedirectingPage = () => {
   );
 };
 
-export default RedirectingPage;
+export default LoadingAnimation;

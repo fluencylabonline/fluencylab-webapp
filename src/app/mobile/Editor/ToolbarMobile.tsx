@@ -30,8 +30,9 @@ import {
   AiOutlineSplitCells,
   AiOutlineTable,
 } from "react-icons/ai";
+import { PiTextAUnderlineDuotone } from "react-icons/pi";
+
 import FluencyInput from "@/app/ui/Components/Input/input";
-import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
 
 type Props = {
@@ -40,7 +41,6 @@ type Props = {
 };
 
 const ToolbarMobile = ({ editor }: Props) => {
-  const [selectedFontFamily, setSelectedFontFamily] = useState("QuickSand");
   const [modal, setModal] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
 
@@ -148,10 +148,10 @@ const ToolbarMobile = ({ editor }: Props) => {
   };
 
   return (
-    <div className="fixed bottom-0 z-10 flex flex-col flex-wrap items-center justify-center w-full rounded-t-2xl bg-indigo-700 dark:bg-indigo-950 text-md">
+    <div className="fixed bottom-0 z-10 flex flex-col flex-wrap items-center justify-center w-full rounded-t-2xl bg-[#B7B7F4] dark:bg-[#21212A] text-md">
         {modal && 
         (<motion.div 
-                className="w-full rounded-t-2xl bg-indigo-700 dark:bg-indigo-950 flex flex-row flex-wrap items-center justify-center px-0 py-[0.1rem]"
+                className="w-full rounded-t-2xl bg-[#B7B7F4] dark:bg-[#21212A] flex flex-row flex-wrap items-center justify-center px-0 py-[0.1rem]"
                 variants={dropdownVariants}
                 initial="hidden"
                 animate="visible"
@@ -463,15 +463,16 @@ const ToolbarMobile = ({ editor }: Props) => {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-row flex-wrap w-full rounded-t-2xl bg-indigo-900 dark:bg-indigo-900 items-center justify-center px-0 py-[0.25rem]">
+      {/*MAIN TOOLBAR*/}
+      <div className="flex flex-row flex-wrap w-full rounded-t-2xl bg-[#E6E6F8] dark:bg-[#0D0D0D] items-center justify-around px-0 py-[0.25rem]">
         <div className="flex flex-row items-center">
             <button
               onClick={() => editor.chain().focus().undo().run()}
               disabled={!editor.can().chain().focus().undo().run()}
               className={
                 editor.isActive("undo")
-                  ? "cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-                  : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+                  ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
+                  : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
               }
             >
               <FaUndoAlt className="w-3 h-auto" />
@@ -482,8 +483,8 @@ const ToolbarMobile = ({ editor }: Props) => {
               disabled={!editor.can().chain().focus().redo().run()}
               className={
                 editor.isActive("redo")
-                  ? "cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-                  : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+                  ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
+                  : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
               }
             >
               <FaRedoAlt className="w-3 h-auto" />
@@ -495,11 +496,11 @@ const ToolbarMobile = ({ editor }: Props) => {
           onClick={() => toggleDropdown('textSize')}
           className={
             editor.isActive("fontStyles")
-              ? "cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-              : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+              ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
+              : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
           }
         >
-            <PiTextTBold className="w-5 h-auto rounded-md" />
+            <PiTextTBold className="w-4 h-auto rounded-md" />
         </motion.button>
 
         <motion.button 
@@ -507,11 +508,11 @@ const ToolbarMobile = ({ editor }: Props) => {
           onClick={() => toggleDropdown('fontStyles')}
           className={
             editor.isActive("fontStyles")
-              ? "cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-              : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+              ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
+              : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
           }
         >
-          <FaFont className="w-4 h-auto" />
+          <PiTextAUnderlineDuotone  className="w-4 h-auto" />
         </motion.button>
 
         <motion.button 
@@ -519,11 +520,11 @@ const ToolbarMobile = ({ editor }: Props) => {
           onClick={() => toggleDropdown('textAlign')}
           className={
             editor.isActive("textAlign")
-              ? "cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-              : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+              ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
+              : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
           }
         >
-          <PiTextAlignCenter className="w-5 h-auto" />
+          <PiTextAlignCenter className="w-4 h-auto" />
         </motion.button>
 
         <motion.button 
@@ -532,10 +533,10 @@ const ToolbarMobile = ({ editor }: Props) => {
           className={
             editor.isActive({ table: "table" })
               ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-              : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+              : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
           }
         >
-          <AiOutlineTable className="w-5 h-auto" />
+          <AiOutlineTable className="w-4 h-auto" />
         </motion.button>
 
         <motion.button 
@@ -543,20 +544,19 @@ const ToolbarMobile = ({ editor }: Props) => {
           onClick={() => toggleDropdown('moreOptions')}
           className={
             editor.isActive("moreOptions")
-              ? "cursor-pointer text-fluency-gray-500 dark:text-fluency-gray-100 hover:text-fluency-gray-800 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
-              : "text-fluency-gray-100 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-fluency-blue-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-200 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
+              ? "text-fluency-blue-500 dark:text-fluency-blue-600 hover:text-fluency-blue-700 duration-150 transition-all ease-in-out bg-fluency-blue-100 rounded-md p-2 px-2 text-md"
+              : "text-fluency-gray-800 dark:text-fluency-gray-50 hover:text-fluency-blue-500 dark:hover:text-white dark:hover:bg-fluency-blue-900 duration-150 ease-in-out transition-all rounded-md p-2 px-2 text-md"
           }
         >
-          <AiOutlinePlus className="w-5 h-auto" />
+          <AiOutlinePlus className="w-4 h-auto" />
         </motion.button>
 
         <button
-          onClick={scrollToBottom}
-          className="mr-1 block cursor-pointer text-fluency-gray-100 dark:text-fluency-gray-100 hover:text-fluency-gray-400 duration-150 transition-all ease-in-out bg-fluency-gray-600 dark:bg-fluency-blue-1000 rounded-md p-2 px-2 text-md"
+          className="mr-1 block cursor-pointer text-fluency-gray-800 dark:text-fluency-gray-100 hover:text-fluency-gray-400 duration-150 transition-all ease-in-out bg-fluency-gray-200 dark:bg-fluency-blue-1000 rounded-md p-2 px-2 text-md"
         >
-          <FaArrowDown className="w-3 h-auto" />
+          <FaArrowDown onClick={scrollToBottom} className="w-3 h-auto" />
         </button>
-        <button className="block cursor-pointer text-fluency-gray-100 dark:text-fluency-gray-100 hover:text-fluency-gray-400 duration-150 transition-all ease-in-out bg-fluency-gray-600 dark:bg-fluency-blue-1000 rounded-md p-2 px-2 text-md">
+        <button className="block cursor-pointer text-fluency-gray-800 dark:text-fluency-gray-100 hover:text-fluency-gray-400 duration-150 transition-all ease-in-out bg-fluency-gray-200 dark:bg-fluency-blue-1000 rounded-md p-2 px-2 text-md">
           <FaArrowUp onClick={scrollToTop} className="w-3 h-auto" />
         </button>
       </div>
