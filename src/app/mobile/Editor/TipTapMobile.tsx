@@ -49,7 +49,7 @@ import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import ToolbarMobile from './ToolbarMobile';
 
-const TiptapMobile = ({ onChange, content, provider, role, userName, professorName  }: any) => {
+const TiptapMobile = ({ onChange, content, provider, role, professorName, studentName }: any) => {
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -59,7 +59,8 @@ const TiptapMobile = ({ onChange, content, provider, role, userName, professorNa
   })
 
   const userColor = role === 'teacher' ? '#21B5DE' : '#DE5916';
-  const cursorName = role === 'teacher' ? professorName : userName;  
+  const cursorName = role === 'teacher' ? professorName : studentName;
+
 
   const editor = useEditor({
     extensions: [
@@ -99,6 +100,9 @@ const TiptapMobile = ({ onChange, content, provider, role, userName, professorNa
       CustomBulletList,
       Link.configure({
         openOnClick: true,
+      }),
+      StarterKit.configure({
+        history: false
       }),
       Collaboration.configure({
         document: provider.doc,

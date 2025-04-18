@@ -5,7 +5,6 @@ import { db } from '@/app/firebase';
 import * as Y from 'yjs';
 import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
 import { firebaseApp } from '../Firebase/firebase';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import TiptapMobile from '../Editor/TipTapMobile';
 import LoadingAnimation from '../Loading/LoadingAnimation';
 
@@ -14,19 +13,22 @@ function NotebookEditor() {
   const [loading, setLoading] = useState<boolean>(true);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(600000);
-  const [userName, setUserName] = useState<string | null>(null);
-  const [professorName, setProfessorName] = useState<string | null>(null);
   const [provider, setProvider] = useState<FirestoreProvider | null>(null);
+  const [professorName, setProfessorName] = useState<string | null>(null);
+  const [studentName, setStudentName] = useState<string | null>(null);
 
   const [notebookID, setNotebookID] = useState<string | null>(null);
   const [studentID, setStudentID] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
-  
   const [isChecked, setIsChecked] = useState(true);
 
+  // Parse URL parameters and set state
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      setNotebookID(params.get('notebookID'));
+      setStudentID(params.get('studentID'));
+      setRole(params.get('role'));
       const darkModeParam = params.get('darkMode');
       if (darkModeParam !== null) {
         setIsChecked(darkModeParam === 'true');
@@ -37,6 +39,7 @@ function NotebookEditor() {
   useEffect(() => {
     document.body.classList.toggle('dark', isChecked);
   }, [isChecked]);
+    
   useEffect(() => {
     const fetchNames = async () => {
       if (!studentID) return;
@@ -48,7 +51,7 @@ function NotebookEditor() {
         if (studentDoc.exists()) {
           const studentData = studentDoc.data();
           const studentName = studentData.name || 'Estudante';
-          setUserName(studentName);
+          setStudentName(studentName);
   
           // Check if the professorID is stored inside the student's document
           if (studentData.professorID) {
@@ -68,24 +71,9 @@ function NotebookEditor() {
       fetchNames();
     }
   }, [studentID]);
-    
+  
   // Use refs to hold these values so they don't trigger re-renders
   const ydocRef = useRef<Y.Doc | null>(null);
-
-  // Parse URL parameters and set state
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      setNotebookID(params.get('notebookID'));
-      setStudentID(params.get('studentID'));
-      setRole(params.get('role'));
-    }
-  }, []);
-
-  // Handle dark mode
-  useEffect(() => {
-    document.body.classList.toggle('dark', isChecked);
-  }, [isChecked]);
 
   // Set up Yjs document and provider when IDs are available
   useEffect(() => {
@@ -112,8 +100,6 @@ function NotebookEditor() {
     });
 
     setProvider(newProvider);
-
-    // Cleanup function
     return () => {
       if (newProvider) {
         newProvider.destroy();
@@ -232,11 +218,9 @@ function NotebookEditor() {
       content={content}
       role={role}
       provider={provider}
-      studentID={studentID}
-      notebookID={notebookID}
-      userName={userName}
-      professorName={professorName}
       onChange={handleContentChange}
+      studentName={studentName}
+      professorName={professorName}
     />
   );
 }
