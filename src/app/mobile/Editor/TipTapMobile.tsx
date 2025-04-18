@@ -29,6 +29,8 @@ import './StylesTipTapMobile.scss'
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import Toolbar from '@/app/ui/TipTap/Toolbar';
+import ToolbarMobile from './ToolbarMobile';
+import Tools from '@/app/ui/TipTap/Components/Tools';
 
 const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
   const CustomBulletList = BulletList.extend({
@@ -105,7 +107,7 @@ const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
     editorProps: {
       attributes: {
         class:
-          "max-w-[100vw] min-w-[100vw] min-h-screen p-3 outline-none bg-black",
+          "max-w-[100vw] min-w-[100vw] min-h-screen p-3 outline-none bg-white dark:bg-black",
       },
     },
     autofocus: true,
@@ -121,9 +123,10 @@ const TiptapMobile = ({ onChange, content, provider, role, userName }: any) => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center text-white dark:text-white'>
+    <div className='flex flex-col justify-center items-center text-black dark:text-white'>
         <EditorContent editor={editor} />
-        <Toolbar editor={editor} content={content} isTyping={''} lastSaved={''} buttonColor={''} animation={false} timeLeft={0} />
+        <ToolbarMobile editor={editor} content={content} />
+        {role === 'teacher' && (<Tools editor={editor} isTeacherNotebook={true} />)}
     </div>
   );
 };

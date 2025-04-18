@@ -18,13 +18,26 @@ function NotebookEditor() {
   const [provider, setProvider] = useState<FirestoreProvider | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const isDarkModeParam = true;
-  const [isChecked, setIsChecked] = useState<boolean>(isDarkModeParam !== null ? isDarkModeParam : true);
-
   const [notebookID, setNotebookID] = useState<string | null>(null);
   const [studentID, setStudentID] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   
+  const [isChecked, setIsChecked] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const darkModeParam = params.get('darkMode');
+      if (darkModeParam !== null) {
+        setIsChecked(darkModeParam === 'true');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', isChecked);
+  }, [isChecked]);
+
   const auth = getAuth(firebaseApp);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
