@@ -15,8 +15,8 @@ function NotebookEditor() {
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(600000);
   const [userName, setUserName] = useState<string | null>(null);
+  const [professorName, setProfessorName] = useState<string | null>(null);
   const [provider, setProvider] = useState<FirestoreProvider | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [notebookID, setNotebookID] = useState<string | null>(null);
   const [studentID, setStudentID] = useState<string | null>(null);
@@ -37,42 +37,38 @@ function NotebookEditor() {
   useEffect(() => {
     document.body.classList.toggle('dark', isChecked);
   }, [isChecked]);
-
-  const auth = getAuth(firebaseApp);
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-    });
-    
-    return () => unsubscribe();
-  }, [auth]);
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      if (!auth.currentUser) return;
+    const fetchNames = async () => {
+      if (!studentID) return;
   
-      const uid = auth.currentUser.uid;
       try {
-        const userDoc = await getDoc(doc(db, "users", uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setUserName(data.name || 'Anônimo');
+        const studentDocRef = doc(db, "users", studentID);
+        const studentDoc = await getDoc(studentDocRef);
+  
+        if (studentDoc.exists()) {
+          const studentData = studentDoc.data();
+          const studentName = studentData.name || 'Estudante';
+          setUserName(studentName);
+  
+          // Check if the professorID is stored inside the student's document
+          if (studentData.professorID) {
+            const professorDoc = await getDoc(doc(db, "users", studentData.professorID));
+            if (professorDoc.exists()) {
+              const professorData = professorDoc.data();
+              setProfessorName(professorData.name || 'Professor');
+            }
+          }
         }
       } catch (error) {
-        console.error("Erro ao buscar nome do usuário:", error);
+        console.error("Erro ao buscar nomes:", error);
       }
     };
   
-    if (isAuthenticated) {
-      fetchUserName();
+    if (studentID) {
+      fetchNames();
     }
-  }, [isAuthenticated]);
-
-  
+  }, [studentID]);
+    
   // Use refs to hold these values so they don't trigger re-renders
   const ydocRef = useRef<Y.Doc | null>(null);
 
@@ -229,7 +225,7 @@ function NotebookEditor() {
     };
   }, [content, studentID, notebookID]);
   
-  if (loading || !isAuthenticated) return <LoadingAnimation />;
+  if (loading) return <LoadingAnimation />;
 
   return (
     <TiptapMobile
@@ -238,8 +234,8 @@ function NotebookEditor() {
       provider={provider}
       studentID={studentID}
       notebookID={notebookID}
-      userName={auth.currentUser?.displayName}
-      currentUser={auth.currentUser}
+      userName={userName}
+      professorName={professorName}
       onChange={handleContentChange}
     />
   );
