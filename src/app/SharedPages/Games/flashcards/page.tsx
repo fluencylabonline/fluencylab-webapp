@@ -643,7 +643,7 @@ const FlashCard: FC = () => {
                         {!globalDecksPractice ? (
                             <div className='flex flex-col items-center'>
                             <h2 className='font-bold text-lg'>Seus decks:</h2>
-                            {decks.length === 0 && <p className="text-gray-500 mt-4">Você ainda não tem decks para praticar. Explore a aba 'Decks'!</p>}
+                            {decks.length === 0 && <p className="text-gray-500 mt-4">Você ainda não tem decks para praticar. Explore a aba Decks!</p>}
                             <ul className='flex flex-col items-start p-4 gap-2'>
                             {decks.map(deck => (
                                 <li id='deck-bg' className='flex flex-col items-center gap-6 p-2 py-8 px-3 rounded-lg w-full justify-between' key={deck.id}>
@@ -825,7 +825,7 @@ const FlashCard: FC = () => {
                             {/* --- NEW --- CSV Upload Section in Modal */}
                             <div className='w-full p-4 border-b border-gray-300 dark:border-gray-700 mb-4'>
                                 <h4 className="text-lg leading-6 font-medium mb-2">Importar Deck de CSV</h4>
-                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">O arquivo CSV deve ter colunas "Front" e "Back". O nome do arquivo (sem extensão) será usado como nome do deck.</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">O arquivo CSV deve ter colunas Front e Back. O nome do arquivo (sem extensão) será usado como nome do deck.</p>
                                 <div className="flex flex-col sm:flex-row items-center gap-2">
                                     <input
                                         type="file"
@@ -880,7 +880,7 @@ const FlashCard: FC = () => {
                                         </div>
                                         {selectedDeck && ( // Only show tag management if a deck is selected
                                         <div className='flex flex-col items-start justify-center gap-2 w-full border-t pt-2 mt-2'>
-                                            <h5 className="font-medium">Tags para '{selectedDeck}'</h5>
+                                            <h5 className="font-medium">Tags para {selectedDeck}</h5>
                                             <div className="flex gap-2 items-center w-full">
                                                 <FluencyInput
                                                     type="text"
@@ -913,7 +913,7 @@ const FlashCard: FC = () => {
                                     </div>
                                     {selectedDeck && ( // Only show manual card add if a deck is selected
                                     <div className="w-full mt-4 border-t pt-4">
-                                        <h4 className="text-md leading-6 font-medium mb-2">Adicionar Cartão Manualmente ao Deck '{selectedDeck}'</h4>
+                                        <h4 className="text-md leading-6 font-medium mb-2">Adicionar Cartão Manualmente ao Deck {selectedDeck}</h4>
                                         <FluencyInput
                                             type="text"
                                             value={newCardFront}
@@ -932,7 +932,7 @@ const FlashCard: FC = () => {
                                 </div>
 
                                 <div className='flex flex-col items-center w-full lg:w-1/2 h-full bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-2'>
-                                    <h4 className="text-lg leading-6 font-medium">Cartões no deck '{selectedDeck || "Nenhum selecionado"}'</h4>
+                                    <h4 className="text-lg leading-6 font-medium">Cartões no deck {selectedDeck || "Nenhum selecionado"}</h4>
                                     {!selectedDeck && <p className="text-sm text-gray-500 mt-4">Selecione um deck à esquerda para ver seus cartões.</p>}
                                     {selectedDeck && editedCardId && (
                                     <div className="flex flex-row gap-3 items-center w-full my-2 p-2 border rounded-md dark:border-gray-700">
@@ -996,7 +996,7 @@ const FlashCard: FC = () => {
                                 <FluencyCloseButton onClick={closeOtherConfirmModal} />
                                 <div className="mt-3 flex flex-col gap-3 p-4">
                                     <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                                        Deseja adicionar o deck '{otherDecks.find(d => d.id === selectedDeck)?.name || selectedDeck}' aos seus decks pessoais para estudo?
+                                        Deseja adicionar o deck {otherDecks.find(d => d.id === selectedDeck)?.name || selectedDeck} aos seus decks pessoais para estudo?
                                     </h3>
                                     <div className="flex justify-center gap-2"> {/* --- MODIFIED --- gap-2 */}
                                         <FluencyButton variant='confirm' onClick={confirmOtherDeckAddition} >Sim, quero aprender.</FluencyButton>
@@ -1018,7 +1018,7 @@ const FlashCard: FC = () => {
                                 <FluencyCloseButton onClick={closeConfirmModal} />
                                 <div className="mt-3 flex flex-col gap-3 p-4">
                                     <h3 className="text-center text-lg leading-6 font-bold mb-2">
-                                        Enviar deck '{otherDecks.find(d => d.id === selectedDeck)?.name || selectedDeck}' para aluno praticar:
+                                        Enviar deck {otherDecks.find(d => d.id === selectedDeck)?.name || selectedDeck} para aluno praticar:
                                     </h3>
                                     <select
                                         value={selectedStudentId}

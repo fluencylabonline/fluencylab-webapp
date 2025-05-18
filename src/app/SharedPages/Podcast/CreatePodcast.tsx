@@ -294,7 +294,7 @@ const CreatePodcastForm = () => {
             onClick={() => setExistingLanguages([...existingLanguages, language])}
             className="text-sm text-blue-600 hover:underline mt-2"
           >
-            Create "{language}"
+            Create {language}
           </button>
         )}
       </div>
@@ -323,7 +323,7 @@ const CreatePodcastForm = () => {
             onClick={() => setExistingLevels([...existingLevels, level])}
             className="text-sm text-blue-600 hover:underline mt-2"
           >
-            Create "{level}"
+            Create {level}
           </button>
         )}
       </div>
