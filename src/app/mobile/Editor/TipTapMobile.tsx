@@ -59,8 +59,7 @@ const TiptapMobile = ({ onChange, content, provider, role, professorName, studen
   })
 
   const userColor = role === 'teacher' ? '#21B5DE' : '#DE5916';
-  const cursorName = role === 'teacher' ? professorName : studentName;
-
+  const cursorName = role === 'teacher' ? "Prof" : "Aluno";
 
   const editor = useEditor({
     extensions: [
@@ -105,8 +104,10 @@ const TiptapMobile = ({ onChange, content, provider, role, professorName, studen
         history: false
       }),
       Collaboration.configure({
-        document: provider.doc,
+        document: provider!.doc,
+        field: 'content',
       }),
+      
       CollaborationCursor.configure({
         provider: provider,
         user: {

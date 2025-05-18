@@ -7,10 +7,6 @@ import Logo from '../../../../public/images/brand/logo.png';
 
 //Icons
 import { IoClose } from "react-icons/io5";
-import { IoLogoWhatsapp } from "react-icons/io5";
-import { FaThreads } from "react-icons/fa6";
-import { FaInstagram } from "react-icons/fa6";
-
 import { SocialIcon } from 'react-social-icons'
 
 interface ModalProps {
@@ -110,7 +106,7 @@ function Footer(){
 
         </div>
       </div>
-      <div className="py-6 text-sm text-center dark:text-gray-400">© 2024 FluencyLab. Todos os direitos reservados.</div>
+      <div className="py-6 text-sm text-center dark:text-gray-400">© 2025 FluencyLab. Todos os direitos reservados.</div>
       <Modal isOpen={isModalOpen} onClose={closeModal} />
     </footer>
     );

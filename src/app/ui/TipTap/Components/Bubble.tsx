@@ -3,7 +3,7 @@ import { franc } from "franc-min";
 import { useState } from "react";
 import ReactDOM from "react-dom";
 import toast from "react-hot-toast";
-import { FaHeadphonesAlt } from "react-icons/fa";
+import { FaAngleDown, FaHeadphonesAlt } from "react-icons/fa";
 import FluencyCloseButton from "../../Components/ModalComponents/closeModal";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
@@ -11,7 +11,22 @@ type PopoversProps = {
   editor: Editor;
 }
 
+// Define speech speed options
+const speechSpeeds = [
+  { label: "0.5x", value: 0.5 },
+  { label: "0.75x", value: 0.75 },
+  { label: "Normal", value: 1 },
+  { label: "1.25x", value: 1.25 },
+  { label: "1.5x", value: 1.5 },
+  { label: "2x", value: 2 },
+];
+
 function Popovers({ editor }: PopoversProps) {
+  const [currentSpeech, setCurrentSpeech] = useState<SpeechSynthesisUtterance | null>(null);
+  const [selectedSpeed, setSelectedSpeed] = useState<number>(1); // Default speed is normal
+  const [showSpeedOptions, setShowSpeedOptions] = useState<boolean>(false);
+
+
   const closeBubble = () => {
     editor.commands.setTextSelection({
       from: editor.state.selection.to,
@@ -45,6 +60,7 @@ function Popovers({ editor }: PopoversProps) {
         const langCode = languageMap[detectedLanguage] || 'en'; // Default to English if language is not found
         const speech = new SpeechSynthesisUtterance(selectedText);
         speech.lang = langCode; // Set the language for speech synthesis
+        speech.rate = selectedSpeed; // Set the selected speech rate
 
         speechSynthesis.speak(speech);
         closeBubble();
@@ -53,6 +69,19 @@ function Popovers({ editor }: PopoversProps) {
       }
     } else {
       console.error("Editor is not available.");
+    }
+  };
+
+  const handleSpeedChange = (speed: number) => {
+    setSelectedSpeed(speed);
+    setShowSpeedOptions(false); // Hide options after selection
+    // If speech is ongoing, you might want to stop and restart with new speed,
+    // or just apply to next speech. For simplicity, this applies to the next.
+    if (speechSynthesis.speaking) {
+        speechSynthesis.cancel(); // Stop current speech
+        // Optionally, you could restart the speech immediately with the new speed
+        // but that requires re-calling readAloud or a similar logic.
+        // For now, it will apply to the next time the user clicks "readAloud".
     }
   };
 
@@ -177,12 +206,37 @@ function Popovers({ editor }: PopoversProps) {
   return (
     <>
       <BubbleMenu className="Popover" editor={editor}>
-        <button
-          onClick={readAloud}
-          className="bg-fluency-green-500 hover:bg-fluency-green-600 text-white p-2 rounded-lg duration-300 ease-in-out"
-        >
-          <FaHeadphonesAlt />
-        </button>
+        <div className="relative flex items-center">
+          <button
+            onClick={readAloud}
+            className={`p-2 rounded-l-lg duration-300 ease-in-out text-white ${speechSynthesis.speaking ? 'bg-red-500 hover:bg-red-600' : 'bg-fluency-green-500 hover:bg-fluency-green-600'}`}
+            title={speechSynthesis.speaking ? "Stop reading" : "Read aloud"}
+          >
+            <FaHeadphonesAlt />
+          </button>
+          <button
+            onClick={() => setShowSpeedOptions(!showSpeedOptions)}
+            className="p-2 bg-fluency-green-500 hover:bg-fluency-green-600 text-white rounded-r-lg duration-300 ease-in-out border-l border-fluency-green-700"
+            title="Select speed"
+          >
+            <FaAngleDown />
+          </button>
+
+          {/* Speed Options Dropdown */}
+          {showSpeedOptions && (
+            <div className="absolute top-full mt-1 right-0 bg-white dark:bg-fluency-gray-600 shadow-lg rounded-md py-1 z-10 w-28">
+              {speechSpeeds.map((speed) => (
+                <button
+                  key={speed.value}
+                  onClick={() => handleSpeedChange(speed.value)}
+                  className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-fluency-gray-500 dark:text-white ${selectedSpeed === speed.value ? 'bg-gray-200 dark:bg-fluency-gray-500 font-semibold' : 'text-gray-700 dark:text-gray-200'}`}
+                >
+                  {speed.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <button
           onClick={showWordDefinition}

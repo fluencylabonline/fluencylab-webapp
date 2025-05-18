@@ -76,19 +76,6 @@ return(
                 </div>
               </div>
 
-              {/*PERSON4*/}
-              <div className="flex flex-col items-center">
-                  <Image
-                  className="object-cover w-20 h-20 mb-2 rounded-full shadow"
-                  src={Team3}
-                  alt="FluencyLab"
-                  />
-                <div className="flex flex-col items-center">
-                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Aldrin</p>
-                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professora de Inglês</p>
-                </div>
-              </div>
-
               {/*PERSON5*/}
               <div className="flex flex-col items-center">
                   <Image
@@ -138,19 +125,6 @@ return(
                 <div className="flex flex-col items-center">
                   <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Deise</p>
                   <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Equipe de Apoio</p>
-                </div>
-              </div>
-
-              {/*PERSON9*/}
-              <div className="flex flex-col items-center">
-                  <Image
-                  className="object-cover w-20 h-20 mb-2 rounded-full shadow"
-                  src={Team3}
-                  alt="FluencyLab"
-                  />
-                <div className="flex flex-col items-center">
-                  <p className="text-lg font-bold text-fluency-text-light dark:text-fluency-text-dark">Aline</p>
-                  <p className="text-sm text-fluency-gray-400 dark:text-fluency-gray-200">Professora de Espanhol</p>
                 </div>
               </div>
 

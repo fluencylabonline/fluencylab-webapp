@@ -12,7 +12,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 // Icons
 import { MdOndemandVideo} from "react-icons/md"
 import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
-import { TbMessageQuestion, TbPigMoney } from 'react-icons/tb';
+import { TbFileReport, TbMessageQuestion, TbPigMoney } from 'react-icons/tb';
 import { LuBookCopy } from 'react-icons/lu';
 import { FiUserPlus } from 'react-icons/fi';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -159,11 +159,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <TbPigMoney className="h-6 w-6"/>,
     },
     {
-      name: "Perguntas",
-      path: "/admin-dashboard/perguntas",
-      icon: <TbMessageQuestion className="h-6 w-6"/>,
-    },
-    {
       name: "Criar Usuário",
       path: "/admin-dashboard/criar-usuario",
       icon: <FiUserPlus className="h-6 w-6"/>,
@@ -182,6 +177,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: "Aulas Gravadas",
       path: "/admin-dashboard/aulas-gravadas",
       icon: <MdOndemandVideo className="h-6 w-6"/>,
+    },
+    {
+      name: "Relatórios",
+      path: "/admin-dashboard/aula-teste",
+      icon: <TbFileReport  className="h-6 w-6"/>,
     },
   ];
 

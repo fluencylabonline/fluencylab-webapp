@@ -383,20 +383,43 @@ export default function Caderno(){
     };
 
     const sortedNotebooks = [...filteredNotebooks].sort((a, b) => {
-        // Function to convert "dd/mm/yyyy" string to a Date object
+        // Use the actual timestamp for sorting if available
+        const timeA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0;
+        const timeB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0;
+        
+        // If timestamps are available, use them
+        if (timeA && timeB) {
+            if (sortOrder === 'asc') {
+                return timeA - timeB;
+            } else {
+                return timeB - timeA;
+            }
+        }
+        
+        // Fallback to parsing the title if no timestamps
         const parseDate = (dateString: string) => {
-            const [day, month, year] = dateString.split('/').map(Number);
-            // Note: Month is zero-indexed in JavaScript Date (0 = January, 11 = December)
+            const parts = dateString.split('/').map(Number);
+            // Handle both DD/MM/YYYY and MM/DD/YYYY formats
+            let day, month, year;
+            
+            if (parts[0] > 12) {
+                [day, month, year] = parts;
+            } else if (parts[1] > 12) {
+                [month, day, year] = parts;
+            } else {
+                [day, month, year] = parts;
+            }
+            
             return new Date(year, month - 1, day);
         };
-    
-        const dateA = parseDate(a.title);  // Convert the title string of notebook a to a Date object
-        const dateB = parseDate(b.title);  // Convert the title string of notebook b to a Date object
-    
+
+        const dateA = parseDate(a.title);
+        const dateB = parseDate(b.title);
+
         if (sortOrder === 'asc') {
-            return dateA.getTime() - dateB.getTime();  // Ascending order
+            return dateA.getTime() - dateB.getTime();
         } else {
-            return dateB.getTime() - dateA.getTime();  // Descending order
+            return dateB.getTime() - dateA.getTime();
         }
     });
 
@@ -430,11 +453,20 @@ export default function Caderno(){
 
             <div className='gap-3 flex flex-col w-full'>
                 <ul className='flex flex-col rounded-md w-full gap-2'>
-                    {sortedNotebooks.map((notebook) => (
+                    {sortedNotebooks.map((notebook) => {
+                        const displayDate = notebook.createdAt?.seconds 
+                        ? new Date(notebook.createdAt.seconds * 1000).toLocaleDateString('pt-BR', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        })
+                        : notebook.title;
+
+                        return(
                         <li key={notebook.id} className='bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 px-6 rounded-md flex flex-row items-center justify-between gap-4 w-full'>
                             <Link key={notebook.id} href={{ pathname: `/teacher-dashboard/alunos/aula/${encodeURIComponent(notebook.studentName)}`, query: { notebook: notebook.id, student: notebook.student } }} passHref>
                                 <div className='hover:text-fluency-blue-700 hover:font-bold duration-200 ease-out transition-all cursor-pointer'>
-                                    <p className='text-md'>{notebook.title}</p>
+                                    <p className='text-md'>{displayDate}</p>
                                     <p className='text-sm'>{notebook.description}</p>
                                 </div>
                             </Link>
@@ -452,7 +484,7 @@ export default function Caderno(){
                                 </Tooltip>
                             </div>
                         </li>
-                    ))}
+                    )})}
                     
                     {filteredSlides.map((slide) => (
                         <li key={slide.url} className='bg-fluency-blue-100 hover:bg-fluency-gray-100 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 px-6 rounded-md flex flex-row items-center justify-between gap-4 w-full'>
