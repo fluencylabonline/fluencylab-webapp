@@ -8,11 +8,23 @@ const GoalModal = ({ isOpen, onClose, editor }) => {
   const [description, setDescription] = useState('Estudar todos os dias pelo menos 10 minutos.');
   const [schedule, setSchedule] = useState('Dia 1 - Criar Flashcards dos pronomes.\nDia 2 - Ler os flashcards em voz alta.\nDia 3 - Fazer atividade 1.\nDia 4 - Revisar anotações e flashcards.\nDia 5 - Fazer atividade 2.\nDia 6 - Revisar flashcards e terminar o homework.');
 
-  const handleInsert = () => {
+    const handleInsert = () => {
     if (editor) {
-      editor.chain().focus().insertContent(
-        `<goal-component title="${title}" description="${description}" schedule="${schedule}"></goal-component>`
-      ).run();
+      // Instead of inserting an HTML string, insert a JSON object
+      // representing the node and its attributes. Tiptap will handle
+      // the correct rendering and escaping.
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'goalComponent', // This must match the name in your Node.create()
+          attrs: {
+            title: title,
+            description: description,
+            schedule: schedule,
+          },
+        })
+        .run();
       onClose();
     }
   };

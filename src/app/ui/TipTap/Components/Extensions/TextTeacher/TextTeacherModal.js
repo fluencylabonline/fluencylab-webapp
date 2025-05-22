@@ -7,9 +7,19 @@ const TextTeacherModal = ({ isOpen, onClose, initialText, editor }) => {
   const [text, setText] = useState(initialText);
 
   // Function to handle inserting text into the editor
-  const handleText = (text) => {
-    if (editor && text) {
-      editor.chain().focus().insertContent(`<teacher-component text="${text}"></teacher-component>`).run();
+  const handleText = () => {
+    if (editor) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'teacherComponent', // This must match the name in your Node.create()
+          attrs: {
+            text: text,
+          },
+        })
+        .run();
+      onClose();
     }
   };
 

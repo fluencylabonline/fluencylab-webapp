@@ -187,7 +187,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       
-      {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}  />}
+      {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
       {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor}/>}

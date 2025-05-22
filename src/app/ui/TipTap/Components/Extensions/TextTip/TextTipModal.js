@@ -6,10 +6,19 @@ const TextTipModal = ({ isOpen, onClose, initialText, editor }) => {
   // State to manage the input text
   const [text, setText] = useState(initialText);
 
-  // Function to handle inserting text into the editor
-  const handleText = (text) => {
-    if (editor && text) {
-      editor.chain().focus().insertContent(`<tip-component text="${text}"></tip-component>`).run();
+    const handleText = () => {
+    if (editor) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'tipComponent', // This must match the name in your Node.create()
+          attrs: {
+            text: text,
+          },
+        })
+        .run();
+      onClose();
     }
   };
 

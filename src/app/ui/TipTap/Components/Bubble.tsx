@@ -11,7 +11,6 @@ type PopoversProps = {
   editor: Editor;
 }
 
-// Define speech speed options
 const speechSpeeds = [
   { label: "0.5x", value: 0.5 },
   { label: "0.75x", value: 0.75 },
@@ -22,10 +21,8 @@ const speechSpeeds = [
 ];
 
 function Popovers({ editor }: PopoversProps) {
-  const [currentSpeech, setCurrentSpeech] = useState<SpeechSynthesisUtterance | null>(null);
-  const [selectedSpeed, setSelectedSpeed] = useState<number>(1); // Default speed is normal
+  const [selectedSpeed, setSelectedSpeed] = useState<number>(0.75); // Default speed is normal
   const [showSpeedOptions, setShowSpeedOptions] = useState<boolean>(false);
-
 
   const closeBubble = () => {
     editor.commands.setTextSelection({
@@ -266,6 +263,14 @@ function Popovers({ editor }: PopoversProps) {
         >
           <div className="w-5 h-5 p-2 rounded-full bg-fluency-blue-500 hover:bg-fluency-blue-600 duration-300 ease-in-out transition-all"></div>
         </button>
+        
+        <button
+          onClick={() => setColorAndCloseBubble('#4c2fcc')}
+          className={editor.isActive('textStyle', { color: '#4c2fcc' }) ? 'is-active' : ''}
+          data-testid="setIndigo"
+        >
+          <div className="w-5 h-5 p-2 rounded-full bg-[#4c2fcc] hover:bg-[#4c2fcc] duration-300 ease-in-out transition-all"></div>
+        </button>
 
         <button
           onClick={() => setColorAndCloseBubble('#FFBF00')}
@@ -289,14 +294,6 @@ function Popovers({ editor }: PopoversProps) {
           data-testid="setRed"
         >
           <div className="w-5 h-5 p-2 rounded-full bg-fluency-red-500 hover:bg-fluency-red-600 duration-300 ease-in-out transition-all"></div>
-        </button>
-
-        <button
-          onClick={() => setColorAndCloseBubble('#FFA500')}
-          className={editor.isActive('textStyle', { color: '#FFA500' }) ? 'is-active' : ''}
-          data-testid="setOrange"
-        >
-          <div className="w-5 h-5 p-2 rounded-full bg-fluency-orange-500 hover:bg-fluency-orange-600 duration-300 ease-in-out transition-all"></div>
         </button>
 
         <button
