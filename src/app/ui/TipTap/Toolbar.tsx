@@ -135,6 +135,16 @@ const Toolbar = ({ editor, isTyping, content }: Props) => {
   const [tableSelect, setTableSelect] = useState(false);
   const [moreOptionsSelect, setMoreOptionsSelect] = useState(false);
 
+  useEffect(() => {
+    const checkViewport = () => {
+      // Tailwind's 'md' breakpoint is 768px.
+      setIsMobileView(window.innerWidth < 768);
+    };
+    checkViewport(); // Initial check
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport); // Cleanup listener
+  }, []);
+
   // Animation variants
   const dropdownVariants = {
     hidden: {
@@ -230,16 +240,6 @@ const Toolbar = ({ editor, isTyping, content }: Props) => {
       setTableSelect(false);
     }
   };
-
-  useEffect(() => {
-    const checkViewport = () => {
-      // Tailwind's 'md' breakpoint is 768px.
-      setIsMobileView(window.innerWidth < 768);
-    };
-    checkViewport(); // Initial check
-    window.addEventListener("resize", checkViewport);
-    return () => window.removeEventListener("resize", checkViewport); // Cleanup listener
-  }, []);
 
   // --- Conditional Rendering based on viewport ---
   if (!isMobileView) {
