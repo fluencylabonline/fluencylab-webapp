@@ -11,8 +11,9 @@ import { useSession } from 'next-auth/react';
 import {
   GoogleGenerativeAI,
 } from "@google/generative-ai";
+
 import { FaTimes } from "react-icons/fa"; // Added FaRobot, FaTimes
-import { VscWand } from "react-icons/vsc"; // Alternative AI icon
+import { VscWand } from "react-icons/vsc";
 
 type PopoversProps = {
   editor: Editor;
@@ -332,13 +333,13 @@ const handleAiAction = async (
           </div>
         </div>
       </div>,
-      document.body // Mounts the modal directly to the body
+      document.body 
     );
   };
 
   return (
     <>
-      <BubbleMenu className="Popover" editor={editor}>
+      <BubbleMenu className="Popover bg-[#d8d8d8af] dark:bg-[#000000af]" editor={editor}>
         <div className="relative flex items-center">
           <button
             onClick={readAloud}
@@ -399,7 +400,7 @@ const handleAiAction = async (
                 aria-hidden="true"
                 className={`w-5 h-5 text-gray-200 ${
                   isAiLoading
-                    ? "animate-spin fill-fluency-blue-500 ease-in-out transition-all duration-300"
+                    ? "animate-spin fill-fluency-indigo-500 ease-in-out transition-all duration-300"
                     : "flex ease-in-out transition-all duration-300"
                 } dark:text-gray-600`}
                 viewBox="0 0 100 101"
@@ -493,8 +494,8 @@ const handleAiAction = async (
           className="bg-slate-300 hover:bg-slate-400 text-white p-2 rounded-lg duration-300 ease-in-out"
         >
           <svg
-            height="1.1rem"
-            width="1.1rem"
+            height="1rem"
+            width="1rem"
             version="1.1"
             id="_x32_"
             xmlns="http://www.w3.org/2000/svg"
@@ -534,7 +535,7 @@ const handleAiAction = async (
           }
           data-testid="setIndigo"
         >
-          <div className="w-5 h-5 p-2 rounded-full bg-[#4c2fcc] hover:bg-[#4c2fcc] duration-300 ease-in-out transition-all"></div>
+          <div className="w-5 h-5 p-2 rounded-full bg-[#4c2fcc] hover:bg-[#352480] duration-300 ease-in-out transition-all"></div>
         </button>
 
         <button
