@@ -135,10 +135,15 @@ const StudentTasks: React.FC<StudentTasksProps> = ({ onClose, isOpen }) => {
     }, [tasks]);
 
     const calculateTaskCompletionPercentage = () => {
-        if (!tasks || !tasks.Task || tasks.Task.length === 0) return 0;
-        const totalTasks = tasks.Task.length;
-        const completedTasks = tasks.Task.filter((task: any) => task.done).length;
-        return (completedTasks / totalTasks) * 100;
+if (!tasks || !tasks.Task || (Array.isArray(tasks.Task) ? tasks.Task.length === 0 : false)) return 0;
+
+const totalTasks = Array.isArray(tasks.Task) ? tasks.Task.length : 1;
+
+const completedTasks = (Array.isArray(tasks.Task) ? tasks.Task : [tasks.Task])
+  .filter((task: any) => task.done).length;
+
+return (completedTasks / totalTasks) * 100;
+
     };
 
     useEffect(() => {

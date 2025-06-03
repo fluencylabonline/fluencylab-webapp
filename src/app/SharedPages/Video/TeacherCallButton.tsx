@@ -25,6 +25,6 @@ export default function TeacherCallButton({ student }: TeacherCallButtonProps) {
     }
 
     return(
-        <FluencyButton variant='purple' className='min-w-max' onClick={createCallId}>Chamada <IoVideocam /></FluencyButton>
+        <FluencyButton variant='glass' className='min-w-max' onClick={createCallId}>Chamada <IoVideocam /></FluencyButton>
     )
 }

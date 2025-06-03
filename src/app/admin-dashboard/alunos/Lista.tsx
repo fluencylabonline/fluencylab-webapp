@@ -147,7 +147,11 @@ export default function Lista() {
                     'Nivelamento', 
                     'Decks', 
                     'AulasGravadas', 
-                    'Slides'
+                    'Slides',
+                    'Placement',
+                    'Contrato',
+                    'enrollments',
+                    'quizResults'
                 ];
                 for (const collectionName of collections) {
                     const collectionRef = collection(db, 'users', userId, collectionName);

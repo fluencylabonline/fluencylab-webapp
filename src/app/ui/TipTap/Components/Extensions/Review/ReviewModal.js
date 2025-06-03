@@ -4,7 +4,7 @@ import FluencyButton from '@/app/ui/Components/Button/button'; // Assuming this 
 
 const ReviewModal = ({ isOpen, onClose, editor }) => {
   const [title, setTitle] = useState('Personal Pronouns');
-  const [content, setContent] = useState(
+  const [reviewContent, setReviewContent] = useState(
     'Vimos que os pronomes são palavras bem úteis.\nHoje vimos: I, **you**, **we**, **they**. Ainda lembra o significado deles? Se não lembra, a atividade de casa vai te ajudar a memorizar.'
   );
 
@@ -17,10 +17,10 @@ const ReviewModal = ({ isOpen, onClose, editor }) => {
         .chain()
         .focus()
         .insertContent({
-          type: 'reviewComponent', // This must match the name in your Node.create()
+          type: 'review-component', // This must match the name in your Node.create()
           attrs: {
             title: title,
-            content: content,
+            reviewContent: reviewContent,
           },
         })
         .run();
@@ -49,8 +49,8 @@ const ReviewModal = ({ isOpen, onClose, editor }) => {
               />
               <textarea
                 className="border rounded p-2 w-full bg-gray-200 dark:bg-fluency-pages-dark text-black dark:text-white" // Added text colors
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                value={reviewContent}
+                onChange={(e) => setReviewContent(e.target.value)}
                 placeholder="Content"
                 rows={6}
               />

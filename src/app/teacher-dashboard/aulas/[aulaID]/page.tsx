@@ -6,11 +6,11 @@ import { getDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
 // TipTap
-import Tiptap from '../../../ui/TipTap/TipTap';
 import DocumentAnimation from '../../../ui/Animations/DocumentAnimation';
 
 // Autenticação
 import { useSession } from 'next-auth/react';
+import Tiptap from '@/app/ui/Components/Aulas/TipTapAulas';
 
 const NotebookEditor = () => {
   const { data: session } = useSession();

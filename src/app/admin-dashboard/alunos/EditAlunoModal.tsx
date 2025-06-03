@@ -252,7 +252,7 @@ const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
                   const selectedProf = professors.find(prof => prof.id === e.target.value) || null;
                   setSelectedProfessor(selectedProf);
                 }}
-                className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-yellow-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
+                className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-orange-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
               >
                 <option value="">Selecionar Professor</option>
                 {professors.map((prof) => (

@@ -345,7 +345,7 @@ const TicTacToe: React.FC = () => {
             "Empate!" :
             <div className='flex flex-row items-center gap-1'>
               <span>
-                {!playerXName || !playerOName ? (<span className='font-bold text-fluency-yellow-500'>Jogo não iniciou</span>) : (<span className='font-medium'>Vez de <strong className='font-bold text-fluency-green-500'>{isXNext ? playerXName : playerOName}</strong></span>)}
+                {!playerXName || !playerOName ? (<span className='font-bold text-fluency-orange-500'>Jogo não iniciou</span>) : (<span className='font-medium'>Vez de <strong className='font-bold text-fluency-green-500'>{isXNext ? playerXName : playerOName}</strong></span>)}
               </span>
               <CiCircleQuestion onClick={openInstrucoes} className='lg:w-7 lg:h-7 w-5 h-5 text-black dark:text-white cursor-pointer'/>
             </div>
@@ -361,7 +361,7 @@ const TicTacToe: React.FC = () => {
       </div>
       
       <div className="mt-4 flex flex-col items-center justify-center gap-1">
-        <p className='text-xs font-bold px-1 rounded-md bg-fluency-yellow-400 dark:bg-fluency-yellow-400 text-black dark:text-black'>Cole o ID aqui depois de criar um jogo e aperte em Entrar</p>
+        <p className='text-xs font-bold px-1 rounded-md bg-fluency-orange-400 dark:bg-fluency-orange-400 text-black dark:text-black'>Cole o ID aqui depois de criar um jogo e aperte em Entrar</p>
         <FluencyInput
           type="text"
           value={gameCode}

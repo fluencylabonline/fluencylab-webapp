@@ -37,7 +37,7 @@ const TextTipComponent = ({ node }) => {
 
   return (
     <NodeViewWrapper className="react-component">
-      <div className='flex flex-row items-center justify-center bg-fluency-yellow-100 dark:bg-fluency-gray-700 text-black dark:text-white w-full h-min rounded-3xl px-4'>
+      <div className='flex flex-row items-center justify-center bg-fluency-orange-100 dark:bg-fluency-gray-700 text-black dark:text-white w-full h-min rounded-3xl px-4'>
         <div className='w-full flex flex-row justify-between items-center'>
           <Image src={TipImage} alt="Teacher" className='w-[13%] h-auto' />
           <div

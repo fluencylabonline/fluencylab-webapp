@@ -20,7 +20,7 @@ const BandImageComponent = ({ node }) => {
   };
 
   return (
-    <NodeViewWrapper className="react-component flex flex-col justify-center items-center">
+    <NodeViewWrapper className="react-component flex flex-col justify-center items-center overflow-hidden">
       <div
         className={`flex ${getFlexDirection()}`}
         style={{ width: size, height: calculatedHeight }}

@@ -28,13 +28,13 @@ export default function Wordle(){
         <div className='w-full h-screen overflow-hidden text-black'>
             <div className='flex flex-row gap-2 items-center justify-between w-full px-4 mt-3'> 
                 <Link href="/games">
-                    <button className="text-fluency-yellow-500 hover:text-fluency-yellow-700 ease-in-out duration-300 flex justify-center">
+                    <button className="text-fluency-orange-500 hover:text-fluency-orange-700 ease-in-out duration-300 flex justify-center">
                     <BsArrowLeft className='lg:w-9 lg:h-9 w-9 h-9' />
                     </button>
                 </Link>
 
                 <div className='flex flex-row gap-2 items-center'>
-                <p className='text-fluency-yellow-500 font-bold text-2xl'>Wordle</p>
+                <p className='text-fluency-orange-500 font-bold text-2xl'>Wordle</p>
                 <select className='outline-none pl-5 max-w-48 max-h-10 flex flex-row justify-center items-center bg-fluency-pages-light dark:bg-fluency-pages-dark dark:text-fluency-gray-100 p-2 rounded-md px-3' value={selectedLanguage} onChange={handleLanguageChange}>
                     <option className='bg-fluency-pages-light dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3 ' key={"english"} value={"english"}>English</option>
                     <option className='bg-fluency-pages-light mt-1 dark:text-fluency-gray-100 dark:bg-fluency-pages-dark p-2 rounded-md px-3' key={"portugues"} value={"portugues"}>Português</option>

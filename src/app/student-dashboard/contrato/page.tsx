@@ -620,7 +620,6 @@ const ContratoAluno: React.FC<ContratoAlunoProps> = () => {
                         </div>
                     </div>)}
                 </div>)}
-            <Toaster />
         </div>
     );
 };

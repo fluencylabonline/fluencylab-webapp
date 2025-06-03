@@ -273,7 +273,7 @@ const WhatAmI: React.FC = () => {
         {gameId && !player2Id && !winner && (
             <div className="flex flex-col items-center gap-2 my-4 text-lg bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md p-3">
                 <span className='font-bold'>Esperando pelo jogador 2 para iniciar...</span>
-                <span className='font-bold text-fluency-yellow-500'>{gameId}</span>
+                <span className='font-bold text-fluency-orange-500'>{gameId}</span>
             </div>
         )}
 
@@ -290,7 +290,7 @@ const WhatAmI: React.FC = () => {
                         <p><strong className='font-bold'>Vez de:</strong> {currentTurnPlayerName}.</p> 
                         <p><strong className='font-bold'>Dica:</strong> <span className='text-fluency-green-500'>{clues[currentClueIndex]}</span></p>
                     </div>
-                : <span className='font-bold text-fluency-yellow-500'>Jogo ainda não iniciou</span>}
+                : <span className='font-bold text-fluency-orange-500'>Jogo ainda não iniciou</span>}
             </div>
 
             <div className="w-full flex flex-row items-center gap-2">

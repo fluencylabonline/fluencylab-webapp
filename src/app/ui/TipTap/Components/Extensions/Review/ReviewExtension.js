@@ -13,7 +13,7 @@ export default Node.create({
       title: {
         default: 'Personal Pronouns',
       },
-      content: {
+      reviewContent: {
         default:
           'Vimos que os pronomes são palavras bem úteis.\nHoje vimos: I, **you**, **we**, **they**. Ainda lembra o significado deles? Se não lembra, a atividade de casa vai te ajudar a memorizar.',
       },
@@ -26,7 +26,7 @@ export default Node.create({
         tag: 'review-component',
         getAttrs: (element) => ({
           title: element.getAttribute('title'),
-          content: element.getAttribute('content'),
+          reviewContent: element.getAttribute('reviewContent'),
         }),
       },
     ];

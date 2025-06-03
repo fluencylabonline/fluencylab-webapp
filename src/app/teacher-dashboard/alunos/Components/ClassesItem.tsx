@@ -15,9 +15,9 @@ const ClassDateItem: FC<ClassDateItemProps> = ({ date, status, onDone, onCancel,
             case 'Feita':
                 return 'text-fluency-green-500 bg-fluency-green-500';
             case 'Cancelada':
-                return 'text-yellow-500 bg-fluency-yellow-500';
+                return 'text-yellow-500 bg-fluency-orange-500';
             case 'À Fazer':
-                return 'text-fluency-blue-600 bg-fluency-blue-500';
+                return 'text-fluency-blue-400 bg-fluency-blue-500';
             case 'Atrasada':
                 return 'text-fluency-red-600 bg-fluency-red-500';
             default:
@@ -49,7 +49,7 @@ const ClassDateItem: FC<ClassDateItemProps> = ({ date, status, onDone, onCancel,
                 <FaRegCalendarCheck className="icon" />
             </button>
             <button
-                className="text-white flex flex-row gap-1 text-xs items-center py-1 px-2 rounded-[4px] font-bold bg-fluency-yellow-600 hover:bg-opacity-100 transition-all duration-300 ease-in-out dark:bg-fluency-yellow-600"
+                className="text-white flex flex-row gap-1 text-xs items-center py-1 px-2 rounded-[4px] font-bold bg-fluency-orange-600 hover:bg-opacity-100 transition-all duration-300 ease-in-out dark:bg-fluency-orange-600"
                 onClick={onCancel}
             >
                 <p className="lg:block md:block hidden">Cancelar</p>

@@ -4,9 +4,11 @@ import { HiVolumeUp } from 'react-icons/hi';
 
 interface AudioPlayerProps {
   src: string;
+  mode: 'listening' | 'practice';       // new prop
+  toggleMode: () => void; 
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, mode, toggleMode }) => {
   const audioPlayerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(new Audio());
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -138,6 +140,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
           </select>
         </div>
 
+        <div onClick={toggleMode} className="speed-controls text-[#dadada] cursor-pointer">
+          <div className='px-2 bg-fluency-bg-dark rounded-md font-bold' id="speedSelect">
+            {mode === 'practice' ? '📝 Modo de Prática' : '🎧 Modo de Escuta'}
+          </div>
+        </div>
+
         <div className="volume-container"> 
           <div className="volume-button">
             <HiVolumeUp className="volume icono-volumeMedium w-6 h-auto text-[#dadada]"/>
@@ -146,6 +154,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
             <div className="volume-percentage"></div>
           </div>
         </div>
+        
       </div>
     </div>
   );

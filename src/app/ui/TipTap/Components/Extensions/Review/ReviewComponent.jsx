@@ -50,7 +50,7 @@ const ReviewComponent = ({ node }) => {
     <NodeViewWrapper className="react-component">
       <div className="flex flex-col bg-fluency-blue-100 dark:bg-fluency-gray-700 text-black dark:text-white rounded-xl px-6 py-4 my-4"> {/* Added my-4 for some vertical spacing */}
         <div className="flex items-center justify-center mb-4">
-          <h2 className="text-2xl font-bold text-fluency-yellow">{title}</h2>
+          <h2 className="text-2xl font-bold text-fluency-orange">{title}</h2>
           {/* Ensure ReviewIcon is imported and path is correct. Added error handling for Image. */}
           <Image
             src={ReviewIcon}

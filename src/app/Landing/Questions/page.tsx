@@ -1,16 +1,68 @@
-'use client';
+"use client";
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
+
 interface AccordionItemProps {
   header: string;
   text: string;
 }
 
+// Variants for the main heading and description
+const headerVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+};
+
+// Variants for the accordion items container (for staggered animation)
+const accordionContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2, // Stagger each child's animation by 0.2 seconds
+    },
+  },
+};
+
+// Variants for individual accordion items
+const accordionItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+    },
+  },
+  hover: {
+    scale: 1.01, // Slightly enlarge on hover
+    boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.15)", // Add a more pronounced shadow
+    transition: { duration: 0.2 },
+  },
+};
+
+// Variants for the accordion content (when expanding/collapsing)
+const accordionContentVariants = {
+  open: { opacity: 1, height: "auto", transition: { duration: 0.3, ease: "easeOut" } },
+  closed: { opacity: 0, height: 0, transition: { duration: 0.2, ease: "easeIn" } },
+};
+
 function Questions() {
   return (
-    <section id="faq" className="flex flex-col items-center relative z-20 overflow-hidden bg-transparent dark:bg-transparent pb-12 pt-10 lg:pb-[90px] lg:pt-[3px]">
+    <section
+      id="faq"
+      className="flex flex-col items-center relative z-20 overflow-hidden bg-transparent dark:bg-transparent pb-12 pt-10 lg:pb-[90px] lg:pt-[3px]"
+    >
       <div className="container mx-auto">
-
-        <div className="text-center max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+        {/* Animated Header Section */}
+        <motion.div
+          className="text-center max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12"
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }} // Animates when 50% of the header is in view, only once
+        >
           <div>
             <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider bg-fluency-red-500 hover:bg-fluency-red-600 text-fluency-text-dark uppercase rounded-full">
               Tem alguma dúvida?
@@ -18,20 +70,40 @@ function Questions() {
           </div>
           <h2 className="w-xl px-3 mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-fluency-text-light dark:text-fluency-text-dark sm:text-4xl md:mx-auto">
             <span className="relative inline-block">
-              <svg viewBox="0 0 51 24" className="absolute top-0 left-0 hidden w-32 -mt-8 -ml-20 text-fluency-red-500 d lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+              <svg
+                viewBox="0 0 51 24"
+                className="absolute top-0 left-0 hidden w-32 -mt-8 -ml-20 text-fluency-red-500 d lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
+              >
                 <defs>
-                  <pattern id="247432cb-6e6c-4bec-9766-564ed7c230dc" x="0" y="0" width=".135" height=".30">
+                  <pattern
+                    id="247432cb-6e6c-4bec-9766-564ed7c230dc"
+                    x="0"
+                    y="0"
+                    width=".135"
+                    height=".30"
+                  >
                     <circle cx="1" cy="1" r=".7"></circle>
                   </pattern>
                 </defs>
-                <rect fill="url(#247432cb-6e6c-4bec-9766-564ed7c230dc)" width="52" height="24"></rect>
+                <rect
+                  fill="url(#247432cb-6e6c-4bec-9766-564ed7c230dc)"
+                  width="52"
+                  height="24"
+                ></rect>
               </svg>
             </span>
             Algumas perguntas frequentes que podem ser úteis
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="lg:-mx-4 flex flex-wrap sm:mx-1">
+        {/* Animated Accordion Items Grid */}
+        <motion.div
+          className="lg:-mx-4 flex flex-wrap sm:mx-1"
+          variants={accordionContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }} // Animates when 30% of the container is in view, only once
+        >
           <div className="w-full px-4 lg:w-1/2">
             <AccordionItem
               header="Como eu sei o meu nível no idioma?"
@@ -60,7 +132,7 @@ function Questions() {
               text="A primeira lição vai envolver uma introdução ao seu professor e à plataforma. O alinhamento de objetivos e planos, um nivelamento espefício, e além disso, o professor vai se adequar às suas preferências de estudo."
             />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="absolute bottom-0 right-0 z-[-1]">
@@ -94,8 +166,7 @@ function Questions() {
       </div>
     </section>
   );
-};
-
+}
 
 const AccordionItem: React.FC<AccordionItemProps> = ({ header, text }) => {
   const [active, setActive] = useState(false);
@@ -106,7 +177,16 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ header, text }) => {
   };
 
   return (
-    <div className="mb-8 w-full rounded-lg bg-fluency-bg-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark p-4 shadow-[0px_20px_95px_0px_rgba(201,203,204,0.30)] dark:shadow-[0px_20px_95px_0px_rgba(0,0,0,0.30)] sm:p-8 lg:px-6 xl:px-8">
+    <motion.div
+      className="mb-8 w-full rounded-lg bg-fluency-bg-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark p-4 shadow-[0px_20px_95px_0px_rgba(201,203,204,0.30)] dark:shadow-[0px_20px_95px_0px_rgba(0,0,0,0.30)] sm:p-8 lg:px-6 xl:px-8"
+      variants={accordionItemVariants}
+      // Trigger individual item animation when it comes into view.
+      // The parent `accordionContainerVariants` handles the overall stagger.
+      initial="hidden"
+      whileInView="visible"
+      whileHover="hover" // Apply hover animation to the entire item
+      viewport={{ once: true, amount: 0.4 }} // Animates when 40% of the item is in view, only once
+    >
       <button
         className={`faq-btn flex w-full text-left`}
         onClick={handleToggle}
@@ -136,16 +216,23 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ header, text }) => {
         </div>
       </button>
 
-      <div
-        className={`pl-[62px] duration-500 ease-in-out ${
-          active ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-        } overflow-hidden transition-all duration-400`}
-      >
-        <p className="py-3 text-base leading-relaxed text-fluency-text-light dark:text-fluency-text-dark">
-          {text}
-        </p>
-      </div>
-    </div>
+      {/* Animated Accordion Content */}
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            className={`pl-[62px] overflow-hidden`}
+            variants={accordionContentVariants}
+            initial="closed"
+            animate="open"
+            exit="closed" // This is crucial for animating out when `active` becomes false
+          >
+            <p className="py-3 text-base leading-relaxed text-fluency-text-light dark:text-fluency-text-dark">
+              {text}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
