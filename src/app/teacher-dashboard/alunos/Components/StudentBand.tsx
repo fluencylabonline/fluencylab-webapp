@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback, useMemo, FC } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   collection,
   doc,
@@ -12,7 +12,7 @@ import {
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { db } from "@/app/firebase";
 
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";

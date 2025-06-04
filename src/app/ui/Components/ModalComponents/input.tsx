@@ -1,4 +1,5 @@
 import FluencyInput from "../Input/input";
+import React, { useEffect, useCallback } from 'react'; // Import useEffect and useCallback
 
 // Interface for a simpler input modal, similar to your ConfirmationModal structure
 interface InputModalProps {
@@ -25,6 +26,28 @@ const InputModal: React.FC<InputModalProps> = ({
   confirmButtonText = 'Confirmar',
   cancelButtonText = 'Cancelar'
 }) => {
+  // Use useCallback to memoize the event handler for performance
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      onConfirm();
+    }
+  }, [onConfirm]); // Dependency array: recreate if onConfirm changes
+
+  useEffect(() => {
+    if (isOpen) {
+      // Add event listener when the modal is open
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      // Clean up event listener when the modal is closed
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup function to remove event listener when component unmounts or isOpen changes
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, handleKeyDown]); // Dependency array: run effect when isOpen or handleKeyDown changes
+
   if (!isOpen) return null;
 
   return (
@@ -37,6 +60,8 @@ const InputModal: React.FC<InputModalProps> = ({
           value={value}
           onChange={onChange}
           className="w-full mb-6"
+          // You might not need to add onKeyDown directly here if you're listening globally
+          // But if FluencyInput exposes an onKeyDown prop, you could pass handleKeyDown to it.
         />
         <div className="flex justify-end space-x-3">
           <button

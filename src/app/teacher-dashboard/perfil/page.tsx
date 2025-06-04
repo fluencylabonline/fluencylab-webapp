@@ -44,7 +44,6 @@ export default function Perfil() {
   const [resetPassword, setResetPassword] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState<string | null>(null);
-  const [cursoFeito, setCursoFeito] = useState<boolean[]>([]);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [link, setLink] = useState('');
@@ -75,12 +74,6 @@ export default function Perfil() {
           setName(data.name || '');
           setNumber(data.number || '');
           setLink(data.link || '');
-          
-          // Convert courses to array
-          if (data.courses) {
-            const coursesArray: boolean[] = Object.values(data.courses);
-            setCursoFeito(coursesArray);
-          }
         }
       },
       (error) => {
@@ -356,12 +349,6 @@ export default function Perfil() {
                 Progresso
               </motion.h3>
               <div className="space-y-2">
-                {getStatusUI(
-                  cursoFeito.every(course => course),
-                  "Curso Pendente",
-                  "Curso Completo",
-                  "/teacher-dashboard/suporte/curso"
-                )}
                 {getStatusUI(
                   !!link,
                   "Link do Meet Pendente",

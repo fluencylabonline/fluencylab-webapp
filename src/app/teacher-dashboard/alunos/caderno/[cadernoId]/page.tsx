@@ -1,32 +1,21 @@
 "use client";
-import React from "react";
-import { useEffect, useState } from "react";
-
-import {
-  addDoc,
-  getDoc,
-  collection,
-  getDocs,
-  doc,
-  serverTimestamp,
-  deleteDoc,
-  updateDoc,
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  addDoc, getDoc, collection, getDocs, doc, 
+  serverTimestamp, deleteDoc, updateDoc 
 } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyInput from "@/app/ui/Components/Input/input";
-import { MdDeleteSweep } from "react-icons/md";
-import { GiSchoolBag } from "react-icons/gi";
-import { IoFilter } from "react-icons/io5";
 import Link from "next/link";
-
 import { toast } from "react-hot-toast";
-import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
-import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Tooltip } from "@nextui-org/react";
 import TeacherCallButton from "@/app/SharedPages/Video/TeacherCallButton";
 import ConfirmationModal from "@/app/ui/Components/ModalComponents/confirmation";
 import InputModal from "@/app/ui/Components/ModalComponents/input";
+import { Backpack, FileText, Trash, PlusCircle } from "lucide-react";
+import { GiNotebook } from "react-icons/gi";
 
 interface Notebook {
   studentName: string;
@@ -60,39 +49,85 @@ interface Aluno {
 }
 
 export default function Caderno() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [studentData, setStudentData] = useState<Aluno | null>(null);
+  const [id, setId] = useState<string | null>(null);
+  const [notebooks, setNotebooks] = useState<Notebook[]>([]);
 
   useEffect(() => {
-    const fetchStudentData = async () => {
+    const params = new URLSearchParams(window.location.search);
+    setId(params.get("id"));
+  }, []);
+
+  // Fetch student data and notebooks
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id) return;
+      
       try {
+        // Fetch student data
         const studentDoc = await getDoc(doc(db, `users/${id}`));
         if (studentDoc.exists()) {
-          const studentData = studentDoc.data() as Aluno;
-          setStudentData(studentData);
-        } else {
-          // Handle case where student doc doesn't exist
+          setStudentData(studentDoc.data() as Aluno);
         }
+        
+        // Fetch notebooks
+        const notebookRef = collection(db, `users/${id}/Notebooks`);
+        const snapshot = await getDocs(notebookRef);
+        const notebookList: Notebook[] = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          notebookList.push({
+            id: doc.id,
+            title: data.title || "",
+            description: data.description || "",
+            createdAt: data.createdAt || "",
+            studentName: data.studentName || "",
+            student: data.student || "",
+            content: data.content || "",
+            classReport: data.classReport || "",
+          });
+        });
+        setNotebooks(notebookList);
       } catch (error) {
-        console.error("Error fetching student data:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchStudentData();
+    fetchData();
   }, [id]);
 
-  //Notebooks Creation
-  const [notebooks, setNotebooks] = useState<Notebook[]>([]);
-  const fetchNotebooks = async () => {
+  // State management
+  const [isModalDescriptionOpen, setIsModalDescriptionOpen] = useState(false);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [description, setDescription] = useState("");
+  const [notebookToDeleteId, setNotebookToDeleteId] = useState("");
+  const [modalNoteId, setModalNoteId] = useState<string | null>(null);
+  const [reportContent, setReportContent] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Create notebook handler
+  const createNotebookWithDescription = async () => {
+    if (!id || !studentData) return;
     try {
       const notebookRef = collection(db, `users/${id}/Notebooks`);
+      await addDoc(notebookRef, {
+        title: new Date().toLocaleDateString("pt-BR"),
+        description: description || "Documento sem descrição",
+        createdAt: serverTimestamp(),
+        student: id,
+        studentName: studentData.name,
+        professorId: studentData.professorId || "",
+        content: "",
+      });
+      toast.success("Caderno novo criado!", { position: "top-center" });
+      
+      // Refresh notebooks
       const snapshot = await getDocs(notebookRef);
-      const notebookList: Notebook[] = [];
+      const updatedNotebooks: Notebook[] = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
-        const notebook: Notebook = {
+        updatedNotebooks.push({
           id: doc.id,
           title: data.title || "",
           description: data.description || "",
@@ -100,118 +135,48 @@ export default function Caderno() {
           studentName: data.studentName || "",
           student: data.student || "",
           content: data.content || "",
-        };
-        notebookList.push(notebook);
+          classReport: data.classReport || "",
+        });
       });
-      setNotebooks(notebookList);
+      setNotebooks(updatedNotebooks);
     } catch (error) {
-      console.error("Error fetching notebooks:", error);
+      console.error("Error creating notebook:", error);
+      toast.error("Erro ao criar caderno", { position: "top-center" });
     }
-  };
-
-  useEffect(() => {
-    fetchNotebooks();
-  }, [id]);
-
-  //Adding a new document with title
-  const [isModalDescriptionOpen, setIsModalDescriptionOpen] = useState(false);
-  const [description, setDescription] = useState("");
-  const handleOpenModalDescription = () => {
-    setIsModalDescriptionOpen(true);
-  };
-
-  const handleCloseModalDescription = () => {
-    setDescription(""); // Clear description on close
+    setDescription("");
     setIsModalDescriptionOpen(false);
   };
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(e.target.value);
-  };
-
-  const createNotebookWithDescription = async () => {
-    try {
-      const notebookRef = collection(db, `users/${id}/Notebooks`);
-      const notebookData = {
-        title: new Date().toLocaleDateString(),
-        description: description || "Documento sem descrição",
-        createdAt: serverTimestamp(),
-        student: id || "", // User ID
-        studentName: studentData?.name || "", // User name
-        professorId: studentData?.professorId || "", // Professor ID
-        content: "",
-      };
-      await addDoc(notebookRef, notebookData);
-      console.log(
-        "Notebook created successfully with description:",
-        description
-      );
-      toast.success("Caderno novo criado!", {
-        position: "top-center",
-      });
-
-      await fetchNotebooks();
-    } catch (error) {
-      console.error("Error creating notebook:", error);
-    }
-    setDescription(""); // Clear description after creating the notebook
-    handleCloseModalDescription(); // Close the modal after creating the notebook
-  };
-
-  // State for ConfirmationModal
-  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
-  const [notebookToDeleteId, setNotebookToDeleteId] = useState("");
-
-  const handleDeleteClick = (notebookId: string) => {
-    setNotebookToDeleteId(notebookId);
-    setIsDeleteConfirmationOpen(true);
-  };
-
+  // Delete notebook handler
   const confirmDeleteNotebook = async () => {
+    if (!id) return;
     try {
       await deleteDoc(doc(db, `users/${id}/Notebooks/${notebookToDeleteId}`));
-      // Filter out the deleted notebook from the state
-      const updatedNotebooks = notebooks.filter(
-        (notebook) => notebook.id !== notebookToDeleteId
-      );
-      setNotebooks(updatedNotebooks);
-      toast.error("Caderno deletado!", {
-        position: "top-center",
-      });
+      setNotebooks(notebooks.filter(notebook => notebook.id !== notebookToDeleteId));
+      toast.error("Caderno deletado!", { position: "top-center" });
     } catch (error) {
       console.error("Error deleting notebook:", error);
-      toast.error("Erro ao deletar caderno.", {
-        position: "top-center",
-      });
-    } finally {
-      setIsDeleteConfirmationOpen(false); // Close the confirmation modal
-      setNotebookToDeleteId(""); // Clear the selected ID
+      toast.error("Erro ao deletar caderno.", { position: "top-center" });
     }
+    setIsDeleteConfirmationOpen(false);
+    setNotebookToDeleteId("");
   };
 
-  const createReviewTask = async (
-    notebookTitle: string,
-    notebookId: string
-  ) => {
+  // Create review task
+  const createReviewTask = async (notebookTitle: string, notebookId: string) => {
+    if (!id || !studentData) return;
     try {
       const studentDocRef = doc(db, `users/${id}`);
       const studentDocSnapshot = await getDoc(studentDocRef);
       const studentData = studentDocSnapshot.data() as Aluno;
 
-      if (!studentData) {
-        throw new Error("Student data not found");
-      }
-
-      const tasksArray = studentData.tasks?.Task || []; // Get the tasks array or initialize it if null
+      const tasksArray = studentData.tasks?.Task || [];
       const taskExists = tasksArray.some(
-        (task: { task: string }) =>
-          task.task === `Revisar a aula de ${notebookTitle}`
+        (task: { task: string }) => task.task === `Revisar a aula de ${notebookTitle}`
       );
 
       if (taskExists) {
-        toast.error("Tarefa já adicionada!", {
-          position: "top-center",
-        });
+        toast.error("Tarefa já adicionada!", { position: "top-center" });
         return;
       }
 
@@ -219,305 +184,325 @@ export default function Caderno() {
         studentData.name
       )}/?notebook=${notebookId}&student=${id}`;
 
-      const newTask = {
+      tasksArray.push({
         task: `Revisar a aula de ${notebookTitle}`,
         done: false,
         link: notebookLink,
-      };
-      tasksArray.push(newTask);
-
-      await updateDoc(studentDocRef, {
-        tasks: { Task: tasksArray },
       });
 
-      toast.success("Tarefa adicionada!", {
-        position: "top-center",
-      });
+      await updateDoc(studentDocRef, { tasks: { Task: tasksArray } });
+      toast.success("Tarefa adicionada!", { position: "top-center" });
     } catch (error) {
       console.error("Error creating task:", error);
-      toast.error("Tarefa não adicionada!", {
-        position: "top-center",
-      });
+      toast.error("Tarefa não adicionada!", { position: "top-center" });
     }
   };
 
-  const [modalNoteId, setModalNoteId] = useState<string | null>(null);
-  const [reportContent, setReportContent] = useState<string>("");
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-
+  // Report modal handlers
   const handleOpenReportModal = async (notebookId: string) => {
+    if (!id) return;
     setModalNoteId(notebookId);
-
-    // Fetch the current report content from the database
-    const notebookRef = doc(db, `users/${id}/Notebooks/${notebookId}`);
-    const notebookSnap = await getDoc(notebookRef);
-
-    if (notebookSnap.exists()) {
-      const currentReport = notebookSnap.data().classReport || "";
-      setReportContent(currentReport);
-    } else {
-      setReportContent("");
+    try {
+      const notebookRef = doc(db, `users/${id}/Notebooks/${notebookId}`);
+      const notebookSnap = await getDoc(notebookRef);
+      setReportContent(notebookSnap.exists() ? notebookSnap.data().classReport || "" : "");
+    } catch (error) {
+      console.error("Error fetching report:", error);
     }
-
     setIsReportModalOpen(true);
   };
 
-  const handleCloseReportModal = () => {
-    setModalNoteId(null);
-    setReportContent("");
+  const saveReport = async () => {
+    if (!id || !modalNoteId) return;
+    try {
+      const notebookRef = doc(db, `users/${id}/Notebooks/${modalNoteId}`);
+      await updateDoc(notebookRef, { classReport: reportContent });
+      
+      setNotebooks(notebooks.map(notebook => 
+        notebook.id === modalNoteId ? { ...notebook, classReport: reportContent } : notebook
+      ));
+      
+      toast.success("Relatório de aula salvo!", { position: "top-center" });
+    } catch (error) {
+      console.error("Error saving report:", error);
+      toast.error("Erro ao salvar relatório", { position: "top-center" });
+    }
     setIsReportModalOpen(false);
   };
 
-  const handleReportContentChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setReportContent(e.target.value);
-  };
-
-  const saveReport = async () => {
-    if (modalNoteId) {
-      const notebookRef = doc(db, `users/${id}/Notebooks/${modalNoteId}`);
-      await updateDoc(notebookRef, {
-        classReport: reportContent,
-      });
-
-      const updatedNotebooks = notebooks.map((notebook) => {
-        if (notebook.id === modalNoteId) {
-          return { ...notebook, classReport: reportContent };
-        }
-        return notebook;
-      });
-
-      setNotebooks(updatedNotebooks);
-      handleCloseReportModal();
-      toast.success("Relatório de aula salvo!", {
-        position: "top-center",
-      });
-    }
-  };
-
-  // Search
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  // Filter notebooks
   const searchLower = searchQuery.toLowerCase();
+  const filteredNotebooks = notebooks.filter(notebook => 
+    notebook.title.toLowerCase().includes(searchLower) || 
+    notebook.description.toLowerCase().includes(searchLower)
+  );
 
-  const filteredNotebooks = notebooks.filter((notebook) => {
-    return (
-      notebook.title.toLowerCase().includes(searchLower) ||
-      notebook.description.toLowerCase().includes(searchLower)
-    );
-  });
-
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOrder(e.target.value as "asc" | "desc");
+  // Animation variants
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
   };
 
-  const sortedNotebooks = [...filteredNotebooks].sort((a, b) => {
-    const timeA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0;
-    const timeB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0;
-
-    if (timeA && timeB) {
-      if (sortOrder === "asc") {
-        return timeA - timeB;
-      } else {
-        return timeB - timeA;
-      }
-    }
-
-    const parseDate = (dateString: string) => {
-      const parts = dateString.split("/").map(Number);
-      let day, month, year;
-
-      // Brazilian date format dd/mm/yyyy - check if day or month is greater than 12
-      if (parts[0] > 12) { // Assuming first part is day if > 12
-        [day, month, year] = parts;
-      } else if (parts[1] > 12) { // Assuming second part is day if > 12 (and first is month)
-        [month, day, year] = parts;
-      } else { // Default to dd/mm/yyyy if both are <= 12
-        [day, month, year] = parts;
-      }
-
-      return new Date(year, month - 1, day);
-    };
-
-    const dateA = parseDate(a.title);
-    const dateB = parseDate(b.title);
-
-    if (sortOrder === "asc") {
-      return dateA.getTime() - dateB.getTime();
-    } else {
-      return dateB.getTime() - dateA.getTime();
-    }
-  });
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
 
   return (
-    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark p-2 flex flex-col gap-4 pb-4 mt-3">
-      <div className="flex flex-col items-center w-full gap-2">
-        <div className="lg:flex lg:flex-row md:flex md:flex-row flex flex-col justify-around gap-4 items-center w-full">
-          <FluencyInput
-            placeholder="Procure por uma aula específica..."
-            variant="glass"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <div className="flex flex-row gap-2 items-center justify-center">
-            <TeacherCallButton student={{ studentID: id }} />
-            <FluencyButton
-              variant="confirm"
-              className="min-w-max"
-              onClick={handleOpenModalDescription}
-            >
-              Criar caderno
-            </FluencyButton>
-          </div>
-          <div className="flex min-w-max">
-            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center dark:text-fluency-gray-300">
-              <IoFilter />
-            </div>
-            <select
-              className="ease-in-out duration-300 w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
-              onChange={handleSortChange}
-              value={sortOrder}
-            >
-              <option value="asc">Crescente</option>
-              <option value="desc">Decrescente</option>
-            </select>
-          </div>
+    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark p-4 flex flex-col gap-6">
+      {/* Header Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div>
+          <h1 className="text-2xl font-bold text-fluency-text-light dark:text-fluency-text-dark">
+            Cadernos de Aula
+          </h1>
+          <p className="text-fluency-gray-600 dark:text-fluency-gray-400">
+            {studentData?.name ? `Aluno: ${studentData.name}` : "Carregando..."}
+          </p>
         </div>
-      </div>
+        
+        <div className="flex flex-wrap gap-3">
+          <TeacherCallButton student={{ studentID: id || "" }} />
+          <FluencyButton
+            variant="confirm"
+            onClick={() => setIsModalDescriptionOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <PlusCircle className="w-5 h-5" />
+            Novo Caderno
+          </FluencyButton>
+        </div>
+      </motion.div>
 
-      <div className="gap-3 flex flex-col w-full">
-        <ul className="flex flex-col rounded-md w-full gap-2">
-          {sortedNotebooks.map((notebook) => {
-            const displayDate = notebook.createdAt?.seconds
-              ? new Date(notebook.createdAt.seconds * 1000).toLocaleDateString(
-                  "pt-BR",
-                  {
-                    year: "numeric",
-                    month: "2-digit",
+      {/* Search Bar */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.3 }}
+        className="w-full"
+      >
+        <FluencyInput
+          placeholder="Pesquisar cadernos por título ou descrição..."
+          variant="glass"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full"
+        />
+      </motion.div>
+
+      {/* Notebooks List */}
+      {filteredNotebooks.length > 0 ? (
+        <motion.ul 
+          className="flex flex-col gap-3 w-full"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          <AnimatePresence>
+            {filteredNotebooks.map((notebook) => {
+              const displayDate = notebook.createdAt?.seconds
+                ? new Date(notebook.createdAt.seconds * 1000).toLocaleDateString("pt-BR", {
                     day: "2-digit",
-                  }
-                )
-              : notebook.title;
+                    month: "2-digit",
+                    year: "numeric"
+                  })
+                : notebook.title;
 
-            return (
-              <li
-                key={notebook.id}
-                className="bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-800 hover:dark:bg-fluency-gray-900 duration-300 ease-in-out transition-all p-2 px-6 rounded-md flex flex-row items-center justify-between gap-2 w-full"
-              >
-                <Link
+              return (
+                <motion.li
                   key={notebook.id}
-                  href={{
-                    pathname: `/teacher-dashboard/alunos/aula/${encodeURIComponent(
-                      notebook.studentName
-                    )}`,
-                    query: { notebook: notebook.id, student: notebook.student },
-                  }}
-                  passHref
+                  variants={item}
+                  exit={{ opacity: 0, height: 0 }}
+                  layout
+                  className="bg-fluency-blue-50 dark:bg-fluency-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-fluency-gray-200 dark:border-fluency-gray-700"
                 >
-                  <div className="hover:text-fluency-blue-500 hover:font-bold duration-200 ease-out transition-all cursor-pointer">
-                    <p className="text-md">{displayDate}</p>
-                    <p className="text-sm">{notebook.description}</p>
+                  <Link
+                    href={{
+                      pathname: `/teacher-dashboard/alunos/aula/${encodeURIComponent(notebook.studentName)}`,
+                      query: { notebook: notebook.id, student: notebook.student },
+                    }}
+                    passHref
+                  >
+                    <div className="p-4 cursor-pointer hover:bg-fluency-blue-100 dark:hover:bg-fluency-gray-700 transition-colors duration-200 flex items-start">
+                      <div className="mr-3 mt-1 text-fluency-blue-500 dark:text-fluency-blue-300">
+                        <GiNotebook className="w-6 h-6" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-fluency-blue-800 dark:text-fluency-blue-200 flex items-center gap-2">
+                          <span>{displayDate}</span>
+                          {notebook.classReport && (
+                            <span className="text-xs bg-fluency-green-100 dark:bg-fluency-green-900 text-fluency-green-800 dark:text-fluency-green-200 px-2 py-1 rounded-full">
+                              Relatório
+                            </span>
+                          )}
+                        </h3>
+                        <p className="text-fluency-gray-700 dark:text-fluency-gray-300 mt-1 line-clamp-2">
+                          {notebook.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                  
+                  <div className="px-4 py-3 bg-fluency-blue-100 dark:bg-fluency-gray-900 flex justify-end gap-3 border-t border-fluency-gray-200 dark:border-fluency-gray-700">
+                    <Tooltip
+                      content="Deletar caderno"
+                      className="bg-fluency-red-100 dark:bg-fluency-red-900 text-fluency-red-800 dark:text-fluency-red-100 font-medium rounded-md px-2 py-1"
+                    >
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setNotebookToDeleteId(notebook.id);
+                          setIsDeleteConfirmationOpen(true);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-fluency-red-100 dark:hover:bg-fluency-red-900/50 transition-colors"
+                      >
+                        <Trash className="w-5 h-5 text-fluency-red-500" />
+                      </button>
+                    </Tooltip>
+
+                    <Tooltip
+                      content="Enviar como tarefa"
+                      className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-100 font-medium rounded-md px-2 py-1"
+                    >
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          createReviewTask(notebook.description, notebook.id);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors"
+                      >
+                        <Backpack className="w-5 h-5 text-fluency-orange-500" />
+                      </button>
+                    </Tooltip>
+
+                    <Tooltip
+                      content="Relatório de aula"
+                      className="bg-fluency-blue-100 dark:bg-fluency-blue-900 text-fluency-blue-800 dark:text-fluency-blue-100 font-medium rounded-md px-2 py-1"
+                    >
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenReportModal(notebook.id);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-fluency-blue-100 dark:hover:bg-fluency-blue-900/50 transition-colors"
+                      >
+                        <FileText className="w-5 h-5 text-fluency-blue-500" />
+                      </button>
+                    </Tooltip>
                   </div>
-                </Link>
-                <div className="flex flex-row gap-2 items-center">
-                  <Tooltip
-                    content="Deletar"
-                    className="bg-fluency-red-300 font-bold text-black rounded-md px-1"
-                  >
-                    <p>
-                      <MdDeleteSweep
-                        onClick={() => handleDeleteClick(notebook.id)}
-                        className="w-auto h-6 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-red-500 hover:dark:text-fluency-red-500 duration-300 ease-in-out transition-all cursor-pointer"
-                      />
-                    </p>
-                  </Tooltip>
-
-                  <Tooltip
-                    content="Enviar como tarefa"
-                    className="bg-orange-300 font-bold text-black rounded-md px-1"
-                  >
-                    <p>
-                      <GiSchoolBag
-                        onClick={() =>
-                          createReviewTask(notebook.description, notebook.id)
-                        }
-                        className="w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-orange-500 hover:dark:text-fluency-orange-500 duration-300 ease-in-out transition-all cursor-pointer"
-                      />
-                    </p>
-                  </Tooltip>
-
-                  <Tooltip
-                    content="Relatório de aula"
-                    className="bg-fluency-blue-300 font-bold text-black rounded-md px-1"
-                  >
-                    <p>
-                      <HiOutlineDocumentReport
-                        onClick={() => handleOpenReportModal(notebook.id)}
-                        className="w-auto h-5 text-fluency-gray-500 dark:text-fluency-gray-200 hover:text-fluency-blue-500 hover:dark:text-fluency-blue-500 duration-300 ease-in-out transition-all cursor-pointer"
-                      />
-                    </p>
-                  </Tooltip>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      
-      {isReportModalOpen && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 transition-opacity">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-full p-6">
-              <div className="flex flex-col items-center justify-center p-1 gap-3">
-                <h2 className="text-lg font-bold mb-2 p-1">
-                  Adicionar Relatório de Aula
-                </h2>
-                <textarea
-                  value={reportContent}
-                  onChange={handleReportContentChange}
-                  placeholder="Digite o relatório de aula"
-                  className="dark:bg-fluency-pages-dark w-full p-2 border border-gray-300 rounded-md"
-                  rows={5}
-                />
-                <div className="flex flex-row items-center justify-center gap-2">
-                  <FluencyButton
-                    variant="confirm"
-                    className="py-2"
-                    onClick={saveReport}
-                  >
-                    Salvar
-                  </FluencyButton>
-                  <FluencyButton
-                    variant="warning"
-                    className="py-2"
-                    onClick={handleCloseReportModal}
-                  >
-                    Cancelar
-                  </FluencyButton>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                </motion.li>
+              );
+            })}
+          </AnimatePresence>
+        </motion.ul>
+      ) : (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center justify-center py-12 text-center rounded-xl bg-fluency-blue-50/50 dark:bg-fluency-gray-800/50 border border-dashed border-fluency-gray-300 dark:border-fluency-gray-600"
+        >
+          <GiNotebook className="w-16 h-16 text-fluency-blue-300 dark:text-fluency-blue-500 mb-4" />
+          <h3 className="text-xl font-semibold mb-2">
+            {searchQuery ? "Nenhum caderno encontrado" : "Nenhum caderno criado"}
+          </h3>
+          <p className="text-fluency-gray-600 dark:text-fluency-gray-400 mb-6 max-w-md">
+            {searchQuery
+              ? "Sua pesquisa não encontrou nenhum caderno correspondente."
+              : "Comece criando seu primeiro caderno de aula para este aluno."}
+          </p>
+          <FluencyButton
+            variant="confirm"
+            onClick={() => setIsModalDescriptionOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <PlusCircle className="w-5 h-5" />
+            Criar primeiro caderno
+          </FluencyButton>
+        </motion.div>
       )}
 
+      {/* Report Modal */}
+      <AnimatePresence>
+        {isReportModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            onClick={() => setIsReportModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-xl shadow-xl w-full max-w-md p-6"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold">Relatório de Aula</h3>
+                <button 
+                  onClick={() => setIsReportModalOpen(false)}
+                  className="text-fluency-gray-500 hover:text-fluency-red-500 text-2xl"
+                >
+                  &times;
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Conteúdo do Relatório
+                </label>
+                <textarea
+                  value={reportContent}
+                  onChange={(e) => setReportContent(e.target.value)}
+                  placeholder="Descreva o conteúdo da aula, pontos de atenção, desempenho do aluno..."
+                  className="w-full min-h-[200px] p-3 border border-fluency-gray-200 dark:border-fluency-gray-700 rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark focus:ring-2 focus:ring-fluency-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div className="flex justify-end gap-3">
+                <FluencyButton
+                  variant="danger"
+                  onClick={() => setIsReportModalOpen(false)}
+                >
+                  Cancelar
+                </FluencyButton>
+                <FluencyButton
+                  variant="confirm"
+                  onClick={saveReport}
+                >
+                  Salvar Relatório
+                </FluencyButton>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Notebook Creation Modal */}
       <InputModal
         isOpen={isModalDescriptionOpen}
-        onClose={handleCloseModalDescription}
+        onClose={() => setIsModalDescriptionOpen(false)}
         onConfirm={createNotebookWithDescription}
         title="Criar Nova Aula"
-        placeholder="Descrição da aula"
+        placeholder="Descrição da aula (ex: Aula sobre verbos no passado)"
         value={description}
-        onChange={handleDescriptionChange}
+        onChange={(e) => setDescription(e.target.value)}
         confirmButtonText="Criar Aula"
         cancelButtonText="Cancelar"
       />
 
+      {/* Delete Confirmation Modal */}
       <ConfirmationModal
         isOpen={isDeleteConfirmationOpen}
         onClose={() => setIsDeleteConfirmationOpen(false)}

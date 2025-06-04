@@ -3,6 +3,7 @@ import { useCallContext } from "@/app/context/CallContext";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import { useSession } from "next-auth/react";
 import { IoVideocam } from "react-icons/io5";
+
 interface TeacherCallButtonProps {
     student: {
       studentID: any;
@@ -25,6 +26,6 @@ export default function TeacherCallButton({ student }: TeacherCallButtonProps) {
     }
 
     return(
-        <FluencyButton variant='glass' className='min-w-max' onClick={createCallId}>Chamada <IoVideocam /></FluencyButton>
+        <FluencyButton variant='glass' className='min-w-max' onClick={createCallId}>Iniciar <IoVideocam /></FluencyButton>
     )
 }
