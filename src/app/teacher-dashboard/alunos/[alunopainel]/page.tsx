@@ -8,8 +8,13 @@ import TeacherManagedAchievements from "@/app/ui/Components/Achievements/compone
 import SpinningLoader from "@/app/ui/Animations/SpinningComponent";
 
 function AlunoPainel() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+  const [id, setId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlId = params.get("id");
+    setId(urlId);
+  }, []);
 
   if (!id) {
     return <SpinningLoader />;

@@ -107,6 +107,21 @@ const formatDateTime = (dateStr: string, timeStr: string) => {
   }
 };
 
+const formatDate = (dateStr: string) => {
+  try {
+    const date = new Date(`${dateStr}`); 
+    
+    return date.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  } catch (e) {
+    console.error("Error formatting date/time:", e);
+    return `${dateStr}`;
+  }
+};
+
 const RescheduledClassesList: React.FC = () => {
   const {
     rescheduledClasses,
@@ -261,9 +276,8 @@ const RescheduledClassesList: React.FC = () => {
                         <strong className="font-medium text-fluency-text-light dark:text-fluency-text-dark">
                           Original:
                         </strong>{" "}
-                        {formatDateTime(
-                          reschedule.originalDate,
-                          reschedule.originalTime
+                        {formatDate(
+                          reschedule.originalDate
                         )}
                       </p>
                       <p>

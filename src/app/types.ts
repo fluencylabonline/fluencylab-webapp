@@ -48,7 +48,6 @@ export interface Aluno {
   classDatesWithStatus: { date: Date; status: string }[];
 }
 
-
 // Used in everything related to the students' calendar
 export const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
@@ -81,3 +80,4 @@ export type RescheduledClass = {
   createdAt: any; // Firestore Timestamp or Date
   requestedAtts?: string[];  // Tornar opcional
 }
+

@@ -45,14 +45,30 @@ const staggerChildren = {
 };
 
 // StatusBadge
+// Add this type above the StatusBadge component
+type StatusKey =
+  | "pending"
+  | "confirmed"
+  | "cancelled_by_student"
+  | "cancelled_by_teacher"
+  | "À Fazer"
+  | "Cancelada"
+  | string; // Allow any string as a fallback
+
 const StatusBadge = ({
   status,
 }: {
   status: RescheduledClass["status"] | string;
 }) => {
+  // Define badgeConfig with index signature
   const badgeConfig: Record<
     string,
-    { bg: string; text: string; label: string; icon: React.ReactNode | null }
+    {
+      bg: string;
+      text: string;
+      label: string;
+      icon: React.ReactNode | null;
+    }
   > = {
     pending: {
       bg: "bg-fluency-orange-100 dark:bg-fluency-orange-900/30",
@@ -68,48 +84,45 @@ const StatusBadge = ({
     },
     cancelled_by_student: {
       bg: "bg-fluency-red-100 dark:bg-fluency-red-900/30",
-      text: "text-fluency-red-800 dark:text-fluency-red-200",
+      text: "text-fluency-red-800 dark:text-fluency-red-200 truncate",
       label: "Cancelada por mim",
       icon: <FiX className="mr-1 w-4 h-4" />,
     },
     cancelled_by_teacher: {
       bg: "bg-fluency-red-100 dark:bg-fluency-red-900/30",
-      text: "text-fluency-red-800 dark:text-fluency-red-200",
+      text: "text-fluency-red-800 dark:text-fluency-red-200 truncate",
       label: "Cancelada pelo Professor",
       icon: <FiX className="mr-1 w-4 h-4" />,
     },
     "À Fazer": {
-      // Added status
       bg: "bg-fluency-blue-100 dark:bg-fluency-blue-900/30",
       text: "text-fluency-blue-800 dark:text-fluency-blue-200",
       label: "À Fazer",
       icon: <FiClock className="mr-1 w-4 h-4" />,
     },
     Cancelada: {
-      // Added status
       bg: "bg-fluency-gray-100 dark:bg-fluency-gray-700",
       text: "text-fluency-gray-800 dark:text-fluency-gray-300",
       label: "Cancelada",
       icon: <FiX className="mr-1 w-4 h-4" />,
     },
-    default: {
-      bg: "bg-fluency-gray-100 dark:bg-fluency-gray-700",
-      text: "text-fluency-gray-800 dark:text-fluency-gray-300",
-      label: status,
-      icon: null,
-    },
   };
 
-  const config = badgeConfig[status] || badgeConfig.default;
+  // Get config or fallback to default
+  const config = badgeConfig[status] || {
+    bg: "bg-fluency-gray-100 dark:bg-fluency-gray-700",
+    text: "text-fluency-gray-800 dark:text-fluency-gray-300",
+    label: status || "Desconhecido",
+    icon: <FiAlertCircle className="mr-1 w-4 h-4" />,
+  };
 
   return (
-    <motion.span
-      variants={fadeIn}
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+    <div
+      className={`inline-flex items-center px-2.5 py-2 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
     >
       {config.icon}
-      {config.label}
-    </motion.span>
+      <span className="font-medium">{config.label}</span>
+    </div>
   );
 };
 
@@ -284,7 +297,15 @@ const HistoryItem = ({
         Data Original
       </p>
       <p className="text-sm text-fluency-text-light dark:text-fluency-text-dark">
-        {rescheduling.originalDate}
+        {new Date(rescheduling.originalDate + "T12:00:00Z").toLocaleDateString(
+          "pt-BR",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            timeZone: "UTC",
+          }
+        )}
       </p>
     </div>
     <div className="md:col-span-1">
@@ -292,7 +313,15 @@ const HistoryItem = ({
         Nova Data
       </p>
       <p className="text-sm text-fluency-text-light dark:text-fluency-text-dark">
-        {rescheduling.newDate}
+        {new Date(rescheduling.newDate + "T12:00:00Z").toLocaleDateString(
+          "pt-BR",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            timeZone: "UTC",
+          }
+        )}
       </p>
     </div>
     <div className="md:col-span-1">
@@ -697,8 +726,13 @@ const StudentReschedulingPage = () => {
         studentMail &&
         sendConfirmationEmail
       ) {
-        const originalClassDateStr = originallySelectedClassDate.toLocaleDateString("pt-BR", {timeZone: "UTC",});
-        const selectedDateStr = new Date(selectedDate + "T00:00:00Z").toLocaleDateString("pt-BR", { timeZone: "UTC" });
+        const originalClassDateStr =
+          originallySelectedClassDate.toLocaleDateString("pt-BR", {
+            timeZone: "UTC",
+          });
+        const selectedDateStr = new Date(
+          selectedDate + "T00:00:00Z"
+        ).toLocaleDateString("pt-BR", { timeZone: "UTC" });
         sendConfirmationEmail({
           studentName,
           professorEmail,
@@ -771,32 +805,18 @@ const StudentReschedulingPage = () => {
           studentName,
           professorEmail,
           studentMail,
-          selectedDate: new Date(cancelReschedule.newDate + "T12:00:00Z").toLocaleDateString("pt-BR", {
+          selectedDate: new Date(
+            cancelReschedule.newDate + "T12:00:00Z"
+          ).toLocaleDateString("pt-BR", {
             day: "2-digit",
             month: "short",
             year: "numeric",
-            timeZone: "UTC"
+            timeZone: "UTC",
           }),
           selectedTimeSlot: {
             startTime: cancelReschedule.newTime,
           },
           templateType: "classCanceledByStudent",
-        });
-        console.log("Cancelamento enviado para aluno!");
-        await sendConfirmationEmail({
-          studentName,
-          professorEmail,
-          studentMail,
-          selectedDate: new Date(cancelReschedule.newDate + "T12:00:00Z").toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            timeZone: "UTC"
-          }),
-          selectedTimeSlot: {
-            startTime: cancelReschedule.newTime,
-          },
-          templateType: "classCanceledByProfessor",
         });
         console.log("Cancelamento enviado para professor!");
         console.log("Cancelamento enviado");
@@ -948,12 +968,12 @@ const StudentReschedulingPage = () => {
               variants={fadeIn}
               className="w-full bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-5 shadow-lg tour-rescheduling-status"
             >
-              <h2 className="text-xl font-bold text-fluency-green-800 dark:text-fluency-green-200 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-fluency-green-800 dark:text-fluency-green-200 mb-5 flex items-center gap-2">
                 <FiCalendar className="w-5 h-5" />
                 Status de Remarcações
               </h2>
 
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 <motion.div
                   variants={scaleUp}
                   className={`p-4 rounded-lg shadow-md w-full ${
@@ -1036,7 +1056,7 @@ const StudentReschedulingPage = () => {
             Informações da Aula
           </h2>
 
-          <div className="flex flex-col gap-4 mb-5">
+          <div className="flex flex-col gap-3 mb-4">
             <div className="bg-fluency-blue-100 dark:bg-fluency-blue-900/20 p-4 rounded-lg flex items-start gap-3 shadow">
               <div className="bg-fluency-blue-100 dark:bg-fluency-blue-900/20 p-2 rounded-full">
                 <FiUser className="w-5 h-5 text-fluency-blue-600 dark:text-fluency-blue-300" />
@@ -1175,13 +1195,14 @@ const StudentReschedulingPage = () => {
                     >
                       <AnimatePresence>
                         {reschedulingHistory.map((rescheduling) => (
-                          <HistoryItem
-                            key={rescheduling.id}
-                            rescheduling={rescheduling}
-                            cancellingId={cancellingId}
-                            submitting={submitting}
-                            onCancel={handleCancelClick}
-                          />
+                          <div key={rescheduling.id}>
+                            <HistoryItem
+                              rescheduling={rescheduling}
+                              cancellingId={cancellingId}
+                              submitting={submitting}
+                              onCancel={handleCancelClick}
+                            />
+                          </div>
                         ))}
                       </AnimatePresence>
                     </motion.div>

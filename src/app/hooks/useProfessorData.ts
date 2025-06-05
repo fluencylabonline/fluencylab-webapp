@@ -10,33 +10,10 @@ import {
   query,
   where,
   serverTimestamp,
-  // Add other necessary Firebase imports like updateDoc, deleteDoc if needed for cancellation
 } from "firebase/firestore";
-import { db } from "@/app/firebase"; // Adjust the path if necessary
+import { db } from "@/app/firebase";
 import toast from "react-hot-toast";
 import { daysOfWeek, RescheduledClass, ReschedulingRules, TimeSlot } from "../types";
-
-// This interface is a copy of:
-// export interface Aluno {
-//   tasks: {};
-//   overdueClassesCount: number;
-//   doneClassesCount: number;
-//   Classes: any;
-//   id: string;
-//   name: string;
-//   email: string;
-//   number: string;
-//   userName: string;
-//   mensalidade: string;
-//   idioma: string[];
-//   teacherEmails: string[];
-//   chooseProfessor: string;
-//   diaAula?: string[];
-//   horario?: string[];
-//   profilePicUrl?: string;
-//   frequencia: number;
-//   classDatesWithStatus: { date: Date; status: string }[];
-// }
 
 interface Student {
   id: string;
@@ -62,6 +39,69 @@ const sanitizeObjectForFirestore = <T extends Record<string, any>>(obj: T): Part
   return sanitized;
 };
 
+// Helper to convert time string to minutes
+const timeToMinutes = (time: string): number => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+// Check if two time ranges overlap
+const timeRangesOverlap = (
+  start1: number, 
+  end1: number, 
+  start2: number, 
+  end2: number
+): boolean => {
+  return Math.max(start1, start2) < Math.min(end1, end2);
+};
+
+// Main conflict detection function
+const hasTimeConflict = (
+  newSlot: TimeSlot,
+  existingEvents: {
+    classes: { date?: string; dayOfWeek?: number; startTime: string; endTime: string }[];
+    rescheduled: { newDate: string; newTime: string }[];
+  }
+): boolean => {
+  const newStart = timeToMinutes(newSlot.startTime);
+  const newEnd = timeToMinutes(newSlot.endTime);
+
+  // Check against regular classes
+  for (const classEvent of existingEvents.classes) {
+    if (newSlot.isRecurring && classEvent.dayOfWeek === newSlot.dayOfWeek) {
+      const classStart = timeToMinutes(classEvent.startTime);
+      const classEnd = classStart + 60; // Classes are 1 hour
+      
+      if (timeRangesOverlap(newStart, newEnd, classStart, classEnd)) {
+        return true;
+      }
+    }
+    
+    if (!newSlot.isRecurring && newSlot.date && classEvent.date === newSlot.date) {
+      const classStart = timeToMinutes(classEvent.startTime);
+      const classEnd = classStart + 60; // Classes are 1 hour
+      
+      if (timeRangesOverlap(newStart, newEnd, classStart, classEnd)) {
+        return true;
+      }
+    }
+  }
+
+  // Check against rescheduled classes
+  for (const rescheduled of existingEvents.rescheduled) {
+    if (!newSlot.isRecurring && newSlot.date && rescheduled.newDate === newSlot.date) {
+      const rescheduledStart = timeToMinutes(rescheduled.newTime);
+      const rescheduledEnd = rescheduledStart + 60; // Rescheduled classes are 1 hour
+      
+      if (timeRangesOverlap(newStart, newEnd, rescheduledStart, rescheduledEnd)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
 export const useProfessorData = () => {
   const { data: session } = useSession();
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
@@ -71,32 +111,31 @@ export const useProfessorData = () => {
     maxReschedulesPerMonth: 2,
   });
   const [students, setStudents] = useState<Student[]>([]);
-  const [rescheduledClasses, setRescheduledClasses] = useState<RescheduledClass[]>([]); // State for rescheduled classes
+  const [rescheduledClasses, setRescheduledClasses] = useState<RescheduledClass[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const userId = session?.user?.id;
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
-  // Fetch initial data (slots, rules, students)
+  // Fetch initial data
   const fetchData = useCallback(async () => {
     if (!userId) return;
     setLoading(true);
     try {
-      // 1. Fetch professor data (slots and rules)
+      // Fetch professor data
       const professorRef = doc(db, "users", userId);
       const professorDoc = await getDoc(professorRef);
 
       if (professorDoc.exists()) {
         const professorData = professorDoc.data();
-        // Ensure slots fetched from Firestore also conform to the expected structure
         const fetchedSlots = (professorData.availableSlots || []).map((slot: any) => ({
-            id: slot.id || `slot_${Math.random().toString(36).substr(2, 9)}`, // Ensure ID exists
-            dayOfWeek: slot.dayOfWeek,
-            date: slot.date,
-            startTime: slot.startTime || '00:00', // Provide defaults for required fields if missing
-            endTime: slot.endTime || '00:45',
-            isRecurring: slot.isRecurring === true, // Ensure boolean
-            recurrenceEndDate: slot.recurrenceEndDate,
+          id: slot.id || `slot_${Math.random().toString(36).substr(2, 9)}`,
+          dayOfWeek: slot.dayOfWeek,
+          date: slot.date,
+          startTime: slot.startTime || '00:00',
+          endTime: slot.endTime || '00:45',
+          isRecurring: slot.isRecurring === true,
+          recurrenceEndDate: slot.recurrenceEndDate,
         }));
         setAvailableSlots(fetchedSlots);
         setRules(professorData.reschedulingRules || {
@@ -106,7 +145,7 @@ export const useProfessorData = () => {
         });
       }
 
-      // 2. Fetch students linked to this professor
+      // Fetch students
       const studentsQuery = query(
         collection(db, "users"),
         where("professorId", "==", userId),
@@ -115,23 +154,23 @@ export const useProfessorData = () => {
       const studentsSnapshot = await getDocs(studentsQuery);
       const studentsData: Student[] = studentsSnapshot.docs.map((doc) => {
         const data = doc.data();
-        // Logic to handle diaAula (converting index/string to name)
         const diaAulaRaw = data.diaAula;
         let diaAulaArray: string[] = [];
+        
         if (Array.isArray(diaAulaRaw)) {
           diaAulaArray = diaAulaRaw
             .map((dayEntry: any) => {
               const parsedDayIndex = parseInt(String(dayEntry), 10);
               return !isNaN(parsedDayIndex) ? getDayName(parsedDayIndex) : String(dayEntry);
             })
-            .filter(Boolean); // Filter out empty strings or invalid names
+            .filter(Boolean);
         } else if (typeof diaAulaRaw === 'string' || typeof diaAulaRaw === 'number') {
-           const parsedDayIndex = parseInt(String(diaAulaRaw), 10);
-           if (!isNaN(parsedDayIndex)) {
-               diaAulaArray = [getDayName(parsedDayIndex)];
-           } else if (typeof diaAulaRaw === 'string' && diaAulaRaw.trim() !== '') {
-               diaAulaArray = [diaAulaRaw];
-           }
+          const parsedDayIndex = parseInt(String(diaAulaRaw), 10);
+          if (!isNaN(parsedDayIndex)) {
+            diaAulaArray = [getDayName(parsedDayIndex)];
+          } else if (typeof diaAulaRaw === 'string' && diaAulaRaw.trim() !== '') {
+            diaAulaArray = [diaAulaRaw];
+          }
         }
 
         const horarioArray = Array.isArray(data.horario)
@@ -150,18 +189,16 @@ export const useProfessorData = () => {
       });
       setStudents(studentsData);
 
-      // 3. Fetch rescheduled classes (Example: assumes a 'reschedulings' collection)
-      // Adjust query based on your actual Firestore structure
+      // Fetch rescheduled classes
       const reschedulesQuery = query(
-        collection(db, "reschedulings"), // Assuming a collection named 'reschedulings'
-        where("professorId", "==", userId)
-        // Add other filters if needed, e.g., status != 'cancelled'
+        collection(db, "reschedulings"),
+        where("professorId", "==", userId),
+        where("status", "==", "confirmed") // Only confirmed classes
       );
       const reschedulesSnapshot = await getDocs(reschedulesQuery);
       const rescheduledData: RescheduledClass[] = reschedulesSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          // Ensure timestamps are handled correctly if needed
+        id: doc.id,
+        ...doc.data(),
       } as RescheduledClass));
       setRescheduledClasses(rescheduledData);
 
@@ -173,43 +210,76 @@ export const useProfessorData = () => {
     }
   }, [userId]);
 
-  // Effect to fetch data on mount or when userId changes
   useEffect(() => {
     if (userId) {
       fetchData();
     }
   }, [userId, fetchData]);
 
-  // Save professor settings (slots and rules)
+  // Save professor settings with conflict detection
   const saveProfessorSettings = useCallback(async (slots: TimeSlot[], currentRules: ReschedulingRules) => {
     if (!userId) return;
     setSaving(true);
     const toastId = toast.loading("Salvando configurações...");
+    
     try {
-      const professorRef = doc(db, "users", userId);
+      // Prepare existing events for conflict detection
+      const existingEvents = {
+        classes: students.flatMap(student => 
+          (student.diaAula || []).map((day, index) => ({
+            dayOfWeek: daysOfWeek.indexOf(day),
+            startTime: (student.horario || [])[index] || '00:00',
+            endTime: '' // Not needed since classes are fixed duration
+          }))
+        ),
+        rescheduled: rescheduledClasses.map(rc => ({
+          newDate: rc.newDate,
+          newTime: rc.newTime
+        }))
+      };
 
-      // --- FIX: Sanitize slots and rules before saving --- 
+      // Check for conflicts in each new slot
+      const conflicts: TimeSlot[] = [];
+      slots.forEach(slot => {
+        if (hasTimeConflict(slot, existingEvents)) {
+          conflicts.push(slot);
+        }
+      });
+
+      // Handle conflicts
+      if (conflicts.length > 0) {
+        const conflictTimes = conflicts.map(c => 
+          `${c.isRecurring ? daysOfWeek[c.dayOfWeek!] : c.date} ${c.startTime}-${c.endTime}`
+        ).join(', ');
+        
+        toast.error(`Conflito de horário encontrado: ${conflictTimes}`, { id: toastId });
+        setSaving(false);
+        return;
+      }
+
+      // Proceed with saving if no conflicts
+      const professorRef = doc(db, "users", userId);
       const sanitizedSlots = slots.map(slot => sanitizeObjectForFirestore(slot));
       const sanitizedRules = sanitizeObjectForFirestore(currentRules);
 
-      // Ensure rules have valid numbers (extra safety check)
       const finalRules = {
-          minAdvanceHours: Number(sanitizedRules.minAdvanceHours) || 24,
-          maxReschedulesPerWeek: Number(sanitizedRules.maxReschedulesPerWeek) || 1,
-          maxReschedulesPerMonth: Number(sanitizedRules.maxReschedulesPerMonth) || 2,
+        minAdvanceHours: Number(sanitizedRules.minAdvanceHours) || 24,
+        maxReschedulesPerWeek: Number(sanitizedRules.maxReschedulesPerWeek) || 1,
+        maxReschedulesPerMonth: Number(sanitizedRules.maxReschedulesPerMonth) || 2,
       };
 
       await setDoc(
         professorRef,
         {
-          availableSlots: sanitizedSlots, // Use sanitized slots
-          reschedulingRules: finalRules, // Use sanitized and validated rules
+          availableSlots: sanitizedSlots,
+          reschedulingRules: finalRules,
           updatedAt: serverTimestamp(),
         },
         { merge: true }
       );
-      setAvailableSlots(slots); // Update local state with original (potentially undefined) slots for UI consistency
-      setRules(currentRules); // Update local state with original rules
+      
+      setAvailableSlots(slots);
+      setRules(currentRules);
       toast.success("Configurações salvas com sucesso!", { id: toastId });
     } catch (error) {
       console.error("Erro ao salvar configurações:", error);
@@ -217,7 +287,7 @@ export const useProfessorData = () => {
     } finally {
       setSaving(false);
     }
-  }, [userId]);
+  }, [userId, students, rescheduledClasses]);
 
   // Save student schedule changes
   const saveStudentSchedule = useCallback(async (studentId: string, diaAula: string[], horario: string[]) => {
@@ -225,23 +295,22 @@ export const useProfessorData = () => {
     const toastId = toast.loading("Salvando dados do aluno...");
     try {
       const studentRef = doc(db, "users", studentId);
-      // Convert day names back to indices or store as strings based on your model
-      // Example: Assuming you store names
       await setDoc(
         studentRef,
         {
-          diaAula: diaAula.length > 0 ? diaAula : null, // Store names or convert back to indices
+          diaAula: diaAula.length > 0 ? diaAula : null,
           horario: horario.length > 0 ? horario : null,
           updatedAt: serverTimestamp(),
         },
         { merge: true }
       );
-      // Update local student state
+      
       setStudents(prevStudents =>
         prevStudents.map(s =>
           s.id === studentId ? { ...s, diaAula, horario } : s
         )
       );
+      
       toast.success("Dados do aluno salvos!", { id: toastId });
     } catch (error) {
       console.error("Erro ao salvar dados do aluno:", error);
@@ -251,39 +320,40 @@ export const useProfessorData = () => {
     }
   }, []);
 
-  // Function to handle cancellation of a rescheduled class by a teacher
-  // Function to handle cancellation of a rescheduled class by a teacher
+  // Cancel rescheduled class
   const cancelRescheduledClass = useCallback(async (rescheduleId: string) => {
-      setCancellingId(rescheduleId); // Set the cancelling ID
-      setSaving(true);
-      const toastId = toast.loading("Cancelando remarcação...");
-      try {
-          const rescheduleRef = doc(db, "reschedulings", rescheduleId);
-          const rescheduleSnap = await getDoc(rescheduleRef);
-          
-          if (!rescheduleSnap.exists()) {
-              throw new Error("Remarcação não encontrada.");
-          }
-          
-          await setDoc(rescheduleRef, {
-              status: 'cancelled_by_teacher',
-              cancelledAt: serverTimestamp()
-          }, { merge: true });
-
-          setRescheduledClasses(prev => prev.map(r =>
-              r.id === rescheduleId ? { ...r, status: 'cancelled_by_teacher' } : r
-          ));
-
-          toast.success("Remarcação cancelada.", { id: toastId });
-      } catch (error: any) {
-          console.error("Erro ao cancelar remarcação:", error);
-          toast.error(`Falha ao cancelar: ${error.message}`, { id: toastId });
-      } finally {
-          setCancellingId(null); // Reset cancelling ID
-          setSaving(false);
+    setCancellingId(rescheduleId);
+    setSaving(true);
+    const toastId = toast.loading("Cancelando remarcação...");
+    
+    try {
+      const rescheduleRef = doc(db, "reschedulings", rescheduleId);
+      const rescheduleSnap = await getDoc(rescheduleRef);
+      
+      if (!rescheduleSnap.exists()) {
+        throw new Error("Remarcação não encontrada.");
       }
+      
+      await setDoc(rescheduleRef, {
+        status: 'cancelled_by_teacher',
+        cancelledAt: serverTimestamp()
+      }, { merge: true });
+
+      setRescheduledClasses(prev => prev.map(r =>
+        r.id === rescheduleId ? { ...r, status: 'cancelled_by_teacher' } : r
+      ));
+
+      toast.success("Remarcação cancelada.", { id: toastId });
+    } catch (error: any) {
+      console.error("Erro ao cancelar remarcação:", error);
+      toast.error(`Falha ao cancelar: ${error.message}`, { id: toastId });
+    } finally {
+      setCancellingId(null);
+      setSaving(false);
+    }
   }, []);
 
+  // Send confirmation email
   const sendConfirmationEmail = async ({
     studentName,
     professorEmail,
@@ -333,17 +403,16 @@ export const useProfessorData = () => {
     loading,
     saving,
     availableSlots,
-    setAvailableSlots, // Allow direct manipulation for adding/removing slots in UI before saving
+    setAvailableSlots,
     rules,
-    setRules, // Allow direct manipulation for editing rules in UI before saving
+    setRules,
     students,
     rescheduledClasses,
     cancellingId,
     saveProfessorSettings,
     saveStudentSchedule,
-    cancelRescheduledClass, // Expose cancellation function
-    fetchData, // Expose refetch function if needed
+    cancelRescheduledClass,
+    fetchData,
     sendConfirmationEmail
   };
 };
-

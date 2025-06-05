@@ -1,25 +1,41 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { toggleTeacherManagedAchievement } from "../lib/firebase";
 import { achievementDefinitions } from "../lib/definitions";
 import { Language, AchievementDefinition } from "../types";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import SpinningLoader from "@/app/ui/Animations/SpinningComponent";
 import { LockKeyhole, LockKeyholeOpen } from "lucide-react";
+import { 
+  doc, 
+  getDoc, 
+  updateDoc, 
+  setDoc,
+  arrayUnion,
+  arrayRemove
+} from "firebase/firestore";
+import { db } from "@/app/firebase"; // Ajuste o caminho conforme necessário
 
 interface TeacherManagedAchievementsProps {
-  studentId: any;
+  studentId: string;
   language: Language;
 }
 
 interface AchievementItemProps {
   achievement: AchievementDefinition;
-  studentId: any;
+  studentId: string;
   isUnlocked: boolean;
   language: Language;
   onToggle: (achievementId: string, newStatus: boolean) => void;
+}
+
+// Interface para o formato de armazenamento de conquistas no Firestore
+interface StudentAchievement {
+  achievementId: string;
+  language: string;
+  unlocked: boolean;
+  unlockedAt?: number; // timestamp em milissegundos
 }
 
 const cardVariants = {
@@ -30,6 +46,131 @@ const cardVariants = {
     boxShadow:
       "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
   },
+};
+
+// Função para alternar conquistas gerenciadas por professor no Firebase
+export const toggleTeacherManagedAchievement = async (
+  studentId: string,
+  achievementId: string,
+  newStatus: boolean,
+  language: Language
+): Promise<boolean> => {
+  try {
+    // Referência ao documento do aluno na coleção student_achievements
+    const studentAchievementsRef = doc(db, "student_achievements", studentId);
+    
+    // Verificar se o documento existe
+    const studentAchievementsDoc = await getDoc(studentAchievementsRef);
+    
+    if (studentAchievementsDoc.exists()) {
+      // O documento existe, vamos atualizar a conquista específica
+      const data = studentAchievementsDoc.data();
+      const achievementsList = data.achievementsList || [];
+      
+      // Verificar se a conquista já existe na lista
+      const existingAchievementIndex = achievementsList.findIndex(
+        (a: StudentAchievement) => a.achievementId === achievementId && a.language === language
+      );
+      
+      if (existingAchievementIndex >= 0) {
+        // A conquista já existe, vamos atualizá-la
+        if (newStatus === achievementsList[existingAchievementIndex].unlocked) {
+          // O status já é o mesmo, não precisa fazer nada
+          return true;
+        }
+        
+        // Remover a conquista antiga
+        const oldAchievement = achievementsList[existingAchievementIndex];
+        await updateDoc(studentAchievementsRef, {
+          achievementsList: arrayRemove(oldAchievement)
+        });
+        
+        // Adicionar a conquista atualizada
+        const updatedAchievement: StudentAchievement = {
+          ...oldAchievement,
+          unlocked: newStatus,
+        };
+        
+        if (newStatus) {
+          updatedAchievement.unlockedAt = Date.now();
+        } else {
+          // Se estiver bloqueando, remover o timestamp
+          delete updatedAchievement.unlockedAt;
+        }
+        
+        await updateDoc(studentAchievementsRef, {
+          achievementsList: arrayUnion(updatedAchievement)
+        });
+      } else {
+        // A conquista não existe, vamos adicioná-la
+        const newAchievement: StudentAchievement = {
+          achievementId: achievementId,
+          language: language,
+          unlocked: newStatus,
+        };
+        
+        if (newStatus) {
+          newAchievement.unlockedAt = Date.now();
+        }
+        
+        await updateDoc(studentAchievementsRef, {
+          achievementsList: arrayUnion(newAchievement)
+        });
+      }
+    } else {
+      // O documento não existe, vamos criá-lo
+      const newAchievement: StudentAchievement = {
+        achievementId: achievementId,
+        language: language,
+        unlocked: newStatus,
+      };
+      
+      if (newStatus) {
+        newAchievement.unlockedAt = Date.now();
+      }
+      
+      // Criar o documento com a primeira conquista
+      await setDoc(studentAchievementsRef, {
+        achievementsList: [newAchievement]
+      });
+    }
+    
+    return true;
+  } catch (error) {
+    console.error("Erro ao atualizar conquista:", error);
+    return false;
+  }
+};
+
+// Função para buscar conquistas desbloqueadas do Firebase
+export const fetchUnlockedAchievements = async (
+  studentId: string,
+  language: Language
+): Promise<string[]> => {
+  try {
+    // Referência ao documento do aluno na coleção student_achievements
+    const studentAchievementsRef = doc(db, "student_achievements", studentId);
+    const studentAchievementsDoc = await getDoc(studentAchievementsRef);
+    
+    if (!studentAchievementsDoc.exists()) {
+      return [];
+    }
+    
+    const data = studentAchievementsDoc.data();
+    const achievementsList = data.achievementsList || [];
+    
+    // Filtrar apenas as conquistas desbloqueadas do idioma especificado
+    const unlockedAchievements = achievementsList
+      .filter((achievement: StudentAchievement) => 
+        achievement.unlocked && achievement.language === language
+      )
+      .map((achievement: StudentAchievement) => achievement.achievementId);
+    
+    return unlockedAchievements;
+  } catch (error) {
+    console.error("Erro ao buscar conquistas:", error);
+    return [];
+  }
 };
 
 const AchievementItem: React.FC<AchievementItemProps> = ({
@@ -201,23 +342,25 @@ const TeacherManagedAchievements: React.FC<TeacherManagedAchievementsProps> = ({
   );
 
   useEffect(() => {
-    const fetchUnlockedAchievements = async () => {
+    const loadUnlockedAchievements = async () => {
+      if (!studentId) {
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
-        // Simulação de dados
-        setTimeout(() => {
-          setUnlockedIds(new Set(["primeira_aula_concluida", "fotogenico"]));
-          setLoading(false);
-        }, 1000);
+        const unlockedAchievementIds = await fetchUnlockedAchievements(studentId, language);
+        setUnlockedIds(new Set(unlockedAchievementIds));
       } catch (error) {
-        console.error("Erro ao buscar achievements:", error);
+        console.error("Erro ao buscar conquistas:", error);
+        toast.error("Não foi possível carregar as conquistas do aluno.");
+      } finally {
         setLoading(false);
       }
     };
 
-    if (studentId) {
-      fetchUnlockedAchievements();
-    }
+    loadUnlockedAchievements();
   }, [studentId, language]);
 
   const handleAchievementToggle = (
@@ -279,7 +422,7 @@ const TeacherManagedAchievements: React.FC<TeacherManagedAchievementsProps> = ({
           animate={{ opacity: 1, y: 0 }}
           className="bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 rounded-lg w-full h-full"
         >
-          <h1 className="text-xl font-bold text-gray-800 dark:text-white p-1 mb-3">
+          <h1 className="text-lg font-bold text-gray-800 dark:text-white p-1 mb-3">
             Conquistas do aluno
           </h1>
 

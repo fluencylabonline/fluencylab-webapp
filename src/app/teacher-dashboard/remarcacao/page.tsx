@@ -210,8 +210,7 @@ const ProfessorReschedulingPage = () => {
             {activeView === "slots" && (
               <AvailableSlotsManager
                 initialSlots={unsavedSlots}
-                onSlotsChange={setUnsavedSlots}
-              />
+                onSlotsChange={setUnsavedSlots} students={students} rescheduledClasses={rescheduledClasses}              />
             )}
 
             {activeView === "rules" && unsavedRules && (

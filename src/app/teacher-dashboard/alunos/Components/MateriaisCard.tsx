@@ -239,10 +239,10 @@ function AlunoMateriais({ studentId }: AlunoMateriaisProps) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center text-center p-2"
+              className="flex flex-col items-center justify-center text-center pb-2"
             >
               <div className="bg-fluency-gray-100 dark:bg-fluency-gray-800 rounded-full p-4 mb-1">
-                <IoCloudDownloadOutline className="w-8 h-8 text-fluency-gray-500 dark:text-fluency-gray-400" />
+                <IoCloudDownloadOutline className="w-4 h-4 text-fluency-gray-500 dark:text-fluency-gray-400" />
               </div>
               <p className="text-fluency-gray-600 dark:text-fluency-gray-400">
                 Nenhum material disponível

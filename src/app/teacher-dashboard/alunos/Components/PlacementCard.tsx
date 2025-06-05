@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { DetailsModal } from "@/app/SharedPages/Placement/Components/DetailsModal";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import SpinningLoader from "@/app/ui/Animations/SpinningComponent";
+import Link from "next/link";
 
 interface PlacementTest {
   date: string;
@@ -125,10 +126,13 @@ export default function PlacementCard({ studentId }: PlacementCardProps) {
             }}
             className="bg-fluency-pages-light dark:bg-fluency-pages-dark w-full h-full p-4 rounded-lg"
           >
-            <div className="flex items-center mb-4">
-              <h2 className="text-lg font-bold text-fluency-blue-600 dark:text-fluency-blue-300">
+            <div className="flex flexe-row justify-between items-center mb-4">
+              <h2 className="text-lg font-bold text-fluency-orange-600 dark:text-fluency-orange-300">
                 Nivelamento
               </h2>
+              <Link href={{ pathname: `nivelamento/${encodeURIComponent("Todos")}`, query: { id: studentId } }} passHref className="text-sm font-bold text-fluency-blue-600 dark:text-fluency-blue-300">
+                Ver todos
+              </Link>
             </div>
 
             {tests.length === 0 ? (

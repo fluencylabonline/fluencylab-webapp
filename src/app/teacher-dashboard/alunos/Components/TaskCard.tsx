@@ -252,7 +252,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ studentId }) => {
         </div>
         <div className="px-4 py-2">
           <div className="flex items-center justify-between w-full mb-3">
-            <h1 className="text-xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-lg font-bold text-gray-800 dark:text-white">
               Tarefas
             </h1>
 

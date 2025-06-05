@@ -19,8 +19,11 @@ const ProfessorCalendarView: React.FC = () => {
 
   // Basic rendering - Replace with actual calendar implementation
   return (
-      <StudentCalendarView students={students} /> 
-  );
+<StudentCalendarView 
+      students={students} 
+      availableSlots={availableSlots}
+      rescheduledClasses={rescheduledClasses}
+    />  );
 };
 
 export default ProfessorCalendarView;
