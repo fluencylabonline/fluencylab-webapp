@@ -35,8 +35,8 @@ import { CheckCheck, Lightbulb } from "lucide-react";
 import StudentCallButton from "@/app/SharedPages/Video/StudentCallButton";
 import Tour from "@/app/ui/Components/JoyRide/FluencyTour";
 
-// Add import at top
-import html2pdf from "html2pdf.js";
+// Dynamic import for html2pdf to avoid SSR issues
+import dynamic from 'next/dynamic';
 
 interface Notebook {
   studentName: string;
@@ -336,10 +336,14 @@ function Caderno() {
     },
   ];
 
-  const downloadNotebookAsPdf = (notebook: Notebook) => {
+  // Fixed PDF download function with proper client-side loading
+  const downloadNotebookAsPdf = async (notebook: Notebook) => {
     // Create toast promise
     const pdfPromise = new Promise<void>(async (resolve, reject) => {
       try {
+        // Dynamically import html2pdf only on client side
+        const html2pdf = (await import('html2pdf.js')).default;
+        
         const element = document.createElement("div");
         element.innerHTML = `
         <div class="p-8 bg-white text-black">
