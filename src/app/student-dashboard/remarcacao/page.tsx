@@ -392,7 +392,7 @@ const ClassSelectionStep = ({
       >
         <FiInfo className="w-8 h-8 text-fluency-orange-500 mx-auto mb-3" />
         <p className="text-fluency-text-light dark:text-fluency-text-dark">
-          Não há aulas com status "À Fazer" disponíveis para remarcação no
+          Não há aulas com status À Fazer disponíveis para remarcação no
           momento.
         </p>
       </motion.div>

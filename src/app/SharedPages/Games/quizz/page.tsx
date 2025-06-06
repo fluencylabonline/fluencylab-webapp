@@ -1528,7 +1528,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
 
               <div className="bg-fluency-yellow-50 dark:bg-fluency-yellow-900 p-3 rounded-lg mb-4">
                 <p className="text-sm">
-                  This will add the quiz as a task in the student's dashboard
+                  This will add the quiz as a task in the student dashboard
                 </p>
               </div>
 

@@ -322,7 +322,7 @@ function Popovers({ editor }: PopoversProps) {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
                       >
-                        "{example}"
+                        {example}
                       </motion.li>
                     ))}
                   </ul>

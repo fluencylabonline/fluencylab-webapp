@@ -215,7 +215,7 @@ const SignatureModal: React.FC<SignatureModalProps> = ({ isOpen, onClose, onSubm
                                 <form onSubmit={handleSubmit}>
                                     <div className="mt-2 space-y-4">
                                         <p className="text-sm text-gray-600 dark:text-gray-300">
-                                            Confirme seus dados e digite seu nome completo como assinatura digital. Ao clicar em "Assinar", você concorda com todos os termos do contrato.
+                                            Confirme seus dados e digite seu nome completo como assinatura digital. Ao clicar em Assinar, você concorda com todos os termos do contrato.
                                         </p>
                                         
                                         <div className="grid grid-cols-1 gap-4">
