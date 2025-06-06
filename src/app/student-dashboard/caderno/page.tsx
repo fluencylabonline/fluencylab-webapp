@@ -775,7 +775,7 @@ function Caderno() {
                     onClick={() =>
                       openModal(
                         "video",
-                        "https://www.youtube.com/embed/dQw4w9WgXcQ?si=fL811nCq62TfR0tW",
+                        "",
                         "Como remarcar uma aula"
                       )
                     }

@@ -27,8 +27,26 @@ export default function SignIn() {
   const emailRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  {
+    /*PERSIST DARK MODE*/
+  }
   const isLocalStorageAvailable =
     typeof window !== "undefined" && window.localStorage;
+
+  const [isChecked] = useState(() => {
+    if (isLocalStorageAvailable) {
+      const storedDarkMode = localStorage.getItem("isDarkMode");
+      return storedDarkMode ? storedDarkMode === "true" : true;
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    if (isLocalStorageAvailable) {
+      localStorage.setItem("isDarkMode", isChecked.toString());
+      document.body.classList.toggle("dark", isChecked);
+    }
+  }, [isChecked, isLocalStorageAvailable]);
 
   useEffect(() => {
     // Auto-focus email input on load

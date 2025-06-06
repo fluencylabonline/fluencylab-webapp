@@ -50,7 +50,7 @@ const FluencySelect = forwardRef<Ref, SelectProps>((props, ref) => {
   } = props;
 
   const merged = clsx(
-    "ease-in-out duration-300 w-full pl-3 pr-10 py-3 rounded-lg border-2 font-medium appearance-none",
+    "ease-in-out duration-300 w-full pl-3 pr-10 py-2 rounded-lg border-2 font-medium appearance-none",
     getVariant(variant),
     "transition-all ease-in-out duration-100",
     className

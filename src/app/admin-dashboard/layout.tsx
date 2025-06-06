@@ -10,9 +10,7 @@ import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 
 // Icons
 import { MdOndemandVideo} from "react-icons/md"
-import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
 import { TbFileReport, TbPigMoney } from 'react-icons/tb';
-import { LuBookCopy } from 'react-icons/lu';
 import { FiUserPlus } from 'react-icons/fi';
 
 //Firebase
@@ -25,7 +23,7 @@ import PomodoroClock from '../ui/TipTap/Components/Pomodoro';
 import { CallProvider, useCallContext } from '../context/CallContext';
 import VideoHome from '../SharedPages/Video/VideoHome';
 import { Toaster } from 'react-hot-toast';
-import { GraduationCap } from 'lucide-react';
+import { LibraryBig, Users } from 'lucide-react';
 
 interface ISidebarItem {
   name: string;
@@ -164,14 +162,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const menuItems: ISidebarItem[] = [
     {
-      name: "Alunos",
+      name: "Usuários",
       path: "/admin-dashboard/alunos",
-      icon: <GraduationCap className="h-6 w-6"/>,
-    },
-    {
-      name: "Professores",
-      path: "/admin-dashboard/professores",
-      icon: <PiChalkboardTeacherFill className="h-6 w-6"/>,
+      icon: <Users className="h-6 w-6"/>,
     },
     {
       name: "Financeiro",
@@ -184,14 +177,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <FiUserPlus className="h-6 w-6"/>,
     },
     {
-      name: "Emitir Certificado",
-      path: "/admin-dashboard/certificados",
-      icon: <PiCertificateBold  className="h-6 w-6"/>,
-    },
-    {
-      name: "Apostilas",
+      name: "Material",
       path: "/admin-dashboard/material",
-      icon: <LuBookCopy  className="h-6 w-6"/>,
+      icon: <LibraryBig  className="h-6 w-6"/>,
     },
     {
       name: "Cursos",

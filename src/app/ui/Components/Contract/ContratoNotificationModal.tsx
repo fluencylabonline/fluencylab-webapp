@@ -55,7 +55,7 @@ const ContratoNotificationModal = () => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-35 animate-fadeIn">
+    <div className="fixed bottom-0 left-0 right-0 z-30 animate-fadeIn">
       <div className="bg-fluency-orange-600 text-black p-4 shadow-lg">
         <div className="container mx-auto flex flex-col md:flex-row justify-center gap-4 items-center">
           <div className="flex items-center mb-2 md:mb-0">

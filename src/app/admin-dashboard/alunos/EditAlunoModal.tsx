@@ -12,31 +12,44 @@ import toast from 'react-hot-toast';
 import { CgRemoveR } from 'react-icons/cg';
 import { FaUserCircle } from 'react-icons/fa';
 
-interface Aluno {
-  CNPJ: string;
-  id: string;
-  name: string;
-  professor: string;
-  professorId: string;
-  mensalidade: number;
-  idioma: any;
-  payments: any;
-  studentMail: string;
-  status: string;
-  diaAula: string;
-  diaPagamento: number;
-  userName: string;
-  profilePictureURL: any;
+interface ContractStatus {
+  signed: boolean;
+  signedByAdmin: boolean;
+  logId: string | null;
+  signedAt: string | null;
+  adminSignedAt: string | null;
 }
 
-interface Professor {
+// In EditAlunoModal.tsx
+interface Aluno {
   id: string;
   name: string;
+  professorId: string;
+  CNPJ?: string; // Make CNPJ optional
+  professor?: string;
+  mensalidade?: number;
+  idioma?: string;
+  payments?: any;
+  studentMail?: any;
+  comecouEm?: string;
+  encerrouEm?: string;
+  diaAula?: string;
+  status?: string;
+  classes?: any;
+  userName?: string;
+  profilePictureURL?: any;
+  diaPagamento?: any;
+  ContratosAssinados?: ContractStatus;
 }
 
 interface EditAlunoProps {
   selectedAluno: Aluno | null;
   onClose: () => void;
+}
+
+interface Professor {
+  id: string;
+  name: string;
 }
 
 const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {

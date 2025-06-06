@@ -174,7 +174,7 @@ const ContratoPDF: React.FC<ContratoPDFProps> = ({ alunoData, contractStatus }) 
             DA REMARCAÇÃO DAS AULAS
           </h2>
           <p className="mb-3 leading-relaxed">
-            <strong>Cláusula 13ª.</strong> As aulas poderão ser remarcadas ou repostas tanto pelo CONTRATANTE quanto pela CONTRATADA uma vez por mês, contudo, a mesma deve ocorrer mediante um aviso prévio de no mínimo 1 - um - dia.
+            <strong>Cláusula 13ª.</strong> As aulas poderão ser remarcadas ou repostas tanto pelo CONTRATANTE duas vezes por mês, contudo, a mesma deve ocorrer mediante um aviso prévio de no mínimo 1 - um - dia. Essas aulas não acumulam para os meses seguintes.
           </p>
           <p className="mb-3 leading-relaxed">
             <strong>Parágrafo único.</strong> O CONTRATADO não tem a obrigação de avisar ou relembrar o aluno a respeito do horário de aula.
@@ -226,6 +226,9 @@ const ContratoPDF: React.FC<ContratoPDFProps> = ({ alunoData, contractStatus }) 
           </p>
           <p className="mb-3 leading-relaxed">
             <strong>Parágrafo único.</strong> A CONTRATADA é obrigada a avisar com antecedência de 1 mês a respeito do recesso e fornecer conteúdo para todos os alunos durante o período de recesso.
+          </p>
+          <p className="mb-3 leading-relaxed">
+            <strong>Parágrafo único.</strong> Aulas contratadas em um mês já corrente dão ao aluno direito de aulas extras equivalentes ao número de aulas já passadas a partir da primeira aula dada. Essas aulas podem ser feitas de uma vez ou progressivamente. 
           </p>
         </section>
 

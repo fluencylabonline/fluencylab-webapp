@@ -1,21 +1,20 @@
 'use client';
-import React, { useState, useRef, MutableRefObject } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
-import { FaUser } from 'react-icons/fa';
+import React, { useState, useRef, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
+import { FaUser, FaTimes } from 'react-icons/fa';
 import FluencyButton from '@/app/ui/Components/Button/button';
 import { montserrat, myFont } from '@/app/ui/Fonts/fonts';
-import { db } from '@/app/firebase';  // Adjust the import path as necessary
+import { db } from '@/app/firebase';
 import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
-
 import ReactToPrint from 'react-to-print';
 import LogoOnline from '../../../../public/images/brand/logo-online.png';
 import Image from 'next/image';
-import './pagina.css';
 import { IoLanguage } from 'react-icons/io5';
 import { BsCalendarDate } from 'react-icons/bs';
 import { TbCircleLetterA, TbNumber123 } from 'react-icons/tb';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { GoNumber } from 'react-icons/go';
+import './pagina.css';
 
 interface FormData {
   studentName: string;
@@ -32,6 +31,15 @@ interface FormData {
 
 interface InnerFormProps {
   formData: FormData;
+}
+
+interface CertificadoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  studentData?: {
+    name: string;
+    course?: string;
+  };
 }
 
 const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({ formData }, ref) => {
@@ -117,7 +125,7 @@ const InnerForm = React.forwardRef<HTMLDivElement, InnerFormProps>(({ formData }
   );
 });
 
-export default function Certificado() {
+const CertificadoModal: React.FC<CertificadoModalProps> = ({ isOpen, onClose, studentData }) => {
   const generateValidationCode = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let code = '';
@@ -128,11 +136,11 @@ export default function Certificado() {
   };
 
   const [formData, setFormData] = useState<FormData>({
-    studentName: '',
+    studentName: studentData?.name || '',
     teacher: '',
     startDate: '',
     endDate: '',
-    course: '',
+    course: studentData?.course || '',
     hours: '',
     frequency: '',
     grade: '',
@@ -140,12 +148,24 @@ export default function Certificado() {
     validationCode: generateValidationCode(),
   });
 
+  // Atualiza os dados do formulário quando studentData muda
+  useEffect(() => {
+    if (studentData) {
+      setFormData(prevData => ({
+        ...prevData,
+        studentName: studentData.name || prevData.studentName,
+        course: studentData.course || prevData.course
+      }));
+    }
+  }, [studentData]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const componentRef = useRef<HTMLDivElement>(null);
+  const printRef = useRef<ReactToPrint>(null);
 
   const handleCreateCertificate = async () => {
     try {
@@ -172,13 +192,20 @@ export default function Certificado() {
       toast.success(`Código de validação: ${formData.validationCode}`, {
         position: "top-center",
       });
+      
+      // Aciona a impressão automaticamente após criar o certificado
+      if (printRef.current) {
+        const printButton = document.querySelector('[data-testid="print-button"]');
+        if (printButton) {
+          (printButton as HTMLElement).click();
+        }
+      }
   
     } catch (error) {
       console.error('Erro ao adicionar documento: ', error);
       toast.error('Erro ao criar certificado');
     }
   };
-  
   
   const handleGenerateValidationCode = async () => {
     let newValidationCode = generateValidationCode();
@@ -200,12 +227,20 @@ export default function Certificado() {
     }
   };
   
+  if (!isOpen) return null;
   
   return (
-    <div className="mt-4 p-12 rounded-md flex flex-col items-center lg:pr-2 md:pr-2 pr-0 bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark">
-        <h1 className='flex justify-center text-xl text-center font-medium'>Registro de Conclusão de Curso</h1>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark text-fluency-text-light dark:text-fluency-text-dark p-6 rounded-lg w-4/5 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Gerar Certificado</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <FaTimes size={24} />
+          </button>
+        </div>
+        
         <div className='flex flex-col gap-3 h-full'>
-          <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-8 w-full mt-8'>
+          <div className='lg:flex lg:flex-row md:flex md:flex-row flex flex-col gap-8 w-full mt-4'>
             <div className='flex flex-col items-stretch gap-2 w-full'>
               <h1>Informações Pessoais</h1>
               <div className="flex">
@@ -295,16 +330,15 @@ export default function Certificado() {
                 </div>
                 <input
                   type="text"
-                  name="validationCode" // Make sure the name matches the state property
+                  name="validationCode"
                   className="w-full -ml-10 pl-10 pr-3 py-2 ease-in-out duration-300 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
                   placeholder="Código de Validação"
-                  value={formData.validationCode} // Bind value to the state property
-                  onChange={handleChange} // Make sure to handle changes if needed
+                  value={formData.validationCode}
+                  onChange={handleChange}
                   required
                 />
                 <FluencyButton variant='warning' onClick={handleGenerateValidationCode}>Gerar</FluencyButton>
               </div>
-
             </div>
 
             <div className='flex flex-col items-stretch gap-2 w-full'>
@@ -370,12 +404,13 @@ export default function Certificado() {
             />
           </div>
 
-          <div className='flex flex-row gap-2'>
+          <div className='flex flex-row gap-2 mt-4'>
             <FluencyButton onClick={handleCreateCertificate} className='w-48' variant='confirm'>Criar Certificado</FluencyButton>
 
             <ReactToPrint
+              ref={printRef}
               trigger={() => {
-                return <FluencyButton className='w-48' variant='danger'>Gerar PDF</FluencyButton>;
+                return <FluencyButton className='w-48' variant='danger' data-testid="print-button">Gerar PDF</FluencyButton>;
               }}
               content={() => componentRef.current}
               documentTitle='Certificado de Conclusão'
@@ -384,11 +419,13 @@ export default function Certificado() {
           </div>
         </div>
 
-      <div className='hidden'><InnerForm ref={componentRef} formData={formData} /></div>
-
-      <Toaster />
+        <div className='hidden'><InnerForm ref={componentRef} formData={formData} /></div>
+      </div>
     </div>
   );
-}
+};
 
 InnerForm.displayName = 'InnerForm';
+
+export default CertificadoModal;
+

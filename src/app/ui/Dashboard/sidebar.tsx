@@ -1,11 +1,9 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { MdOndemandVideo } from 'react-icons/md';
 
 interface ISidebarItem {
   name: string;
@@ -22,40 +20,16 @@ type SidebarProps = {
 //IMAGES
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar from '@/app/ui/Components/Avatar/avatar';
-import { db } from '@/app/firebase';
-import { doc, getDoc } from 'firebase/firestore';
 
 export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: SidebarProps) {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState('');
-  const { data: session } = useSession();
-  const [classes, setClasses] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleItemClick = (path: string) => {
     router.push(path);
     setSelectedItem(path);
   };
-
-  const handleAulas = () => {
-    router.push('cursos');
-  };
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (session?.user?.id) {
-        try {
-          const profile = doc(db, 'users', session.user.id);
-          const docSnap = await getDoc(profile);
-          if (docSnap.exists()) setClasses(docSnap.data().classes);
-        } catch (error) {
-          console.error("Error fetching document: ", error);
-        }
-      }
-    };
-
-    fetchUserInfo();
-  }, [session]);
 
   return (
     <motion.aside
@@ -127,27 +101,6 @@ export default function Sidebar({ isCollapsed, toggleSidebar, menuItems }: Sideb
             </motion.div>
           ))}
 
-          {classes && (
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-center rounded-lg cursor-pointer py-3 px-4 text-fluency-text-light dark:text-fluency-text-dark hover:bg-fluency-blue-50 dark:hover:bg-fluency-blue-700 ${
-                isCollapsed ? 'justify-center' : ''
-              }`}
-              onClick={handleAulas}
-            >
-              <MdOndemandVideo className="w-6 h-6" />
-              {!isCollapsed && (
-                <motion.span 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="ml-3 font-medium truncate"
-                >
-                  Cursos
-                </motion.span>
-              )}
-            </motion.div>
-          )}
         </nav>
 
         <div className="px-2 mt-auto">

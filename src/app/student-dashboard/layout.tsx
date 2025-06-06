@@ -9,7 +9,7 @@ import Header from "@/app/ui/Dashboard/header";
 import RedirectinAnimation from "../ui/Animations/RedirectinAnimation";
 
 // Icons
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { PomodoroProvider, usePomodoro } from "../context/PomodoroContext";
 import PomodoroClock from "../ui/TipTap/Components/Pomodoro";
@@ -18,6 +18,7 @@ import VideoHome from "../SharedPages/Video/VideoHome";
 import { Toaster } from "react-hot-toast";
 import { CalendarRange, Dices, GraduationCap } from "lucide-react";
 import ContratoNotificationModal from "../ui/Components/Contract/ContratoNotificationModal";
+import { MdOndemandVideo } from "react-icons/md";
 
 interface ISidebarItem {
   name: string;
@@ -165,7 +166,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     };
   }, [session]);
 
-
+  const [classes, setClasses] = useState('');
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+        if (session?.user?.id) {
+          try {
+            const profile = doc(db, 'users', session.user.id);
+            const docSnap = await getDoc(profile);
+            if (docSnap.exists()) setClasses(docSnap.data().classes);
+          } catch (error) {
+            console.error("Error fetching document: ", error);
+          }
+        }
+      };
+  
+      fetchUserInfo();
+    }, [session]);
+    
   // New useEffect for saving last login date every 15 minutes
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -254,6 +271,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       path: "/student-dashboard/remarcacao",
       icon: <CalendarRange className="h-6 w-6" />,
     },
+    ...(classes !== '' ? [{
+      name: "Cursos",
+      path: "/student-dashboard/cursos",
+      icon: <MdOndemandVideo className="h-6 w-6" />,
+    }] : [])
   ];
 
   const [showAnimation, setShowAnimation] = useState(true);

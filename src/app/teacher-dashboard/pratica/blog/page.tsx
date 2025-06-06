@@ -1,4 +1,4 @@
-import BlogPage from "@/app/SharedPages/Blog/BlogPage";
+import BlogPage from "@/app/SharedPages/Blog/components/BlogPage";
 
 export default function BlogScreen(){
     return(

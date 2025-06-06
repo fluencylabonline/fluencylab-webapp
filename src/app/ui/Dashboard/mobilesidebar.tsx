@@ -2,16 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
-import { MdOndemandVideo } from 'react-icons/md';
 
 //IMAGES
 import Logo from '../../../../public/images/brand/logo.png';
 import Avatar from '@/app/ui/Components/Avatar/avatar';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/app/firebase';
 
 interface ISidebarItem {
   name: string;
@@ -33,18 +29,11 @@ export default function MobileSidebar({
 }: MobileSidebarProps) {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState('');
-  const { data: session } = useSession();
-  const [classes, setClasses] = useState('');
   const [isClosing, setIsClosing] = useState(false);
 
   const handleItemClick = (path: string) => {
     router.push(path);
     setSelectedItem(path);
-    startCloseAnimation();
-  };
-
-  const handleAulas = () => {
-    router.push('cursos');
     startCloseAnimation();
   };
 
@@ -56,22 +45,6 @@ export default function MobileSidebar({
       callback?.();
     }, 300);
   };
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (session?.user?.id) {
-        try {
-          const profile = doc(db, 'users', session.user.id);
-          const docSnap = await getDoc(profile);
-          if (docSnap.exists()) setClasses(docSnap.data().classes);
-        } catch (error) {
-          console.error("Error fetching document: ", error);
-        }
-      }
-    };
-
-    fetchUserInfo();
-  }, [session]);
 
   // Prevent body scrolling when mobile menu is open
   useEffect(() => {
@@ -150,18 +123,6 @@ export default function MobileSidebar({
                 <span className="font-medium">{item.name}</span>
               </motion.div>
             ))}
-
-            {classes && (
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-3 rounded-lg cursor-pointer py-3 px-4 text-fluency-text-light dark:text-fluency-text-dark hover:bg-fluency-blue-50 dark:hover:bg-fluency-gray-700"
-                onClick={handleAulas}
-              >
-                <MdOndemandVideo className="w-6 h-6" />
-                <span className="font-medium">Cursos</span>
-              </motion.div>
-            )}
           </nav>
 
           <div className="px-2">

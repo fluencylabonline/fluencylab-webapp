@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import {
   collection,
   query,
@@ -11,9 +11,17 @@ import {
   getDocsFromServer,
   DocumentData,
   QueryDocumentSnapshot,
+  deleteDoc, // Import deleteDoc
+  doc,       // Import doc
 } from 'firebase/firestore'
-import { db } from '@/app/firebase'
+import { ref, deleteObject } from 'firebase/storage'; // Import storage functions
+import { db, storage } from '@/app/firebase' // Make sure to export `storage` from your firebase config
 import BlogCard from './BlogCard'
+import FluencyButton from '@/app/ui/Components/Button/button'
+import FluencyInput from '@/app/ui/Components/Input/input'
+import FluencySelect from '@/app/ui/Components/Input/select'
+import { useSession } from 'next-auth/react'; // Import useSession
+import ConfirmationModal from '@/app/ui/Components/ModalComponents/confirmation';
 
 type Blog = {
   id: string
@@ -35,6 +43,13 @@ export default function BlogPage() {
   const [search, setSearch] = useState('')
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([])
   const [availableLevels, setAvailableLevels] = useState<string[]>([])
+
+  // State for the confirmation modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [blogToDelete, setBlogToDelete] = useState<{ id: string; coverUrl?: string } | null>(null);
+
+  const { data: session } = useSession(); // Get the session
+  const isAdmin = session?.user?.role === 'admin'; // Check if the user is an admin
 
   const fetchFilters = async () => {
     try {
@@ -77,6 +92,43 @@ export default function BlogPage() {
     }
   }
 
+  // Modified handleDelete function to open the modal
+  const handleDelete = async (blogId: string, coverUrl?: string): Promise<void> => {
+    setBlogToDelete({ id: blogId, coverUrl });
+    setIsModalOpen(true);
+  };
+
+  // Function to execute the deletion after confirmation
+  const confirmDelete = async () => {
+    if (!blogToDelete) return; // Should not happen if modal is open
+
+    const { id: blogId, coverUrl } = blogToDelete;
+    setIsModalOpen(false); // Close the modal immediately
+
+    try {
+      // 1. Delete the blog post from Firestore
+      await deleteDoc(doc(db, 'blogs', blogId));
+      console.log('Blog post deleted from Firestore:', blogId);
+
+      // 2. Delete the cover image from Firebase Storage if it exists
+      if (coverUrl) {
+        const imageRef = ref(storage, coverUrl);
+        await deleteObject(imageRef);
+        console.log('Cover image deleted from Storage:', coverUrl);
+      }
+
+      // 3. Update the local state to remove the deleted blog
+      setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== blogId));
+      // Optionally, refetch blogs to ensure consistency, especially if pagination is active
+      // fetchBlogs(); // This might reset pagination, consider fetching only if necessary
+    } catch (error) {
+      console.error("Erro ao deletar o artigo ou a imagem da capa:", error);
+      alert('Erro ao deletar o artigo. Verifique o console para mais detalhes.');
+    } finally {
+      setBlogToDelete(null); // Clear the blog to delete state
+    }
+  };
+
   useEffect(() => {
     fetchFilters()
     fetchBlogs()
@@ -92,37 +144,40 @@ export default function BlogPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 pb-32 pt-2">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-        <div className="md:col-span-2 relative">
-          <input
-            className="w-full bg-fluency-pages-light dark:bg-fluency-pages-dark px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-            placeholder="Buscar artigo..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+      <div className="flex flex-row justify-between w-full gap-4 mb-4">
+        <FluencyInput
+          variant="solid"
+          placeholder="Buscar artigo..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-        <select
-          className="bg-fluency-pages-light dark:bg-fluency-pages-dark px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        <FluencySelect
           value={filterLanguage}
-          onChange={(e) => setFilterLanguage(e.target.value)}
+          onChange={(e: { target: { value: SetStateAction<string> } }) => setFilterLanguage(e.target.value)}
+          placeholder="Todos idiomas"
         >
           <option value="">Todos idiomas</option>
           {availableLanguages.map(lang => (
             <option key={lang} value={lang}>{lang}</option>
           ))}
-        </select>
+        </FluencySelect>
 
-        <select
-          className="bg-fluency-pages-light dark:bg-fluency-pages-dark px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        <FluencySelect
           value={filterLevel}
-          onChange={(e) => setFilterLevel(e.target.value)}
+          onChange={(e: { target: { value: SetStateAction<string> } }) => setFilterLevel(e.target.value)}
+          placeholder="Todos níveis"
         >
           <option value="">Todos níveis</option>
           {availableLevels.map(lvl => (
             <option key={lvl} value={lvl}>{lvl}</option>
           ))}
-        </select>
+        </FluencySelect>
+        {isAdmin && (
+          <FluencyButton variant='glass'>
+            Criar
+          </FluencyButton>
+        )}
       </div>
 
       {loading ? (
@@ -144,7 +199,12 @@ export default function BlogPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
+            <BlogCard
+              key={blog.id}
+              blog={blog}
+              isAdmin={isAdmin} // Pass the isAdmin prop
+              onDelete={handleDelete} // Pass the handleDelete function
+            />
           ))}
         </div>
       )}
@@ -159,6 +219,17 @@ export default function BlogPage() {
           </button>
         </div>
       )}
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Confirmar Exclusão"
+        message="Tem certeza que deseja deletar este artigo? Esta ação é irreversível."
+        confirmButtonText="Deletar"
+        confirmButtonVariant="danger"
+      />
     </div>
   )
 }

@@ -6,7 +6,6 @@ import Questions from '@/app/Landing/Questions/page';
 import Footer from '@/app/Landing/Footer/page';
 
 export default function Home() {
-
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark pt-1'>
         <Header />

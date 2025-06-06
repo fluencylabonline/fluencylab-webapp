@@ -208,7 +208,7 @@ export default function PracticePage() {
             {/* Left Arrow */}
             {showLeftArrow && (
               <motion.button
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-40 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg"
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg"
                 onClick={() => scroll('left')}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
