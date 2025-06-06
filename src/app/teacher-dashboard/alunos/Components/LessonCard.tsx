@@ -30,6 +30,8 @@ import {
 import FluencyButton from "@/app/ui/Components/Button/button";
 import InputModal from "@/app/ui/Components/ModalComponents/input";
 import ReportModal from "./ReportModal";
+import Tour from "@/app/ui/Components/JoyRide/FluencyTour";
+import { useSession } from "next-auth/react";
 
 interface Notebook {
   id: string;
@@ -59,6 +61,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [displayedLessons, setDisplayedLessons] = useState(3);
+  const { data: session } = useSession();
 
   //Lesson constants
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
@@ -313,13 +316,56 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
     setIsReportModalOpen(false);
   };
 
+  const tourSteps = [
+    {
+      target: '.tour-view-all-button',
+      title: 'Ver Todas as Lições',
+      content: 'Clique aqui para ver todas as lições deste aluno.',
+      placement: 'bottom' as const,
+      disableBeacon: true,
+    },
+    {
+      target: '.tour-create-button',
+      title: 'Criar Nova Aula',
+      content: 'Use este botão para criar um novo caderno de aula.',
+      placement: 'bottom' as const,
+    },
+    {
+      target: '.tour-search-button',
+      title: 'Buscar Lições',
+      content: 'Encontre lições específicas usando esta barra de pesquisa.',
+      placement: 'bottom' as const,
+    },
+    {
+      target: '.tour-notebooks-list',
+      title: 'Lista de Lições',
+      content: 'Aqui estão as últimas 3 lições que você criou. Clique em uma para abrir.',
+      placement: 'top' as const,
+    },
+    {
+      target: '.tour-notebook-actions',
+      title: 'Ações da Lição',
+      content: 'Aqui você pode deletar, adicionar como tarefa ou escrever um relatório sobre a aula.',
+      placement: 'left' as const,
+    }
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="w-full h-full rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4"
     >
-      <div className="flex flex-row justify-between items-center mb-4 gap-4 tour-call-button">
+
+       <Tour 
+          steps={tourSteps}
+          pageKey="teacher-lesson-card"
+          userId={session?.user.id}
+          delay={1000}
+          onTourEnd={() => console.log('Teacher lesson card tour completed')}
+        />
+        
+      <div className="flex flex-row justify-between items-center w-full mb-4 gap-4">
         {!isSearchOpen && (
           <>
             <TeacherCallButton student={{ studentID: id }} />
@@ -330,14 +376,15 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
               }}
               passHref
             >
-              <FluencyButton variant="purple">
-                <span className="hidden sm:inline">Ver Todas</span>
+              <FluencyButton variant="purple" className="tour-view-all-button">
+                <span className="hidden sm:inline truncate">Ver Todas</span>
                 <TbBook2 className="w-5 h-auto sm:hidden" />
               </FluencyButton>
             </Link>
             {/* CREATE NEW NOTEBOOK */}
             <FluencyButton
               variant="confirm"
+              className="tour-create-button"
               onClick={() => setIsModalDescriptionOpen(true)}
             >
               <span className="hidden sm:inline">Criar</span>
@@ -347,7 +394,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
         )}
 
         <div
-          className={`${
+          className={`tour-search-button ${
             isSearchOpen ? "w-full" : "w-auto"
           } transition-all duration-300`}
         >
@@ -388,7 +435,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
       </div>
 
       <div
-        className="flex flex-col gap-3 tour-notebooks-list overflow-y-auto"
+        className="flex flex-col gap-3 tour-notebooks-list overflow-y-auto tour-notebooks-list "
         style={{ maxHeight: "55vh" }}
       >
         <AnimatePresence>
@@ -438,7 +485,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
                           </p>
                         </div>
                       </Link>
-                      <div className="flex flex-row items-center">
+                      <div className="flex flex-row items-center tour-notebook-actions">
                         {/* "Delete Notebook" Button - Triggers the modal */}
                         <motion.button
                           whileHover={{ scale: 1.1 }}

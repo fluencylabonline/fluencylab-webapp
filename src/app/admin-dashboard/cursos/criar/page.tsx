@@ -148,8 +148,8 @@ const CreateCoursePage = () => {
               onChange={handleInputChange}
               required
             >
-              <option value="student">Estudante Básico</option>
-              <option value="premium_student">Estudante Premium</option>
+              <option value="student">Estudante</option>
+              <option value="teacher">Professor</option>
               <option value="all">Todos os Usuários</option>
             </FluencySelect>
 

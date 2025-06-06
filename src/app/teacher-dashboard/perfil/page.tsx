@@ -25,7 +25,7 @@ import FluencyButton from '@/app/ui/Components/Button/button';
 import FluencyInput from '@/app/ui/Components/Input/input';
 
 // Firebase
-import { auth, db, storage } from "@/app/firebase";
+import { auth, db } from "@/app/firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { motion, AnimatePresence } from "framer-motion";
 

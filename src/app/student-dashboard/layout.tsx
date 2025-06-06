@@ -17,6 +17,7 @@ import { CallProvider, useCallContext } from "../context/CallContext";
 import VideoHome from "../SharedPages/Video/VideoHome";
 import { Toaster } from "react-hot-toast";
 import { CalendarRange, Dices, GraduationCap } from "lucide-react";
+import ContratoNotificationModal from "../ui/Components/Contract/ContratoNotificationModal";
 
 interface ISidebarItem {
   name: string;
@@ -84,7 +85,7 @@ function LayoutContent({
           <div
             className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}
           >
-            {/* FIX: Pass toggleMenu function from sidebarProps */}
+            <ContratoNotificationModal />
             <Header isMobile toggleSidebar={sidebarProps.toggleMenu} />
             {isPomodoroVisible && <PomodoroClock />}
             {children}
@@ -100,11 +101,11 @@ function LayoutContent({
               isSidebarCollapsed ? "ml-[4rem]" : "ml-[14.5rem] pl-3"
             }`}
           >
-            {/* FIX: Pass toggleSidebar function from sidebarProps */}
             <Header
               toggleSidebar={sidebarProps.toggleSidebar}
               isMobile={false}
             />
+            <ContratoNotificationModal />
             {isPomodoroVisible && <PomodoroClock />}
             {callData?.callId && <VideoHome />}
             {children}
@@ -132,37 +133,81 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   // This checks if the pathname starts with the fullScreenBasePath
   const hideLayoutElements = pathname.startsWith(fullScreenBasePath);
 
+  // State to store the last time the login date was saved
+  const [lastLoginSaveTime, setLastLoginSaveTime] = useState<number | null>(
+    null
+  );
+
   useEffect(() => {
     const updateUserStatus = async (status: string) => {
       if (session) {
         const { user } = session;
-        const userDocRef = doc(db, "users", session.user.id);
-         const loginTime = new Date().toISOString(); // UTC ISO string
+        const userDocRef = doc(db, 'users', user.id);
 
-  try {
-    await updateDoc(userDocRef, { 
-      status,
-      lastLoginDates: arrayUnion({ 
-        time: loginTime,
-        status
-      })
-    });
-  } catch (error) {
-    console.error(`Error updating user status:`, error);
-  }
-      }};
+        try {
+          await updateDoc(userDocRef, { status });
+          console.log(`User status updated to ${status}`);
+        } catch (error) {
+          console.error(`Error updating user status to ${status}:`, error);
+        }
+      }
+    };
 
     const handleBeforeUnload = () => {
-      updateUserStatus("offline");
+      updateUserStatus('offline');
     };
 
-    updateUserStatus("online");
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    updateUserStatus('online');
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [session]);
+
+
+  // New useEffect for saving last login date every 15 minutes
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    const saveLoginDatePeriodically = async () => {
+      if (session && session.user.id) {
+        const currentTime = new Date().getTime();
+        // Check if 15 minutes (900,000 milliseconds) have passed since the last save
+        if (
+          !lastLoginSaveTime ||
+          currentTime - lastLoginSaveTime >= 15 * 60 * 1000
+        ) {
+          const userDocRef = doc(db, "users", session.user.id);
+          const loginTime = new Date().toISOString(); // UTC ISO string
+
+          try {
+            await updateDoc(userDocRef, {
+              lastLoginDates: arrayUnion({
+                time: loginTime,
+                status: "online", // Or a different status if desired for these periodic updates
+              }),
+            });
+            setLastLoginSaveTime(currentTime); // Update the last saved time
+            console.log("Last login date updated:", loginTime);
+          } catch (error) {
+            console.error(
+              "Error updating last login date periodically:",
+              error
+            );
+          }
+        }
+      }
+    };
+
+    // Set an interval to run every minute (or more frequently if needed for precision)
+    // The actual update will only happen every 15 minutes due to the condition inside
+    intervalId = setInterval(saveLoginDatePeriodically, 60 * 1000); // Check every minute
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval when the component unmounts
+    };
+  }, [session, lastLoginSaveTime]); // Depend on session and lastLoginSaveTime to re-run if they change
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isMenuHidden, setIsMenuHidden] = useState(false);

@@ -194,8 +194,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <LuBookCopy  className="h-6 w-6"/>,
     },
     {
-      name: "Aulas Gravadas",
-      path: "/admin-dashboard/aulas-gravadas",
+      name: "Cursos",
+      path: "/admin-dashboard/cursos",
       icon: <MdOndemandVideo className="h-6 w-6"/>,
     },
     {

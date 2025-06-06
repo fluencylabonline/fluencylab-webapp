@@ -228,9 +228,42 @@ export default function HomePage() {
     }
   };
 
-  const skipQuestion = () => {
-    goToNextQuestion();
-  };
+  const handleDontKnow = () => {
+    if (!language) return;
+
+    const abilityName = abilities[currentAbilityIndex];
+    const questionsForAbility = database[language as 'en' | 'es'][abilityName as keyof typeof database.en];
+    const currentQuestion = questionsForAbility[currentQuestionIndex];
+    const lastQuestionIndex = questionsForAbility.length - 1;
+    const lastQuestion = questionsForAbility[lastQuestionIndex];
+
+    // 1. Mark current question as skipped
+    handleAnswer(currentQuestion.id, null, false, currentQuestion.difficulty, currentQuestionIndex, true);
+
+    // 2. Mark last question as skipped (if it's not the same as current and not already answered/skipped)
+    if (currentQuestionIndex !== lastQuestionIndex && !userAnswers[lastQuestion.id]) {
+        handleAnswer(lastQuestion.id, null, false, lastQuestion.difficulty, lastQuestionIndex, true);
+    }
+
+    // 3. Determine next question index or finish
+    const nextQuestionIndex = currentQuestionIndex + 1;
+
+    // Check if we should finish the ability test
+    // Finish if the next index is the last question index AND the last question was just skipped by this action OR
+    // Finish if the next index is beyond the last question index
+    const shouldFinish = (nextQuestionIndex === lastQuestionIndex && currentQuestionIndex !== lastQuestionIndex) || nextQuestionIndex > lastQuestionIndex;
+
+    if (shouldFinish) {
+        finishAbilityTest();
+    } else {
+        // Go to the next question normally
+        setCurrentQuestionIndex(nextQuestionIndex);
+        setAbilityQuestionProgress(prev => ({
+            ...prev,
+            [abilityName]: nextQuestionIndex
+        }));
+    }
+};
 
   const finishAbilityTest = () => {
     setIsQuestionModalOpen(false);
@@ -270,35 +303,54 @@ export default function HomePage() {
     localStorage.removeItem(selectedLanguageKey);
   };
 
-  const calculateAbilityResult = () => {
-    const abilityName = abilities[currentAbilityIndex];
-    const questionsForAbility = database[language as 'en' | 'es'][abilityName as keyof typeof database.en];
-    let score = 0;
-    let correctAnswersCount = 0;
-    let totalQuestions = 0;
-    questionsForAbility.forEach(question => {
-      if (userAnswers[question.id]) {
-        totalQuestions++;
-        if (userAnswers[question.id].isCorrect) {
-          correctAnswersCount++;
-          score += question.difficulty;
+    const calculateAbilityResult = () => {
+        const abilityName = abilities[currentAbilityIndex];
+        const questionsForAbility = database[language as 'en' | 'es'][abilityName as keyof typeof database.en];
+        let skippedCount = 0;
+        let score = 0;
+        let maxScore = 0;
+        let totalQuestionsAnswered = 0;
+        let correctAnswersCount = 0;
+
+        questionsForAbility.forEach(question => {
+            maxScore += question.difficulty; // Calcula o score máximo possível para a habilidade
+            if (userAnswers[question.id]) {
+                totalQuestionsAnswered++;
+                if (userAnswers[question.id].skipped) {
+                    skippedCount++; // Conta as questões puladas
+                } else if (userAnswers[question.id].isCorrect) {
+                    correctAnswersCount++;
+                    score += question.difficulty; // Soma a dificuldade apenas se a resposta estiver correta e não pulada
+                }
+            }
+        });
+
+        // Thresholds ajustados para o score máximo de 42 (assumindo 12 questões, 2 por nível 1-6)
+        let level = "A1";
+        if (score > 7) level = "A2";  // > 1/6 do maxScore (42 * 1/6 = 7)
+        if (score > 14) level = "B1"; // > 1/3 do maxScore (42 * 1/3 = 14)
+        if (score > 21) level = "B2"; // > 1/2 do maxScore (42 * 1/2 = 21)
+        if (score > 28) level = "C1"; // > 2/3 do maxScore (42 * 2/3 = 28)
+        if (score > 35) level = "C2"; // > 5/6 do maxScore (42 * 5/6 = 35)
+
+        // Ajuste de dificuldade: Se muitas questões foram puladas, limita o nível máximo.
+        // Exemplo: Se mais de 4 questões foram puladas, limita o nível a B1.
+        // Este threshold (4) pode ser ajustado conforme necessário.
+        if (skippedCount > 4) {
+            const levelValues = { "A1": 1, "A2": 2, "B1": 3, "B2": 4, "C1": 5, "C2": 6 };
+            if (levelValues[level as keyof typeof levelValues] > levelValues["B1"]) {
+                level = "B1"; // Limita o nível máximo a B1 se mais de 4 questões foram puladas
+            }
         }
-      }
-    });
-    let level = "A1";
-    if (score > 5) level = "A2";
-    if (score > 10) level = "B1";
-    if (score > 15) level = "B2";
-    if (score > 20) level = "C1";
-    if (score >= 25) level = "C2";
-    setAbilityResults(prev => [
-      ...prev,
-      { ability: abilityName, score, level, correctAnswers: correctAnswersCount, totalQuestions }
-    ]);
-  };
+
+        setAbilityResults(prev => [
+            ...prev,
+            { ability: abilityName, score, level, correctAnswers: correctAnswersCount, totalQuestions: questionsForAbility.length, maxScore, skippedCount } // Inclui skippedCount
+        ]);
+    };
 
   return (
-    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark flex flex-col h-[100vh] w-full overflow-y-auto">
+    <div className="bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark flex flex-col h-screen w-full overflow-y-auto">
       {/* Cabeçalho */}
       <div className="flex flex-row w-full justify-between items-center px-3 pt-1">
         <Link href="/">
@@ -360,7 +412,7 @@ export default function HomePage() {
         currentQuestionIndex={currentQuestionIndex}
         onAnswer={handleAnswer}
         onNextQuestion={goToNextQuestion}
-        onSkipQuestion={skipQuestion}
+        onDontKnow={handleDontKnow} // Passa a nova função
         isLastQuestion={
           language
             ? currentQuestionIndex ===

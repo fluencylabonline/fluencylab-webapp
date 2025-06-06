@@ -124,10 +124,10 @@ const Results: React.FC<ResultsProps> = ({ results, timeLeft }) => {
     const [isExplanationOpen, setIsExplanationOpen] = useState(false);
 
     return (
-        <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-md w-full h-full text-center rounded-lg">
+        <div className="w-full h-full text-center rounded-lg">
             <h2 className="text-2xl font-bold mb-4 p-4">Resultados do Nivelamento FluencyLab</h2>
 
-            <div className="gap-2 flex flex-col items-center justify-center m-4 p-4 border rounded-lg bg-gray-100 dark:bg-fluency-bg-dark">
+            <div className="gap-2 flex flex-col items-center justify-center m-4 p-4 border rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-md ">
                 <div className='border-4 bg-white rounded-full w-fit p-2 mx-auto mb-2'>
                      <Image src={badgeData.image} alt={badgeData.name} width={100} height={100} className="bg-cover scale-125"  />
                 </div>
@@ -153,7 +153,7 @@ const Results: React.FC<ResultsProps> = ({ results, timeLeft }) => {
                 </motion.a>
             </div>
 
-            <div className='flex flex-col items-center justify-center m-4 p-4 border rounded-lg bg-gray-100 dark:bg-fluency-bg-dark'>
+            <div className='flex flex-col items-center justify-center m-4 p-4 border rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-md '>
                 <p id="detalhes" className="text-lg font-bold mb-4">Aqui estão os seus resultados por habilidade. Ah, e clica <button className='text-indigo-600 hover:text-indigo-700 duration-300 ease-in-out transition-all' onClick={() => setIsExplanationOpen(true)}>aqui</button> se quiser entender melhor os níveis.</p>
                 <ul className="mb-6">
                     {results.map((result, index) => {
@@ -168,7 +168,7 @@ const Results: React.FC<ResultsProps> = ({ results, timeLeft }) => {
 
                         return (
                             <li key={index} className="mb-2">
-                                <strong>{abilityMap[result.ability] || result.ability}:</strong> {levelMap[result.level as keyof typeof levelMap]} - {result.score}/{result.totalQuestions * 6}
+                                <strong>{abilityMap[result.ability] || result.ability}:</strong> {levelMap[result.level as keyof typeof levelMap]} - {result.score}/{result.maxScore}
                             </li>
                         );
                     })}
