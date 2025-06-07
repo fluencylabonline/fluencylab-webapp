@@ -66,6 +66,7 @@ const Tiptap = ({
   content,
   isEditable,
   isTeacherNotebook,
+  studentID
 }: any) => {
   const { data: session } = useSession();
   const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
@@ -181,7 +182,7 @@ TaskItem.configure({
 
   return (
     <div className="flex justify-center min-h-screen min-w-screen bg-tiptap-page-light dark:bg-tiptap-page-dark">
-      <Toolbar editor={editor} />
+      <Toolbar editor={editor} studentID={studentID}/>
       <EditorContent editor={editor} />
       <Bubble editor={editor} />
       {session?.user.role !== "student" && isEditable && (

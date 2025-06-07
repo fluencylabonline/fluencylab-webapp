@@ -151,6 +151,7 @@ function NotebookEditor() {
       provider={provider}
       onChange={handleContentChange}
       isEditable={true}
+      studentID={studentID}
     />
   );
 }

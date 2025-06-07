@@ -577,6 +577,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
         studentName={studentData?.name || ""}
         isLoading={false} // Set to true when saving
       />
+      
     </motion.div>
   );
 };

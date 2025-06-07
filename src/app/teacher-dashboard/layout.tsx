@@ -19,7 +19,14 @@ import PomodoroClock from "../ui/TipTap/Components/Pomodoro";
 import { CallProvider, useCallContext } from "../context/CallContext";
 import VideoHome from "../SharedPages/Video/VideoHome";
 import { Toaster } from "react-hot-toast";
-import { CalendarFold, CalendarRange, Dices, GraduationCap, LibraryBig, MonitorPlay } from "lucide-react";
+import {
+  CalendarFold,
+  CalendarRange,
+  Dices,
+  GraduationCap,
+  LibraryBig,
+  MonitorPlay,
+} from "lucide-react";
 import { MdOutlineClass } from "react-icons/md";
 
 interface ISidebarItem {
@@ -57,14 +64,13 @@ function LayoutContent({
               "bg-white dark:bg-fluency-gray-800 text-gray-900 dark:text-white shadow-lg",
           }}
         />
-        {/* Potentially add full-screen styling here if children don't inherently fill */}
-        {isPomodoroVisible && <PomodoroClock />}
-            {callData?.callId && <VideoHome />}
-            
-        <div className="w-full h-full min-h-screen">
-            {children}
-        </div>
 
+        <div className="w-full h-full min-h-screen">
+          {/* Potentially add full-screen styling here if children don't inherently fill */}
+          {isPomodoroVisible && <PomodoroClock />}
+          {callData?.callId && <VideoHome />}
+          {children}
+        </div>
       </div>
     );
   }
@@ -94,6 +100,7 @@ function LayoutContent({
             {/* FIX: Pass toggleMenu function from sidebarProps */}
             <Header isMobile toggleSidebar={sidebarProps.toggleMenu} />
             {isPomodoroVisible && <PomodoroClock />}
+            {callData?.callId && <VideoHome />}
             {children}
           </div>
         </div>
@@ -108,7 +115,10 @@ function LayoutContent({
             }`}
           >
             {/* FIX: Pass toggleSidebar function from sidebarProps */}
-            <Header toggleSidebar={sidebarProps.toggleSidebar} isMobile={false} />
+            <Header
+              toggleSidebar={sidebarProps.toggleSidebar}
+              isMobile={false}
+            />
             {isPomodoroVisible && <PomodoroClock />}
             {callData?.callId && <VideoHome />}
             {children}
@@ -196,32 +206,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "Alunos",
       path: "/teacher-dashboard/alunos",
-      icon: <PiStudentFill className="h-6 w-6"/>,
+      icon: <PiStudentFill className="h-6 w-6" />,
     },
     {
       name: "Prática",
       path: "/teacher-dashboard/pratica",
-      icon: <LuGamepad2 className="h-6 w-6"/>,
+      icon: <LuGamepad2 className="h-6 w-6" />,
     },
     {
       name: "Material",
       path: "/teacher-dashboard/material",
-      icon: <LibraryBig className="h-6 w-6"/>,
+      icon: <LibraryBig className="h-6 w-6" />,
     },
     {
       name: "Suas aulas",
       path: "/teacher-dashboard/aulas",
-      icon: <MdOutlineClass className="h-6 w-6"/>,
+      icon: <MdOutlineClass className="h-6 w-6" />,
     },
     {
       name: "Remarcações",
       path: "/teacher-dashboard/remarcacao",
-      icon: <CalendarFold className="h-6 w-6"/>,
+      icon: <CalendarFold className="h-6 w-6" />,
     },
     {
       name: "Cursos",
       path: "/teacher-dashboard/cursos",
-      icon: <MonitorPlay className="h-6 w-6"/>,
+      icon: <MonitorPlay className="h-6 w-6" />,
     },
   ];
 

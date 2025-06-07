@@ -55,11 +55,13 @@ function LayoutContent({
               "bg-white dark:bg-fluency-gray-800 text-gray-900 dark:text-white shadow-lg",
           }}
         />
-        {/* Potentially add full-screen styling here if children don't inherently fill */}
-        {isPomodoroVisible && <PomodoroClock />}
-        {callData?.callId && <VideoHome />}
 
-        <div className="w-full h-full min-h-screen">{children}</div>
+        <div className="w-full h-full min-h-screen">
+          {/* Potentially add full-screen styling here if children don't inherently fill */}
+          {isPomodoroVisible && <PomodoroClock />}
+          {callData?.callId && <VideoHome />}
+          {children}
+        </div>
       </div>
     );
   }
@@ -143,7 +145,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const updateUserStatus = async (status: string) => {
       if (session) {
         const { user } = session;
-        const userDocRef = doc(db, 'users', user.id);
+        const userDocRef = doc(db, "users", user.id);
 
         try {
           await updateDoc(userDocRef, { status });
@@ -155,34 +157,34 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     };
 
     const handleBeforeUnload = () => {
-      updateUserStatus('offline');
+      updateUserStatus("offline");
     };
 
-    updateUserStatus('online');
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    updateUserStatus("online");
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [session]);
 
-  const [classes, setClasses] = useState('');
-    useEffect(() => {
-      const fetchUserInfo = async () => {
-        if (session?.user?.id) {
-          try {
-            const profile = doc(db, 'users', session.user.id);
-            const docSnap = await getDoc(profile);
-            if (docSnap.exists()) setClasses(docSnap.data().classes);
-          } catch (error) {
-            console.error("Error fetching document: ", error);
-          }
+  const [classes, setClasses] = useState("");
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (session?.user?.id) {
+        try {
+          const profile = doc(db, "users", session.user.id);
+          const docSnap = await getDoc(profile);
+          if (docSnap.exists()) setClasses(docSnap.data().classes);
+        } catch (error) {
+          console.error("Error fetching document: ", error);
         }
-      };
-  
-      fetchUserInfo();
-    }, [session]);
-    
+      }
+    };
+
+    fetchUserInfo();
+  }, [session]);
+
   // New useEffect for saving last login date every 15 minutes
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -271,11 +273,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       path: "/student-dashboard/remarcacao",
       icon: <CalendarRange className="h-6 w-6" />,
     },
-    ...(classes !== '' ? [{
-      name: "Cursos",
-      path: "/student-dashboard/cursos",
-      icon: <MdOndemandVideo className="h-6 w-6" />,
-    }] : [])
+    ...(classes !== ""
+      ? [
+          {
+            name: "Cursos",
+            path: "/student-dashboard/cursos",
+            icon: <MdOndemandVideo className="h-6 w-6" />,
+          },
+        ]
+      : []),
   ];
 
   const [showAnimation, setShowAnimation] = useState(true);

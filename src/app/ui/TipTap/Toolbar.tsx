@@ -35,6 +35,7 @@ import TableDropdown from "./Components/Toolbar/Dropdown/TableDropdown";
 interface ToolbarProps {
   editor: Editor | null;
   onGoBack?: () => void;
+  studentID: any;
 }
 
 type ToolbarButtonConfig = {
@@ -50,7 +51,7 @@ type ToolbarButtonConfig = {
   alignLeft?: boolean;
 };
 
-const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack }) => {
+const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID }) => {
   const isMobile = useMobile();
   const router = useRouter();
 
