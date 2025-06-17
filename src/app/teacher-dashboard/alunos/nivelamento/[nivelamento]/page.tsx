@@ -9,7 +9,7 @@ import { DetailsModal } from "@/app/SharedPages/Placement/Components/DetailsModa
 
 export default function NivelamentoTeacher() {
   const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+  const id = params.get("student");
   const [tests, setTests] = useState<
     {
       date: string;

@@ -47,13 +47,16 @@ import Vocabulab from "./Extensions/Vocabulab/VocabulabModal";
 import Download from "./Extensions/Download/DownloadModal";
 import StudentTasks from "./StudentTasks";
 import FlashcardModal from "./Extensions/Flashcards/FlashcardModal";
+import { useSession } from "next-auth/react";
 
 interface ToolsProps {
   editor: Editor;
   isTeacherNotebook: boolean;
+  isEditable: boolean;
 }
 
-const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook }) => {
+const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook, isEditable }) => {
+  const { data: session } = useSession();
   const [modals, setModals] = useState({
     textStudent: false,
     textTeacher: false,
@@ -531,7 +534,7 @@ const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook }) => {
         editor={editor}
       />
 
-      <motion.div
+      {/* <motion.div
         className="fixed bottom-5 right-5 bg-fluency-blue-500 p-3 rounded-full shadow-lg cursor-pointer z-40"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -543,7 +546,17 @@ const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook }) => {
         transition={{ duration: 0.3 }}
       >
         <FiTool className="w-6 h-6 text-white" />
-      </motion.div>
+      </motion.div> */}
+
+      {session?.user.role !== "student" && isEditable && (
+        <button
+          onClick={toggleBottomSheet}
+          title='Ferramentas'
+          className="p-2 rounded-md flex-shrink-0 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 cursor-pointer transition-colors duration-150 ease-in-out"
+        >
+          <FiTool size={16} />
+        </button>
+      )}
 
       {/* Bottom Sheet */}
       <AnimatePresence>

@@ -368,16 +368,16 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
       <div className="flex flex-row justify-between items-center w-full mb-4 gap-4">
         {!isSearchOpen && (
           <>
-            <TeacherCallButton student={{ studentID: id }} />
+            {/* <TeacherCallButton student={{ studentID: id }} /> */}
             <Link
               href={{
                 pathname: `caderno/${encodeURIComponent("Lições")}`,
-                query: { id: id },
+                query: { student: id },
               }}
               passHref
             >
               <FluencyButton variant="purple" className="tour-view-all-button">
-                <span className="hidden sm:inline truncate">Ver Todas</span>
+                <span className="hidden sm:inline truncate">Ver Todas Lições</span>
                 <TbBook2 className="w-5 h-auto sm:hidden" />
               </FluencyButton>
             </Link>
@@ -387,7 +387,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
               className="tour-create-button"
               onClick={() => setIsModalDescriptionOpen(true)}
             >
-              <span className="hidden sm:inline">Criar</span>
+              <span className="hidden sm:inline">Criar Lição</span>
               <PlusCircle className="w-5 h-auto sm:hidden" />
             </FluencyButton>
           </>
@@ -435,7 +435,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
       </div>
 
       <div
-        className="flex flex-col gap-3 tour-notebooks-list overflow-y-auto tour-notebooks-list "
+        className="flex flex-col gap-3 tour-notebooks-list overflow-y-auto pt-2 tour-notebooks-list"
         style={{ maxHeight: "55vh" }}
       >
         <AnimatePresence>

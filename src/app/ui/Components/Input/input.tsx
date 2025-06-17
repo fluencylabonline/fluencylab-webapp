@@ -34,7 +34,7 @@ const getVariant = (variant: InputVariant) => {
     case "confirm":
       return "border-fluency-green-500 hover:border-fluency-green-600 bg-fluency-green-500 text-fluency-text-dark hover:bg-fluency-green-600 focus:bg-fluency-green-700 dark:bg-transparent dark:text-fluency-green-500 dark:hover:text-white dark:hover:bg-fluency-green-500 hover:dark:border-fluency-green-500";
     case "glass":
-      return "bg-white/20 backdrop-blur-lg border border-white/30 text-fluency-gray-800 dark:text-fluency-gray-100 hover:bg-white/30 hover:dark:bg-black/30 hover:border-white/50 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent dark:bg-black/20 dark:border-white/10 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.05)]";
+      return "bg-white/20 backdrop-blur-lg border border-white/30 text-fluency-gray-800 dark:text-fluency-gray-100 hover:bg-white/30 hover:dark:bg-black/30 hover:border-white/50 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent dark:bg-black/20 dark:border-white/10 transition-all duration-300";
     default:
       return "border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800";
   }

@@ -16,7 +16,7 @@ const fluencyColors = {
   },
   "tiptap-page": {
     dark: "#050A0E",
-    light: "#f5f5f5",
+    light: "#f5f5f5", // Maybe FDF4DC is better
   },
   "fluency-blue": {
     50: "#f0f1fd",

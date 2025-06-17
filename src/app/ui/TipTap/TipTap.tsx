@@ -59,6 +59,8 @@ import Bubble from "./Components/Bubble";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import Toolbar from "./Toolbar";
+import FloatTeacherCallButton from "@/app/SharedPages/Video/FloatTeacherCallButton";
+import FloatStudentCallButton from "@/app/SharedPages/Video/FloatStudentCallButton";
 
 const Tiptap = ({
   provider,
@@ -66,7 +68,7 @@ const Tiptap = ({
   content,
   isEditable,
   isTeacherNotebook,
-  studentID
+  studentID,
 }: any) => {
   const { data: session } = useSession();
   const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
@@ -113,12 +115,12 @@ const Tiptap = ({
       TableHeader,
       TableCell,
       TaskList,
-TaskItem.configure({
-  nested: true, // <--- this is the important part
-  HTMLAttributes: {
-    class: 'task-item',
-  },
-}),
+      TaskItem.configure({
+        nested: true,
+        HTMLAttributes: {
+          class: "task-item",
+        },
+      }),
       CustomBulletList,
       Link.configure({
         openOnClick: true,
@@ -182,12 +184,23 @@ TaskItem.configure({
 
   return (
     <div className="flex justify-center min-h-screen min-w-screen bg-tiptap-page-light dark:bg-tiptap-page-dark">
-      <Toolbar editor={editor} studentID={studentID}/>
+      <Toolbar
+        isTeacherNotebook={isTeacherNotebook}
+        isEditable={isEditable}
+        editor={editor}
+        studentID={studentID}
+      />
       <EditorContent editor={editor} />
       <Bubble editor={editor} />
-      {session?.user.role !== "student" && isEditable && (
-        <Tools isTeacherNotebook={isTeacherNotebook} editor={editor} />
+
+      {session?.user.role === "student" && (
+        <FloatStudentCallButton student={studentID} />
       )}
+
+      {session?.user.role === "teacher" && (
+        <FloatTeacherCallButton student={studentID} />
+      )}
+
       {session?.user.role === "student" && (
         <div className="fixed bottom-5 right-5">
           {isPomodoroVisible ? (
@@ -203,7 +216,6 @@ TaskItem.configure({
           )}
         </div>
       )}
-      <Toaster />
     </div>
   );
 };

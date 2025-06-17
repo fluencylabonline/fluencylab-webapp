@@ -15,7 +15,7 @@ function AlunoPainel() {
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const urlId = params.get("id");
+    const urlId = params.get("student");
     setId(urlId);
   }, []);
 

@@ -62,7 +62,7 @@ export default function Caderno() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setId(params.get("id"));
+    setId(params.get("student"));
   }, []);
 
 // Fetch student data and notebooks
@@ -317,7 +317,7 @@ const createNotebookWithDescription = async () => {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <TeacherCallButton student={{ studentID: id || "" }} />
+          {/* Call button was here */}
           <FluencyButton
             variant="confirm"
             onClick={() => setIsModalDescriptionOpen(true)}

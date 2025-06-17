@@ -19,6 +19,7 @@ import {
   CircleAlert,
   ArrowDown,
   ArrowUp,
+  Video,
 } from "lucide-react";
 import { useMobile } from "@/app/hooks/use-mobile";
 import LinkComponent from "./Components/Toolbar/LinkComponent";
@@ -31,11 +32,15 @@ import HighlightDropdown from "./Components/Toolbar/Dropdown/HighlightDropdown";
 import TextAlignDropdown from "./Components/Toolbar/Dropdown/TextAlignDropdown";
 import ListDropdown from "./Components/Toolbar/Dropdown/ListDropdown";
 import TableDropdown from "./Components/Toolbar/Dropdown/TableDropdown";
+import Tools from "./Components/Tools";
+import { FaTools } from "react-icons/fa";
 
 interface ToolbarProps {
   editor: Editor | null;
   onGoBack?: () => void;
   studentID: any;
+  isTeacherNotebook: boolean
+  isEditable: boolean
 }
 
 type ToolbarButtonConfig = {
@@ -51,7 +56,7 @@ type ToolbarButtonConfig = {
   alignLeft?: boolean;
 };
 
-const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID }) => {
+const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID, isEditable, isTeacherNotebook}) => {
   const isMobile = useMobile();
   const router = useRouter();
 
@@ -247,6 +252,14 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
       tooltip: "Toggle Dark Mode",
       alignRight: true,
     },
+    {
+      name: "toolToggle",
+      isCustomComponent: true,
+      customComponent: <Tools isEditable={isEditable} isTeacherNotebook={isTeacherNotebook} editor={editor}/>,
+      icon: FaTools, // Placeholder icon
+      tooltip: "Ferramentas",
+      alignRight: true,
+    },
   ];
 
   const renderButtons = (alignment: "left" | "center" | "right") => {
@@ -297,6 +310,7 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
           }
         `}
       >
+
         {/* Far Left Buttons */}
         <div className="flex items-center gap-2">{renderButtons("left")}</div>
 
@@ -305,6 +319,7 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
 
         {/* Far Right Buttons */}
         <div className="flex items-center gap-2">{renderButtons("right")}</div>
+        
       </div>
     </div>
   );

@@ -446,7 +446,7 @@ function Paineis() {
                 <Link
                   href={{
                     pathname: `alunos/${encodeURIComponent(student.name)}`,
-                    query: { id: student.id },
+                    query: { student: student.id },
                   }}
                   passHref
                 >
@@ -460,7 +460,7 @@ function Paineis() {
                       pathname: `alunos/caderno/${encodeURIComponent(
                         student.name
                       )}`,
-                      query: { id: student.id },
+                      query: { student: student.id },
                     }}
                     passHref
                   >
