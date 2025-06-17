@@ -189,7 +189,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
       <EditorContent editor={editor} />
       <Bubble editor={editor}/>
-      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor}/>}
+      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor} isEditable={true}/>}
       {session?.user.role === 'student' && (
         <div className='fixed bottom-5 right-5'>
           {isPomodoroVisible ? (
