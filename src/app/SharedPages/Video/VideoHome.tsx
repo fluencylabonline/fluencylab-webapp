@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect, useCallback } from "react";
 import { useCallContext } from "../../context/CallContext";
 
-const apiKey = "emed9s7rdsfj";
+const apiKey = "emed9s7rdsfj"; // apenas teste, precisa mudar
 
 export default function VideoHome() {
   const { data: session } = useSession();

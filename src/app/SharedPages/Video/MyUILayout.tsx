@@ -25,7 +25,7 @@ import { BiCamera, BiCameraOff, BiMicrophone, BiMicrophoneOff } from 'react-icon
 
 // Common container and notch classes for responsiveness
 const containerClasses =
-  "fixed top-0 right-0 bottom-0 w-full max-w-sm z-[9999] rounded-l-2xl overflow-y-auto bg-slate-200 dark:bg-fluency-pages-dark shadow-lg shadow-gray-400 dark:shadow-fluency-gray-800 p-4";
+  "fixed top-0 right-0 bottom-0 w-full max-w-sm z-[9999] rounded-l-2xl overflow-y-auto bg-slate-200 dark:bg-fluency-gray-700 shadow-lg shadow-gray-400 dark:shadow-fluency-gray-800 p-4";
 const notchClasses =
   "absolute left-2 top-1/2 transform -translate-y-1/2 w-[5px] h-12 bg-gray-400 dark:bg-gray-200 rounded-full mx-auto mb-4 cursor-grab";
 
@@ -51,7 +51,7 @@ interface JoinUIProps {
   };
 
   export const showJoinedCallToast = (): void => {
-    toast("Bem-vindo!", {
+    toast("Sala criada!", {
       position: "bottom-center",
       style: {
         borderRadius: "10px",
@@ -194,7 +194,7 @@ export const MyUILayout: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      setId(params.get("id"));
+      setId(params.get("student"));
     }
   }, []);
   
@@ -383,7 +383,7 @@ const handleToggleVideo = async (): Promise<void> => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="pointer-events-auto fixed bottom-20 right-20 w-min z-[9999] p-3 rounded-xl bg-slate-200 dark:bg-fluency-pages-dark shadow-lg shadow-gray-400 dark:shadow-fluency-gray-800"
+            className="pointer-events-auto fixed bottom-20 right-20 w-min z-[9999] p-3 rounded-xl bg-fluency-gray-200 dark:bg-fluency-gray-900"
           >
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="w-full flex flex-col items-center justify-center gap-4">
