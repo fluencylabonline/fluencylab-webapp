@@ -154,7 +154,7 @@ const Tiptap = ({ onChange, content, isEditable, isTeacherNotebook }: any) => {
       <EditorContent editor={editor} />
       {isEditable && <FixedBottomToolbar editor={editor} />}
       <Bubble editor={editor}/>
-      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor}/>}
+      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor} isEditable={true}/>}
     </div>
   );
 };
