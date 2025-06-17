@@ -478,7 +478,7 @@ function Caderno() {
             className="w-full rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4"
           >
             <div className="flex justify-between items-center mb-4 gap-4 tour-call-button">
-              <StudentCallButton student={{ studentID: id }} />
+              {/* <StudentCallButton student={{ studentID: id }} /> */}
 
               <div className="relative w-48 tour-notebooks-search">
                 <input
