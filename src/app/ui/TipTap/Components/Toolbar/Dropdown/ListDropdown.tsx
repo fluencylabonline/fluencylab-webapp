@@ -12,9 +12,10 @@ import DropdownMenuItem from "./DropdownMenuItem";
 
 interface ListDropdownProps {
   editor: Editor | null;
+  placement?: any;
 }
 
-const ListDropdown: React.FC<ListDropdownProps> = ({ editor }) => {
+const ListDropdown: React.FC<ListDropdownProps> = ({ editor, placement }) => {
   // Task List Options
   const taskListOptions = [
     {
@@ -88,7 +89,7 @@ const ListDropdown: React.FC<ListDropdownProps> = ({ editor }) => {
           ))}
         </div>
       }
-      placement="bottom"
+      placement={placement}
       align="center"
     >
       <ToolbarButton icon={icon} tooltip={tooltip} />

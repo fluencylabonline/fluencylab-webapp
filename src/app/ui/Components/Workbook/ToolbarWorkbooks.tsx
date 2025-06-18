@@ -4,7 +4,7 @@ import {
   Bold,
   Italic,
   Strikethrough,
-  Pilcrow, // Using Pilcrow for Paragraph
+  Pilcrow,
   Heading1,
   Heading2,
   Heading3,
@@ -12,28 +12,33 @@ import {
   ListOrdered,
   Code,
   Quote,
-  Minus, // For Horizontal Rule
+  Minus,
   Undo,
   Redo,
 } from 'lucide-react';
+import Tools from '../../TipTap/Components/Tools';
+import { FaTools } from 'react-icons/fa';
 
-// Define the props for the toolbar component
 interface FixedBottomToolbarProps {
-  editor: Editor | null; // The TipTap editor instance
+  editor: Editor | null;
+  isTeacherNotebook: boolean;
+  isEditable: boolean;
 }
 
-// Define a type for toolbar items for easier management
 type ToolbarButtonConfig = {
   name: string;
-  action: () => void;
+  action?: () => void;
   isActive?: () => boolean;
   canExecute?: () => boolean;
   icon: React.ElementType;
   tooltip: string;
+  isCustomComponent?: boolean;
+  customComponent?: React.ReactNode;
+  alignLeft?: boolean;
+  alignRight?: boolean;
 };
 
-const FixedBottomToolbar: React.FC<FixedBottomToolbarProps> = ({ editor }) => {
-  // If the editor is not available, don't render the toolbar
+const FixedBottomToolbar: React.FC<FixedBottomToolbarProps> = ({ editor, isEditable, isTeacherNotebook }) => {
   if (!editor) {
     return (
       <div className="fixed bottom-4 left-1/2 z-50 flex h-auto w-auto min-w-[200px] -translate-x-1/2 transform items-center justify-center rounded-xl bg-white px-4 py-3 text-center text-sm text-gray-600 shadow-xl ring-1 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">
@@ -42,8 +47,6 @@ const FixedBottomToolbar: React.FC<FixedBottomToolbarProps> = ({ editor }) => {
     );
   }
 
-  // Configuration for each toolbar button
-  // This makes it easier to add or modify buttons in the future
   const toolbarButtons: ToolbarButtonConfig[] = [
     {
       name: 'bold',
@@ -146,6 +149,7 @@ const FixedBottomToolbar: React.FC<FixedBottomToolbarProps> = ({ editor }) => {
       canExecute: () => editor.can().chain().focus().undo().run(),
       icon: Undo,
       tooltip: 'Undo (Ctrl+Z)',
+      alignLeft: true,
     },
     {
       name: 'redo',
@@ -153,15 +157,37 @@ const FixedBottomToolbar: React.FC<FixedBottomToolbarProps> = ({ editor }) => {
       canExecute: () => editor.can().chain().focus().redo().run(),
       icon: Redo,
       tooltip: 'Redo (Ctrl+Y)',
+      alignLeft: true,
+    },
+    {
+      name: "toolToggle",
+      isCustomComponent: true,
+      customComponent: <Tools isEditable={isEditable} isTeacherNotebook={isTeacherNotebook} editor={editor} />,
+      icon: FaTools,
+      tooltip: "Ferramentas",
+      alignRight: true,
     },
   ];
 
-  return (
-    <div className="fixed bottom-4 left-1/2 z-50 flex w-auto -translate-x-1/2 transform flex-wrap items-center justify-center gap-2 rounded-xl bg-white p-3 shadow-xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
-      {toolbarButtons.map((button) => {
+  const renderButtons = (alignment: "left" | "center" | "right") => {
+    return toolbarButtons
+      .filter((button) => {
+        if (alignment === "left") return button.alignLeft;
+        if (alignment === "right") return button.alignRight;
+        return !button.alignLeft && !button.alignRight;
+      })
+      .map((button) => {
+        if (button.isCustomComponent && button.customComponent) {
+          return (
+            <React.Fragment key={button.name}>
+              {button.customComponent}
+            </React.Fragment>
+          );
+        }
+
         const IconComponent = button.icon;
         const isActive = button.isActive ? button.isActive() : false;
-        const canExecute = button.canExecute ? button.canExecute() : true; // Assume can execute if not specified
+        const canExecute = button.canExecute ? button.canExecute() : true;
 
         return (
           <button
@@ -179,7 +205,14 @@ const FixedBottomToolbar: React.FC<FixedBottomToolbarProps> = ({ editor }) => {
             <IconComponent size={18} />
           </button>
         );
-      })}
+      });
+  };
+
+  return (
+    <div className="fixed bottom-4 left-1/2 z-50 flex w-auto -translate-x-1/2 transform items-center justify-between gap-4 rounded-xl bg-white p-3 shadow-xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+      <div className="flex gap-2">{renderButtons("left")}</div>
+      <div className="flex flex-wrap justify-center gap-2">{renderButtons("center")}</div>
+      <div className="flex gap-2">{renderButtons("right")}</div>
     </div>
   );
 };

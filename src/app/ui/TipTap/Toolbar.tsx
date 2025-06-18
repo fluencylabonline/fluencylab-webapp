@@ -142,7 +142,7 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
     {
       name: "listDropdown",
       isCustomComponent: true,
-      customComponent: <ListDropdown editor={editor} />,
+      customComponent: <ListDropdown editor={editor} placement={isMobile ? 'top' : 'bottom'}/>,
       icon: Pilcrow, // Placeholder icon, as it's a custom component
       tooltip: "Lists",
     },

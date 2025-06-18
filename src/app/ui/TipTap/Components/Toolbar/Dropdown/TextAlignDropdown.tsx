@@ -7,9 +7,10 @@ import ToolbarButton from "../ToolbarButton";
 
 interface TextAlignDropdownProps {
   editor: Editor | null;
+  placement?: any;
 }
 
-const TextAlignDropdown: React.FC<TextAlignDropdownProps> = ({ editor }) => {
+const TextAlignDropdown: React.FC<TextAlignDropdownProps> = ({ editor, placement }) => {
   const textAlignOptions = [
     { name: "Left", value: "left", icon: AlignLeft },
     { name: "Center", value: "center", icon: AlignCenter },
@@ -62,7 +63,7 @@ const TextAlignDropdown: React.FC<TextAlignDropdownProps> = ({ editor }) => {
   );
 
   return (
-    <Dropdown content={dropdownContent} placement="bottom" align="center">
+    <Dropdown content={dropdownContent} placement={placement} align="center">
       <ToolbarButton icon={currentAlignIcon} tooltip="Text Alignment" />
     </Dropdown>
   );

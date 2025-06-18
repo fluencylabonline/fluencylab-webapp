@@ -8,9 +8,10 @@ import { Highlighter } from "lucide-react"; // Import the Highlighter icon
 
 interface HighlightDropdownProps {
   editor: Editor | null;
+  placement?: any;
 }
 
-const HighlightDropdown: React.FC<HighlightDropdownProps> = ({ editor }) => {
+const HighlightDropdown: React.FC<HighlightDropdownProps> = ({ editor, placement }) => {
   const highlighterColors = [
     {
       name: "Yellow",
@@ -71,7 +72,7 @@ const HighlightDropdown: React.FC<HighlightDropdownProps> = ({ editor }) => {
   );
 
   return (
-    <Dropdown content={dropdownContent} placement="bottom" align="center">
+    <Dropdown content={dropdownContent} placement={placement} align="center">
       <ToolbarButton
         icon={Highlighter}
         tooltip="Highlight Text"

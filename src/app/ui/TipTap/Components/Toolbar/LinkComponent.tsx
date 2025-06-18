@@ -8,9 +8,10 @@ import Dropdown from './Dropdown/Dropdown';
 interface LinkComponentProps {
   editor: Editor | null;
   isMobile?: boolean;
+  placement?: any;
 }
 
-const LinkComponent: React.FC<LinkComponentProps> = ({ editor, isMobile = false }) => {
+const LinkComponent: React.FC<LinkComponentProps> = ({ editor, isMobile = false, placement }) => {
   const [linkUrl, setLinkUrl] = useState('');
 
   if (!editor) return null;
@@ -130,7 +131,7 @@ const LinkComponent: React.FC<LinkComponentProps> = ({ editor, isMobile = false 
   return (
     <Dropdown
       content={dropdownContent}
-      placement={isMobile ? 'top' : 'bottom'}
+      placement={isMobile ? 'top' : placement}
       align="center"
       contentClassName="min-w-0"
       onOpenChange={handleDropdownOpen}

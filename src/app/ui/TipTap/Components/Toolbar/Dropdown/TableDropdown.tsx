@@ -16,9 +16,10 @@ import DropdownMenuItem from "./DropdownMenuItem";
 
 interface TableDropdownProps {
   editor: Editor | null;
+  placement?: any;
 }
 
-const TableDropdown: React.FC<TableDropdownProps> = ({ editor }) => {
+const TableDropdown: React.FC<TableDropdownProps> = ({ editor, placement }) => {
   const tableOptions = [
     {
       name: "Inserir tabela",
@@ -71,7 +72,7 @@ const TableDropdown: React.FC<TableDropdownProps> = ({ editor }) => {
       tooltip: "Add Row Before",
     },
     {
-      name: "Add. Lin. Antes",
+      name: "Add. Lin. Depois",
       action: () => editor?.chain().focus().addRowAfter().run(),
       canExecute: () =>
         editor?.can().chain().focus().addRowAfter().run() || false,
@@ -128,7 +129,7 @@ const TableDropdown: React.FC<TableDropdownProps> = ({ editor }) => {
   );
 
   return (
-    <Dropdown content={dropdownContent} placement="bottom" align="center">
+    <Dropdown content={dropdownContent} placement={placement} align="center">
       <ToolbarButton icon={Table} tooltip="Table Options" />
     </Dropdown>
   );

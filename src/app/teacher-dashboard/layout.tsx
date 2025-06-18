@@ -11,7 +11,6 @@ import RedirectinAnimation from "../ui/Animations/RedirectinAnimation";
 // Icons
 import { PiStudentFill } from "react-icons/pi";
 import { LuGamepad2 } from "react-icons/lu";
-import { RiCalendarScheduleLine } from "react-icons/ri";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { PomodoroProvider, usePomodoro } from "../context/PomodoroContext";
@@ -21,9 +20,6 @@ import VideoHome from "../SharedPages/Video/VideoHome";
 import { Toaster } from "react-hot-toast";
 import {
   CalendarFold,
-  CalendarRange,
-  Dices,
-  GraduationCap,
   LibraryBig,
   MonitorPlay,
 } from "lucide-react";
@@ -51,7 +47,7 @@ function LayoutContent({
   hideLayoutElements: boolean; // New prop type
 }) {
   const { isPomodoroVisible } = usePomodoro();
-  const { callData, setCallData } = useCallContext();
+  const { callData } = useCallContext();
 
   // If hideLayoutElements is true, just render children without sidebar/header
   if (hideLayoutElements) {
@@ -66,7 +62,6 @@ function LayoutContent({
         />
 
         <div className="w-full h-full min-h-screen">
-          {/* Potentially add full-screen styling here if children don't inherently fill */}
           {isPomodoroVisible && <PomodoroClock />}
           {callData?.callId && <VideoHome />}
           {children}
@@ -97,7 +92,6 @@ function LayoutContent({
           <div
             className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}
           >
-            {/* FIX: Pass toggleMenu function from sidebarProps */}
             <Header isMobile toggleSidebar={sidebarProps.toggleMenu} />
             {isPomodoroVisible && <PomodoroClock />}
             {callData?.callId && <VideoHome />}
@@ -114,7 +108,6 @@ function LayoutContent({
               isSidebarCollapsed ? "ml-[4rem]" : "ml-[14.5rem] pl-3"
             }`}
           >
-            {/* FIX: Pass toggleSidebar function from sidebarProps */}
             <Header
               toggleSidebar={sidebarProps.toggleSidebar}
               isMobile={false}
@@ -137,7 +130,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const pathname = usePathname(); // Get the current pathname
+  const pathname = usePathname();
 
   // Define the base path that should trigger full-screen mode
   const fullScreenBasePath = "/teacher-dashboard/alunos/aula/";

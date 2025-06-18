@@ -152,9 +152,8 @@ const Tiptap = ({ onChange, content, isEditable, isTeacherNotebook }: any) => {
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <EditorContent editor={editor} />
-      {isEditable && <FixedBottomToolbar editor={editor} />}
+      {isEditable && <FixedBottomToolbar editor={editor} isTeacherNotebook={isTeacherNotebook} isEditable={isEditable} />}
       <Bubble editor={editor}/>
-      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor} isEditable={true}/>}
     </div>
   );
 };

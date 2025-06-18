@@ -1,13 +1,7 @@
 "use client";
 import React from 'react';
 
-//Other imports
-import { Toaster } from 'react-hot-toast';
-import { useSession } from 'next-auth/react';
-import { usePomodoro } from '@/app/context/PomodoroContext';
-
 //TipTap Imports
-import Toolbar from "./ToolbarAulas";
 import Link from '@tiptap/extension-link'
 import History from '@tiptap/extension-history'
 import Highlight from '@tiptap/extension-highlight'
@@ -29,13 +23,10 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 
-//Extensions
-
-//Icons
-import { LuTimerOff, LuTimer } from 'react-icons/lu';
 
 //Style
 import '../../TipTap/styles.scss'
+
 //Tools
 import AudioExtension from '../../TipTap/Components/Extensions/Audio/AudioExtension';
 import BandImageExtension from '../../TipTap/Components/Extensions/BandImage/BandImageExtension';
@@ -54,12 +45,10 @@ import TextTipExtension from '../../TipTap/Components/Extensions/TextTip/TextTip
 import TranslationExtension from '../../TipTap/Components/Extensions/Translation/TranslationExtension';
 import VocabulabExtension from '../../TipTap/Components/Extensions/Vocabulab/VocabulabExtension';
 import Bubble from '../../TipTap/Components/Bubble';
+import ToolbarAulas from './ToolbarAulas';
 import Tools from '../../TipTap/Components/Tools';
 
 const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, buttonColor, isEditable, isTeacherNotebook }: any) => {
-  const { data: session } = useSession();
-  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
-
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
       return {
@@ -116,31 +105,6 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       }),
       Highlight,
       Color,
-      /*
-      //Part of collaboration that might work now, but I'm not using yet
-      Collaboration.configure({
-        document: ydoc,
-      }),
-      CollaborationCursor.configure({
-        provider: provider,
-        user: {
-          id: session?.user?.id || 'anonymous',
-          name: session?.user?.name || 'Anonymous',
-          color: session?.user?.role === 'teacher' ? '#65C6E0' : '#E08E65',
-        },
-      }),
-      
-      Collaboration.configure({
-        document: provider.doc,
-      }),
-      CollaborationCursor.configure({
-        provider: provider,
-        user: {
-          color: 'blue'
-        },
-      }),
-      */
-
       Placeholder.configure({
         placeholder: ({ node }) => {
           const headingPlaceholders: { [key: number]: string } = {
@@ -161,22 +125,14 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     editorProps: {
       attributes: {
         class:
-          "lg:min-w-[794px] md:max-w-[794px] max-w-[90vw] min-h-screen lg:p-16 md:p-10 p-6 border-[0.5px] border-[#cfcfcf] dark:border-fluency-gray-300 outline-none bg-white dark:bg-fluency-gray-900",
+          "lg:min-w-[794px] md:max-w-[794px] max-w-[90vw] min-h-screen outline-none",
       },
     },
     autofocus: true,
     content: content,
-
-    //Mark this one when real-time
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-    /*
-    onUpdate: async ({ editor }) => {
-      const newContent = editor.getHTML();
-      onChange(newContent);
-    },
-    */
   }) 
 
   if (!editor) {
@@ -185,21 +141,12 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
 
   return (
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
-      
-      {isEditable && <Toolbar editor={editor} content={content} isTyping={isTyping} lastSaved={lastSaved} animation={animation} timeLeft={timeLeft} buttonColor={buttonColor}/>}
+      <ToolbarAulas editor={editor} studentID={undefined} isTeacherNotebook={true} isEditable={true}/>
       <EditorContent editor={editor} />
+      <div className='fixed bottom-[5rem] right-5 z-[999]'>
+        <Tools editor={editor} isTeacherNotebook={true} isEditable={true} />
+      </div>
       <Bubble editor={editor}/>
-      {session?.user.role !== 'student' && isEditable && <Tools isTeacherNotebook={isTeacherNotebook} editor={editor} isEditable={true}/>}
-      {session?.user.role === 'student' && (
-        <div className='fixed bottom-5 right-5'>
-          {isPomodoroVisible ? (
-           <LuTimerOff onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-red-500 duration-300 ease-in-out transition-all" />
-          ):(
-           <LuTimer onClick={togglePomodoroVisibility} className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-green-500 duration-300 ease-in-out transition-all" />
-          )}
-        </div>
-      )}
-      <Toaster />
     </div>
   );
 };
