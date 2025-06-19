@@ -318,37 +318,53 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
 
   const tourSteps = [
     {
-      target: '.tour-view-all-button',
-      title: 'Ver Todas as Lições',
-      content: 'Clique aqui para ver todas as lições deste aluno.',
-      placement: 'bottom' as const,
+      target: ".tour-view-all-button",
+      title: "Ver Todas as Lições",
+      content: "Clique aqui para ver todas as lições deste aluno.",
+      placement: "bottom" as const,
       disableBeacon: true,
     },
     {
-      target: '.tour-create-button',
-      title: 'Criar Nova Aula',
-      content: 'Use este botão para criar um novo caderno de aula.',
-      placement: 'bottom' as const,
+      target: ".tour-create-button",
+      title: "Criar Nova Aula",
+      content: "Use este botão para criar um novo caderno de aula.",
+      placement: "bottom" as const,
     },
     {
-      target: '.tour-search-button',
-      title: 'Buscar Lições',
-      content: 'Encontre lições específicas usando esta barra de pesquisa.',
-      placement: 'bottom' as const,
+      target: ".tour-search-button",
+      title: "Buscar Lições",
+      content: "Encontre lições específicas usando esta barra de pesquisa.",
+      placement: "bottom" as const,
     },
     {
-      target: '.tour-notebooks-list',
-      title: 'Lista de Lições',
-      content: 'Aqui estão as últimas 3 lições que você criou. Clique em uma para abrir.',
-      placement: 'top' as const,
+      target: ".tour-notebooks-list",
+      title: "Lista de Lições",
+      content:
+        "Aqui estão as últimas 3 lições que você criou. Clique em uma para abrir.",
+      placement: "top" as const,
     },
     {
-      target: '.tour-notebook-actions',
-      title: 'Ações da Lição',
-      content: 'Aqui você pode deletar, adicionar como tarefa ou escrever um relatório sobre a aula.',
-      placement: 'left' as const,
-    }
+      target: ".tour-notebook-actions",
+      title: "Ações da Lição",
+      content:
+        "Aqui você pode deletar, adicionar como tarefa ou escrever um relatório sobre a aula.",
+      placement: "left" as const,
+    },
   ];
+
+  if (isReportModalOpen) {
+    return (
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportContent={reportContent}
+        setReportContent={setReportContent}
+        saveReport={saveReport}
+        studentName={studentData?.name || ""}
+        isLoading={false} // Set to true when saving
+      />
+    );
+  }
 
   return (
     <motion.div
@@ -356,15 +372,14 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
       animate={{ opacity: 1, y: 0 }}
       className="w-full h-full rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4"
     >
+      <Tour
+        steps={tourSteps}
+        pageKey="teacher-lesson-card"
+        userId={session?.user.id}
+        delay={1000}
+        onTourEnd={() => console.log("Teacher lesson card tour completed")}
+      />
 
-       <Tour 
-          steps={tourSteps}
-          pageKey="teacher-lesson-card"
-          userId={session?.user.id}
-          delay={1000}
-          onTourEnd={() => console.log('Teacher lesson card tour completed')}
-        />
-        
       <div className="flex flex-row justify-between items-center w-full mb-4 gap-4">
         {!isSearchOpen && (
           <>
@@ -377,7 +392,9 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
               passHref
             >
               <FluencyButton variant="purple" className="tour-view-all-button">
-                <span className="hidden sm:inline truncate">Ver Todas Lições</span>
+                <span className="hidden sm:inline truncate">
+                  Ver Todas Lições
+                </span>
                 <TbBook2 className="w-5 h-auto sm:hidden" />
               </FluencyButton>
             </Link>
@@ -567,17 +584,6 @@ const LessonCard: React.FC<LessonCardProps> = ({ studentId }) => {
         confirmButtonText="Criar Aula"
         cancelButtonText="Cancelar"
       />
-
-      <ReportModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-        reportContent={reportContent}
-        setReportContent={setReportContent}
-        saveReport={saveReport}
-        studentName={studentData?.name || ""}
-        isLoading={false} // Set to true when saving
-      />
-      
     </motion.div>
   );
 };

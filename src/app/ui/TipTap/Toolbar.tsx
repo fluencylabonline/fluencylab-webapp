@@ -34,13 +34,16 @@ import ListDropdown from "./Components/Toolbar/Dropdown/ListDropdown";
 import TableDropdown from "./Components/Toolbar/Dropdown/TableDropdown";
 import Tools from "./Components/Tools";
 import { FaTools } from "react-icons/fa";
+import { useSession } from "next-auth/react";
+import { usePomodoro } from "@/app/context/PomodoroContext";
+import { LuTimerOff, LuTimer } from "react-icons/lu";
 
 interface ToolbarProps {
   editor: Editor | null;
   onGoBack?: () => void;
   studentID: any;
-  isTeacherNotebook: boolean
-  isEditable: boolean
+  isTeacherNotebook: boolean;
+  isEditable: boolean;
 }
 
 type ToolbarButtonConfig = {
@@ -56,9 +59,17 @@ type ToolbarButtonConfig = {
   alignLeft?: boolean;
 };
 
-const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID, isEditable, isTeacherNotebook}) => {
+const ResponsiveToolbar: React.FC<ToolbarProps> = ({
+  editor,
+  onGoBack,
+  studentID,
+  isEditable,
+  isTeacherNotebook,
+}) => {
   const isMobile = useMobile();
   const router = useRouter();
+  const { data: session } = useSession();
+  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
 
   const handleGoBack = () => {
     router.back();
@@ -142,7 +153,9 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
     {
       name: "listDropdown",
       isCustomComponent: true,
-      customComponent: <ListDropdown editor={editor} placement={isMobile ? 'top' : 'bottom'}/>,
+      customComponent: (
+        <ListDropdown editor={editor} placement={isMobile ? "top" : "bottom"} />
+      ),
       icon: Pilcrow, // Placeholder icon, as it's a custom component
       tooltip: "Lists",
     },
@@ -245,6 +258,14 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
       canExecute: () => typeof window !== "undefined",
     },
     {
+      name: "pomodoroToggle",
+      action: () => togglePomodoroVisibility(),
+      canExecute: () => session?.user.role === "student",
+      icon: isPomodoroVisible ? LuTimerOff : LuTimer,
+      tooltip: isPomodoroVisible ? "Fechar Pomodoro" : "Abrir Pomodoro",
+      alignRight: true,
+    },
+    {
       name: "darkModeToggle",
       isCustomComponent: true,
       customComponent: <DarkModeToggle />,
@@ -255,7 +276,13 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
     {
       name: "toolToggle",
       isCustomComponent: true,
-      customComponent: <Tools isEditable={isEditable} isTeacherNotebook={isTeacherNotebook} editor={editor}/>,
+      customComponent: (
+        <Tools
+          isEditable={isEditable}
+          isTeacherNotebook={isTeacherNotebook}
+          editor={editor}
+        />
+      ),
       icon: FaTools, // Placeholder icon
       tooltip: "Ferramentas",
       alignRight: true,
@@ -310,7 +337,6 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
           }
         `}
       >
-
         {/* Far Left Buttons */}
         <div className="flex items-center gap-2">{renderButtons("left")}</div>
 
@@ -319,7 +345,6 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({ editor, onGoBack, studentID
 
         {/* Far Right Buttons */}
         <div className="flex items-center gap-2">{renderButtons("right")}</div>
-        
       </div>
     </div>
   );

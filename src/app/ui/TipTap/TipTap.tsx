@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-
-import { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { usePomodoro } from "@/app/context/PomodoroContext";
 
 //TipTap Imports
 import Link from "@tiptap/extension-link";
@@ -46,14 +43,10 @@ import VocabulabExtension from "@/app/ui/TipTap/Components/Extensions/Vocabulab/
 import DownloadExtension from "@/app/ui/TipTap/Components/Extensions/Download/DownloadExtension";
 import FlashcardExtension from "@/app/ui/TipTap/Components/Extensions/Flashcards/FlashcardExtension";
 
-//Icons
-import { LuTimerOff, LuTimer } from "react-icons/lu";
-
 //Style
 import "./styles.scss";
 
 //Tools
-import Tools from "./Components/Tools";
 import Bubble from "./Components/Bubble";
 
 import Collaboration from "@tiptap/extension-collaboration";
@@ -71,7 +64,6 @@ const Tiptap = ({
   studentID,
 }: any) => {
   const { data: session } = useSession();
-  const { isPomodoroVisible, togglePomodoroVisibility } = usePomodoro();
 
   const CustomBulletList = BulletList.extend({
     addKeyboardShortcuts() {
@@ -201,21 +193,6 @@ const Tiptap = ({
         <FloatTeacherCallButton student={studentID} />
       )}
 
-      {session?.user.role === "student" && (
-        <div className="fixed bottom-5 right-5">
-          {isPomodoroVisible ? (
-            <LuTimerOff
-              onClick={togglePomodoroVisibility}
-              className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-red-500 duration-300 ease-in-out transition-all"
-            />
-          ) : (
-            <LuTimer
-              onClick={togglePomodoroVisibility}
-              className="w-10 h-10 cursor-pointer p-2 rounded-full bg-fluency-gray-100 dark:bg-fluency-gray-400 hover:bg-fluency-gray-200 dark:hover:bg-fluency-gray-500 hover:text-fluency-green-500 duration-300 ease-in-out transition-all"
-            />
-          )}
-        </div>
-      )}
     </div>
   );
 };

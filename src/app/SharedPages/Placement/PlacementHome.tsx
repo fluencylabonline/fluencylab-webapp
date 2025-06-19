@@ -221,9 +221,7 @@ export default function PlacementUser() {
         // Format current date as "YYYY-MM-DD"
         const currentDate = new Date();
         const currentDateFormatted =
-            `${currentDate.getDate().toString().padStart(2, '0')}
-            /${(currentDate.getMonth() + 1).toString().padStart(2, '0')}
-            /${currentDate.getFullYear()}`;
+            `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
 
         // --- Test Customization Logic ---
         let difficultyLevels = [1, 2, 3, 4, 5, 6]; // Default difficulty levels

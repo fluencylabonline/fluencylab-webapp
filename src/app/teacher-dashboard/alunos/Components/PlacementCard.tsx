@@ -42,7 +42,7 @@ export default function PlacementCard({ studentId }: PlacementCardProps) {
             acc + (Number(score) || 0), 0);
           
           return {
-            date: data.date,
+            date: data.createdAt,
             completed: Object.values(data.abilitiesCompleted || {}).every(v => v === true),
             totalScore,
             abilitiesCompleted: data.abilitiesCompleted || {},
@@ -179,7 +179,8 @@ export default function PlacementCard({ studentId }: PlacementCardProps) {
                                   ? <span className="text-fluency-yellow-700 dark:text-fluency-yellow-300">⌛</span> 
                                   : <span className="text-fluency-red-700 dark:text-fluency-red-300">✗</span>
                               }
-                                {new Date(test.date).toLocaleDateString('pt-BR', { month: 'numeric', year: 'numeric' })}
+                                {new Date(test.createdAt * 1000).toLocaleDateString('pt-BR', { month: 'numeric', year: 'numeric' })
+}
                             </h3>
                           </div>
                           

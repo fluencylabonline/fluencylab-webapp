@@ -57,14 +57,14 @@ export default function FloatStudentCallButton({ student }: FloatStudentCallButt
 
   return (
     <motion.div
-      className="fixed bottom-5 right-5 z-40"
+      className="fixed bottom-12 right-2 z-40"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <motion.button
         className={`flex items-center gap-2 px-4 py-3 rounded-full overflow-hidden ${
           firebaseCallId
-            ? 'bg-purple-600 hover:bg-purple-700 cursor-pointer text-white shadow-lg'
+            ? 'bg-fluency-blue-600 hover:bg-fluency-blue-700 cursor-pointer text-white shadow-lg'
             : 'bg-white/20 dark:bg-black/20 backdrop-blur-lg border border-white/30 dark:border-white/10 text-fluency-gray-800 dark:text-fluency-gray-100 hover:bg-white/30 hover:dark:bg-black/30 hover:border-white/50 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-colors duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.05)] cursor-not-allowed'
         }`}
         initial={{ width: 56 }}

@@ -88,7 +88,7 @@ export default function WorkbookViewer() {
   if (!book) return null;
 
   return (
-    <div className="flex flex-col md:flex-row h-[92vh] overflow-hidden">
+    <div className="flex flex-col md:flex-row h-[95vh] overflow-hidden">
       {/* Mobile sidebar toggle */}
       <div className="md:hidden flex items-center p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800">
         <button 

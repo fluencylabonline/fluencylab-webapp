@@ -3,21 +3,34 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { collection, getDocs, query, where, or } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "@/app/firebase";
 import Link from "next/link";
 import Image from "next/image";
 import { FiClock, FiBookOpen, FiArrowRight } from "react-icons/fi";
+import { LuFileSpreadsheet } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
 import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencySkeleton from "@/app/ui/Animations/FluencySkeleton";
 import { Course } from "@/app/ui/Components/Course/types";
-import { LuFileSpreadsheet } from "react-icons/lu";
 
 const StudentCoursesPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<
+    (Course & {
+      sectionCount: number;
+      lessonCount: number;
+      isEnrolled: boolean;
+    })[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,16 +40,13 @@ const StudentCoursesPage = () => {
         const coursesCollection = collection(db, "courses");
         const studentRole = session?.user?.role || "student";
 
-        const q = query(
-          coursesCollection,
-          where("role", "==", studentRole)
-        );
-
+        const q = query(coursesCollection, where("role", "==", studentRole));
         const querySnapshot = await getDocs(q);
+
         const coursesData = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const courseId = doc.id;
-            const courseData = doc.data();
+          querySnapshot.docs.map(async (docSnapshot) => {
+            const courseId = docSnapshot.id;
+            const courseData = docSnapshot.data();
 
             const sectionsRef = collection(db, "courses", courseId, "sections");
             const sectionsSnapshot = await getDocs(sectionsRef);
@@ -59,21 +69,35 @@ const StudentCoursesPage = () => {
               lessonCount += lessonsSnapshot.size;
             }
 
+            // Verifica matrícula
+            let isEnrolled = false;
+            try {
+              const enrollmentRef = doc(
+                db,
+                "users",
+                session?.user?.id!,
+                "enrollments",
+                courseId
+              );
+              const enrollmentSnap = await getDoc(enrollmentRef);
+              isEnrolled = enrollmentSnap.exists();
+            } catch (e) {
+              console.error("Erro ao buscar matrícula:", e);
+            }
+
             return {
+              ...(courseData as Course),
               id: courseId,
-              ...courseData,
               sectionCount,
               lessonCount,
-            } as Course & { sectionCount: number; lessonCount: number };
+              isEnrolled,
+            };
           })
         );
 
         setCourses(coursesData);
       } catch (error) {
-        console.error(
-          "Error fetching courses and their sections/lessons: ",
-          error
-        );
+        console.error("Erro ao carregar cursos: ", error);
         toast.error("Falha ao carregar os cursos e conteúdos.");
       } finally {
         setLoading(false);
@@ -115,11 +139,11 @@ const StudentCoursesPage = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-center">
           {courses.map((course) => (
             <div
               key={course.id}
-              className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-md overflow-hidden hover:shadow-xl transition-shadow duration-300 min-w-full"
             >
               <div className="relative w-full h-48">
                 <Image
@@ -136,10 +160,10 @@ const StudentCoursesPage = () => {
 
               <div className="p-4 flex flex-col gap-3">
                 <div className="flex flex-row items-start justify-between gap-2 text-sm text-fluency-text-secondary dark:text-fluency-text-dark-secondary">
-                  <h2 className="text-xl font-semibold text-fluency-text-light dark:text-fluency-text-dark truncate">
+                  <h2 className="text-xl font-semibold text-fluency-text-light dark:text-fluency-text-dark">
                     {course.title}
                   </h2>
-                  <span className="px-3 font-semibold py-1 bg-fluency-blue-200 dark:bg-fluency-blue-800 rounded-md">
+                  <span className="px-3 text-xs font-semibold py-1 bg-fluency-blue-200 dark:bg-fluency-blue-800 rounded-md">
                     {course.language}
                   </span>
                 </div>
@@ -149,25 +173,21 @@ const StudentCoursesPage = () => {
                   <span>{course.duration}</span>
                 </div>
 
-                {course.lessons && (
-                  <div className="flex items-center gap-2 text-sm text-fluency-text-secondary dark:text-fluency-text-dark-secondary">
-                    <FiBookOpen className="flex-shrink-0" />
-                    <span>
-                      {course.sectionCount}{" "}
-                      {course.sectionCount === 1 ? "Seção" : "Seções"}
-                    </span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2 text-sm text-fluency-text-secondary dark:text-fluency-text-dark-secondary">
+                  <FiBookOpen className="flex-shrink-0" />
+                  <span>
+                    {course.sectionCount}{" "}
+                    {course.sectionCount === 1 ? "Seção" : "Seções"}
+                  </span>
+                </div>
 
-                {course.lessons && (
-                  <div className="flex items-center gap-2 text-sm text-fluency-text-secondary dark:text-fluency-text-dark-secondary">
-                    <LuFileSpreadsheet  className="flex-shrink-0" />
-                    <span>
-                      {course.lessonCount}{" "}
-                      {course.lessonCount === 1 ? "Lição" : "Lições"}
-                    </span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2 text-sm text-fluency-text-secondary dark:text-fluency-text-dark-secondary">
+                  <LuFileSpreadsheet className="flex-shrink-0" />
+                  <span>
+                    {course.lessonCount}{" "}
+                    {course.lessonCount === 1 ? "Lição" : "Lições"}
+                  </span>
+                </div>
 
                 <p className="text-sm text-fluency-text-light dark:text-fluency-text-dark line-clamp-3 mt-2">
                   {course.description}
@@ -175,7 +195,9 @@ const StudentCoursesPage = () => {
 
                 <Link href={`cursos/curso?id=${course.id}`} className="mt-2">
                   <FluencyButton variant="confirm" className="w-full">
-                    <span>Ver Detalhes</span>
+                    <span>
+                      {course.isEnrolled ? "Continuar" : "Ver Detalhes"}
+                    </span>
                     <FiArrowRight className="ml-2 w-4 h-4" />
                   </FluencyButton>
                 </Link>

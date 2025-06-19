@@ -23,8 +23,8 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`h-[95vh] p-4 overflow-y-auto border-r bg-fluency-pages-light dark:bg-fluency-pages-dark border-gray-200 dark:border-gray-700
-        w-full md:h-[95vh] md:p-4
+      className={`h-[85vh] p-4 overflow-y-auto border-r bg-fluency-pages-light dark:bg-fluency-pages-dark border-gray-200 dark:border-gray-700
+        w-full md:h-[85vh] md:p-4
         md:transition-all md:duration-300
         ${collapsed ? "md:w-22" : "md:w-64"}`}
     >
