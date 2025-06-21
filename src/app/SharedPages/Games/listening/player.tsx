@@ -115,9 +115,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
         <div className="speed-controls text-[#E64E17]">
           <select className='p-2 bg-fluency-bg-dark rounded-md font-bold' id="speedSelect" value={playbackRate} onChange={handleSpeedChange}>
             <option value={0.5}>0.5x</option>
-            <option value={1.0}>1x</option>
-            <option value={1.5}>1.5x</option>
-            <option value={2.0}>2x</option>
+            <option value={0.8}>1x</option>
+            <option value={1.2}>1.5x</option>
+            <option value={1.8}>2x</option>
           </select>
         </div>
 

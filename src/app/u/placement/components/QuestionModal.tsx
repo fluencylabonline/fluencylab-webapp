@@ -1,5 +1,5 @@
 // components/QuestionModalComponent.tsx
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Question } from '../types'; // Import the Question interface
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -55,6 +55,22 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
 
     const currentQuestion = questions[currentQuestionIndex];
 
+    // Randomize options for MCQ questions
+    const randomizedOptions = useMemo(() => {
+        if (!currentQuestion || !currentQuestion.options || currentQuestion.type !== 'mcq') {
+            return [];
+        }
+        
+        // Create a copy of the options array and shuffle it
+        const shuffled = [...currentQuestion.options];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        return shuffled;
+    }, [currentQuestion?.id, currentQuestion?.options]); // Regenerate when question changes
+
     useEffect(() => {
         if (isOpen) {
             setSelectedOption(null);
@@ -76,6 +92,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
             setShowSpeakingSkipButton(true); // Initially show Skip button for speaking
         }
     }, [isOpen, currentQuestionIndex]);
+    
     const stopSpeaking = useCallback(() => {
         if (speechSynthesisRef.current && window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
@@ -351,7 +368,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
                                 </button>
                             </>
                         ) : (
-                            currentQuestion.options?.map((option, index) => (
+                            (currentQuestion.type === 'mcq' ? randomizedOptions : currentQuestion.options)?.map((option, index) => (
                                 <button
                                     key={index}
                                     disabled={disableOptions}

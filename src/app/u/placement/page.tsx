@@ -18,7 +18,6 @@ const abilityTranslations: { [key: string]: string } = {
   grammar: 'Gramática',
 };
 
-
 const testResultsKey = 'placementTestResults';
 const abilityProgressKey = 'abilityProgress';
 const abilityQuestionProgressKey = 'abilityQuestionProgress';

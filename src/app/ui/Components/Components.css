@@ -16,12 +16,12 @@
   align-items: center;
   justify-content: center;
   color: rgb(255, 255, 255);
-  box-shadow: 0 0 12px #151c6525;
+  box-shadow: 0 0 22px #030c6b93;
   overflow: visible !important;
 }
 
 .dark .toggle-icon {
-  box-shadow: 0 0 14px rgba(255, 215, 0, 0.75);
+  box-shadow: 0 0 22px rgba(255, 217, 0, 0.781);
 }
 
 .toggle-icon svg {
