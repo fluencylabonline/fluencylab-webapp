@@ -3,16 +3,17 @@
 import React, { useState } from 'react';
 import { Editor } from '@tiptap/react';
 import { Link, RotateCcw, ExternalLink, Trash2 } from 'lucide-react';
+import { useMobile } from '@/app/hooks/use-mobile';
 import Dropdown from './Dropdown/Dropdown';
 
 interface LinkComponentProps {
   editor: Editor | null;
-  isMobile?: boolean;
   placement?: any;
 }
 
-const LinkComponent: React.FC<LinkComponentProps> = ({ editor, isMobile = false, placement }) => {
+const LinkComponent: React.FC<LinkComponentProps> = ({ editor, placement }) => {
   const [linkUrl, setLinkUrl] = useState('');
+  const isMobile = useMobile();
 
   if (!editor) return null;
 
@@ -135,6 +136,7 @@ const LinkComponent: React.FC<LinkComponentProps> = ({ editor, isMobile = false,
       align="center"
       contentClassName="min-w-0"
       onOpenChange={handleDropdownOpen}
+      usePortal={isMobile}
     >
       <button
         title="Add Link (Ctrl+K)"

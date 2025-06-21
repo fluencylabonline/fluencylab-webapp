@@ -189,7 +189,7 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({
     {
       name: "link",
       isCustomComponent: true,
-      customComponent: <LinkComponent editor={editor} isMobile={isMobile} />,
+      customComponent: <LinkComponent editor={editor} />,
       icon: Bold, // Placeholder icon
       tooltip: "Link",
     },
@@ -218,7 +218,7 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({
     {
       name: "highlight",
       isCustomComponent: true,
-      customComponent: <HighlightDropdown editor={editor} />,
+      customComponent: <HighlightDropdown editor={editor} placement={isMobile ? "top" : "bottom"}/>,
       icon: Pilcrow, // Placeholder icon
       tooltip: "Highlight Text",
     },

@@ -4,6 +4,7 @@ import { Editor } from "@tiptap/react";
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from "lucide-react";
 import Dropdown from "./Dropdown";
 import ToolbarButton from "../ToolbarButton";
+import { useMobile } from "@/app/hooks/use-mobile";
 
 interface TextAlignDropdownProps {
   editor: Editor | null;
@@ -11,6 +12,8 @@ interface TextAlignDropdownProps {
 }
 
 const TextAlignDropdown: React.FC<TextAlignDropdownProps> = ({ editor, placement }) => {
+  const isMobile = useMobile();
+  
   const textAlignOptions = [
     { name: "Left", value: "left", icon: AlignLeft },
     { name: "Center", value: "center", icon: AlignCenter },
@@ -63,7 +66,12 @@ const TextAlignDropdown: React.FC<TextAlignDropdownProps> = ({ editor, placement
   );
 
   return (
-    <Dropdown content={dropdownContent} placement={placement} align="center">
+    <Dropdown 
+      content={dropdownContent} 
+      placement={isMobile ? "top" : placement} 
+      align="center"
+      usePortal={isMobile}
+    >
       <ToolbarButton icon={currentAlignIcon} tooltip="Text Alignment" />
     </Dropdown>
   );

@@ -57,7 +57,7 @@ export default function FloatStudentCallButton({ student }: FloatStudentCallButt
 
   return (
     <motion.div
-      className="fixed bottom-12 right-2 z-40"
+      className="fixed bottom-12 lg:right-12 md:right-5 right-2 z-40"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

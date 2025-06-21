@@ -154,7 +154,7 @@ const ToolbarAulas: React.FC<ToolbarAulasProps> = ({ editor, onGoBack, studentID
     {
       name: "link",
       isCustomComponent: true,
-      customComponent: <LinkComponent editor={editor} isMobile={isMobile} placement={'top'} />,
+      customComponent: <LinkComponent editor={editor} />,
       icon: Bold, // Placeholder icon
       tooltip: "Link",
     },
@@ -169,21 +169,21 @@ const ToolbarAulas: React.FC<ToolbarAulasProps> = ({ editor, onGoBack, studentID
     {
       name: "tableDropdown",
       isCustomComponent: true,
-      customComponent: <TableDropdown editor={editor} placement={'top'} />,
+      customComponent: <TableDropdown editor={editor} />,
       icon: Pilcrow, // Placeholder icon
       tooltip: "Table Options",
     },
     {
       name: "textAlign",
       isCustomComponent: true,
-      customComponent: <TextAlignDropdown editor={editor} placement={'top'} />,
+      customComponent: <TextAlignDropdown editor={editor}  />,
       icon: Pilcrow, // Placeholder icon
       tooltip: "Text Alignment",
     },
     {
       name: "highlight",
       isCustomComponent: true,
-      customComponent: <HighlightDropdown editor={editor} placement={'top'} />,
+      customComponent: <HighlightDropdown editor={editor} />,
       icon: Pilcrow, // Placeholder icon
       tooltip: "Highlight Text",
     },

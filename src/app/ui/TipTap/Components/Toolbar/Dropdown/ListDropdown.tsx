@@ -9,6 +9,7 @@ import {
 import Dropdown from "./Dropdown";
 import ToolbarButton from "../ToolbarButton";
 import DropdownMenuItem from "./DropdownMenuItem";
+import { useMobile } from "@/app/hooks/use-mobile";
 
 interface ListDropdownProps {
   editor: Editor | null;
@@ -16,6 +17,8 @@ interface ListDropdownProps {
 }
 
 const ListDropdown: React.FC<ListDropdownProps> = ({ editor, placement }) => {
+  const isMobile = useMobile();
+  
   // Task List Options
   const taskListOptions = [
     {
@@ -89,8 +92,9 @@ const ListDropdown: React.FC<ListDropdownProps> = ({ editor, placement }) => {
           ))}
         </div>
       }
-      placement={placement}
+      placement={isMobile ? "top" : placement}
       align="center"
+      usePortal={isMobile}
     >
       <ToolbarButton icon={icon} tooltip={tooltip} />
     </Dropdown>

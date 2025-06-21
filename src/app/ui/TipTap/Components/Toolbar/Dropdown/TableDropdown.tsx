@@ -13,6 +13,7 @@ import {
 import Dropdown from "./Dropdown";
 import ToolbarButton from "../ToolbarButton";
 import DropdownMenuItem from "./DropdownMenuItem";
+import { useMobile } from "@/app/hooks/use-mobile";
 
 interface TableDropdownProps {
   editor: Editor | null;
@@ -20,6 +21,8 @@ interface TableDropdownProps {
 }
 
 const TableDropdown: React.FC<TableDropdownProps> = ({ editor, placement }) => {
+  const isMobile = useMobile();
+  
   const tableOptions = [
     {
       name: "Inserir tabela",
@@ -129,7 +132,12 @@ const TableDropdown: React.FC<TableDropdownProps> = ({ editor, placement }) => {
   );
 
   return (
-    <Dropdown content={dropdownContent} placement={placement} align="center">
+    <Dropdown 
+      content={dropdownContent} 
+      placement={isMobile ? "top" : placement} 
+      align="center"
+      usePortal={isMobile}
+    >
       <ToolbarButton icon={Table} tooltip="Table Options" />
     </Dropdown>
   );

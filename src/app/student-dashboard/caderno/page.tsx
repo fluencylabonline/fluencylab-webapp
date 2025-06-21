@@ -480,7 +480,7 @@ function Caderno() {
             <div className="flex justify-between items-center mb-4 gap-4 tour-call-button">
               {/* <StudentCallButton student={{ studentID: id }} /> */}
 
-              <div className="relative w-48 tour-notebooks-search">
+              <div className="relative w-full tour-notebooks-search">
                 <input
                   type="text"
                   placeholder="Buscar lições..."
@@ -508,7 +508,7 @@ function Caderno() {
                       key={notebook.id}
                       whileHover={{ scale: 1.02, y: 5 }}
                       exit={{ scale: 0.9 }}
-                      className="bg-fluency-gray-50 dark:bg-fluency-gray-800 rounded-lg overflow-hidden border border-fluency-gray-200 dark:border-fluency-gray-700"
+                      className="bg-fluency-blue-100 dark:bg-fluency-gray-800 rounded-lg overflow-hidden border border-fluency-gray-200 dark:border-fluency-gray-700"
                     >
                       <div className="flex justify-between items-start p-4">
                         <Link
@@ -681,10 +681,10 @@ function Caderno() {
                           exit={{ opacity: 0, x: -20 }}
                           transition={{ delay: index * 0.05 }}
                           whileHover={{ scale: 1.02 }}
-                          className="flex items-center justify-between p-3 rounded-lg bg-fluency-gray-50 dark:bg-fluency-gray-800 hover:bg-fluency-blue-50 dark:hover:bg-fluency-gray-700 transition-colors duration-200"
+                          className="flex items-center justify-between p-3 rounded-lg bg-fluency-blue-100 dark:bg-fluency-gray-800 hover:bg-fluency-blue-50 dark:hover:bg-fluency-gray-700 transition-colors duration-200"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-md bg-fluency-blue-100 dark:bg-fluency-gray-700">
+                            <div className="p-2 rounded-md bg-fluency-blue-200 dark:bg-fluency-gray-700">
                               {renderMaterialIcon(material.name)}
                             </div>
                             <div className="max-w-[120px] overflow-hidden whitespace-nowrap">
@@ -754,7 +754,7 @@ function Caderno() {
                       )
                     }
                   >
-                    <div className="bg-fluency-yellow-100 dark:bg-fluency-yellow-900 p-2 rounded-md mt-0.5">
+                    <div className="bg-fluency-orange-100 dark:bg-fluency-orange-900 p-2 rounded-md mt-0.5">
                       <FaInfoCircle className="text-fluency-yellow-600 dark:text-fluency-yellow-300" />
                     </div>
                     <div>

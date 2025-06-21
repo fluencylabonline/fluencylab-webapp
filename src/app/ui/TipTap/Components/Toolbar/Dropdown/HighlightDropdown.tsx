@@ -4,7 +4,8 @@ import { Editor } from "@tiptap/react";
 import { X } from "lucide-react";
 import Dropdown from "./Dropdown";
 import ToolbarButton from "../ToolbarButton";
-import { Highlighter } from "lucide-react"; // Import the Highlighter icon
+import { Highlighter } from "lucide-react";
+import { useMobile } from "@/app/hooks/use-mobile";
 
 interface HighlightDropdownProps {
   editor: Editor | null;
@@ -12,6 +13,8 @@ interface HighlightDropdownProps {
 }
 
 const HighlightDropdown: React.FC<HighlightDropdownProps> = ({ editor, placement }) => {
+  const isMobile = useMobile();
+  
   const highlighterColors = [
     {
       name: "Yellow",
@@ -72,7 +75,12 @@ const HighlightDropdown: React.FC<HighlightDropdownProps> = ({ editor, placement
   );
 
   return (
-    <Dropdown content={dropdownContent} placement={placement} align="center">
+    <Dropdown 
+      content={dropdownContent} 
+      placement={isMobile ? "top" : placement} 
+      align="center"
+      usePortal={isMobile}
+    >
       <ToolbarButton
         icon={Highlighter}
         tooltip="Highlight Text"

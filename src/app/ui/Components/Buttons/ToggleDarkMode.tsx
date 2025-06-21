@@ -7,7 +7,9 @@ export function ToggleDarkMode() {
 
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('isDarkMode');
-    setIsChecked(storedDarkMode === 'true');
+    const isDark = storedDarkMode === 'true';
+    setIsChecked(isDark);
+    document.body.classList.toggle('dark', isDark);
   }, []);
 
   const handleCheckboxChange = () => {
