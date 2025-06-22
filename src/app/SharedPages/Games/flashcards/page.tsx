@@ -16,7 +16,7 @@ import {
 import { db } from "@/app/firebase";
 import "./flashcards.css";
 import FluencyButton from "@/app/ui/Components/Button/button";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import FluencyCloseButton from "@/app/ui/Components/ModalComponents/closeModal";
 import FluencyInput from "@/app/ui/Components/Input/input";
 import { FiEdit3 } from "react-icons/fi";
@@ -24,8 +24,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { Tabs, Tab } from "@nextui-org/tabs";
-import { IoClose } from "react-icons/io5";
-import Papa from "papaparse"; // --- NEW --- Import papaparse
+import Papa from "papaparse";
 import FlashcardPractice from "@/app/ui/Components/Games/FlashcardPractice";
 
 interface Deck {

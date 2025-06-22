@@ -52,6 +52,7 @@ interface Deck {
   deckTitle: string;
   deckDescription: string;
   questions: Question[];
+  tags?: string[];
 }
 
 interface Student {
@@ -101,15 +102,48 @@ export default function Quiz() {
   const [csvData, setCsvData] = useState<string>("");
   const [importing, setImporting] = useState<boolean>(false);
 
+  // 2. Adicionar estados para tags
+  const [currentTag, setCurrentTag] = useState<string>("");
+  const [deckTags, setDeckTags] = useState<string[]>([]);
+  const [selectedTagFilter, setSelectedTagFilter] = useState<string>("");
+
+  // 3. Função para adicionar tag
+  const addTag = () => {
+    if (currentTag.trim() !== "" && !deckTags.includes(currentTag.trim())) {
+      setDeckTags([...deckTags, currentTag.trim()]);
+      setCurrentTag("");
+    }
+  };
+
+  // 4. Função para remover tag
+  const removeTag = (tagToRemove: string) => {
+    setDeckTags(deckTags.filter((tag) => tag !== tagToRemove));
+  };
+
+  // 5. Função para obter todas as tags únicas
+  const getAllTags = () => {
+    const allTags = new Set<string>();
+    decks.forEach((deck) => {
+      deck.tags?.forEach((tag) => allTags.add(tag));
+    });
+    return Array.from(allTags).sort();
+  };
+
   // Handle search input
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredDecks = decks.filter((deck) =>
-    deck.deckTitle.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  // 6. Atualizar filtro de decks para incluir tags e busca
+  const filteredDecks = decks.filter((deck) => {
+    const matchesSearch = deck.deckTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesTag =
+      selectedTagFilter === "" || (deck.tags && deck.tags.includes(selectedTagFilter));
+    return matchesSearch && matchesTag;
+  });
+  
   // Fetch user scores
   useEffect(() => {
     if (session) {
@@ -315,6 +349,7 @@ export default function Quiz() {
     setDeckTitle(deck.deckTitle);
     setDeckDescription(deck.deckDescription);
     setQuestions(deck.questions);
+    setDeckTags(deck.tags || []);
     setEditQuizz(true);
   };
 
@@ -440,6 +475,7 @@ export default function Quiz() {
         deckTitle: deckTitle,
         deckDescription: deckDescription,
         questions: questions,
+        tags: deckTags,
       });
       toast.success("Deck created successfully!");
 
@@ -449,6 +485,7 @@ export default function Quiz() {
       setQuestionOption("");
       setOptions([]);
       setQuestions([]);
+      setDeckTags([]);
       setCreateQuizz(false);
 
       const snapshot = await getDocs(collection(db, "Quizzes"));
@@ -475,6 +512,7 @@ export default function Quiz() {
         deckTitle: deckTitle,
         deckDescription: deckDescription,
         questions: questions,
+        tags: deckTags,
       });
 
       closeEditQuiz();
@@ -698,6 +736,9 @@ export default function Quiz() {
 
           const newDeckTitle = firstRow.deckTitle;
           const newDeckDescription = firstRow.deckDescription;
+          const newDeckTags = firstRow.tags
+            ? firstRow.tags.split(",").map((tag: string) => tag.trim())
+            : [];
 
           // Process questions
           const questionsMap: Record<string, Question> = {};
@@ -735,6 +776,7 @@ export default function Quiz() {
 
           // Set state for preview
           setDeckTitle(newDeckTitle);
+          setDeckTags(newDeckTags);
           setDeckDescription(newDeckDescription);
           setQuestions(newQuestions);
           setShowImportModal(false);
@@ -769,6 +811,28 @@ export default function Quiz() {
             onChange={handleSearchChange}
           />
         </motion.div>
+        <div className="flex flex-row gap-2 items-center">
+          <select
+            value={selectedTagFilter}
+            onChange={(e) => setSelectedTagFilter(e.target.value)}
+            className="px-3 py-2 border rounded-lg bg-white dark:bg-fluency-gray-700"
+          >
+            <option value="">Todas as tags</option>
+            {getAllTags().map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+          {selectedTagFilter && (
+            <button
+              onClick={() => setSelectedTagFilter("")}
+              className="px-2 py-1 bg-fluency-red-100 text-fluency-red-700 rounded-md text-sm hover:bg-fluency-red-200"
+            >
+              Limpar
+            </button>
+          )}
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
           {role === "teacher" && (
@@ -779,7 +843,7 @@ export default function Quiz() {
               >
                 <FluencyButton className="w-full" onClick={openCreateQuiz}>
                   <span className="flex items-center">
-                    Create <span className="hidden sm:inline ml-1">Quiz</span>
+                    Criar <span className="hidden sm:inline ml-1">Quiz</span>
                     <RxCardStackPlus className="ml-2 w-5 h-5" />
                   </span>
                 </FluencyButton>
@@ -794,7 +858,7 @@ export default function Quiz() {
                   onClick={openImportModal}
                 >
                   <span className="flex items-center">
-                    <span className="hidden sm:inline">Import</span>
+                    <span className="hidden sm:inline">Importar</span>
                     <FiUpload className="ml-2 w-5 h-5" />
                   </span>
                 </FluencyButton>
@@ -836,14 +900,33 @@ export default function Quiz() {
                 <span className="bg-fluency-blue-100 dark:bg-fluency-blue-900 text-fluency-blue-800 dark:text-fluency-blue-200 text-xs px-2 py-1 rounded-full">
                   {deck.questions.length} perguntas
                 </span>
+                
                 <span className="font-semibold text-fluency-blue-600 dark:text-fluency-blue-400">
                   Pontos: {userScores[deck.deckTitle] || 0}
                 </span>
               </div>
             </div>
 
+{deck.tags && deck.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 p-4">
+                    {deck.tags.slice(0, 3).map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-fluency-green-100 dark:bg-fluency-green-900 text-fluency-green-800 dark:text-fluency-green-200 text-xs px-2 py-1 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {deck.tags.length > 3 && (
+                      <span className="text-xs text-fluency-gray-500">
+                        +{deck.tags.length - 3} mais
+                      </span>
+                    )}
+                  </div>
+                )}
             {role === "teacher" && (
               <div className="bg-fluency-gray-100 dark:bg-fluency-gray-900 p-2 flex justify-end gap-2">
+                
                 <Tooltip
                   content="Edit deck"
                   className="bg-fluency-blue-600 p-1 rounded-md text-white"
@@ -1008,7 +1091,7 @@ export default function Quiz() {
                       transition={{ duration: 0.5 }}
                     >
                       <h3 className="text-2xl font-bold mb-2">
-                        Quiz Completed!
+                        Quiz Completado!
                       </h3>
                       <motion.div
                         className="text-5xl font-bold text-fluency-blue-500 mb-6"
@@ -1040,13 +1123,13 @@ export default function Quiz() {
           <div className="bg-white dark:bg-fluency-gray-800 rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">Import Quiz from CSV</h3>
+                <h3 className="text-xl font-bold">Importar Quiz de CSV</h3>
                 <FluencyCloseButton onClick={closeImportModal} />
               </div>
 
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-2">
-                  Upload CSV File
+                  Fazer upload do arquivo CSV:
                 </label>
                 <input
                   type="file"
@@ -1058,7 +1141,7 @@ export default function Quiz() {
 
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">
-                  Or paste CSV data:
+                  Ou cole o CSV aqui:
                 </label>
                 <textarea
                   value={csvData}
@@ -1071,23 +1154,23 @@ export default function Quiz() {
 
               <div className="flex justify-end gap-3">
                 <FluencyButton variant="gray" onClick={closeImportModal}>
-                  Cancel
+                  Cancelar
                 </FluencyButton>
                 <FluencyButton
                   variant="confirm"
                   onClick={handleCSVImport}
                   disabled={importing}
                 >
-                  {importing ? "Importing..." : "Import"}
+                  {importing ? "Importando..." : "Importar"}
                 </FluencyButton>
               </div>
 
               <div className="mt-6 bg-fluency-blue-50 dark:bg-fluency-blue-900 p-4 rounded-lg">
-                <h4 className="font-bold mb-2">CSV Format Example:</h4>
+                <h4 className="font-bold mb-2">CSV Exemplo de formato:</h4>
                 <pre className="text-xs overflow-x-auto">
-                  {`deckTitle,deckDescription,questionTitle,option1,isCorrect1,option2,isCorrect2,option3,isCorrect3,option4,isCorrect4
-Math Basics,Basic math questions,What is 2+2?,4,true,5,false,6,false,8,false
-Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
+                  {`deckTitle,deckDescription,tags,questionTitle,option1,isCorrect1,option2,isCorrect2,option3,isCorrect3,option4,isCorrect4
+                    Math Basics,Basic math questions,"math,basic,arithmetic",What is 2+2?,4,true,5,false,6,false,8,false
+                    Math Basics,Basic math questions,"math,basic,arithmetic",What is 3*3?,6,false,9,true,12,false,15,false`}
                 </pre>
               </div>
             </div>
@@ -1098,10 +1181,10 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
       {/* Create Quiz Modal */}
       {createQuiz && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-fluency-gray-800 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+          <div className="bg-white dark:bg-fluency-gray-800 rounded-xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto">
             <div className="p-6 overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">Create New Quiz</h3>
+                <h3 className="text-xl font-bold">Crie um novo quiz</h3>
                 <FluencyCloseButton onClick={closeCreateQuiz} />
               </div>
 
@@ -1110,7 +1193,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Deck Title
+                      Título do Deck
                     </label>
                     <FluencyInput
                       value={deckTitle}
@@ -1121,7 +1204,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Deck Description
+                      Descrição do Deck
                     </label>
                     <FluencyInput
                       value={deckDescription}
@@ -1132,7 +1215,40 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Question
+                      Tags
+                    </label>
+                    <div className="flex gap-2">
+                      <FluencyInput
+                        value={currentTag}
+                        onChange={(e) => setCurrentTag(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && addTag()}
+                        placeholder="Adicionar tag"
+                      />
+                      <FluencyButton onClick={addTag}>Adicionar</FluencyButton>
+                    </div>
+                    {deckTags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {deckTags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="bg-fluency-blue-100 dark:bg-fluency-blue-900 text-fluency-blue-800 dark:text-fluency-blue-200 text-sm px-2 py-1 rounded-full flex items-center gap-1"
+                          >
+                            {tag}
+                            <button
+                              onClick={() => removeTag(tag)}
+                              className="text-fluency-red-500 hover:text-fluency-red-700"
+                            >
+                              <IoClose size={14} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Pergunta
                     </label>
                     <FluencyInput
                       value={questionTitle}
@@ -1143,7 +1259,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Options
+                      Opções
                     </label>
                     <div className="flex gap-2">
                       <FluencyInput
@@ -1157,15 +1273,13 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                         className="min-w-[120px]"
                         onClick={addOption}
                       >
-                        Add Option
+                        Add Opção
                       </FluencyButton>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium">
-                      Current Options
-                    </label>
+                    <label className="block text-sm font-medium">Opções</label>
                     <ul className="space-y-2 max-h-40 overflow-y-auto p-2 bg-fluency-gray-100 dark:bg-fluency-gray-900 rounded-lg">
                       {options.map((option, index) => (
                         <li
@@ -1198,7 +1312,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                       className="w-full"
                       onClick={finishQuestion}
                     >
-                      Add Question
+                      Add Pergunta
                     </FluencyButton>
                   </div>
                 </div>
@@ -1206,13 +1320,13 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                 {/* Right Column */}
                 <div className="space-y-4">
                   <h4 className="font-semibold">
-                    Added Questions ({questions.length})
+                    Perguntas adicionadas ({questions.length})
                   </h4>
 
                   <div className="bg-fluency-blue-50 dark:bg-fluency-blue-900 p-3 rounded-lg mb-4">
                     <p className="text-sm">
-                      <span className="font-bold">Tip:</span> Add at least 4
-                      questions to create the quiz
+                      <span className="font-bold">Dica:</span> Adicione pelo
+                      menos 4 perguntas para criar um quiz.
                     </p>
                   </div>
 
@@ -1249,23 +1363,23 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                     {questions.length === 0 && (
                       <div className="text-center py-8 text-fluency-gray-500">
                         <TbCardsFilled className="mx-auto text-4xl mb-2" />
-                        <p>No questions added yet</p>
+                        <p>Nenhuma pergunta adicionada ainda</p>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-6 border-t border-fluency-gray-200 dark:border-fluency-gray-700 mt-4">
+              <div className="flex justify-end gap-3 pt-4 border-t border-fluency-gray-200 dark:border-fluency-gray-700 mt-4">
                 <FluencyButton variant="gray" onClick={closeCreateQuiz}>
-                  Cancel
+                  Cancelar
                 </FluencyButton>
                 <FluencyButton
                   variant="confirm"
                   onClick={handleCreateQuiz}
                   disabled={questions.length < 4}
                 >
-                  Create Quiz
+                  Criar Quiz
                 </FluencyButton>
               </div>
             </div>
@@ -1276,11 +1390,11 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
       {/* Edit Quiz Modal */}
       {editQuiz && selectedDeck && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-fluency-gray-800 rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
+          <div className="bg-white dark:bg-fluency-gray-800 rounded-xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto">
             <div className="p-6 overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">
-                  Edit Quiz: {selectedDeck.deckTitle}
+                  Editar Quiz: {selectedDeck.deckTitle}
                 </h3>
                 <FluencyCloseButton onClick={closeEditQuiz} />
               </div>
@@ -1290,67 +1404,98 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Deck Title
+                      Título do Quiz
                     </label>
                     <FluencyInput
                       value={deckTitle}
                       onChange={(e) => setDeckTitle(e.target.value)}
-                      placeholder="Quiz Title"
+                      placeholder="Título do Quiz"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Deck Description
+                      Descrição
                     </label>
                     <FluencyInput
                       value={deckDescription}
                       onChange={(e) => setDeckDescription(e.target.value)}
-                      placeholder="Quiz Description"
+                      placeholder="Descrição"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Tags
+                    </label>
+                    <div className="flex gap-2">
+                      <FluencyInput
+                        value={currentTag}
+                        onChange={(e) => setCurrentTag(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && addTag()}
+                        placeholder="Adicionar tag"
+                      />
+                      <FluencyButton onClick={addTag}>Adicionar</FluencyButton>
+                    </div>
+                    {deckTags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {deckTags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="bg-fluency-blue-100 dark:bg-fluency-blue-900 text-fluency-blue-800 dark:text-fluency-blue-200 text-sm px-2 py-1 rounded-full flex items-center gap-1"
+                          >
+                            {tag}
+                            <button
+                              onClick={() => removeTag(tag)}
+                              className="text-fluency-red-500 hover:text-fluency-red-700"
+                            >
+                              <IoClose size={14} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="bg-fluency-yellow-50 dark:bg-fluency-yellow-900 p-3 rounded-lg">
                     <p className="text-sm">
-                      <span className="font-bold">Tip:</span> Add new questions
-                      below
+                      <span className="font-bold">Dica:</span> Adicione novas
+                      perguntas abaixo
                     </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      New Question
+                      Nova pergunta
                     </label>
                     <FluencyInput
                       value={questionTitle}
                       onChange={(e) => setQuestionTitle(e.target.value)}
-                      placeholder="New question text"
+                      placeholder="Nova pergunta aqui"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      New Option
+                      Nova opção
                     </label>
                     <div className="flex gap-2">
                       <FluencyInput
                         value={questionOption}
                         onChange={(e) => setQuestionOption(e.target.value)}
-                        placeholder="Option text"
+                        placeholder="Opção aqui"
                       />
                       <FluencyButton
                         className="min-w-[120px]"
                         onClick={addOption}
                       >
-                        Add Option
+                        Add Opção
                       </FluencyButton>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium">
-                      Current Options
-                    </label>
+                    <label className="block text-sm font-medium">Opções</label>
                     <ul className="space-y-2 max-h-40 overflow-y-auto p-2 bg-fluency-gray-100 dark:bg-fluency-gray-900 rounded-lg">
                       {options.map((option, index) => (
                         <li
@@ -1383,14 +1528,14 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                     onClick={addQuestionToEdit}
                     disabled={!questionTitle || options.length === 0}
                   >
-                    Add New Question
+                    Adicionar Pergunta Nova
                   </FluencyButton>
                 </div>
 
                 {/* Questions List */}
                 <div className="lg:col-span-2 space-y-4">
                   <h4 className="font-semibold">
-                    Questions ({questions.length})
+                    Perguntas ({questions.length})
                   </h4>
 
                   <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
@@ -1416,9 +1561,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                         </div>
 
                         <div className="space-y-2 mt-3">
-                          <label className="text-sm font-medium">
-                            Options:
-                          </label>
+                          <label className="text-sm font-medium">Opções:</label>
                           <ul className="space-y-2">
                             {question.options.map((option, oIndex) => (
                               <li
@@ -1472,16 +1615,19 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                       </div>
                     ))}
                   </div>
-                </div>
-              </div>
 
-              <div className="flex justify-end gap-3 pt-6 border-t border-fluency-gray-200 dark:border-fluency-gray-700 mt-4">
-                <FluencyButton variant="gray" onClick={closeEditQuiz}>
-                  Cancel
-                </FluencyButton>
-                <FluencyButton variant="confirm" onClick={handleSaveEditQuiz}>
-                  Save Changes
-                </FluencyButton>
+                  <div className="flex justify-end gap-3 pt-6 border-t border-fluency-gray-200 dark:border-fluency-gray-700 mt-4">
+                    <FluencyButton variant="gray" onClick={closeEditQuiz}>
+                      Cancelar
+                    </FluencyButton>
+                    <FluencyButton
+                      variant="confirm"
+                      onClick={handleSaveEditQuiz}
+                    >
+                      Salvar mudanças
+                    </FluencyButton>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1494,7 +1640,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
           <div className="bg-white dark:bg-fluency-gray-800 rounded-xl shadow-2xl w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">Assign Quiz to Students</h3>
+                <h3 className="text-xl font-bold">Enviar como tarefa</h3>
                 <FluencyCloseButton onClick={closeStudentModal} />
               </div>
 
@@ -1510,14 +1656,14 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
 
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">
-                  Select Student
+                  Selecionar aluno
                 </label>
                 <select
                   value={selectedStudentId}
                   onChange={(e) => setSelectedStudentId(e.target.value)}
                   className="w-full p-3 border rounded-lg bg-white dark:bg-fluency-gray-700"
                 >
-                  <option value="">Select a student</option>
+                  <option value="">Selecinar aluno</option>
                   {students.map((student) => (
                     <option key={student.id} value={student.id}>
                       {student.name}
@@ -1528,13 +1674,14 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
 
               <div className="bg-fluency-yellow-50 dark:bg-fluency-yellow-900 p-3 rounded-lg mb-4">
                 <p className="text-sm">
-                  This will add the quiz as a task in the student dashboard
+                  Isso vai adicionar o quiz como uma tarefa para o aluno
+                  selecionado.
                 </p>
               </div>
 
               <div className="flex justify-end gap-3">
                 <FluencyButton variant="gray" onClick={closeStudentModal}>
-                  Cancel
+                  Cancelar
                 </FluencyButton>
                 <FluencyButton
                   variant="confirm"
@@ -1543,7 +1690,7 @@ Math Basics,Basic math questions,What is 3*3?,6,false,9,true,12,false,15,false`}
                   }
                   disabled={!selectedStudentId}
                 >
-                  Assign Task
+                  Enviar
                 </FluencyButton>
               </div>
             </div>
