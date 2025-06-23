@@ -145,8 +145,8 @@ const FlashcardComponent = ({ node }) => {
   const currentCard = filteredCards[currentIndex] || {};
 
   return (
-    <NodeViewWrapper className="flashcard-container">
-      <div className="flex flex-row items-center justify-center gap-4 bg-gray-700 text-white p-2 px-4 rounded-md mb-4">
+    <NodeViewWrapper className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-row items-center justify-center gap-4 bg-gray-700 text-white p-2 px-4 rounded-md">
         <button
           className={`font-bold duration-300 ease-in-out transition-all px-2 py-1 rounded-md ${
             mode === 'normal' ? 'bg-blue-500 text-white' : 'hover:text-fluency-blue-500'
@@ -173,17 +173,7 @@ const FlashcardComponent = ({ node }) => {
         </button>
       </div>
 
-      {/* Progress bar */}
-      {mode === 'srs' && (
-        <div className="hidden w-full h-2 bg-gray-300 rounded-full overflow-hidden mb-4">
-          <div
-            className="h-full bg-blue-500 transition-all duration-500"
-            style={{ width: `${((filteredCards.length / cards.length) * 100).toFixed(1)}%` }}
-          />
-        </div>
-      )}
-
-      <div className="flex flex-row items-center justify-center w-full gap-2 mb-4">
+      <div className="flex flex-row items-center justify-center w-full gap-2">
         <button onClick={() => (mode === 'srs' ? goToNextCard() : handleNavigation('prev'))}>
           <GrFormPrevious className="w-6 h-6 hover:text-blue-600 duration-300 ease-in-out transition-all" />
         </button>
@@ -215,39 +205,45 @@ const FlashcardComponent = ({ node }) => {
         </button>
       </div>
 
-      {/* Type mode input */}
       {mode === 'type' && (
-        <div className="flex flex-row items-center justify-center gap-2">
-          <input
-            className={`px-2 py-1 outline-none rounded-md font-semibold w-64
-              ${
-                feedback === 'correct'
-                  ? 'bg-green-600 text-white'
-                  : feedback === 'incorrect'
-                  ? 'bg-red-600 text-white'
-                  : 'bg-fluency-gray-300 dark:bg-fluency-gray-700 text-white dark:text-white'
-              }`}
-            type="text"
-            value={userInput}
-            onChange={(e) => {
-              setUserInput(e.target.value);
-              setFeedback(null);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') checkAnswer();
-            }}
-          />
-          <button onClick={checkAnswer} title="Check answer">
-            <FaRegCheckCircle className="w-6 h-6 text-fluency-gray-500 hover:text-green-600 duration-300 ease-in-out transition-all" />
-          </button>
+        <div className="flex flex-row items-center justify-center gap-2 w-full">
+          <div className="relative w-64">
+            <input
+              className={`px-2 py-1 outline-none rounded-md font-semibold w-full pr-10
+                ${
+                  feedback === 'correct'
+                    ? 'bg-green-600 text-white'
+                    : feedback === 'incorrect'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-fluency-gray-300 dark:bg-fluency-gray-700 text-white dark:text-white'
+                }`}
+              type="text"
+              value={userInput}
+              onChange={(e) => {
+                setUserInput(e.target.value);
+                setFeedback(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') checkAnswer();
+              }}
+            />
+            <button
+              onClick={checkAnswer}
+              title="Check answer"
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+              tabIndex={-1}
+              style={{ background: 'none', border: 'none', padding: 0 }}
+            >
+              <FaRegCheckCircle className="w-6 h-6 text-fluency-gray-500 hover:text-green-600 duration-300 ease-in-out transition-all" />
+            </button>
+          </div>
         </div>
       )}
 
-      {/* SRS difficulty buttons */}
-      {mode === 'srs' && (
+      {mode === 'srs' && isFlipped && (
         <div className="flex flex-row items-center justify-center gap-1 mt-4">
           <button
-            className="bg-fluency-orange-600 hover:bg-fluency-orange-700 duration-300 ease-in-out transition-all p-1 px-4 rounded-l-lg font-bold text-white"
+            className="bg-fluency-green-600 hover:bg-fluency-green-700 duration-300 ease-in-out transition-all p-1 px-4 rounded-l-lg font-bold text-white"
             onClick={() => handleSrsSelection('easy')}
           >
             Fácil
@@ -280,7 +276,7 @@ const FlashcardComponent = ({ node }) => {
       )}
 
       {/* Navigation index */}
-      <div className="card-navigation mt-4 text-center text-white">
+      <div className="card-navigation text-center text-white">
         <span>
           {filteredCards.length === 0 ? 0 : currentIndex + 1}/{filteredCards.length}
         </span>

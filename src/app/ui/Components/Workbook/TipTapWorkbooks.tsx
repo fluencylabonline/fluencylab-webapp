@@ -12,7 +12,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
 import Document from '@tiptap/extension-document'
 import Image from '@tiptap/extension-image'
-import { EditorContent, useEditor } from '@tiptap/react'
+import { EditorContent, Extension, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
@@ -43,9 +43,7 @@ import GoalExtension from '@/app/ui/TipTap/Components/Extensions/Goal/GoalExtens
 import VocabulabExtension from '@/app/ui/TipTap/Components/Extensions/Vocabulab/VocabulabExtension';
 import DownloadExtension from '@/app/ui/TipTap/Components/Extensions/Download/DownloadExtension';
 import FlashcardExtension from '@/app/ui/TipTap/Components/Extensions/Flashcards/FlashcardExtension';
-
-//Icons
-import { LuTimerOff, LuTimer } from 'react-icons/lu';
+import QuizExtenstion from "@/app/ui/TipTap/Components/Extensions/Quiz/QuizExtension";
 
 //Style
 import '../../TipTap/styles.scss'
@@ -58,17 +56,27 @@ import FixedBottomToolbar from './ToolbarWorkbooks';
 const Tiptap = ({ onChange, content, isEditable, isTeacherNotebook }: any) => {
   const { data: session } = useSession();
 
-  const CustomBulletList = BulletList.extend({
+  const TabInsertExtension = Extension.create({
+    name: "customTab",
+
     addKeyboardShortcuts() {
       return {
-        'Tab': () => this.editor.commands.toggleBulletList(),
-      }
+        Tab: () => {
+          const { state, dispatch } = this.editor.view;
+          const { tr, selection } = state;
+          const tabSpaces = "    "; // 4 spaces
+
+          dispatch(tr.insertText(tabSpaces, selection.from, selection.to));
+          return true;
+        },
+      };
     },
-  })
+  });
 
   const editor = useEditor({
     editable: isEditable,
     extensions: [
+      QuizExtenstion,
       TextStudentExtension,
       TextTeacherExtension,
       TextTipExtension,
@@ -101,7 +109,7 @@ const Tiptap = ({ onChange, content, isEditable, isTeacherNotebook }: any) => {
       TaskItem.configure({
         nested: true,
       }),
-      CustomBulletList,
+      TabInsertExtension,
       Link.configure({
         openOnClick: true,
       }),

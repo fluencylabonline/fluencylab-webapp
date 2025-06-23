@@ -47,6 +47,7 @@ import Vocabulab from "./Extensions/Vocabulab/VocabulabModal";
 import Download from "./Extensions/Download/DownloadModal";
 import StudentTasks from "./StudentTasks";
 import FlashcardModal from "./Extensions/Flashcards/FlashcardModal";
+import QuizModal from "./Extensions/Quiz/QuizModal";
 import { useSession } from "next-auth/react";
 
 interface ToolsProps {
@@ -76,6 +77,7 @@ const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook, isEditable }) 
     vocabulab: false,
     download: false,
     flashcard: false,
+    quiz: false,
 
     workbooksList: false,
     versions: false,
@@ -254,7 +256,13 @@ const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook, isEditable }) 
       label: "Flashcards",
       icon: <LuBookOpen className="text-xl" />,
       modal: "flashcard",
-      description: "Add interactive flashcards",
+      description: "Adicione flashcards para treinar vocabulário",
+    },
+    {
+      label: "Quiz",
+      icon: <LuBookOpen className="text-xl" />,
+      modal: "quiz",
+      description: "Adicione um quiz interativo",
     },
   ];
 
@@ -532,6 +540,11 @@ const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook, isEditable }) 
         isOpen={modals.flashcard}
         onClose={() => toggleModal("flashcard", false)}
         editor={editor}
+      />
+      <QuizModal 
+        isOpen={modals.quiz} 
+        onClose={() => toggleModal("quiz", false)} 
+        editor={editor} 
       />
 
       {/* <motion.div
