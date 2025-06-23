@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FluencyButton from "@/app/ui/Components/Button/button";
 import FluencyInput from "@/app/ui/Components/Input/input";
@@ -37,6 +37,7 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
   otherDecks,
   children,
 }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       closeModal();
@@ -51,6 +52,10 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isModalOpen, handleKeyDown]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 10);
+  };
 
   return (
     <AnimatePresence>
@@ -67,45 +72,56 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25 }}
-            className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col max-h-[90vh]"
+            className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 bg-gray-800/50 border-b border-gray-700">
+            {/* Sticky Header */}
+            <div 
+              className={`sticky top-0 z-10 flex items-center justify-between p-6 transition-all ${
+                isScrolled 
+                  ? 'bg-fluency-bg-light/90 dark:bg-fluency-bg-dark/90 backdrop-blur-md border-b border-fluency-gray-200 dark:border-fluency-gray-700' 
+                  : 'bg-transparent'
+              }`}
+            >
               <div>
                 <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
                   Gerenciar Decks
                 </h2>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-fluency-text-gray-light dark:text-fluency-text-gray-dark mt-1">
                   Crie novos decks ou gerencie os existentes
                 </p>
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                className="text-fluency-text-light dark:text-fluency-text-dark hover:text-fluency-blue-500 dark:hover:text-fluency-blue-300 transition-colors p-1 rounded-full hover:bg-fluency-gray-100 dark:hover:bg-fluency-gray-800"
               >
                 <X size={24} />
               </button>
             </div>
 
-            {/* Main Content */}
-            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
+            {/* Scrollable Content */}
+            <div 
+              className="p-6 overflow-y-auto flex-1 custom-scrollbar"
+              onScroll={handleScroll}
+            >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Create New Deck Section */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="p-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl"
+                  className="p-6 bg-fluency-sections-light dark:bg-fluency-sections-dark border border-fluency-gray-200 dark:border-fluency-gray-700 rounded-xl"
                 >
                   <div className="flex items-center gap-3 mb-6">
-                    <FolderPlus className="w-6 h-6 text-cyan-400" />
-                    <h3 className="text-xl font-semibold text-white">Criar Novo Deck</h3>
+                    <FolderPlus className="w-6 h-6 text-fluency-blue-500 dark:text-fluency-blue-300" />
+                    <h3 className="text-xl font-semibold text-fluency-text-light dark:text-fluency-text-dark">
+                      Criar Novo Deck
+                    </h3>
                   </div>
                   
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                      <label className="block text-sm font-medium text-fluency-text-gray-light dark:text-fluency-text-gray-dark mb-2">
                         Nome do Novo Deck
                       </label>
                       <FluencyInput
@@ -113,7 +129,7 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                         placeholder="Ex: Vocabulário de Negócios"
                         value={newDeckName}
                         onChange={(e) => setNewDeckName(e.target.value)}
-                        className="w-full py-3 px-4"
+                        className="w-full py-3 px-4 bg-fluency-bg-light dark:bg-fluency-bg-dark border border-fluency-gray-200 dark:border-fluency-gray-700 text-fluency-text-light dark:text-fluency-text-dark"
                       />
                     </div>
                     
@@ -123,8 +139,8 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                     >
                       <FluencyButton 
                         onClick={createDeck} 
-                        variant="purple"
-                        className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-500"
+                        variant="confirm"
+                        className="w-full py-3 rounded-xl"
                       >
                         <Plus className="mr-2" />
                         Criar Deck
@@ -138,23 +154,25 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="p-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl"
+                  className="p-6 bg-fluency-sections-light dark:bg-fluency-sections-dark border border-fluency-gray-200 dark:border-fluency-gray-700 rounded-xl"
                 >
                   <div className="flex items-center gap-3 mb-6">
-                    <Tag className="w-6 h-6 text-cyan-400" />
-                    <h3 className="text-xl font-semibold text-white">Gerenciar Deck Existente</h3>
+                    <Tag className="w-6 h-6 text-fluency-blue-500 dark:text-fluency-blue-300" />
+                    <h3 className="text-xl font-semibold text-fluency-text-light dark:text-fluency-text-dark">
+                      Gerenciar Deck Existente
+                    </h3>
                   </div>
                   
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                      <label className="block text-sm font-medium text-fluency-text-gray-light dark:text-fluency-text-gray-dark mb-2">
                         Selecione um Deck
                       </label>
                       <div className="relative">
                         <select
                           value={selectedDeck}
                           onChange={(e) => handleDeckSelection(e.target.value)}
-                          className="appearance-none w-full py-3 px-4 pr-10 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                          className="appearance-none w-full py-3 px-4 pr-10 rounded-lg bg-fluency-bg-light dark:bg-fluency-bg-dark border border-fluency-gray-200 dark:border-fluency-gray-700 text-fluency-text-light dark:text-fluency-text-dark focus:border-fluency-blue-500 focus:ring-1 focus:ring-fluency-blue-500"
                         >
                           <option value="">-- Selecione um Deck --</option>
                           {otherDecks.map((deck) => (
@@ -163,7 +181,7 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                             </option>
                           ))}
                         </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-fluency-text-gray-light dark:text-fluency-text-gray-dark">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                           </svg>
@@ -179,7 +197,9 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                         className="pt-4 space-y-6"
                       >
                         <div>
-                          <h4 className="text-lg font-semibold text-white mb-3">Tags do Deck</h4>
+                          <h4 className="text-lg font-semibold text-fluency-text-light dark:text-fluency-text-dark mb-3">
+                            Tags do Deck
+                          </h4>
                           
                           {tags.length > 0 ? (
                             <div className="flex flex-wrap gap-2 min-h-[40px]">
@@ -191,12 +211,12 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0.8, opacity: 0 }}
                                     whileHover={{ scale: 1.05 }}
-                                    className="bg-gradient-to-r from-cyan-700 to-blue-700 text-white px-3 py-1.5 rounded-full text-sm flex items-center shadow-md"
+                                    className="bg-fluency-blue-500 dark:bg-fluency-blue-700 text-fluency-text-light px-3 py-1.5 rounded-full text-sm flex items-center shadow-md"
                                   >
                                     #{tag}
                                     <button
                                       onClick={() => removeTag(index)}
-                                      className="ml-2 text-white hover:text-gray-300 text-xs font-bold"
+                                      className="ml-2 text-fluency-text-light hover:text-fluency-red-500 text-xs font-bold"
                                     >
                                       &#x2715;
                                     </button>
@@ -205,8 +225,10 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                               </AnimatePresence>
                             </div>
                           ) : (
-                            <div className="text-center py-4 bg-gray-800/50 rounded-lg border border-dashed border-gray-700">
-                              <p className="text-gray-400">Nenhuma tag adicionada ainda</p>
+                            <div className="text-center py-4 bg-fluency-bg-light dark:bg-fluency-bg-dark rounded-lg border border-dashed border-fluency-gray-200 dark:border-fluency-gray-700">
+                              <p className="text-fluency-text-gray-light dark:text-fluency-text-gray-dark">
+                                Nenhuma tag adicionada ainda
+                              </p>
                             </div>
                           )}
                         </div>
@@ -217,7 +239,7 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                             placeholder="Adicionar nova tag"
                             value={newTag}
                             onChange={(e) => setNewTag(e.target.value)}
-                            className="flex-grow py-2"
+                            className="flex-grow py-2 bg-fluency-bg-light dark:bg-fluency-bg-dark border border-fluency-gray-200 dark:border-fluency-gray-700 text-fluency-text-light dark:text-fluency-text-dark"
                           />
                           <motion.div
                             whileHover={{ scale: 1.05 }}
@@ -244,22 +266,11 @@ const DeckCreationModal: React.FC<DeckCreationModalProps> = ({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="mt-8 border-t border-gray-700 pt-6"
+                  className="mt-8 border-t border-fluency-gray-200 dark:border-fluency-gray-700 pt-6"
                 >
                   {children}
                 </motion.div>
               )}
-            </div>
-            
-            {/* Footer */}
-            <div className="p-6 border-t border-gray-700 flex justify-end">
-              <FluencyButton 
-                onClick={closeModal} 
-                variant="glass"
-                className="px-6 py-2.5 rounded-xl"
-              >
-                Fechar
-              </FluencyButton>
             </div>
           </motion.div>
         </motion.div>

@@ -193,16 +193,16 @@ const LearningProgress: React.FC = () => {
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-xl border border-gray-700"
+        className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 shadow-xl border border-fluency-gray-200 dark:border-fluency-gray-500"
       >
-        <div className="flex items-center gap-3 mb-6">
+        <div className="hidden items-center gap-3 mb-6">
           <IoStatsChart className="w-6 h-6 text-cyan-400" />
           <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-emerald-300">
             Progresso de Aprendizado
           </h3>
         </div>
         
-        <div className="flex justify-center py-8">
+        <div className="flex justify-center py-6">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       </motion.div>
@@ -213,9 +213,9 @@ const LearningProgress: React.FC = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-xl border border-gray-700"
+      className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-3 shadow-xl border border-fluency-gray-200 dark:border-fluency-gray-500"
     >
-      <div className="flex items-center gap-3 mb-6">
+      <div className="hidden items-center gap-3 mb-6">
         <IoStatsChart className="w-6 h-6 text-cyan-400" />
         <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-emerald-300">
           Progresso de Aprendizado
@@ -223,16 +223,16 @@ const LearningProgress: React.FC = () => {
       </div>
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <motion.div 
           whileHover={{ scale: 1.03 }}
-          className="bg-gradient-to-br from-gray-800 to-gray-700 p-4 rounded-xl border border-gray-700 text-center"
+          className="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl border border-gray-500 dark:border-gray-700 text-center"
         >
           <div className="flex justify-center mb-2">
             <IoBook className="w-6 h-6 text-blue-400" />
           </div>
-          <div className="text-2xl font-bold text-white">{stats.totalCards}</div>
-          <div className="text-sm text-gray-400">Total</div>
+          <div className="text-xl font-bold text-gray-800 dark:text-white">{stats.totalCards}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Total</div>
         </motion.div>
         
         <motion.div 
@@ -242,8 +242,8 @@ const LearningProgress: React.FC = () => {
           <div className="flex justify-center mb-2">
             <IoCheckmarkCircle className="w-6 h-6 text-green-400" />
           </div>
-          <div className="text-2xl font-bold text-green-400">{stats.masteredCount}</div>
-          <div className="text-sm text-gray-400">Dominadas</div>
+          <div className="text-xl font-bold text-green-400">{stats.masteredCount}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Dominadas</div>
         </motion.div>
         
         <motion.div 
@@ -253,8 +253,8 @@ const LearningProgress: React.FC = () => {
           <div className="flex justify-center mb-2">
             <IoFlame className="w-6 h-6 text-amber-400" />
           </div>
-          <div className="text-2xl font-bold text-amber-400">{stats.learningCount}</div>
-          <div className="text-sm text-gray-400">Aprendendo</div>
+          <div className="text-xl font-bold text-amber-400">{stats.learningCount}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Aprendendo</div>
         </motion.div>
         
         <motion.div 
@@ -264,12 +264,12 @@ const LearningProgress: React.FC = () => {
           <div className="flex justify-center mb-2">
             <IoWarning className="w-6 h-6 text-red-400" />
           </div>
-          <div className="text-2xl font-bold text-red-400">{stats.strugglingCount}</div>
-          <div className="text-sm text-gray-400">Difíceis</div>
+          <div className="text-xl font-bold text-red-400">{stats.strugglingCount}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Difíceis</div>
         </motion.div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="hidden md:grid-cols-2 gap-6">
         {/* Mastered Cards */}
         <div>
           <div className="flex items-center gap-2 mb-4">
@@ -324,7 +324,7 @@ const LearningProgress: React.FC = () => {
         </div>
 
         {/* Struggling Cards */}
-        <div>
+        <div className='hidden'>
           <div className="flex items-center gap-2 mb-4">
             <IoWarning className="w-5 h-5 text-red-400" />
             <h4 className="text-md font-semibold text-white">
@@ -377,7 +377,7 @@ const LearningProgress: React.FC = () => {
       </div>
 
       {/* Progress Bar */}
-      <div className="mt-6 pt-4 border-t border-gray-700">
+      <div className="hidden mt-6 pt-4 border-t border-gray-700">
         <div className="flex justify-between text-sm text-gray-400 mb-2">
           <span>Progresso Geral</span>
           <span>{stats.totalCards > 0 ? Math.round((stats.masteredCount / stats.totalCards) * 100) : 0}% dominado</span>

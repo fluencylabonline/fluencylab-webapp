@@ -87,12 +87,12 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ type: "spring", damping: 25 }}
-            className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+            className="bg-fluency-pages-light dark:bg-fluency-pages-dark border border-gray-700 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 bg-gray-800/50 border-b border-gray-700">
+            <div className="flex items-center justify-between p-6 bg-fluency-pages-light dark:bg-fluency-pages-dark border-b border-gray-700">
               <div>
-                <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                <h2 className="text-2xl font-bold text-fluency-text-light dark:text-fluency-text-dark">
                   Decks Globais
                 </h2>
                 <p className="text-sm text-gray-400 mt-1">
@@ -114,11 +114,8 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
                   type="text"
                   placeholder="Buscar decks por nome ou tag..."
                   value={searchTerm}
+                  variant='glass'
                   onChange={handleSearchChange}
-                  className="w-full pl-12 py-4 rounded-xl bg-gray-800/70 border-gray-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                />
-                <Search 
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" 
                 />
               </div>
             </div>
@@ -131,12 +128,12 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
                   animate={{ opacity: 1 }}
                   className="text-center py-10"
                 >
-                  <div className="bg-gray-800/50 rounded-2xl border border-gray-700 p-8 max-w-md mx-auto">
-                    <Search className="mx-auto h-16 w-16 text-cyan-500 p-3 bg-gray-700 rounded-full" />
-                    <h3 className="mt-6 text-xl font-medium text-gray-300">
+                  <div className="bg-gray-400/50 dark:bg-gray-800/50 rounded-2xl p-8 max-w-md mx-auto">
+                    <Search className="mx-auto h-16 w-16 text-green-500 p-3 bg-gray-700 rounded-full" />
+                    <h3 className="mt-6 text-xl font-medium text-gray-800 dark:text-gray-300">
                       Nenhum deck encontrado
                     </h3>
-                    <p className="mt-2 text-gray-400">
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
                       {searchTerm 
                         ? "Tente buscar com outros termos." 
                         : "Ainda não há decks públicos disponíveis."}
@@ -144,7 +141,7 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
                   </div>
                 </motion.div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-3">
                   {filteredDecks.map((deck) => (
                     <motion.div
                       key={deck.id}
@@ -152,23 +149,16 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
                       animate={{ opacity: 1, y: 0 }}
                       whileHover={{ 
                         y: -5,
-                        borderColor: '#06b6d4',
+                        borderColor: '#22c55e',
                         boxShadow: '0 10px 25px -5px rgba(6, 182, 212, 0.1)'
                       }}
-                      className="bg-gray-800/60 backdrop-blur-sm rounded-xl border border-gray-700 p-5 transition-all duration-300"
+                      className="flex flex-wrap justify-between bg-gray-400/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 transition-all duration-300"
                     >
-                      <div className="mb-4">
+                      <div className="mb-2">
                         <div className="flex justify-between items-start gap-3">
-                          <h3 className="text-lg font-semibold text-cyan-100 mb-2">
+                          <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2">
                             {deck.name}
                           </h3>
-                          
-                          {deck.popularity !== undefined && (
-                            <div className="flex items-center text-xs bg-gray-700 px-2 py-1 rounded-full">
-                              <Star className="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" />
-                              {deck.popularity}
-                            </div>
-                          )}
                         </div>
                         
                         {deck.tags && deck.tags.length > 0 && (
@@ -198,20 +188,7 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
                         >
                           <span className="flex items-center justify-center gap-2">
                             <BookOpen className="w-5 h-5" />
-                            Praticar
-                          </span>
-                        </FluencyButton>
-                        <FluencyButton
-                          onClick={() => {
-                            onManageDeck(deck.id);
-                            onClose();
-                          }}
-                          variant="glass"
-                          className="flex-1 py-3 rounded-xl"
-                        >
-                          <span className="flex items-center justify-center gap-2">
-                            <Settings className="w-5 h-5" />
-                            Gerenciar
+                            Adicionar
                           </span>
                         </FluencyButton>
                       </div>
@@ -221,16 +198,6 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
               )}
             </div>
 
-            {/* Footer */}
-            <div className="flex justify-end gap-3 p-6 border-t border-gray-700">
-              <FluencyButton 
-                onClick={onClose} 
-                variant="danger"
-                className="px-6 py-3 rounded-xl"
-              >
-                Fechar
-              </FluencyButton>
-            </div>
           </motion.div>
         </motion.div>
       )}
@@ -242,31 +209,31 @@ const GlobalDecksModal: React.FC<GlobalDecksModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-60 p-4"
+            className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[99] p-4"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="bg-gradient-to-br from-gray-800 to-gray-900 border border-cyan-500/30 rounded-2xl shadow-xl w-full max-w-lg"
+              className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-2xl shadow-xl w-full max-w-lg"
             >
               <div className="p-8 text-center">
                 <div className="mx-auto w-16 h-16 rounded-full bg-cyan-900/30 flex items-center justify-center mb-6">
-                  <BookOpen className="w-8 h-8 text-cyan-400" />
+                  <BookOpen className="w-8 h-8 text-green-400" />
                 </div>
                 
-                <h3 className="text-xl font-bold mb-4 text-white">
+                <h3 className="text-xl font-bold mb-4 text-gray-600 dark:text-gray-400">
                   Adicionar Deck
                 </h3>
                 
-                <p className="text-gray-300 mb-2">
+                <p className="text-gray-800 dark:text-gray-300 mb-2">
                   Deseja adicionar o deck
                 </p>
                 
-                <p className="text-xl font-semibold text-cyan-300 mb-6">
+                <p className="text-xl font-semibold text-green-500 mb-6">
                   {globalDecks.find(d => d.id === selectedDeck)?.name || selectedDeck}
                 </p>
                 
-                <p className="text-gray-400 mb-6 text-sm">
+                <p className="text-gray-500 dark:text-gray-300 mb-6 text-sm">
                   Este deck será adicionado aos seus decks pessoais para estudo
                 </p>
                 

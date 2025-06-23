@@ -121,7 +121,7 @@ const WeeklyHeatmap: React.FC = () => {
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-xl border border-gray-700"
+        className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-6 shadow-xl border border-fluency-gray-200 dark:border-fluency-gray-500"
       >
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-emerald-300">
@@ -143,13 +143,13 @@ const WeeklyHeatmap: React.FC = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-xl border border-gray-700"
+      className="w-full h-full bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 shadow-xl border border-fluency-gray-200 dark:border-fluency-gray-500"
     >
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-emerald-300">
+        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fluency-blue-400 to-fluency-blue-700">
           Atividade Semanal
-        </h3>
-        <div className="bg-gradient-to-r from-cyan-700/30 to-emerald-700/30 rounded-full px-3 py-1 text-xs font-medium">
+        </h1>
+        <div className="bg-fluency-blue-300 dark:bg-fluency-blue-500 rounded-full px-3 py-1 text-xs text-white font-bold">
           {totalReviews} revisões
         </div>
       </div>
@@ -190,7 +190,7 @@ const WeeklyHeatmap: React.FC = () => {
                     <div className="font-medium text-white">
                       {getFormattedDate(day.date)}
                     </div>
-                    <div className="text-cyan-400">
+                    <div className="text-white font-bold truncate">
                       {day.count} {day.count === 1 ? 'revisão' : 'revisões'}
                     </div>
                   </motion.div>
@@ -206,34 +206,32 @@ const WeeklyHeatmap: React.FC = () => {
 
         {/* Legend */}
         <div className="flex flex-col items-center space-y-3 pt-4 border-t border-gray-700">
-          <div className="text-xs text-gray-400">Intensidade de revisões</div>
+          <div className="text-xs text-gray-800 dark:text-gray-400">Intensidade de revisões</div>
           <div className="flex items-center justify-center space-x-1">
-            <span className="text-xs text-gray-500">Menos</span>
+            <span className="text-xs text-gray-800 dark:text-gray-400">Menos</span>
             {[0, 1, 2, 3, 4].map(level => (
               <div
                 key={level}
                 className={`w-4 h-4 md:w-5 md:h-5 rounded-sm ${getIntensityColor(level)} border border-gray-700`}
               />
             ))}
-            <span className="text-xs text-gray-500">Mais</span>
+            <span className="text-xs text-gray-800 dark:text-gray-400">Mais</span>
           </div>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-3 text-sm pt-4 border-t border-gray-700">
-          <div className="bg-gray-800/50 rounded-lg p-3 text-center">
-            <div className="text-gray-400 text-xs mb-1">Dias ativos</div>
-            <div className="text-xl font-bold text-cyan-400">
-              {weekData.filter(day => day.count > 0).length}
-              <span className="text-sm text-gray-400">/7</span>
+          <div className="bg-gray-600/15 dark:bg-gray-800/50 rounded-lg p-3 text-center">
+            <div className="text-gray-800 dark:text-gray-400 text-xs mb-1">Dias ativos</div>
+            <div className="text-xl font-bold text-indigo-400">
+              {weekData.filter(day => day.count > 0).length}<span className="text-sm text-gray-800 dark:text-gray-400">/7</span>
             </div>
           </div>
           
-          <div className="bg-gray-800/50 rounded-lg p-3 text-center">
-            <div className="text-gray-400 text-xs mb-1">Média diária</div>
+          <div className="bg-gray-600/15 dark:bg-gray-800/50 rounded-lg p-3 text-center">
+            <div className="text-gray-800 dark:text-gray-400 text-xs mb-1">Média diária</div>
             <div className="text-xl font-bold text-emerald-400">
-              {Math.round(totalReviews / 7)}
-              <span className="text-sm text-gray-400"> revisões</span>
+              {Math.round(totalReviews / 7)}<span className="text-sm text-gray-800 dark:text-gray-400"> revisões</span>
             </div>
           </div>
         </div>

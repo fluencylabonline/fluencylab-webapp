@@ -18,16 +18,13 @@ import "./flashcards.css";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import Papa from "papaparse";
-import FlashcardPractice from "@/app/ui/Components/Games/FlashcardPractice";
+import FlashcardPractice from "@/app/SharedPages/Flashcard/components/FlashcardPractice";
 
 // Importa os componentes
 import DeckList from "./components/DeckList";
 import DeckCreationModal from "./components/DeckCreationModal";
 import CardManagement from "./components/CardManagement";
 import GlobalDecksModal from "./components/GlobalDecksModal";
-import WeeklyHeatmap from "./components/WeeklyHeatmap";
-import LearningProgress from "./components/LearningProgress";
-import ReviewHeatmap from "@/app/ui/Components/Games/ReviewHeatmap";
 
 // Interfaces
 interface Deck {
@@ -622,7 +619,7 @@ const FlashCard: FC = () => {
   }, [selectedDeck, globalDecksPractice, currentUserId]);
 
   return (
-    <div className="flashcard-container">
+    <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 shadow-xl border border-fluency-gray-200 dark:border-fluency-gray-500 h-full w-full">
       {!selectedDeck || !globalDecksPractice ? (
         <DeckList
           searchTerm={searchTerm}
@@ -644,8 +641,6 @@ const FlashCard: FC = () => {
           deckName={decks.find(deck => deck.id === selectedDeck)?.name || ""}        
         />
       )}
-
-      <LearningProgress />
 
       <GlobalDecksModal
         isOpen={isGlobalDecksModalOpen}
