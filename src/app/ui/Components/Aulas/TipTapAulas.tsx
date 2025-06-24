@@ -114,7 +114,8 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
-      Highlight,
+      TextStyle,
+      Highlight.configure({ multicolor: true }),
       Color,
       Placeholder.configure({
         placeholder: ({ node }) => {
@@ -154,7 +155,7 @@ const Tiptap = ({ onChange, content, isTyping, lastSaved, animation, timeLeft, b
     <div className='flex flex-col min-w-full min-h-full gap-8 justify-center items-center text-black dark:text-white'>
       <ToolbarAulas editor={editor} studentID={undefined} isTeacherNotebook={true} isEditable={true}/>
       <EditorContent editor={editor} />
-      <div className='fixed bottom-[5rem] right-5 z-[999]'>
+      <div className='fixed bottom-[5rem] right-5 z-[999] rounded-md bg-gray-400 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700'>
         <Tools editor={editor} isTeacherNotebook={true} isEditable={true} />
       </div>
       <Bubble editor={editor}/>
