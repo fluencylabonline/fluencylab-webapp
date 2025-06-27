@@ -90,9 +90,11 @@ export default function Perfil() {
           setCNPJ(data.CNPJ || "");
           setMeioPagamento(data.meioPagamento || "pix");
           setMensalidade(data.mensalidade || "");
-          setContratoFoiAssinado(
-            data.ContratoAssinado || { signed: false, logs: [] }
-          );
+          const contratos = data.ContratosAssinados;
+            setContratoFoiAssinado(
+              contratos && typeof contratos.signed === 'boolean' ? contratos : { signed: false, logs: [] }
+            );
+
           setNivelamentoPermitido(data.NivelamentoPermitido !== false);
         }
       },
