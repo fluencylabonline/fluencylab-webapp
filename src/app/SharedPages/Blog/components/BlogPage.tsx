@@ -22,6 +22,7 @@ import FluencyInput from '@/app/ui/Components/Input/input'
 import FluencySelect from '@/app/ui/Components/Input/select'
 import { useSession } from 'next-auth/react'; // Import useSession
 import ConfirmationModal from '@/app/ui/Components/ModalComponents/confirmation';
+import { useRouter } from "next/navigation";
 
 type Blog = {
   id: string
@@ -43,6 +44,7 @@ export default function BlogPage() {
   const [search, setSearch] = useState('')
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([])
   const [availableLevels, setAvailableLevels] = useState<string[]>([])
+  const router = useRouter();
 
   // State for the confirmation modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -174,7 +176,7 @@ export default function BlogPage() {
           ))}
         </FluencySelect>
         {isAdmin && (
-          <FluencyButton variant='glass'>
+          <FluencyButton variant='glass' onClick={() => router.push('blog/new')}>
             Criar
           </FluencyButton>
         )}
