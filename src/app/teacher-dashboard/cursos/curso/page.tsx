@@ -43,7 +43,7 @@ export default function CourseDetailPageContent() {
       setLoading(true);
       try {
         // 1. Fetch Course Details
-        const courseRef = doc(db, "courses", courseId);
+        const courseRef = doc(db, "Cursos", courseId);
         const courseSnap = await getDoc(courseRef);
 
         if (!courseSnap.exists()) {
@@ -62,12 +62,12 @@ export default function CourseDetailPageContent() {
         }
 
         // Fetch Sections/Lessons and calculate total lessons
-        const sectionsCol = collection(db, "courses", courseId, "sections");
+        const sectionsCol = collection(db, "Cursos", courseId, "sections");
         const sectionsSnap = await getDocs(sectionsCol);
         let totalLessonsCount = 0;
         const sectionsData = await Promise.all(sectionsSnap.docs.map(async (sectionDoc) => {
             const section = { id: sectionDoc.id, ...sectionDoc.data() } as Section;
-            const lessonsCol = collection(db, "courses", courseId, "sections", sectionDoc.id, "lessons");
+            const lessonsCol = collection(db, "Cursos", courseId, "sections", sectionDoc.id, "lessons");
             const lessonsSnap = await getDocs(lessonsCol);
             section.lessons = lessonsSnap.docs.map(lessonDoc => ({ id: lessonDoc.id, ...lessonDoc.data() } as Lesson));
             totalLessonsCount += section.lessons.length;

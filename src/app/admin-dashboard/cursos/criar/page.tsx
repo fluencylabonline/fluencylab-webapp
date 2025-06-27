@@ -86,7 +86,7 @@ const CreateCoursePage = () => {
         createdAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, "courses"), newCourse);
+      await addDoc(collection(db, "Cursos"), newCourse);
       toast.success("Curso criado com sucesso!", { id: toastId });
       router.push("/admin-dashboard/cursos");
     } catch (error) {

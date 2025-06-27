@@ -83,12 +83,12 @@ export default function LessonPageContent() {
         let currentSection: Section | null = null;
         let sections: Section[] = [];
 
-        const courseRef = doc(db, "courses", courseId);
+        const courseRef = doc(db, "Cursos", courseId);
         const courseSnap = await getDoc(courseRef);
         if (courseSnap.exists()) {
           // Fetch sections ordered by an 'order' field (assuming it exists)
           const sectionsQuery = query(
-            collection(db, "courses", courseId, "sections"),
+            collection(db, "Cursos", courseId, "sections"),
             orderBy("order", "asc")
           );
           const sectionsSnap = await getDocs(sectionsQuery);
@@ -102,7 +102,7 @@ export default function LessonPageContent() {
             const lessonsQuery = query(
               collection(
                 db,
-                "courses",
+                "Cursos",
                 courseId,
                 "sections",
                 sectionDoc.id,
@@ -217,7 +217,7 @@ export default function LessonPageContent() {
       // 🔍 Reconta TODAS as lições do curso
       let totalLessons = 0;
       const sectionsQuery = query(
-        collection(db, "courses", courseId, "sections"),
+        collection(db, "Cursos", courseId, "sections"),
         orderBy("order", "asc")
       );
       const sectionsSnap = await getDocs(sectionsQuery);
@@ -226,7 +226,7 @@ export default function LessonPageContent() {
         const lessonsQuery = query(
           collection(
             db,
-            "courses",
+            "Cursos",
             courseId,
             "sections",
             sectionDoc.id,

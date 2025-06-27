@@ -75,7 +75,7 @@ export default function EditCourseForm() {
     if (!courseId) return;
     setLoadingContent(true);
     try {
-      const courseRef = doc(db, "courses", courseId);
+      const courseRef = doc(db, "Cursos", courseId);
       const courseSnap = await getDoc(courseRef);
       if (courseSnap.exists()) {
         const courseData = { id: courseSnap.id, ...courseSnap.data() } as Course;
@@ -87,11 +87,11 @@ export default function EditCourseForm() {
         return;
       }
 
-      const sectionsQuery = query(collection(db, "courses", courseId, "sections"), orderBy("order", "asc"));
+      const sectionsQuery = query(collection(db, "Cursos", courseId, "sections"), orderBy("order", "asc"));
       const sectionsSnap = await getDocs(sectionsQuery);
       const sectionsData = await Promise.all(sectionsSnap.docs.map(async (sectionDoc) => {
         const section = { id: sectionDoc.id, ...sectionDoc.data(), lessons: [] } as unknown as Section;
-        const lessonsQuery = query(collection(db, "courses", courseId, "sections", sectionDoc.id, "lessons"), orderBy("order", "asc"));
+        const lessonsQuery = query(collection(db, "Cursos", courseId, "sections", sectionDoc.id, "lessons"), orderBy("order", "asc"));
         const lessonsSnap = await getDocs(lessonsQuery);
         section.lessons = lessonsSnap.docs.map(lessonDoc => ({ id: lessonDoc.id, ...lessonDoc.data() } as Lesson));
         return section;
@@ -149,7 +149,7 @@ export default function EditCourseForm() {
         setImageFile(null);
       }
 
-      const courseRef = doc(db, "courses", courseId);
+      const courseRef = doc(db, "Cursos", courseId);
       const { id, ...courseDetailsToUpdate } = { ...course, imageUrl };
       await updateDoc(courseRef, courseDetailsToUpdate);
 
@@ -173,11 +173,11 @@ export default function EditCourseForm() {
     const toastId = toast.loading(editingSection ? "Atualizando seção..." : "Criando seção...");
     try {
       if (editingSection) {
-        const sectionRef = doc(db, "courses", courseId, "sections", editingSection.id);
+        const sectionRef = doc(db, "Cursos", courseId, "sections", editingSection.id);
         await updateDoc(sectionRef, { title: sectionData.title });
       } else {
         const newOrder = sections.length > 0 ? Math.max(...sections.map(s => s.order)) + 1 : 0;
-        const sectionsCol = collection(db, "courses", courseId, "sections");
+        const sectionsCol = collection(db, "Cursos", courseId, "sections");
         await addDoc(sectionsCol, { title: sectionData.title, order: newOrder });
       }
       await fetchCourseAndContent();
@@ -203,7 +203,7 @@ export default function EditCourseForm() {
     try {
       const lessonsCollectionRef = collection(
         db,
-        "courses",
+        "Cursos",
         courseId,
         "sections",
         sectionId,
@@ -239,7 +239,7 @@ export default function EditCourseForm() {
       }
       await firestoreBatch.commit();
 
-      const sectionRef = doc(db, "courses", courseId, "sections", sectionId);
+      const sectionRef = doc(db, "Cursos", courseId, "sections", sectionId);
       await deleteDoc(sectionRef);
       await fetchCourseAndContent();
       toast.success("Seção e todo o seu conteúdo excluídos com sucesso!", { id: toastId });
@@ -260,7 +260,7 @@ export default function EditCourseForm() {
     if (!courseId || !currentSectionIdForLesson) return;
       const toastId = toast.loading(editingLesson ? "Atualizando lição..." : "Criando lição...");
       try {
-          const sectionRef = collection(db, "courses", courseId, "sections", currentSectionIdForLesson, "lessons");
+          const sectionRef = collection(db, "Cursos", courseId, "sections", currentSectionIdForLesson, "lessons");
           let lessonDocRef;
 
           if (editingLesson) {
@@ -330,7 +330,7 @@ export default function EditCourseForm() {
     if (!courseId || !confirm("Tem certeza que deseja excluir esta lição?")) return;
     const toastId = toast.loading("Excluindo lição...");
     try {
-      const lessonRef = doc(db, "courses", courseId, "sections", sectionId, "lessons", lessonId);
+      const lessonRef = doc(db, "Cursos", courseId, "sections", sectionId, "lessons", lessonId);
       await deleteDoc(lessonRef);
       await fetchCourseAndContent();
       toast.success("Lição excluída!", { id: toastId });
@@ -362,7 +362,7 @@ export default function EditCourseForm() {
       }
       const toastId = toast.loading(editingQuizQuestion ? "Atualizando questão..." : "Adicionando questão...");
       try {
-          const lessonRef = doc(db, "courses", courseId, "sections", currentLessonForQuiz.sectionId, "lessons", currentLessonForQuiz.id);
+          const lessonRef = doc(db, "Cursos", courseId, "sections", currentLessonForQuiz.sectionId, "lessons", currentLessonForQuiz.id);
           let updatedQuiz: QuizQuestion[];
 
           if (editingQuizQuestion) {
@@ -395,7 +395,7 @@ export default function EditCourseForm() {
       if (!courseId || !lesson.sectionId || !confirm("Tem certeza que deseja excluir esta questão do quiz?")) return;
       const toastId = toast.loading("Excluindo questão...");
       try {
-          const lessonRef = doc(db, "courses", courseId, "sections", lesson.sectionId, "lessons", lesson.id);
+          const lessonRef = doc(db, "Cursos", courseId, "sections", lesson.sectionId, "lessons", lesson.id);
           const updatedQuiz = (lesson.quiz || []).filter(q => q.id !== questionId);
           await updateDoc(lessonRef, { quiz: updatedQuiz });
           await fetchCourseAndContent();
@@ -423,7 +423,7 @@ export default function EditCourseForm() {
       items[targetIndex].order = tempOrder;
 
       const batch = writeBatch(db);
-      const basePath = collection(db, "courses", courseId, type === 'section' ? "sections" : `sections/${sectionId}/lessons`);
+      const basePath = collection(db, "Cursos", courseId, type === 'section' ? "sections" : `sections/${sectionId}/lessons`);
 
       const item1Ref = doc(basePath, items[index].id);
       batch.update(item1Ref, { order: items[index].order });

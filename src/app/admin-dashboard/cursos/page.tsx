@@ -31,7 +31,7 @@ const AdminCoursesPage = () => {
     const fetchCourses = async () => {
       setLoadingCourses(true);
       try {
-        const querySnapshot = await getDocs(collection(db, "courses"));
+        const querySnapshot = await getDocs(collection(db, "Cursos"));
         const coursesData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
@@ -54,7 +54,7 @@ const AdminCoursesPage = () => {
     const toastId = toast.loading('Excluindo curso...');
 
     try {
-      await deleteDoc(doc(db, "courses", courseToDeleteId));
+      await deleteDoc(doc(db, "Cursos", courseToDeleteId));
       setCourses(courses.filter(course => course.id !== courseToDeleteId));
       toast.success('Curso excluído com sucesso!', { id: toastId });
     } catch (error) {

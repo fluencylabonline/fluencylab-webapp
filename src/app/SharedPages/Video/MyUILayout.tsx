@@ -24,8 +24,20 @@ import { ParticipantsGridPiP } from './ParticipantsGridPiP';
 import { BiCamera, BiCameraOff, BiMicrophone, BiMicrophoneOff } from 'react-icons/bi';
 
 // Common container and notch classes for responsiveness
-const containerClasses =
-  "fixed top-0 right-0 bottom-0 w-full max-w-sm z-[9999] rounded-l-2xl overflow-y-auto bg-slate-200 dark:bg-fluency-gray-700 shadow-lg shadow-gray-400 dark:shadow-fluency-gray-800 p-4";
+const containerClasses = `
+  fixed top-0 right-0 bottom-0 w-full max-w-sm z-[9999]
+  rounded-l-2xl overflow-y-auto
+  bg-white/20 dark:bg-black/20
+  backdrop-blur-lg
+  border border-white/30 dark:border-white/10
+  text-fluency-gray-800 dark:text-fluency-gray-100
+  hover:bg-white/30 hover:dark:bg-black/30
+  hover:border-white/50 dark:hover:border-white/20
+  focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent
+  transition-all duration-300
+  shadow-[0_4px_12px_rgba(0,0,0,0.05)]
+  p-4
+`;
 const notchClasses =
   "absolute left-2 top-1/2 transform -translate-y-1/2 w-[5px] h-12 bg-gray-400 dark:bg-gray-200 rounded-full mx-auto mb-4 cursor-grab";
 

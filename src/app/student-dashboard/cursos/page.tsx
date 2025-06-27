@@ -37,7 +37,7 @@ const StudentCoursesPage = () => {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        const coursesCollection = collection(db, "courses");
+        const coursesCollection = collection(db, "Cursos");
         const studentRole = session?.user?.role || "student";
 
         const q = query(coursesCollection, where("role", "==", studentRole));
@@ -48,7 +48,7 @@ const StudentCoursesPage = () => {
             const courseId = docSnapshot.id;
             const courseData = docSnapshot.data();
 
-            const sectionsRef = collection(db, "courses", courseId, "sections");
+            const sectionsRef = collection(db, "Cursos", courseId, "sections");
             const sectionsSnapshot = await getDocs(sectionsRef);
             const sectionDocs = sectionsSnapshot.docs;
 
@@ -59,7 +59,7 @@ const StudentCoursesPage = () => {
               const lessonsSnapshot = await getDocs(
                 collection(
                   db,
-                  "courses",
+                  "Cursos",
                   courseId,
                   "sections",
                   sectionDoc.id,

@@ -256,12 +256,17 @@ return (
   <div
     className={`
       fixed ${isMobile ? 'bottom-4' : 'bottom-4'} left-1/2 z-20
-      transform -translate-x-1/2
-      bg-tiptap-page-light py-2 px-3
-      dark:bg-tiptap-page-dark
-      rounded-xl shadow-xl
-      border border-gray-200 dark:border-gray-700
-      backdrop-blur-sm bg-opacity-90
+      -translate-x-1/2 transform
+      rounded-xl px-3 py-2
+      bg-white/20 dark:bg-black/50
+      backdrop-blur-lg
+      border border-white/30 dark:border-white/10
+      text-fluency-gray-800 dark:text-fluency-gray-100
+      hover:bg-white/30 hover:dark:bg-black/30
+      hover:border-white/50 dark:hover:border-white/20
+      focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent
+      transition-all duration-300
+      shadow-[0_4px_12px_rgba(0,0,0,0.05)]
     `}
   >
     <div
