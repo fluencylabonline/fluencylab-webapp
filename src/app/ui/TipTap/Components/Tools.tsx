@@ -602,8 +602,8 @@ const Tools: React.FC<ToolsProps> = ({ editor, isTeacherNotebook, isEditable }) 
                 </motion.button>
               </div>
 
-              <div className="p-4 pb-8 overflow-y-auto max-h-[calc(95vh-60px)]">
-                <div className="flex flex-col lg:flex-row items-start justify-center flex-wrap gap-4">
+              <div className="p-3 pb-8 overflow-y-auto max-h-[calc(95vh-60px)]">
+                <div className="flex flex-col lg:flex-row items-start justify-center flex-wrap gap-3">
                   {/* Faixas Section - Responsive */}
                   <motion.div
                     className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1rem)] flex flex-col items-center gap-1 bg-gray-300 dark:bg-gray-900 rounded-md p-4"

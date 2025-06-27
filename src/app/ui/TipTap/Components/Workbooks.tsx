@@ -461,7 +461,7 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
             ></motion.div>
 
             <motion.div
-              className="relative bg-fluency-pages-light dark:bg-fluency-gray-900 rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-hidden"
+              className="relative bg-fluency-pages-light dark:bg-fluency-gray-900 rounded-xl shadow-xl w-full max-w-[95vw] max-h-[95vh] overflow-hidden"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}

@@ -176,22 +176,17 @@ const Dropdown: React.FC<DropdownProps> = ({
           animate="visible"
           exit="exit"
           variants={dropdownVariants}
-className={`
-  ${usePortal ? '' : 'absolute'}
-  ${usePortal ? 'z-[9999]' : 'z-[99]'}
-  min-w-[160px]
-  bg-white/20 dark:bg-black/80
-  backdrop-blur-lg
-  border border-white/30 dark:border-white/10
-  text-fluency-gray-800 dark:text-fluency-gray-100
-  transition-all duration-300
-  shadow-[0_4px_12px_rgba(0,0,0,0.05)]
-  rounded-xl overflow-hidden
-  ${usePortal ? '' : dropdownPlacementClasses}
-  ${usePortal ? '' : dropdownAlignmentClasses}
-  ${contentClassName}
-`}
-
+          className={`
+            ${usePortal ? '' : 'absolute'}
+            ${usePortal ? 'z-[9999]' : 'z-[99]'}
+            min-w-[160px]
+            bg-white dark:bg-gray-800 rounded-lg shadow-lg
+            border border-gray-200 dark:border-gray-700
+            overflow-hidden
+            ${usePortal ? '' : dropdownPlacementClasses}
+            ${usePortal ? '' : dropdownAlignmentClasses}
+            ${contentClassName}
+          `}
           style={usePortal ? getPortalAlignmentStyle() : {}}
           role="menu"
           onClick={(e) => {

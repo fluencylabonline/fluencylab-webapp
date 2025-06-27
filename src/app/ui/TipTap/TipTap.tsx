@@ -74,8 +74,11 @@ const Tiptap = ({
         Tab: () => {
           const { state, dispatch } = this.editor.view;
           const { tr, selection } = state;
-          const tabSpaces = "    "; // 4 spaces
 
+          const isSelectionEmpty = selection.from === selection.to;
+          if (!isSelectionEmpty) return false; // don't override normal selection behavior
+
+          const tabSpaces = "    "; // 4 spaces
           dispatch(tr.insertText(tabSpaces, selection.from, selection.to));
           return true;
         },

@@ -318,26 +318,18 @@ const ResponsiveToolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-<div
-  className={`
-    fixed z-50 w-full flex-shrink-0
-    ${isMobile ? "bottom-0 left-0 right-0" : "top-0 left-0 right-0"}
-    bg-white/20 dark:bg-black/20
-    backdrop-blur-lg
-    border-b border-white/30 dark:border-white/10
-    text-fluency-gray-800 dark:text-fluency-gray-100
-    hover:bg-white/30 hover:dark:bg-black/30
-    hover:border-white/50 dark:hover:border-white/20
-    focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent
-    transition-all duration-300
-    shadow-[0_4px_12px_rgba(0,0,0,0.05)]
-    py-1
-  `}
->
-
+    <div
+      className={`
+        fixed z-50 w-full flex-shrink-0
+        bg-tiptap-page-light py-1
+        dark:bg-tiptap-page-dark
+        border-b border-gray-200 dark:border-gray-700
+        ${isMobile ? "bottom-0 left-0 right-0" : "top-0 left-0 right-0"}
+      `}
+    >
       <div
         className={`
-          flex items-center gap-2
+          flex items-center gap-2 
           ${
             isMobile
               ? "overflow-x-auto scrollbar-hide px-2"

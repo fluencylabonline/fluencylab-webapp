@@ -56,10 +56,15 @@ function Popovers({ editor }: PopoversProps) {
   }, []);
 
   useEffect(() => {
-    // Show animation when bubble menu becomes active
+    let delayTimeout: ReturnType<typeof setTimeout>;
+
     if (editor.isActive("text") && !visible) {
-      setVisible(true);
+      delayTimeout = setTimeout(() => setVisible(true), 300); // 300ms delay
+    } else if (!editor.isActive("text") && visible) {
+      setVisible(false);
     }
+
+    return () => clearTimeout(delayTimeout);
   }, [editor.state.selection]);
 
   const closeBubble = () => {
@@ -361,7 +366,7 @@ function Popovers({ editor }: PopoversProps) {
         <AnimatePresence>
           {visible && (
             <motion.div 
-              className="flex items-center gap-2 p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+              className="flex items-center gap-2 p-2 rounded-xl shadow-lg border border-white/30 dark:border-white/20 bg-white/30 dark:bg-white/10 backdrop-blur-md backdrop-saturate-150"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
