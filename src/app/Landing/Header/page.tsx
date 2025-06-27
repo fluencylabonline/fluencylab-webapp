@@ -13,6 +13,7 @@ import Image from "next/image";
 import Logo from "../../../../public/images/brand/logo.png";
 import LandingHeaderImage from "../../../../public/images/landing/new-landing-header-image.png";
 import SemiCircle from "../../../../public/images/landing/semi-circle.png";
+import SmallLogo from "../../../../public/images/brand/icon-brand.png";
 
 //Components Imports
 import { ToggleDarkMode } from "@/app/ui/Components/Buttons/ToggleDarkMode";
@@ -131,20 +132,14 @@ export default function Header() {
         >
           <motion.div variants={itemVariants} className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.2">
-              <motion.video
-                className="lg:block md:flex hidden h-[60px] w-auto hover:contrast-150"
-                controls={false}
-                loop
-                autoPlay
+              <motion.div
+                className="lg:block md:flex hidden w-auto"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <source
-                  src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-looping-only.webm?alt=media&token=040f0a1f-e733-4cd7-9062-e904c577d2c1"
-                  type="video/webm"
-                />
-              </motion.video>
+                <Image src={SmallLogo} width={100} height={100} className="w-[2.8rem] h-auto" alt="FluencyLab Logo" />
+              </motion.div>
             </a>
           </motion.div>
 
