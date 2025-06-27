@@ -34,7 +34,7 @@ const QuizComponent = ({ quiz, onQuizSubmit, savedQuizData }: QuizComponentProps
   };
 
   const handleSubmitQuiz = async () => {
-    if (!allQuestionsAnswered || isSubmitting) return;
+    if (!allQuestionsAnswered || isSubmitting) return (toast.error("Por favor, responda todas as perguntas antes de enviar."));
     
     setIsSubmitting(true);
     const toastId = toast.loading("Enviando respostas do quiz...");
@@ -190,7 +190,6 @@ const QuizComponent = ({ quiz, onQuizSubmit, savedQuizData }: QuizComponentProps
           <FluencyButton
             onClick={handleSubmitQuiz}
             variant={allQuestionsAnswered ? 'confirm' : 'gray'}
-            disabled={!allQuestionsAnswered || isSubmitting}
             className="w-full sm:w-auto"
           >
             {isSubmitting ? "Enviando..." : "Verificar Respostas"}

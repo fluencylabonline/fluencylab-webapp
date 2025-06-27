@@ -1,13 +1,12 @@
-// src/app/student/cursos/curso/page.tsx
 "use client";
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
-import { db } from "@/app/firebase"; // Adjust the import path as needed
+import { db } from "@/app/firebase"; // Ajuste o caminho conforme seu projeto
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiClock, FiBookOpen, FiChevronRight, FiCheckCircle, FiCircle, FiLock, FiArrowLeft, FiLoader } from "react-icons/fi";
+import { FiClock, FiBookOpen, FiChevronRight, FiCheckCircle, FiCircle, FiLock, FiLoader } from "react-icons/fi";
 import toast, { Toaster } from 'react-hot-toast'
 import { Course, Section, Lesson, Enrollment } from "@/app/ui/Components/Course/types";
 import FluencyButton from "@/app/ui/Components/Button/button";
@@ -42,7 +41,7 @@ export default function CourseDetailPageContent() {
       if (!session?.user?.id) return;
       setLoading(true);
       try {
-        // 1. Fetch Course Details
+        // 1. Buscar detalhes do curso
         const courseRef = doc(db, "Cursos", courseId);
         const courseSnap = await getDoc(courseRef);
 
@@ -53,39 +52,51 @@ export default function CourseDetailPageContent() {
         }
         const courseData = { id: courseSnap.id, ...courseSnap.data() } as Course;
 
-        // Basic access check
+        // Verificação básica de acesso
         const studentRole = session.user.role || 'student';
         if (courseData.role !== 'all' && courseData.role !== studentRole) {
-              toast.error("Você não tem permissão para acessar este curso.");
-              router.push("/student-dashboard/cursos");
-              return;
+          toast.error("Você não tem permissão para acessar este curso.");
+          router.push("/student-dashboard/cursos");
+          return;
         }
 
-        // Fetch Sections/Lessons and calculate total lessons
+        // Buscar Sections e Lessons e calcular total de lições
         const sectionsCol = collection(db, "Cursos", courseId, "sections");
         const sectionsSnap = await getDocs(sectionsCol);
         let totalLessonsCount = 0;
+
         const sectionsData = await Promise.all(sectionsSnap.docs.map(async (sectionDoc) => {
-            const section = { id: sectionDoc.id, ...sectionDoc.data() } as Section;
-            const lessonsCol = collection(db, "Cursos", courseId, "sections", sectionDoc.id, "lessons");
-            const lessonsSnap = await getDocs(lessonsCol);
-            section.lessons = lessonsSnap.docs.map(lessonDoc => ({ id: lessonDoc.id, ...lessonDoc.data() } as Lesson));
-            totalLessonsCount += section.lessons.length;
-            return section;
+          const section = { id: sectionDoc.id, ...sectionDoc.data() } as Section;
+          const lessonsCol = collection(db, "Cursos", courseId, "sections", sectionDoc.id, "lessons");
+          const lessonsSnap = await getDocs(lessonsCol);
+          section.lessons = lessonsSnap.docs.map(lessonDoc => ({ id: lessonDoc.id, ...lessonDoc.data() } as Lesson));
+          totalLessonsCount += section.lessons.length;
+          return section;
         }));
 
-        courseData.sections = sectionsData;
+        // Ordenar lessons dentro das sections pelo campo order
+        const sectionsDataOrdered = sectionsData
+          .map(section => {
+            if (section.lessons && section.lessons.length > 0) {
+              section.lessons = section.lessons.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+            }
+            return section;
+          })
+          // Ordenar as sections pelo campo order
+          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+        courseData.sections = sectionsDataOrdered;
         courseData.totalLessons = totalLessonsCount;
+
         setCourse(courseData);
 
-        // 2. Fetch Enrollment Status & Progress
+        // 2. Buscar status da matrícula e progresso
         const enrollmentRef = doc(db, "users", session.user.id, "enrollments", courseId);
         const enrollmentSnap = await getDoc(enrollmentRef);
         if (enrollmentSnap.exists()) {
           const currentEnrollment = enrollmentSnap.data() as Enrollment;
           setEnrollment(currentEnrollment);
           setIsEnrolled(true);
-          // Calculate progress
           const completedLessons = Object.values(currentEnrollment.progress || {}).filter(Boolean).length;
           setProgressPercentage(totalLessonsCount > 0 ? Math.round((completedLessons / totalLessonsCount) * 100) : 0);
         } else {
@@ -103,7 +114,7 @@ export default function CourseDetailPageContent() {
     };
 
     if (status === "authenticated" && session?.user?.id) {
-        fetchData();
+      fetchData();
     }
 
   }, [session, status, router, courseId]);
@@ -123,7 +134,7 @@ export default function CourseDetailPageContent() {
         lastAccessed: serverTimestamp()
       };
       await setDoc(enrollmentRef, newEnrollmentData);
-      setEnrollment(newEnrollmentData); // Update local state immediately
+      setEnrollment(newEnrollmentData);
       setIsEnrolled(true);
       setProgressPercentage(0);
       toast.success("Matrícula realizada com sucesso!", { id: toastId });
@@ -139,19 +150,19 @@ export default function CourseDetailPageContent() {
     return !!enrollment?.progress?.[lessonId];
   };
 
-  // Function to find the previous lesson ID for locking logic
+  // Função para obter o id da lição anterior (para lógica de bloqueio)
   const getPreviousLessonId = (currentSectionIndex: number, currentLessonIndex: number): string | null => {
-      if (!course?.sections) return null;
+    if (!course?.sections) return null;
 
-      if (currentLessonIndex > 0) {
-          // Previous lesson in the same section
-          return course.sections[currentSectionIndex]?.lessons[currentLessonIndex - 1]?.id || null;
-      } else if (currentSectionIndex > 0) {
-          // Last lesson of the previous section
-          const prevSection = course.sections[currentSectionIndex - 1];
-          return prevSection?.lessons[prevSection.lessons.length - 1]?.id || null;
-      }
-      return null; // First lesson of the first section
+    if (currentLessonIndex > 0) {
+      // Lição anterior na mesma seção
+      return course.sections[currentSectionIndex]?.lessons[currentLessonIndex - 1]?.id || null;
+    } else if (currentSectionIndex > 0) {
+      // Última lição da seção anterior
+      const prevSection = course.sections[currentSectionIndex - 1];
+      return prevSection?.lessons[prevSection.lessons.length - 1]?.id || null;
+    }
+    return null; // Primeira lição da primeira seção
   };
 
   if (loading || status === "loading") {
@@ -162,13 +173,13 @@ export default function CourseDetailPageContent() {
     return <div className="flex justify-center items-center min-h-[92vh]"><p>Curso não encontrado.</p></div>;
   }
 
-return (
+  return (
     <div className="flex flex-col w-full pr-3 pt-2 bg-fluency-bg-light dark:bg-fluency-bg-dark min-h-screen">
       <Toaster position="top-center" toastOptions={{
         className: 'bg-white dark:bg-fluency-gray-800 text-gray-900 dark:text-white shadow-lg',
       }} />
 
-      {/* Course Header Section */}
+      {/* Cabeçalho do curso */}
       <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg shadow-lg mb-4">
         <div className="grid md:grid-cols-[300px_1fr] gap-6 p-6">
           <div className="relative h-60 w-full rounded-md overflow-hidden">
@@ -178,21 +189,14 @@ return (
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              onError={(e) => {
-                e.currentTarget.src = '/images/course-placeholder.jpg';
-              }}
+              onError={(e) => { e.currentTarget.src = '/images/course-placeholder.jpg'; }}
             />
           </div>
-          
           <div className="flex flex-col justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-fluency-text-light dark:text-fluency-text-dark mb-4">
-                {course.title}
-              </h1>
-              <p className="text-fluency-text-light dark:text-fluency-text-dark mb-6">
-                {course.description}
-              </p>
-              
+              <h1 className="text-3xl font-bold text-fluency-text-light dark:text-fluency-text-dark mb-4">{course.title}</h1>
+              <p className="text-fluency-text-light dark:text-fluency-text-dark mb-6">{course.description}</p>
+
               <div className="flex flex-wrap gap-4 mb-6">
                 <div className="flex items-center gap-2 text-sm text-fluency-text-secondary dark:text-fluency-text-dark-secondary">
                   <FiClock className="w-5 h-5" />
@@ -209,7 +213,7 @@ return (
               </div>
             </div>
 
-            {/* Enrollment Section */}
+            {/* Seção de matrícula */}
             <div className="space-y-4">
               {isEnrolled ? (
                 <div className="space-y-2">
@@ -218,13 +222,12 @@ return (
                     <span>{progressPercentage}% Completo</span>
                   </div>
                   <div className="w-full bg-fluency-gray-100 dark:bg-fluency-gray-800 rounded-full h-3">
-                    <div 
+                    <div
                       className="bg-fluency-blue-500 h-3 rounded-full transition-all duration-300"
                       style={{ width: `${progressPercentage}%` }}
                     />
                   </div>
 
-                  {/* ✅ Mostrar label de conclusão se progresso for 100% */}
                   {progressPercentage === 100 && (
                     <div className="mt-2 text-green-600 dark:text-green-400 font-semibold flex items-center gap-2">
                       <FiCheckCircle className="w-4 h-4" />
@@ -252,12 +255,12 @@ return (
         </div>
       </div>
 
-      {/* Course Content */}
+      {/* Conteúdo do curso */}
       <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-bold text-fluency-text-light dark:text-fluency-text-dark mb-6">
           Conteúdo do Curso
         </h2>
-        
+
         {course.sections && course.sections.length > 0 ? (
           <div className="space-y-4">
             {course.sections.map((section, sectionIndex) => (
@@ -265,7 +268,7 @@ return (
                 <h3 className="bg-fluency-gray-200 dark:bg-fluency-gray-800 px-4 py-3 font-semibold text-fluency-text-light dark:text-fluency-text-dark">
                   {section.title}
                 </h3>
-                
+
                 <div className="divide-y divide-fluency-gray-200 dark:divide-fluency-gray-800">
                   {section.lessons?.map((lesson, lessonIndex) => {
                     const completed = isEnrolled && isLessonCompleted(lesson.id);
@@ -273,7 +276,7 @@ return (
                     const isLocked = !isEnrolled || (prevLessonId && !isLessonCompleted(prevLessonId));
 
                     return (
-                      <div 
+                      <div
                         key={lesson.id}
                         className={`p-4 flex items-center justify-between ${
                           isLocked ? 'bg-fluency-gray-50 dark:bg-fluency-gray-800 opacity-75' : 'bg-fluency-gray-100 dark:bg-fluency-gray-700 hover:bg-fluency-gray-50 dark:hover:bg-fluency-gray-800'
@@ -293,11 +296,11 @@ return (
                             {lesson.title}
                           </span>
                         </div>
-                        
+
                         {isLocked ? (
                           <FiLock className="text-fluency-gray-400 dark:text-fluency-gray-500 w-5 h-5 flex-shrink-0" />
                         ) : (
-                          <Link 
+                          <Link
                             href={`curso/licao?courseId=${courseId}&lessonId=${lesson.id}`}
                             className="text-fluency-blue-500 hover:text-fluency-blue-600 transition-colors"
                           >
