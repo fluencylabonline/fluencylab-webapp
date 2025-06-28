@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "FluencyLab",
     description: "Vem aprender idiomas com a gente!",
     url: "https://www.fluencylab.me", // Replace with the actual URL
-    images: "https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-looping-only.webm?alt=media&token=040f0a1f-e733-4cd7-9062-e904c577d2c1", // Replace with actual image URL
+    images: "https://www.fluencylab.me/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ficon-brand.ce44cb2b.png&w=128&q=75", // Replace with actual image URL
     siteName: "FluencyLab",
     type: "website",
   },
