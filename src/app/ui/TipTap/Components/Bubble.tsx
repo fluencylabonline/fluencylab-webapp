@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { FaTimes } from "react-icons/fa";
 import { VscWand } from "react-icons/vsc";
+import '../styles.scss';
 
 const speechSpeeds = [
   { label: "0.5x", value: 0.5 },
@@ -360,7 +361,7 @@ function Popovers({ editor }: PopoversProps) {
           placement: "bottom",
           moveTransition: "transform 0.2s ease-out",
           onShow: () => setVisible(true),
-          onHide: () => setVisible(false)
+          onHide: () => setVisible(false),
         }}
       >
         <AnimatePresence>
