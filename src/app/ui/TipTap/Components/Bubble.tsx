@@ -354,7 +354,7 @@ function Popovers({ editor }: PopoversProps) {
     <>
       <BubbleMenu 
         editor={editor}
-        className="Popover"
+        className="Popover rounded-xl shadow-lg border border-white/30 dark:border-white/20 bg-white/30 dark:bg-white/10 backdrop-blur-md backdrop-saturate-150"
         tippyOptions={{ 
           duration: 300,
           animation: "scale",
@@ -367,7 +367,7 @@ function Popovers({ editor }: PopoversProps) {
         <AnimatePresence>
           {visible && (
             <motion.div 
-              className="flex items-center gap-2 p-2 rounded-xl shadow-lg border border-white/30 dark:border-white/20 bg-white/30 dark:bg-white/10 backdrop-blur-md backdrop-saturate-150"
+              className="flex items-center gap-2"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
