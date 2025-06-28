@@ -1,5 +1,5 @@
 // components/QuestionModalComponent.tsx
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Question } from '../types'; // Import the Question interface
 import FluencyButton from '@/app/ui/Components/Button/button';
@@ -12,7 +12,7 @@ interface QuestionModalProps {
     currentQuestionIndex: number;
     onAnswer: (questionId: string, userAnswer: string | null, isCorrect: boolean, difficulty: number, questionIndex: number, skipped: boolean) => void;
     onNextQuestion: () => void;
-    onSkipQuestion: () => void;
+    onDontKnow: () => void; // Renomeado de onSkipQuestion
     isLastQuestion: boolean;
     language: string;
 }
@@ -25,7 +25,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
     currentQuestionIndex,
     onAnswer,
     onNextQuestion,
-    onSkipQuestion,
+    onDontKnow,
     isLastQuestion,
     language
 }) => {
@@ -33,7 +33,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
     const [showNextButton, setShowNextButton] = useState(false);
     const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean | null>(null);
     const [disableOptions, setDisableOptions] = useState(false);
-    const [showSkipButton, setShowSkipButton] = useState(true);
+    // const [showSkipButton, setShowSkipButton] = useState(true); // Removido
 
     // Speech Recognition states
     const [recording, setRecording] = useState(false);
@@ -45,7 +45,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
     const [showSpeakingNextButton, setShowSpeakingNextButton] = useState(false); // Control Next button for speaking
     const [showSpeakingSkipButton, setShowSpeakingSkipButton] = useState(true); // Control Skip button for speaking
     const progressPercentage = questions.length > 0 ? ((currentQuestionIndex + 1) / questions.length) * 100 : 0;
-    
+    const [showSkipButton, setShowSkipButton] = useState(true);
     // Listening attempts state
     const [listeningAttempts, setListeningAttempts] = useState(2);
     const [listeningButtonDisabled, setListeningButtonDisabled] = useState(false);
@@ -54,6 +54,22 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
     const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null); // Ref for SpeechSynthesisUtterance
 
     const currentQuestion = questions[currentQuestionIndex];
+
+    // Randomize options for MCQ questions
+    const randomizedOptions = useMemo(() => {
+        if (!currentQuestion || !currentQuestion.options || currentQuestion.type !== 'mcq') {
+            return [];
+        }
+        
+        // Create a copy of the options array and shuffle it
+        const shuffled = [...currentQuestion.options];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        return shuffled;
+    }, [currentQuestion?.id, currentQuestion?.options]); // Regenerate when question changes
 
     useEffect(() => {
         if (isOpen) {
@@ -76,6 +92,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
             setShowSpeakingSkipButton(true); // Initially show Skip button for speaking
         }
     }, [isOpen, currentQuestionIndex]);
+    
     const stopSpeaking = useCallback(() => {
         if (speechSynthesisRef.current && window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
@@ -154,19 +171,20 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
         onNextQuestion();
     };
 
-    const handleSkip = () => {
+    const handleDontKnow = () => {
         setShowNextButton(false);
         setShowCorrectAnswer(null);
         setDisableOptions(false);
-        setShowSkipButton(true);
-        setUserTranscript(''); // Clear transcript for skipped question
+        // setShowSkipButton(true); // Remover lógica do botão Pular
+        setUserTranscript(""); // Clear transcript for skipped question
         setSpeakingScore(null); // Clear speaking score
         setShowSpeakingNextButton(false); // Reset for next question
-        setShowSpeakingSkipButton(true); // Reset for next question
+        // setShowSpeakingSkipButton(true); // Remover lógica do botão Pular
         setRecordAttempt(0); // Reset attempt for next question
         setListeningAttempts(2); // Reset listening attempts for skipped question
-        onSkipQuestion();
-        onAnswer(currentQuestion.id, null, false, currentQuestion.difficulty, currentQuestionIndex, true); // null answer for skipped, isCorrect: false, skipped: true
+        onDontKnow(); // Chama a nova prop
+        // A lógica de pular a última questão será tratada no componente pai (page.tsx)
+        // A chamada onAnswer para marcar como pulada também será movida para o pai
     };
     
     const computeScore = useCallback(() => {
@@ -350,7 +368,7 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
                                 </button>
                             </>
                         ) : (
-                            currentQuestion.options?.map((option, index) => (
+                            (currentQuestion.type === 'mcq' ? randomizedOptions : currentQuestion.options)?.map((option, index) => (
                                 <button
                                     key={index}
                                     disabled={disableOptions}
@@ -445,24 +463,17 @@ const QuestionModalComponent: React.FC<QuestionModalProps> = ({
 
 
                         <div className="flex justify-end mt-6 space-x-2">
-                            {showSpeakingSkipButton && currentQuestion.type === 'text' && ( // Conditionally show Skip for speaking based on state
-                                <FluencyButton onClick={handleSkip} variant='warning'>
-                                    Pular
+                            {/* Botão "Não sei" - Visível quando não há resposta selecionada/gravada */}
+                            {!showNextButton && !showSpeakingNextButton && (
+                                <FluencyButton onClick={handleDontKnow} variant='warning'>
+                                    Não sei
                                 </FluencyButton>
                             )}
-                            {showSpeakingNextButton && currentQuestion.type === 'text' && ( // Conditionally show Next for speaking after recording
+
+                            {/* Botão "Próxima/Finalizar" - Visível após resposta/gravação */}
+                            {(showNextButton || showSpeakingNextButton) && (
                                 <FluencyButton onClick={handleNext} variant='purple'>
-                                    {isLastQuestion ? 'Finalizar' : 'Proxima'}
-                                </FluencyButton>
-                            )}
-                            {showSkipButton && currentQuestion.type !== 'text' && ( // Conditionally show Skip for other question types
-                                <FluencyButton onClick={handleSkip} variant='warning'>
-                                    Pular
-                                </FluencyButton>
-                            )}
-                            {showNextButton && currentQuestion.type !== 'text' && ( // Conditionally show Next for other question types
-                                <FluencyButton onClick={handleNext} variant='purple'>
-                                    {isLastQuestion ? 'Finalizar' : 'Proxima'}
+                                    {isLastQuestion ? 'Finalizar' : 'Próxima'}
                                 </FluencyButton>
                             )}
                         </div>

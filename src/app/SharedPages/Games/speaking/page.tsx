@@ -218,7 +218,7 @@ export default function Speaking() {
                 <div className='flex flex-col items-center gap-2 h-full'>
                     <div className='rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 w-full'>
                         <p className='font-semibold'>Instruções:</p>
-                        <p>Quando estiver pronto, aperte o botão falar e leia o texto em voz alta. Quando terminar, clique em Parar e veja sua pontuação. <span className='font-semibold text-fluency-yellow-500'>Este recurso está em fase de testes. Talvez precise tentar mais de uma vez para ter uma pontuação realista.</span></p>
+                        <p>Quando estiver pronto, aperte o botão falar e leia o texto em voz alta. Quando terminar, clique em Parar e veja sua pontuação. <span className='font-semibold text-fluency-orange-500'>Este recurso está em fase de testes. Talvez precise tentar mais de uma vez para ter uma pontuação realista.</span></p>
                     </div>
                     <div className='rounded-md bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 w-full'>
                         <h2 className='font-bold text-lg'>{selectedAudio.name}</h2>

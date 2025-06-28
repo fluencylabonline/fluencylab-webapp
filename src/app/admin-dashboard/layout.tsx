@@ -3,22 +3,27 @@ import { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
-import MobileHeader from '@/app/ui/Dashboard/mobileheader';
 import MobileSidebar from '@/app/ui/Dashboard/mobilesidebar';
 import Sidebar from "@/app/ui/Dashboard/sidebar";
-import Header from '@/app/ui/Dashboard/header';
+import Header from '@/app/ui/Dashboard/header'; // Using the unified Header
 import RedirectinAnimation from '../ui/Animations/RedirectinAnimation';
 
 // Icons
 import { MdOndemandVideo} from "react-icons/md"
-import { PiCertificateBold, PiChalkboardTeacherFill, PiStudentFill } from 'react-icons/pi';
-import { TbFileReport, TbMessageQuestion, TbPigMoney } from 'react-icons/tb';
-import { LuBookCopy } from 'react-icons/lu';
+import { TbFileReport, TbPigMoney } from 'react-icons/tb';
 import { FiUserPlus } from 'react-icons/fi';
+
+//Firebase
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+
+//Context
 import { PomodoroProvider, usePomodoro } from '../context/PomodoroContext';
 import PomodoroClock from '../ui/TipTap/Components/Pomodoro';
+import { CallProvider, useCallContext } from '../context/CallContext';
+import VideoHome from '../SharedPages/Video/VideoHome';
+import { Toaster } from 'react-hot-toast';
+import { LibraryBig, Users } from 'lucide-react';
 
 interface ISidebarItem {
   name: string;
@@ -31,41 +36,54 @@ function LayoutContent({
   isSidebarCollapsed,
   sidebarProps,
   menuItems,
-  children, // Pass children directly here, not as a prop
+  children,
 }: {
   isMobile: boolean;
   isSidebarCollapsed: boolean;
   sidebarProps: any;
   menuItems: ISidebarItem[];
-  children: React.ReactNode; // Add children as a direct prop to LayoutContent
+  children: React.ReactNode;
 }) {
-  const { isPomodoroVisible } = usePomodoro(); // Move the hook outside the conditional
-
+  const { isPomodoroVisible } = usePomodoro();
+  const { callData, setCallData } = useCallContext();
+  
   return (
     <div className='bg-fluency-bg-light dark:bg-fluency-bg-dark text-fluency-text-light dark:text-fluency-text-dark'>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          className: "bg-white dark:bg-fluency-gray-800 text-gray-900 dark:text-white shadow-lg",
+        }}
+      />
+      
       {isMobile ? (
         <div>
-          <div>
-            <MobileSidebar isSidebarCollapsed={false} {...sidebarProps} menuItems={menuItems} />
-          </div>
+          <MobileSidebar isSidebarCollapsed={false} {...sidebarProps} menuItems={menuItems} />
           <div className={`p-1 min-h-screen overflow-y-hidden transition-all duration-300 ease-in-out`}>
-            <MobileHeader {...sidebarProps} />
+            {/* Use unified Header with mobile toggle */}
+            <Header 
+              isMobile 
+              toggleSidebar={sidebarProps.toggleMenu} 
+            />
             {isPomodoroVisible && <PomodoroClock />}
             {children}
           </div>
         </div>
       ) : (
         <div>
-          <div>
-            <Sidebar {...sidebarProps} menuItems={menuItems} />
-          </div>
+          <Sidebar {...sidebarProps} menuItems={menuItems} />
           <div
             className={`p-1 min-h-screen transition-all duration-300 ease-in-out ${
-              isSidebarCollapsed ? 'ml-[5rem]' : 'ml-[14.5rem] pl-4'
+              isSidebarCollapsed ? "ml-[4rem]" : "ml-[14.5rem] pl-3"
             }`}
           >
-            <Header {...sidebarProps} />
+            {/* Use unified Header with desktop toggle */}
+            <Header 
+              toggleSidebar={sidebarProps.toggleSidebar} 
+              isMobile={false} 
+            />
             {isPomodoroVisible && <PomodoroClock />}
+            {callData?.callId && <VideoHome />}
             {children}
           </div>
         </div>
@@ -144,14 +162,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const menuItems: ISidebarItem[] = [
     {
-      name: "Alunos",
+      name: "Usuários",
       path: "/admin-dashboard/alunos",
-      icon: <PiStudentFill className="h-6 w-6"/>,
-    },
-    {
-      name: "Professores",
-      path: "/admin-dashboard/professores",
-      icon: <PiChalkboardTeacherFill className="h-6 w-6"/>,
+      icon: <Users className="h-6 w-6"/>,
     },
     {
       name: "Financeiro",
@@ -164,18 +177,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       icon: <FiUserPlus className="h-6 w-6"/>,
     },
     {
-      name: "Emitir Certificado",
-      path: "/admin-dashboard/certificados",
-      icon: <PiCertificateBold  className="h-6 w-6"/>,
+      name: "Material",
+      path: "/admin-dashboard/material",
+      icon: <LibraryBig  className="h-6 w-6"/>,
     },
     {
-      name: "Apostilas",
-      path: "/admin-dashboard/apostilas",
-      icon: <LuBookCopy  className="h-6 w-6"/>,
-    },
-    {
-      name: "Aulas Gravadas",
-      path: "/admin-dashboard/aulas-gravadas",
+      name: "Cursos",
+      path: "/admin-dashboard/cursos",
       icon: <MdOndemandVideo className="h-6 w-6"/>,
     },
     {
@@ -203,15 +211,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <PomodoroProvider>
-      <LayoutContent
-        isMobile={isMobile}
-        isSidebarCollapsed={isSidebarCollapsed}
-        sidebarProps={sidebarProps}
-        menuItems={menuItems}
-      >
-        {children} {/* Render children directly here */}
-      </LayoutContent>
-    </PomodoroProvider>
+    <CallProvider>
+      <PomodoroProvider>
+        <LayoutContent
+          isMobile={isMobile}
+          isSidebarCollapsed={isSidebarCollapsed}
+          sidebarProps={sidebarProps}
+          menuItems={menuItems}
+        >
+          {children}
+        </LayoutContent>
+      </PomodoroProvider>
+    </CallProvider>
   );
 }

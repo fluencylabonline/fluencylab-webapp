@@ -1,46 +1,88 @@
 'use client'
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { getDoc, doc, updateDoc, collection, addDoc, getDocs } from 'firebase/firestore';
+import * as Y from 'yjs';
+import { FirestoreProvider } from '@gmcfall/yjs-firestore-provider';
+import { db, firebaseApp } from '@/app/mobile/Firebase/firebase';
 import { useSearchParams } from 'next/navigation';
-
-// Firebase
-import { getDoc, doc, setDoc, addDoc, collection } from 'firebase/firestore';
-import { db } from '@/app/firebase';
-
-// TipTap and animations
+import LoadingAnimation from '@/app/mobile/Loading/LoadingAnimation';
 import Tiptap from './TipTap';
-import DocumentAnimation from '../Animations/DocumentAnimation';
 
-// CSS for button animation
-import './styles.scss';
-
-const NotebookEditor = () => {
+function NotebookEditor() {
   const searchParams = useSearchParams();
-  // Since both notebook and student IDs are always provided, we cast them as strings.
   const notebookID = searchParams.get('notebook') as string;
   const studentID = searchParams.get('student') as string;
 
   const [content, setContent] = useState<string>('');
-  const [loading, setLoading] = useState(true);
-  const [isTyping, setIsTyping] = useState(false);
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<number>(600000); // 10 minutes in ms
-  const [buttonColor, setButtonColor] = useState<string>('black');
-  const [animation, setAnimation] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [provider, setProvider] = useState<FirestoreProvider | null>(null);
+  const [timeLeft, setTimeLeft] = useState<number>(600000);
 
-  // Using a ref to store the typing timeout id.
-  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ydocRef = useRef<Y.Doc | null>(null);
 
-  // Fetch notebook content on mount
+  useEffect(() => {
+    if (!studentID || !notebookID) return;
+
+    if (!ydocRef.current) {
+      ydocRef.current = new Y.Doc();
+    }
+
+    const basePath: string[] = ["users", studentID, "Notebooks", notebookID];
+    const newProvider = new FirestoreProvider(firebaseApp, ydocRef.current, basePath);
+    
+    newProvider.on('synced', (isSynced: boolean) => {
+      console.log('Provider synced:', isSynced);
+    });
+    
+    newProvider.on('update', (update: any) => {
+      console.log('Update sent to Firestore:', update);
+    });
+
+    setProvider(newProvider);
+    return () => {
+      if (newProvider) {
+        newProvider.destroy();
+      }
+    };
+  }, [studentID, notebookID]);
+
   useEffect(() => {
     const fetchNotebookContent = async () => {
+      if (!studentID || !notebookID) return;
+
       try {
         setLoading(true);
         const notebookDoc = await getDoc(doc(db, `users/${studentID}/Notebooks/${notebookID}`));
+        
         if (notebookDoc.exists()) {
-          setContent(notebookDoc.data().content);
+          const fetchedContent = notebookDoc.data().content;
+          const versionRef = collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`);
+          const versionSnapshot = await getDocs(versionRef);
+    
+          const isAlreadySaved = versionSnapshot.docs.some(
+            (doc) => doc.data().content === fetchedContent
+          );
+    
+          if (!isAlreadySaved) {
+            const timestamp = new Date();
+            await addDoc(versionRef, {
+              content: fetchedContent,
+              date: timestamp.toLocaleDateString(),
+              time: timestamp.toLocaleTimeString(),
+            });
+          } else {
+            console.log('Fetched content is already saved, skipping...');
+          }
+    
+          if (ydocRef.current) {
+            ydocRef.current.getText('content').delete(0, ydocRef.current.getText('content').length);
+            ydocRef.current.getText('content').insert(0, fetchedContent);
+          }
+          
+          setContent(fetchedContent);
         }
       } catch (error) {
-        console.error('Error fetching notebook content: ', error);
+        console.error('Error fetching notebook content:', error);
       } finally {
         setLoading(false);
       }
@@ -49,106 +91,69 @@ const NotebookEditor = () => {
     fetchNotebookContent();
   }, [studentID, notebookID]);
 
-  // Debounced content change handler wrapped with useCallback
-  const handleContentChange = useCallback(async (newContent: string) => {
-    if (!isTyping) {
-      setIsTyping(true);
-    }
-
-    // Clear previous timeout if exists
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    // Set a new timeout to stop typing indicator after 3 seconds
-    typingTimeoutRef.current = setTimeout(() => {
-      setIsTyping(false);
-    }, 3000);
-
+  const handleContentChange = async (newContent: string) => {
+    setContent(newContent);
+    
+    if (!studentID || !notebookID) return;
+    
     try {
-      await setDoc(
-        doc(db, `users/${studentID}/Notebooks/${notebookID}`),
-        { content: newContent },
-        { merge: true }
-      );
-    } catch (error) {
-      console.error('Error saving notebook content: ', error);
-    }
-  }, [isTyping, studentID, notebookID]);
-
-  // Function to save a version of the notebook
-  const saveVersion = useCallback(async () => {
-    try {
-      const timestamp = new Date();
-      await addDoc(collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`), {
-        content,
-        date: timestamp.toLocaleDateString(),
-        time: timestamp.toLocaleTimeString(),
+      await updateDoc(doc(db, `users/${studentID}/Notebooks/${notebookID}`), {
+        content: newContent,
       });
-      setLastSaved(timestamp.toLocaleString());
-      setButtonColor('black');
-      setAnimation(true);
-      setTimeout(() => setAnimation(false), 1000);
     } catch (error) {
-      console.error('Error saving version: ', error);
+      console.error('Error saving content to Firestore:', error);
     }
-  }, [content, studentID, notebookID]);
-
-  // Set up auto-save and countdown timers
+  };
+  
   useEffect(() => {
+    if (!studentID || !notebookID || !content) return;
+    
+    const saveVersion = async () => {
+      try {
+        const timestamp = new Date();
+        await addDoc(collection(db, `users/${studentID}/Notebooks/${notebookID}/versions`), {
+          content,
+          date: timestamp.toLocaleDateString(),
+          time: timestamp.toLocaleTimeString(),
+        });
+      } catch (error) {
+        console.error('Error saving version: ', error);
+      }
+    };
+  
     const saveInterval = setInterval(() => {
       saveVersion();
-      setTimeLeft(600000); // Reset timeLeft to 10 minutes
-    }, 600000); // Save every 10 minutes
-
+      setTimeLeft(600000); 
+    }, 600000);
+  
     const countdownInterval = setInterval(() => {
-      setTimeLeft(prev => Math.max(prev - 1000, 0)); // Countdown every second
+      setTimeLeft(prev => Math.max(prev - 1000, 0));
     }, 1000);
-
-    // Add a beforeunload listener to save version on page exit
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  
+    const handleBeforeUnload = () => {
       saveVersion();
     };
+    
     window.addEventListener('beforeunload', handleBeforeUnload);
-
+  
     return () => {
       clearInterval(saveInterval);
       clearInterval(countdownInterval);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [saveVersion]);
-
-  // Update button color based on remaining time
-  useEffect(() => {
-    const targetColor = { r: 35, g: 101, b: 51 };
-    const startColor = { r: 0, g: 0, b: 0 };
-    const ratio = (600000 - timeLeft) / 600000; // Ratio between 0 and 1
-    const r = Math.round(startColor.r + ratio * (targetColor.r - startColor.r));
-    const g = Math.round(startColor.g + ratio * (targetColor.g - startColor.g));
-    const b = Math.round(startColor.b + ratio * (targetColor.b - startColor.b));
-    setButtonColor(`rgb(${r}, ${g}, ${b})`);
-  }, [timeLeft]);
-
-  if (loading) {
-    return <DocumentAnimation />;
-  }
+  }, [content, studentID, notebookID]);
+  
+  if (loading) return <LoadingAnimation />;
 
   return (
-    <div className="lg:px-6 lg:py-4 md:px-6 md:py-4 px-2 py-1">
-      <Tiptap
-        content={content}
-        onChange={(newContent: string) => {
-          setContent(newContent);
-          handleContentChange(newContent);
-        }}
-        isTyping={isTyping}
-        lastSaved={lastSaved}
-        buttonColor={buttonColor}
-        animation={animation}
-        timeLeft={timeLeft}
-        isEditable={true}
-      />
-    </div>
+    <Tiptap
+      content={content}
+      provider={provider}
+      onChange={handleContentChange}
+      isEditable={true}
+      studentID={studentID}
+    />
   );
-};
+}
 
 export default NotebookEditor;

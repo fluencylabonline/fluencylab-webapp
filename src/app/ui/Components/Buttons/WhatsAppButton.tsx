@@ -108,7 +108,7 @@ export const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ buttonText }) =>
               <div className="fixed inset-0 transition-opacity">
                 <div className="absolute inset-0 bg-fluency-gray-400 opacity-95"></div>
               </div>
-              <div className="bg-fluency-text-dark text-black dark:text-white dark:bg-fluency-pages-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-max p-5">
+              <div className="bg-fluency-pages-light text-black dark:text-white dark:bg-fluency-pages-dark rounded-lg overflow-hidden shadow-xl transform transition-all w-max h-max p-5">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left p-4">
                     <button

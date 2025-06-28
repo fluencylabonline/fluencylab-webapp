@@ -434,7 +434,7 @@ export default function CustomVideoPlayer({
   return (
     <div className={`
       fixed bottom-0 left-0 right-0 w-full 
-      bg-fluency-gray-100 dark:bg-fluency-gray-900 backdrop-blur-lg shadow-lg
+      rounded-xl backdrop-blur-lg shadow-lg
       flex ${showFullDetails ? 'flex-col' : 'flex-row items-center'} // Layout changes based on details visibility
       transition-all duration-300 ease-in-out // Smooth height and flex changes
       ${showFullDetails ? 'h-[max(60vh,400px)] max-h-[90vh]' : 'h-[100px]'} // Dynamic height based on details

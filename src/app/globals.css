@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply transition-colors duration-500; /* Smooth transition for all color changes */
+}
+
+* {
+  @apply transition-colors duration-500; /* Optional: smoother nested element transitions */
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -119,4 +127,11 @@ html {
     transform: translateY(100%);
     opacity: 0;
   }
+}
+
+.dropdown-item {
+  @apply px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 
+         transition-colors duration-200 ease-in-out
+         hover:bg-blue-50 dark:hover:bg-gray-700/50
+         cursor-pointer;
 }

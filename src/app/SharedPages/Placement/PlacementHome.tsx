@@ -7,10 +7,10 @@ import { CiCircleQuestion } from "react-icons/ci";
 
 // Firebase imports
 import { db } from "@/app/firebase";
-import { doc, getDoc, setDoc, serverTimestamp, getDocs, collection, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, getDocs, collection, onSnapshot } from "firebase/firestore";
 
 // Toast notifications and icon
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { VscDebugStart } from "react-icons/vsc";
 
 // Framer Motion imports
@@ -38,6 +38,7 @@ import Badges from './Components/Badges/Badges';
 import { Levels } from './Components/Badges/Levels';
 import './Placement.css';
 import { IoClose } from 'react-icons/io5';
+import Tour from '@/app/ui/Components/JoyRide/FluencyTour';
 
 export default function PlacementUser() {
     const { data: session } = useSession();
@@ -220,9 +221,7 @@ export default function PlacementUser() {
         // Format current date as "YYYY-MM-DD"
         const currentDate = new Date();
         const currentDateFormatted =
-            `${currentDate.getDate().toString().padStart(2, '0')}
-            /${(currentDate.getMonth() + 1).toString().padStart(2, '0')}
-            /${currentDate.getFullYear()}`;
+            `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
 
         // --- Test Customization Logic ---
         let difficultyLevels = [1, 2, 3, 4, 5, 6]; // Default difficulty levels
@@ -349,10 +348,46 @@ export default function PlacementUser() {
         }
     };
 
+    // Determine if user is a student
+    const isStudent = session?.user.role === 'student';
+    
+    // Tour steps configuration
+    const tourSteps = [
+        {
+            target: '.tour-greeting',
+            title: 'Bem-vindo ao Nivelamento!',
+            content: 'Aqui você pode testar seu nível de conhecimento no idioma e acompanhar seu progresso.',
+            placement: 'bottom' as const,
+            disableBeacon: true,
+        },
+        {
+            target: '.tour-start-button',
+            title: 'Iniciar Teste',
+            content: 'Clique aqui para começar ou continuar seu teste de nivelamento.',
+            placement: 'top' as const,
+        },
+        {
+            target: '.tour-progress-section',
+            title: 'Seu Progresso',
+            content: 'Veja aqui seu histórico de testes e resultados anteriores.',
+            placement: 'left' as const,
+        }
+    ];
+
     return (
         <div className='flex flex-col items-center justify-center p-4 w-full h-full'>
-            <Toaster />
 
+            {/* Conditionally render Tour for students */}
+            {isStudent && (
+                <Tour 
+                    steps={tourSteps}
+                    pageKey="placement-test"
+                    userId={session?.user.id || undefined}
+                    delay={1000}
+                    onTourEnd={() => console.log('Placement test tour completed')}
+                />
+            )}
+            
             {/* Animate view transition between Test List and Placement Test */}
             <AnimatePresence mode="wait">
                 {!showTest ? (
@@ -364,7 +399,7 @@ export default function PlacementUser() {
                         transition={{ duration: 0.5 }}
                         className='lg:flex lg:flex-row md:flex md:flex-col flex flex-col items-center justify-center w-full h-full gap-4 text-fluency-text-light dark:text-fluency-text-dark p-6 rounded-md'
                     >
-                        <div className="relative bg-fluency-gray-100 dark:bg-fluency-pages-dark w-full lg:h-[75vh] md:h-full h-full flex flex-col items-center justify-between rounded-md border-white border p-8">
+                        <div className="relative bg-fluency-gray-100 dark:bg-fluency-pages-dark w-full lg:h-[75vh] md:h-full h-full flex flex-col items-center justify-between rounded-md border-white border p-8 tour-greeting">
                             <div className="absolute top-4 right-4 font-bold text-sm">
                                 <CiCircleQuestion onClick={() => setIsExplanationOpen(true)} className='w-6 h-6 hover:text-indigo-600 duration-300 ease-in-out transition-all cursor-pointer' />
                             </div>
@@ -390,7 +425,7 @@ export default function PlacementUser() {
                             )}
                         </div>
 
-                        <div className="relative bg-fluency-gray-100 dark:bg-fluency-pages-dark w-full h-[75vh] flex flex-col items-center justify-between rounded-md border-white border p-8">
+                        <div className="relative bg-fluency-gray-100 dark:bg-fluency-pages-dark w-full h-[75vh] flex flex-col items-center justify-between rounded-md border-white border p-8 tour-progress-section">
                             <div className="absolute top-4 right-4 font-bold text-sm">
                                 <CiCircleQuestion onClick={() => setIsProgressOpen(true)} className='w-6 h-6 hover:text-indigo-600 duration-300 ease-in-out transition-all cursor-pointer' />
                             </div>

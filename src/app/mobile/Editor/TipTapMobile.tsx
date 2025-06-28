@@ -162,7 +162,7 @@ const TiptapMobile = ({ onChange, content, provider, role, professorName, studen
     <div className='flex flex-col justify-center items-center text-black dark:text-white'>
         <EditorContent editor={editor} />
         <ToolbarMobile editor={editor} content={content} />
-        {role === 'teacher' && (<Tools editor={editor} isTeacherNotebook={true} />)}
+        {role === 'teacher' && (<Tools editor={editor} isTeacherNotebook={true} isEditable={false} />)}
     </div>
   );
 };

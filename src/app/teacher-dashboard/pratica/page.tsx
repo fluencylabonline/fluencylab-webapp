@@ -1,9 +1,9 @@
-import GamesProTeacher from '@/app/SharedPages/Games/pageteacher';
+import GamesPro from '@/app/SharedPages/Games/page';
 
 export default function Pratica(){
     return(
         <div>
-            <GamesProTeacher />
+            <GamesPro />
         </div>
     );
 }

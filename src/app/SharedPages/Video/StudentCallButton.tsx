@@ -57,7 +57,7 @@ export default function StudentCallButton({ student }: StudentCallButtonProps) {
 
   return (
     <FluencyButton
-      variant={`${firebaseCallId ? 'confirm' : 'purple'}`}
+      variant={`${firebaseCallId ? 'purple' : 'glass'}`}
       className='min-w-max'
       onClick={createCallId}
       disabled={!firebaseCallId} 
@@ -81,7 +81,7 @@ export default function StudentCallButton({ student }: StudentCallButtonProps) {
             exit={{ opacity: 0, y: 5 }}
             transition={{ duration: 0.3 }}
           >
-            Chamada
+            Nenhuma chamada
           </motion.span>
         )}
       </AnimatePresence>{" "}

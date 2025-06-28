@@ -54,7 +54,7 @@ const TransitionAnimation = () => {
       */}
 
       <video className='lg:w-[15%] md:w-[15%] sm:w-[19%] min-h-screen' controls={false} loop autoPlay>
-        <source src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/anima%C3%A7%C3%B5es%2Fbrand-animation-1.webm?alt=media&token=ab840307-4c27-4dd5-9830-d0bd8aa6f2c8" type="video/webm" />
+        <source src="https://firebasestorage.googleapis.com/v0/b/fluencylab-webapp.appspot.com/o/Animations%2FFluencyLab_Final.webm?alt=media&token=870b22b3-0a99-4301-b736-f1c6ad30bab5" type="video/webm" />
       </video>
 
       <div className={`text-container ${fade ? 'fade-in' : 'fade-out'}`}>

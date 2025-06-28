@@ -1,125 +1,129 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
 
 .tiptap {
-    input[type="checkbox"] {
-      margin-right: 8px;
-    }
+  input[type="checkbox"] {
+    margin-right: 8px;
+  }
 
-    mark {
-      background-color: #e4d234ec;
-    }
+  mark {
+    background-color: #e4d234ec;
+  }
 
-    a {
-      color: #1e75c5;
-      font-weight: bold;
-    }
-    
-      ul,
-      ol,
-      li {
-        padding: 0 1rem;
-      }
-    
-      h1,
-      h2
-      {
-        line-height: 1.1;
-      }
+  a {
+    color: #1e75c5;
+    font-weight: bold;
+  }
 
-      h3,
-      h4,
-      h5,
-      h6
-      {
-        line-height: 1.5;
-      }
-    
-      h1{
-        font-size: 2.2rem;
-        font-weight: 900;
-      }
-      h2{
-        font-size: 1.5rem;
-        font-weight: 600;
-      }
-      h3{
-        font-size: 1.125rem;
-      }
-      h4{
-        font-size: 1.375rem;
-      }
-      h5{
-        font-size: 2rem;
-      }
-      h6{
-        font-size: 3rem;
-      }
-  
-      code {
-        background-color: rgba(#616161, 0.1);
-        color: #616161;
-        margin-top: 5px;
-        margin-bottom: 5px;
-      }
-    
-      pre {
-        background: #ecca1e;
-        text-align: center;
-        color: #FFF;
-        font-weight: 700;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        
-        code {
-          color: inherit;
-          padding: 0;
-          background: none;
-          font-size: 1rem;
-        }
-      }
-    
-      img {
-        max-width: 100%;
-        height: auto;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-radius: 16px;
-        &.ProseMirror-selectednode {
-          outline: 3px solid #68CEF8;
-        }
-      }
-    
-      blockquote {
-        background: #ecca1e;
-        text-align: start;
-        color: #FFF;
-        font-size: 1.5rem;
-        font-weight: 900;
-        padding: 1rem 3.5rem;
-        border-top-left-radius: 0px;
-        border-top-right-radius: 2rem;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 2rem;
-        margin-top: 10px;
-        overflow: visible;
-        position: relative;
-        left: -65px;
-        top: -40px;
-        width: fit-content;
-      }
-    
-      hr {
-        border: none;
-        border-top: 3px solid rgba(#7e7575, 0.3);
-        margin: 2rem 0;
-      }
-  
-      .bold{
-        background-color: aqua;
-      }
+  ul,
+  ol[data-type="bulletList"] {
+    list-style-type: circle;
+    padding-left: 1.5rem;
+  }
+  li[data-type="bulletList"] {
+    list-style-type: circle;
+    padding-left: 1.5rem;
+  }
+
+  h1,
+  h2 {
+    line-height: 1.1;
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+  }
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 1.125rem;
+  }
+  h4 {
+    font-size: 1.375rem;
+  }
+  h5 {
+    font-size: 2rem;
+  }
+  h6 {
+    font-size: 3rem;
+  }
+
+  code {
+    background-color: rgba(#616161, 0.1);
+    color: #a1a1a1;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 2px;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: #eca31a;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border-radius: 0.4rem;
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 1rem;
+      font-family: "Quicksand", sans-serif;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    &.ProseMirror-selectednode {
+      outline: 3px solid #68cef8;
+    }
+  }
+
+  blockquote {
+    // background: #eca31a;
+    text-align: start;
+    // color: #FFF;
+    font-size: 1.5rem;
+    font-weight: 900;
+    // padding: 1rem 3.5rem;
+    // border-radius: 4px;
+    margin-top: 10px;
+    // overflow: visible;
+    // position: relative;
+    // width: fit-content;
+    // text-decoration: underline;
+    border-left: 4px solid #eca31a;
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 3px solid rgba(#7e7575, 0.3);
+    margin: 2rem 0;
+  }
+
+  .bold {
+    background-color: aqua;
+  }
 
   /* Table-specific styling */
   table {
@@ -152,7 +156,10 @@
     .selectedCell:after {
       background: #5e79ac36;
       content: "";
-      left: 0; right: 0; top: 0; bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
       pointer-events: none;
       position: absolute;
       z-index: 2;
@@ -178,172 +185,170 @@
     cursor: ew-resize;
     cursor: col-resize;
   }
-  
 }
-  
-  .Popover {
-    border-radius: 8px;
-    padding: 10px;
+
+.Popover {
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+/* Give a remote user a caret */
+.collaboration-cursor__caret {
+  border-left: 1px solid #0d0d0d;
+  border-right: 1px solid #0d0d0d;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+
+/* Render the username above the caret */
+.collaboration-cursor__label {
+  border-radius: 3px 3px 3px 0;
+  color: #0d0d0d;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 0.1rem 0.3rem;
+  position: absolute;
+  top: -1.4em;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* NotebookEditor.css */
+.save-button {
+  padding: 5px 5px;
+  border-radius: 100%;
+  color: white;
+  border: none;
+  transition: background-color 0.5s ease;
+}
+
+.save-button.animate {
+  animation: saveAnimation 1s ease;
+}
+
+@keyframes saveAnimation {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+
+ul[data-type="taskList"] {
+  list-style: none;
+  margin-left: 0;
+  padding: 0;
+
+  li {
+    align-items: flex-start;
     display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
 
-    /* Give a remote user a caret */
-  .collaboration-cursor__caret {
-    border-left: 1px solid #0d0d0d;
-    border-right: 1px solid #0d0d0d;
-    margin-left: -1px;
-    margin-right: -1px;
-    pointer-events: none;
-    position: relative;
-    word-break: normal;
-  }
-
-  /* Render the username above the caret */
-  .collaboration-cursor__label {
-    border-radius: 3px 3px 3px 0;
-    color: #0d0d0d;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 600;
-    left: -1px;
-    line-height: normal;
-    padding: 0.1rem 0.3rem;
-    position: absolute;
-    top: -1.4em;
-    user-select: none;
-    white-space: nowrap;
-  }
-  
-  /* NotebookEditor.css */
-  .save-button {
-    padding: 5px 5px;
-    border-radius: 100%;
-    color: white;
-    border: none;
-    transition: background-color 0.5s ease;
-  }
-
-  .save-button.animate {
-    animation: saveAnimation 1s ease;
-  }
-
-  @keyframes saveAnimation {
-    from {
-      transform: scale(1);
+    > label {
+      flex: 0 0 auto;
+      margin-right: 0.5rem;
+      user-select: none;
     }
-    to {
-      transform: scale(1.2);
+
+    > div {
+      flex: 1 1 auto;
     }
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
   }
 
   ul[data-type="taskList"] {
-    list-style: none;
-    margin-left: 0;
-    padding: 0;
-
-    li {
-      align-items: flex-start;
-      display: flex;
-
-      > label {
-        flex: 0 0 auto;
-        margin-right: 0.5rem;
-        user-select: none;
-      }
-
-      > div {
-        flex: 1 1 auto;
-      }
-    }
-
-    input[type="checkbox"] {
-      cursor: pointer;
-    }
-
-    ul[data-type="taskList"] {
-      margin: 0;
-    }
-  }
-
-  /* List of options */
-  .optionsList {
-    list-style-type: none;
-    padding: 0;
     margin: 0;
   }
+}
 
-  /* Each option style */
-  .option {
-    padding: 10px;
-    margin: 5px 0;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
+/* List of options */
+.optionsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
-  /* Hover effect for options */
-  .option:hover {
-    color: #3b3b3b;
-    font-weight: 600;
-    transition: 0.3s ease, transform 0.2s ease;
-  }
+/* Each option style */
+.option {
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-  /* Styles for correct answer */
-  .correct {
-    color: #4caf50; 
-    font-weight: bold;
-  }
+/* Hover effect for options */
+.option:hover {
+  color: #3b3b3b;
+  font-weight: 600;
+  transition: 0.3s ease, transform 0.2s ease;
+}
 
-  /* Styles for incorrect answer */
-  .incorrect {
-    color: #f44336;
-    font-weight: bold;
-  }
+/* Styles for correct answer */
+.correct {
+  color: #4caf50;
+  font-weight: bold;
+}
 
-  /* Feedback message after selection */
-  .feedback {
-    font-size: 14px;
-    font-weight: bold;
-  }
+/* Styles for incorrect answer */
+.incorrect {
+  color: #f44336;
+  font-weight: bold;
+}
 
-  .textGreen500 {
-    color: #4caf50;
-  }
+/* Feedback message after selection */
+.feedback {
+  font-size: 14px;
+  font-weight: bold;
+}
 
-  .textRed500 {
-    color: #f44336;
-  }
+.textGreen500 {
+  color: #4caf50;
+}
 
-  .option-h3 {
-    font-size: 16px !important;
-    font-weight: 600;
-  }
+.textRed500 {
+  color: #f44336;
+}
 
-  .option.disabled {
-    color: #888; /* Disable text */
-    pointer-events: none; /* Prevent any clicks on disabled options */
-    opacity: 0.8; /* Dim the option */
-  }
+.option-h3 {
+  font-size: 16px !important;
+  font-weight: 600;
+}
 
-  /* Styles for correct answer */
-  .correct.disabled {
-    color: #5eb961; /* Green */
-    font-weight: 900;
-  }
+.option.disabled {
+  color: #888; /* Disable text */
+  pointer-events: none; /* Prevent any clicks on disabled options */
+  opacity: 0.8; /* Dim the option */
+}
 
-  /* Styles for incorrect answer */
-  .incorrect.disabled {
-    color: #f88f87; /* Red */
-    font-weight: 900;
-  }
+/* Styles for correct answer */
+.correct.disabled {
+  color: #5eb961; /* Green */
+  font-weight: 900;
+}
 
-  .tiptap ::selection {
-    background-color: #3F51B5ec; /* The background color when text is selected */
-    color: white;
-  }
-  
-  .tiptap {
-    caret-color: #3F51B5 !important; /* Change to your desired color */
-  }
-  
+/* Styles for incorrect answer */
+.incorrect.disabled {
+  color: #f88f87; /* Red */
+  font-weight: 900;
+}
+
+.tiptap ::selection {
+  background-color: #3f51b5ec; /* The background color when text is selected */
+  color: white;
+}
+
+.tiptap {
+  caret-color: #3f51b5 !important; /* Change to your desired color */
+}

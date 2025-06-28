@@ -286,7 +286,7 @@ export default function CustomAudioPlayer({
   };
 
   return (
-    <div className="w-full p-6 bg-fluency-gray-100 dark:bg-fluency-gray-900 shadow-xl relative transition-all duration-300 hover:shadow-2xl">
+    <div className="w-full p-6  shadow-xl relative transition-all duration-300 hover:shadow-2xl rounded-xl">
       <audio
         ref={audioRef}
         src={src}
@@ -305,8 +305,6 @@ export default function CustomAudioPlayer({
         preload="metadata"
         className="w-full" // Added Tailwind class for width
       />
-
-
 
       <div className='flex flex-row items-center justify-between mb-4'>
         {title && (

@@ -17,6 +17,9 @@ const AudioComponent = ({ node }) => {
   const [isTranscriptVisible, setIsTranscriptVisible] = useState(false);
   const [showAllWords, setShowAllWords] = useState(false);
 
+  // New state to toggle mode: 'listening' or 'practice'
+  const [mode, setMode] = useState('listening');
+
   useEffect(() => {
     if (!audioId) {
       console.error('No audio ID provided');
@@ -38,7 +41,7 @@ const AudioComponent = ({ node }) => {
           });
           setSelectedAudio(data.url);
           prepareWordInputs(data.transcript);
-          setTranscript(data.transcript); // Set transcript for toggling visibility
+          setTranscript(data.transcript);
         } else {
           console.error('Document does not exist.');
         }
@@ -51,27 +54,23 @@ const AudioComponent = ({ node }) => {
   }, [audioId]);
 
   const prepareWordInputs = (transcript) => {
-    // Split the original transcript into words
     const words = transcript.split(' ');
-  
-    // Create a set to track which words will become inputs
     const inputIndicesSet = new Set();
     while (inputIndicesSet.size < Math.floor(words.length * 0.2)) {
       inputIndicesSet.add(Math.floor(Math.random() * words.length));
     }
-  
-    // Create the word input objects
+
     const inputs = words.map((word, index) => ({
       word,
       isInput: inputIndicesSet.has(index),
       userAnswer: '',
-      isCorrect: null
+      isCorrect: null,
     }));
-  
+
     setWordInputs(inputs);
     setInputsDisabled(false);
   };
-  
+
   const checkAnswers = () => {
     const emptyFields = wordInputs.filter(input => input.isInput && input.userAnswer.trim() === '').length;
     if (emptyFields === wordInputs.filter(input => input.isInput).length) {
@@ -80,10 +79,9 @@ const AudioComponent = ({ node }) => {
       });
       return null;
     }
-  
+
     const updatedWordInputs = wordInputs.map(input => {
       if (input.isInput) {
-        // Remove punctuation from both the original word and the user answer for comparison
         const cleanWord = input.word.replace(/[!?]/g, '').toLowerCase();
         const cleanUserAnswer = input.userAnswer.trim().replace(/[!?]/g, '').toLowerCase();
         const isCorrect = cleanWord === cleanUserAnswer;
@@ -91,11 +89,11 @@ const AudioComponent = ({ node }) => {
       }
       return input;
     });
-  
+
     setWordInputs(updatedWordInputs);
     setInputsDisabled(true);
   };
-  
+
   const handleInputChange = (index, event) => {
     const { value } = event.target;
     const updatedWordInputs = [...wordInputs];
@@ -122,6 +120,11 @@ const AudioComponent = ({ node }) => {
     setShowAllWords(!showAllWords);
   };
 
+  // Toggle mode function
+  const toggleMode = () => {
+    setMode(prev => (prev === 'practice' ? 'listening' : 'practice'));
+  };
+
   const getWordDisplay = (input, index) => {
     if (showAllWords) {
       return input.word;
@@ -142,52 +145,38 @@ const AudioComponent = ({ node }) => {
       <Toaster />
       <div className='h-min w-full flex flex-col justify-center items-center'>
         <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 w-full text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
-          {selectedAudio && <AudioPlayer src={selectedAudio} />}
-          {randomDocument && (
+          {selectedAudio && <AudioPlayer src={selectedAudio} mode={mode} toggleMode={toggleMode} />}
+          {randomDocument && mode === 'practice' && (
             <div className='flex flex-col items-center gap-2' key={randomDocument.id}>
               <div className='flex flex-col sm:flex-row gap-0 sm:gap-2'>
-                <FluencyButton
-                  className='mt-4'
-                  onClick={toggleTranscriptVisibility}
-                >
+                <FluencyButton className='mt-4' onClick={toggleTranscriptVisibility}>
                   {isTranscriptVisible ? 'Esconder texto' : 'Mostrar texto'}
                 </FluencyButton>
-                <FluencyButton
-                  className='mt-4'
-                  variant='confirm'
-                  onClick={toggleShowAllWords}
-                >
+                <FluencyButton className='mt-4' variant='confirm' onClick={toggleShowAllWords}>
                   {showAllWords ? 'Esconder respostas' : 'Mostrar respostas'}
                 </FluencyButton>
               </div>
               {isTranscriptVisible && (
                 <>
-                <div className='h-max overflow-hidden overflow-y-scroll p-10 rounded-md'>
-                  {wordInputs.map((input, index) => (
-                    <span className='w-full' key={index}>
-                      {getWordDisplay(input, index)}
-                      {' '}
-                    </span>
-                  ))}
-                </div>
-                {inputsDisabled ? (
-                <div className='flex flex-row gap-2 items-center'>
-                  <FluencyButton
-                    className='mt-4 flex flex-row items-center'
-                    variant='warning'
-                    onClick={handlePlayAgain}
-                  >
-                    Jogar novamente
-                  </FluencyButton>
-                </div>
-              ) : (
-                <FluencyButton
-                  variant='gray'
-                  onClick={checkAnswers}
-                >
-                  Verificar Respostas
-                </FluencyButton>
-              )}
+                  <div className='h-max overflow-hidden overflow-y-scroll p-10 rounded-md'>
+                    {wordInputs.map((input, index) => (
+                      <span className='w-full' key={index}>
+                        {getWordDisplay(input, index)}
+                        {' '}
+                      </span>
+                    ))}
+                  </div>
+                  {inputsDisabled ? (
+                    <div className='flex flex-row gap-2 items-center'>
+                      <FluencyButton className='mt-4 flex flex-row items-center' variant='warning' onClick={handlePlayAgain}>
+                        Jogar novamente
+                      </FluencyButton>
+                    </div>
+                  ) : (
+                    <FluencyButton variant='gray' onClick={checkAnswers}>
+                      Verificar Respostas
+                    </FluencyButton>
+                  )}
                 </>
               )}
             </div>

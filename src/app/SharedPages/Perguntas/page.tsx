@@ -612,7 +612,7 @@ export default function Forum() {
 
                                         <button
                                             onClick={() => openQuestionModal(question)}
-                                            className="dark:text-fluency-gray-900 text-fluency-gray-50  bg-fluency-yellow-600 dark:bg-fluency-yellow-400 hover:bg-fluency-yellow-500 hover:dark:bg-fluency-yellow-500 p-2 rounded-md flex flex-row gap-1 items-center text-xs font-semibold duration-300 ease-in-out"
+                                            className="dark:text-fluency-gray-900 text-fluency-gray-50  bg-fluency-orange-600 dark:bg-fluency-orange-400 hover:bg-fluency-orange-500 hover:dark:bg-fluency-orange-500 p-2 rounded-md flex flex-row gap-1 items-center text-xs font-semibold duration-300 ease-in-out"
                                         >
                                             <FaReplyAll /> Responder
                                         </button>

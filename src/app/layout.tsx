@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "FluencyLab",
     type: "website",
   },
-  themeColor: "#21B5DE",
+  themeColor: "#1A237E",
 };
 
 export default function RootLayout({

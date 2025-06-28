@@ -85,8 +85,8 @@ export default function Professors() {
         className='text-xs font-bold bg-fluency-green-200 rounded-md p-1'
         content="Sem informações de pagamento para esse mês"
       >
-        <span className="hover:text-fluency-yellow-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
-          <RiErrorWarningLine className='text-fluency-yellow-500'/>
+        <span className="hover:text-fluency-orange-500 duration-300 ease-in-out transition-all text-lg text-danger cursor-pointer active:opacity-50">
+          <RiErrorWarningLine className='text-fluency-orange-500'/>
         </span>
       </Tooltip>
     );

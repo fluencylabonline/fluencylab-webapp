@@ -12,31 +12,45 @@ import toast from 'react-hot-toast';
 import { CgRemoveR } from 'react-icons/cg';
 import { FaUserCircle } from 'react-icons/fa';
 
-interface Aluno {
-  CNPJ: string;
-  id: string;
-  name: string;
-  professor: string;
-  professorId: string;
-  mensalidade: number;
-  idioma: any;
-  payments: any;
-  studentMail: string;
-  status: string;
-  diaAula: string;
-  diaPagamento: number;
-  userName: string;
-  profilePictureURL: any;
+interface ContractStatus {
+  signed: boolean;
+  signedByAdmin: boolean;
+  logId: string | null;
+  signedAt: string | null;
+  adminSignedAt: string | null;
 }
 
-interface Professor {
+// In EditAlunoModal.tsx
+interface Aluno {
   id: string;
   name: string;
+  professorId: string;
+  CNPJ?: string; // Make CNPJ optional
+  professor?: string;
+  mensalidade?: number;
+  idioma?: string;
+  payments?: any;
+  studentMail?: any;
+  comecouEm?: string;
+  encerrouEm?: string;
+  diaAula?: string;
+  status?: string;
+  classes?: any;
+  userName?: string;
+  profilePictureURL?: any;
+  diaPagamento?: any;
+  meioPagamento?: string; // Add payment method field
+  ContratosAssinados?: ContractStatus;
 }
 
 interface EditAlunoProps {
   selectedAluno: Aluno | null;
   onClose: () => void;
+}
+
+interface Professor {
+  id: string;
+  name: string;
 }
 
 const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
@@ -48,6 +62,7 @@ const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
   const [editableAluno, setEditableAluno] = useState<Aluno | null>(null);
   const [selectedCNPJ, setSelectedCNPJ] = useState<string | null>(selectedAluno?.CNPJ || '');
   const languages = ['Português', 'Ingles', 'Espanhol', 'Libras', 'Alemão'];
+  const paymentMethods = ['pix', 'cartao']; // Payment method options
 
   useEffect(() => {
     setSelectedCNPJ(selectedAluno?.CNPJ || '');
@@ -114,14 +129,21 @@ const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
     if (editableAluno) {
       setEditableAluno({ ...editableAluno, idioma: newLanguage });
     }
-  };  
+  };
+
+  const handlePaymentMethodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPaymentMethod = e.target.value;
+    if (editableAluno) {
+      setEditableAluno({ ...editableAluno, meioPagamento: newPaymentMethod });
+    }
+  };
 
   const saveChanges = async () => {
     if (!editableAluno) return;
 
     // Validate required fields
-    const { mensalidade, diaPagamento, idioma } = editableAluno;
-    if (!mensalidade || !diaPagamento || !idioma) {
+    const { mensalidade, diaPagamento, idioma, meioPagamento } = editableAluno;
+    if (!mensalidade || !diaPagamento || !idioma || !meioPagamento) {
       toast.error('Todos os campos obrigatórios devem ser preenchidos!', { position: 'top-center' });
       return;
     }
@@ -132,6 +154,7 @@ const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
       CNPJ: editableAluno.CNPJ,
       diaPagamento: editableAluno.diaPagamento,
       idioma: editableAluno.idioma,
+      meioPagamento: editableAluno.meioPagamento, // Add payment method to update data
       professor: selectedProfessor ? selectedProfessor.name : editableAluno.professor,
       professorId: selectedProfessor ? selectedProfessor.id : editableAluno.professorId
     };
@@ -229,6 +252,22 @@ const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
               ))}
             </select>
           </div>
+
+          <div>
+            <p className='text-xs font-semibold'>Meio de Pagamento:</p>
+            <select
+              value={editableAluno?.meioPagamento || ''}
+              onChange={handlePaymentMethodChange}
+              className="ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-blue-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800"
+            >
+              <option value="">Selecione o meio de pagamento</option>
+              {paymentMethods.map((method) => (
+                <option key={method} value={method}>
+                  {method === 'pix' ? 'PIX' : 'Cartão'}
+                </option>
+              ))}
+            </select>
+          </div>
           
           <div>
             <p className='text-xs font-semibold'>Pagamento para:</p>
@@ -252,7 +291,7 @@ const EditAluno: React.FC<EditAlunoProps> = ({ selectedAluno, onClose }) => {
                   const selectedProf = professors.find(prof => prof.id === e.target.value) || null;
                   setSelectedProfessor(selectedProf);
                 }}
-                className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-yellow-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
+                className='ease-in-out duration-300 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-fluency-gray-100 outline-none focus:border-fluency-orange-500 dark:bg-fluency-pages-dark dark:border-fluency-gray-500 dark:text-fluency-gray-100 text-fluency-gray-800'
               >
                 <option value="">Selecionar Professor</option>
                 {professors.map((prof) => (

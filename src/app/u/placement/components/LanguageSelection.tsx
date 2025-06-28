@@ -28,7 +28,7 @@ const LanguageSelection: React.FC<LanguageSelectionProps> = ({ onLanguageSelect 
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-fluency-pages-light dark:bg-fluency-pages-dark shadow-md w-full h-full text-center flex flex-col items-center justify-center space-y-4 rounded-lg">
+        <form onSubmit={handleSubmit} className="shadow-md w-full h-full text-center flex flex-col items-center justify-center space-y-4 rounded-lg">
             <h2 className="text-2xl font-bold mb-6">Escolha um idioma</h2>
 
             <select
