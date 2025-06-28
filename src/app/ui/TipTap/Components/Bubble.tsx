@@ -390,7 +390,7 @@ function Popovers({ editor }: PopoversProps) {
                         className="p-3 bg-orange-50 dark:bg-orange-900/20 border-l-3 border-orange-500 rounded-r-md"
                       >
                         <p className="text-gray-700 dark:text-gray-300 italic">
-                          "{example}"
+                          {example}
                         </p>
                       </div>
                     ))}
