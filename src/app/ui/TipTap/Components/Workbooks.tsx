@@ -44,13 +44,23 @@ const levelOrder: Record<string, number> = {
 const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'new' | 'old'>('new');
+  
+  // Estados para apostilas novas
   const [workbooks, setWorkbooks] = useState<Workbook[]>([]);
-  const [lessonDocs, setLessonDocs] = useState<
-    Record<string, GroupedLessonDocs[]>
-  >({});
+  const [lessonDocs, setLessonDocs] = useState<Record<string, GroupedLessonDocs[]>>({});
   const [filteredItems, setFilteredItems] = useState<LessonDoc[]>([]);
   const [expandedWorkbook, setExpandedWorkbook] = useState<string | null>(null);
   const [expandedUnit, setExpandedUnit] = useState<{
+    workbook: string;
+    unit: string;
+  } | null>(null);
+
+  // Estados para apostilas antigas
+  const [oldLessonDocs, setOldLessonDocs] = useState<Record<string, GroupedLessonDocs[]>>({});
+  const [filteredOldItems, setFilteredOldItems] = useState<LessonDoc[]>([]);
+  const [expandedOldWorkbook, setExpandedOldWorkbook] = useState<string | null>(null);
+  const [expandedOldUnit, setExpandedOldUnit] = useState<{
     workbook: string;
     unit: string;
   } | null>(null);
@@ -62,6 +72,7 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
     onClose();
   };
 
+  // Funções para apostilas novas (código original)
   const fetchWorkbooks = async () => {
     try {
       const workbooksCollection = collection(db, "Apostilas");
@@ -110,29 +121,24 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
           {}
         );
 
-      // Sort units by their numerical value if they are numbers
       const sortedUnitGroups = Object.keys(groupedByUnit)
         .sort((a, b) => {
-          // Attempt to convert unit names to numbers for sorting
           const numA = parseInt(a, 10);
           const numB = parseInt(b, 10);
           if (!isNaN(numA) && !isNaN(numB)) {
             return numA - numB;
           }
-          // Fallback to string comparison if not purely numerical
           return a.localeCompare(b);
         })
         .map((unit) => ({
           unit,
           docs: groupedByUnit[unit].sort((a, b) => {
-            // Extract the leading number from the title for sorting
             const numA = parseInt(a.data.title, 10);
             const numB = parseInt(b.data.title, 10);
 
             if (!isNaN(numA) && !isNaN(numB)) {
               return numA - numB;
             }
-            // Fallback to string comparison if parsing fails or titles don't start with numbers
             return a.data.title.localeCompare(b.data.title);
           }),
         }));
@@ -144,9 +150,64 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
     }
   };
 
+  // Funções para apostilas antigas
+  const fetchOldLessonsForWorkbook = async (workbookName: string) => {
+    try {
+      const lessonsRef = collection(db, 'Notebooks', workbookName, 'Lessons');
+      const lessonsSnapshot = await getDocs(lessonsRef);
+      const fetchedLessonDocs: LessonDoc[] = lessonsSnapshot.docs.map(
+        (doc) => ({
+          id: doc.id,
+          data: doc.data(),
+          unit: doc.data().unit || "Uncategorized",
+          workbook: workbookName,
+        })
+      );
+
+      const groupedByUnit: Record<string, LessonDoc[]> =
+        fetchedLessonDocs.reduce(
+          (acc: Record<string, LessonDoc[]>, doc: LessonDoc) => {
+            const unit = doc.unit;
+            if (!acc[unit]) acc[unit] = [];
+            acc[unit].push(doc);
+            return acc;
+          },
+          {}
+        );
+
+      const sortedUnitGroups = Object.keys(groupedByUnit)
+        .sort((a, b) => {
+          const numA = parseInt(a, 10);
+          const numB = parseInt(b, 10);
+          if (!isNaN(numA) && !isNaN(numB)) {
+            return numA - numB;
+          }
+          return a.localeCompare(b);
+        })
+        .map((unit) => ({
+          unit,
+          docs: groupedByUnit[unit].sort((a, b) => {
+            const numA = parseInt(a.data.title, 10);
+            const numB = parseInt(b.data.title, 10);
+
+            if (!isNaN(numA) && !isNaN(numB)) {
+              return numA - numB;
+            }
+            return a.data.title.localeCompare(b.data.title);
+          }),
+        }));
+
+      return sortedUnitGroups;
+    } catch (error) {
+      console.error(`Error fetching old lessons for ${workbookName}:`, error);
+      return [];
+    }
+  };
+
   const fetchAllLessons = async () => {
     setLoading(true);
     try {
+      // Buscar apostilas novas
       const fetchedWorkbooks = await fetchWorkbooks();
       const allLessons: Record<string, GroupedLessonDocs[]> = {};
 
@@ -156,6 +217,17 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
       }
 
       setLessonDocs(allLessons);
+
+      // Buscar apostilas antigas
+      const oldWorkbooks = ['First Steps', 'The Basics'];
+      const allOldLessons: Record<string, GroupedLessonDocs[]> = {};
+
+      for (const workbookName of oldWorkbooks) {
+        const workbookLessons = await fetchOldLessonsForWorkbook(workbookName);
+        allOldLessons[workbookName] = workbookLessons;
+      }
+
+      setOldLessonDocs(allOldLessons);
     } catch (error) {
       console.error("Error fetching all lessons:", error);
     } finally {
@@ -173,51 +245,88 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
     setSearchTerm(value);
     if (!value.trim()) {
       setFilteredItems([]);
+      setFilteredOldItems([]);
       return;
     }
 
     const lowerValue = value.toLowerCase();
-    const results: LessonDoc[] = [];
 
-    Object.entries(lessonDocs).forEach(([workbookName, workbookGroups]) => {
-      workbookGroups.forEach((group) => {
-        group.docs.forEach((doc) => {
-          if (doc.data.title?.toLowerCase().includes(lowerValue)) {
-            results.push(doc);
-          }
+    if (activeTab === 'new') {
+      const results: LessonDoc[] = [];
+      Object.entries(lessonDocs).forEach(([workbookName, workbookGroups]) => {
+        workbookGroups.forEach((group) => {
+          group.docs.forEach((doc) => {
+            if (doc.data.title?.toLowerCase().includes(lowerValue)) {
+              results.push(doc);
+            }
+          });
         });
       });
-    });
 
-    // Also sort search results by title
-    results.sort((a, b) => {
-      const numA = parseInt(a.data.title, 10);
-      const numB = parseInt(b.data.title, 10);
+      results.sort((a, b) => {
+        const numA = parseInt(a.data.title, 10);
+        const numB = parseInt(b.data.title, 10);
+        if (!isNaN(numA) && !isNaN(numB)) {
+          return numA - numB;
+        }
+        return a.data.title.localeCompare(b.data.title);
+      });
 
-      if (!isNaN(numA) && !isNaN(numB)) {
-        return numA - numB;
-      }
-      return a.data.title.localeCompare(b.data.title);
-    });
+      setFilteredItems(results);
+    } else {
+      const results: LessonDoc[] = [];
+      Object.entries(oldLessonDocs).forEach(([workbookName, workbookGroups]) => {
+        workbookGroups.forEach((group) => {
+          group.docs.forEach((doc) => {
+            if (doc.data.title?.toLowerCase().includes(lowerValue)) {
+              results.push(doc);
+            }
+          });
+        });
+      });
 
-    setFilteredItems(results);
+      results.sort((a, b) => {
+        const numA = parseInt(a.data.title, 10);
+        const numB = parseInt(b.data.title, 10);
+        if (!isNaN(numA) && !isNaN(numB)) {
+          return numA - numB;
+        }
+        return a.data.title.localeCompare(b.data.title);
+      });
+
+      setFilteredOldItems(results);
+    }
   };
 
   const clearSearch = () => {
     setSearchTerm("");
     setFilteredItems([]);
+    setFilteredOldItems([]);
   };
 
   const toggleWorkbook = (workbookId: string) => {
-    setExpandedWorkbook(expandedWorkbook === workbookId ? null : workbookId);
-    setExpandedUnit(null);
+    if (activeTab === 'new') {
+      setExpandedWorkbook(expandedWorkbook === workbookId ? null : workbookId);
+      setExpandedUnit(null);
+    } else {
+      setExpandedOldWorkbook(expandedOldWorkbook === workbookId ? null : workbookId);
+      setExpandedOldUnit(null);
+    }
   };
 
   const toggleUnit = (workbookId: string, unit: string) => {
-    if (expandedUnit?.workbook === workbookId && expandedUnit?.unit === unit) {
-      setExpandedUnit(null);
+    if (activeTab === 'new') {
+      if (expandedUnit?.workbook === workbookId && expandedUnit?.unit === unit) {
+        setExpandedUnit(null);
+      } else {
+        setExpandedUnit({ workbook: workbookId, unit });
+      }
     } else {
-      setExpandedUnit({ workbook: workbookId, unit });
+      if (expandedOldUnit?.workbook === workbookId && expandedOldUnit?.unit === unit) {
+        setExpandedOldUnit(null);
+      } else {
+        setExpandedOldUnit({ workbook: workbookId, unit });
+      }
     }
   };
 
@@ -261,7 +370,9 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
   };
 
   const renderSearchResults = () => {
-    if (filteredItems.length === 0) {
+    const currentFilteredItems = activeTab === 'new' ? filteredItems : filteredOldItems;
+    
+    if (currentFilteredItems.length === 0) {
       return (
         <motion.div
           className="text-center py-8"
@@ -282,7 +393,7 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
         initial="hidden"
         animate="visible"
       >
-        {filteredItems.map((doc) => (
+        {currentFilteredItems.map((doc) => (
           <motion.li
             className="flex flex-row gap-4 justify-between items-center p-4 bg-fluency-pages-light dark:bg-fluency-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             key={`${doc.workbook}-${doc.id}`}
@@ -306,9 +417,16 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
     );
   };
 
-  const renderWorkbook = (workbook: Workbook) => {
-    const isExpanded = expandedWorkbook === workbook.id;
-    const workbookLessons = lessonDocs[workbook.id] || [];
+  const renderWorkbook = (workbook: Workbook | { id: string; title: string }) => {
+    const isExpanded = activeTab === 'new' 
+      ? expandedWorkbook === workbook.id 
+      : expandedOldWorkbook === workbook.id;
+    
+    const workbookLessons = activeTab === 'new' 
+      ? (lessonDocs[workbook.id] || [])
+      : (oldLessonDocs[workbook.id] || []);
+
+    const currentExpandedUnit = activeTab === 'new' ? expandedUnit : expandedOldUnit;
 
     return (
       <motion.div
@@ -348,8 +466,8 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
               {workbookLessons.map((unitGroup, index) => {
                 const unitKey = `${workbook.id}-${unitGroup.unit}`;
                 const isUnitExpanded =
-                  expandedUnit?.workbook === workbook.id &&
-                  expandedUnit?.unit === unitGroup.unit;
+                  currentExpandedUnit?.workbook === workbook.id &&
+                  currentExpandedUnit?.unit === unitGroup.unit;
 
                 return (
                   <motion.div
@@ -429,16 +547,34 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
       return renderSearchResults();
     }
 
-    return (
-      <motion.div
-        className="space-y-4"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {sortedWorkbooks.map((workbook) => renderWorkbook(workbook))}
-      </motion.div>
-    );
+    if (activeTab === 'new') {
+      return (
+        <motion.div
+          className="space-y-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {sortedWorkbooks.map((workbook) => renderWorkbook(workbook))}
+        </motion.div>
+      );
+    } else {
+      const oldWorkbooks = ['First Steps', 'The Basics'].map(name => ({
+        id: name,
+        title: name
+      }));
+      
+      return (
+        <motion.div
+          className="space-y-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {oldWorkbooks.map((workbook) => renderWorkbook(workbook))}
+        </motion.div>
+      );
+    }
   };
 
   return (
@@ -472,6 +608,36 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
 
                 <div className="flex justify-center items-center mb-4">
                   <h3 className="text-2xl font-bold">Apostilas</h3>
+                </div>
+
+                {/* Abas */}
+                <div className="flex mb-4 bg-fluency-gray-200 dark:bg-fluency-gray-800 rounded-lg p-1">
+                  <button
+                    className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                      activeTab === 'new'
+                        ? 'bg-fluency-green-500 text-white'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-fluency-gray-300 dark:hover:bg-fluency-gray-700'
+                    }`}
+                    onClick={() => {
+                      setActiveTab('new');
+                      clearSearch();
+                    }}
+                  >
+                    Apostilas Novas
+                  </button>
+                  <button
+                    className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                      activeTab === 'old'
+                        ? 'bg-fluency-green-500 text-white'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-fluency-gray-300 dark:hover:bg-fluency-gray-700'
+                    }`}
+                    onClick={() => {
+                      setActiveTab('old');
+                      clearSearch();
+                    }}
+                  >
+                    Apostilas Antigas
+                  </button>
                 </div>
 
                 <div className="relative">
@@ -522,7 +688,7 @@ const Workbooks: React.FC<WorkbooksProps> = ({ editor, onClose, isOpen }) => {
                 </div>
               </div>
 
-              <div className="p-4 pb-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              <div className="p-4 pb-6 overflow-y-auto max-h-[calc(90vh-200px)]">
                 {renderContent()}
               </div>
             </motion.div>
