@@ -142,9 +142,8 @@ const AudioComponent = ({ node }) => {
 
   return (
     <NodeViewWrapper className="react-component">
-      <Toaster />
       <div className='h-min w-full flex flex-col justify-center items-center'>
-        <div className='bg-fluency-pages-light dark:bg-fluency-pages-dark p-3 w-full text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
+        <div className='w-full text-justify flex flex-col gap-1 items-center justify-center rounded-md text-lg'>
           {selectedAudio && <AudioPlayer src={selectedAudio} mode={mode} toggleMode={toggleMode} />}
           {randomDocument && mode === 'practice' && (
             <div className='flex flex-col items-center gap-2' key={randomDocument.id}>

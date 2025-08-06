@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './AudioPlayerComponent.css';
 import { HiVolumeUp } from 'react-icons/hi';
+import { CiUndo, CiRedo } from 'react-icons/ci';
 
 interface AudioPlayerProps {
   src: string;
@@ -116,7 +117,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, mode, toggleMode }) => {
     audioRef.current.playbackRate = newPlaybackRate;
   };
 
-  return (
+  const skipForward = () => {
+    const audio = audioRef.current;
+    audio.currentTime = Math.min(audio.currentTime + 10, duration);
+  };
+
+  const skipBackward = () => {
+    const audio = audioRef.current;
+    audio.currentTime = Math.max(audio.currentTime - 10, 0);
+  };
+
+    return (
     <div className="audio-player w-full" ref={audioPlayerRef}>
       <div className="timeline" onClick={handleTimelineClick}>
         <div className="progress"></div>
@@ -138,6 +149,21 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, mode, toggleMode }) => {
             <option value={1.2}>1.5x</option>
             <option value={1.8}>2x</option>
           </select>
+        </div>
+
+        <div className="skip-controls flex items-center gap-2">
+          <button
+            onClick={skipBackward}
+            className="text-white font-bold bg-fluency-bg-dark rounded-full px-1 py-1 hover:bg-fluency-blue-500"
+          >
+            <CiUndo className="w-6 h-6" />
+          </button>
+          <button
+            onClick={skipForward}
+            className="text-white font-bold bg-fluency-bg-dark rounded-full px-1 py-1 hover:bg-fluency-blue-500"
+          >
+            <CiRedo className="w-6 h-6" />
+          </button>
         </div>
 
         <div onClick={toggleMode} className="speed-controls text-[#dadada] cursor-pointer">

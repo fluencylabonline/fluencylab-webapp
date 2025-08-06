@@ -29,9 +29,9 @@ const games = [
   { title: "Listening", backgroundImage: Listening, path: "pratica/listening" },
   { title: "Quiz", backgroundImage: QuizzImage, path: "pratica/quizz" },
   { title: "Speaking", backgroundImage: Speaking, path: "pratica/speaking" },
-  { title: "TicTacToe", backgroundImage: TicTacToeImage, path: "pratica/tictactoe" },
+  { title: "TicTacToe", backgroundImage: TicTacToeImage, path: "pratica/tic-tac-toe" },
   { title: "Vocabulary", backgroundImage: Vocabulary, path: "pratica/vocabulary" },
-  { title: "What Am I?", backgroundImage: WhatAmIImage, path: "pratica/whatami" },
+  { title: "What Am I?", backgroundImage: WhatAmIImage, path: "pratica/what-am-i" },
 ];
 
 export default function PracticePage() {
