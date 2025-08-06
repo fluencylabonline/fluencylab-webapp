@@ -470,14 +470,14 @@ function Caderno() {
         onTourEnd={() => console.log("Caderno tour completed")}
       />
 
-      <div className="fade-in fade-out p-2 h-[92vh] min-w-screen overflow-y-scroll">
-        <div className="gap-3 h-full lg:flex lg:flex-row md:flex md:flex-col flex flex-col">
+      <div className="fade-in fade-out p-2 h-[92vh] min-w-screen overflow-hidden">
+        <div className="gap-3 lg:flex lg:flex-row md:flex md:flex-col flex flex-col h-full overflow-hidden">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4"
+            className="w-full rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 flex flex-col min-h-0"
           >
-            <div className="flex justify-between items-center mb-4 gap-4 tour-call-button">
+            <div className="flex justify-between items-center mb-4 gap-4 tour-call-button flex-shrink-0">
               {/* <StudentCallButton student={{ studentID: id }} /> */}
 
               <div className="relative w-full tour-notebooks-search">
@@ -500,65 +500,69 @@ function Caderno() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 tour-notebooks-list">
-              <AnimatePresence>
-                {sortedNotebooks.length > 0 ? (
-                  sortedNotebooks.map((notebook) => (
-                    <motion.div
-                      key={notebook.id}
-                      whileHover={{ scale: 1.02, y: 5 }}
-                      exit={{ scale: 0.9 }}
-                      className="bg-fluency-blue-100 dark:bg-fluency-gray-800 rounded-lg overflow-hidden border border-fluency-gray-200 dark:border-fluency-gray-700"
-                    >
-                      <div className="flex justify-between items-start p-4">
-                        <Link
-                          href={{
-                            pathname: `/student-dashboard/caderno/aula/${encodeURIComponent(
-                              notebook.studentName
-                            )}`,
-                            query: {
-                              notebook: notebook.id,
-                              student: notebook.student,
-                            },
-                          }}
-                          passHref
-                          className="flex-1"
+            <div className="flex-1 min-h-0 tour-notebooks-list">
+              <div className="h-full overflow-y-auto custom-scrollbar">
+                <div className="flex flex-col gap-4 pr-2">
+                  <AnimatePresence>
+                    {sortedNotebooks.length > 0 ? (
+                      sortedNotebooks.map((notebook) => (
+                        <motion.div
+                          key={notebook.id}
+                          whileHover={{ scale: 1.02, y: 5 }}
+                          exit={{ scale: 0.9 }}
+                          className="bg-fluency-blue-100 dark:bg-fluency-gray-800 rounded-lg overflow-hidden border border-fluency-gray-200 dark:border-fluency-gray-700 flex-shrink-0"
                         >
-                          <div>
-                            <h3 className="font-bold text-lg mb-2 truncate">
-                              {notebook.title}
-                            </h3>
-                            <p className="text-fluency-gray-600 dark:text-fluency-gray-300 text-sm line-clamp-2">
-                              {notebook.description || "Sem descrição"}
-                            </p>
-                          </div>
-                        </Link>
+                          <div className="flex justify-between items-start p-4">
+                            <Link
+                              href={{
+                                pathname: `/student-dashboard/caderno/aula/${encodeURIComponent(
+                                  notebook.studentName
+                                )}`,
+                                query: {
+                                  notebook: notebook.id,
+                                  student: notebook.student,
+                                },
+                              }}
+                              passHref
+                              className="flex-1 min-w-0"
+                            >
+                              <div>
+                                <h3 className="font-bold text-lg mb-2 break-words">
+                                  {notebook.title}
+                                </h3>
+                                <p className="text-fluency-gray-600 dark:text-fluency-gray-300 text-sm line-clamp-2 break-words">
+                                  {notebook.description || "Sem descrição"}
+                                </p>
+                              </div>
+                            </Link>
 
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            downloadNotebookAsPdf(notebook);
-                          }}
-                          className="ml-4 p-2 rounded-full hover:bg-fluency-blue-100 dark:hover:bg-fluency-gray-700 transition-colors tour-notebooks-pdf-download"
-                          aria-label="Download PDF"
-                        >
-                          <FaFilePdf className="w-5 h-5 text-fluency-red-500" />
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="col-span-full text-center py-8 text-fluency-gray-500"
-                  >
-                    {searchQuery
-                      ? "Nenhum caderno encontrado"
-                      : "Nenhum caderno disponível"}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                downloadNotebookAsPdf(notebook);
+                              }}
+                              className="ml-4 p-2 rounded-full hover:bg-fluency-blue-100 dark:hover:bg-fluency-gray-700 transition-colors tour-notebooks-pdf-download flex-shrink-0"
+                              aria-label="Download PDF"
+                            >
+                              <FaFilePdf className="w-5 h-5 text-fluency-red-500" />
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="col-span-full text-center py-8 text-fluency-gray-500"
+                      >
+                        {searchQuery
+                          ? "Nenhum caderno encontrado"
+                          : "Nenhum caderno disponível"}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
             </div>
           </motion.div>
 
