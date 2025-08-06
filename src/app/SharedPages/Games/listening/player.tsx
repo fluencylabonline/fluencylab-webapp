@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './AudioPlayer.css';
-import { HiVolumeUp } from 'react-icons/hi';
+import React, { useEffect, useRef, useState } from "react";
+import "./AudioPlayer.css";
+import { HiVolumeUp } from "react-icons/hi";
+import { CiRedo, CiUndo } from "react-icons/ci";
 
 interface AudioPlayerProps {
   src: string;
@@ -25,7 +26,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
       setCurrentTime(audio.currentTime);
       const progress = (audio.currentTime / audio.duration) * 100;
       if (audioPlayerRef.current) {
-        const progressBar = audioPlayerRef.current.querySelector('.progress') as HTMLDivElement;
+        const progressBar = audioPlayerRef.current.querySelector(
+          ".progress"
+        ) as HTMLDivElement;
         progressBar.style.width = `${progress}%`;
       }
     };
@@ -39,14 +42,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
       setIsPlaying(false); // Set isPlaying to false when audio ends
     };
 
-    audio.addEventListener('loadeddata', updateDuration);
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('ended', handleEnded); // Add ended event listener
+    audio.addEventListener("loadeddata", updateDuration);
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("ended", handleEnded); // Add ended event listener
 
     return () => {
-      audio.removeEventListener('loadeddata', updateDuration);
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('ended', handleEnded); // Clean up ended event listener
+      audio.removeEventListener("loadeddata", updateDuration);
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("ended", handleEnded); // Clean up ended event listener
       audio.pause();
       setIsPlaying(false);
     };
@@ -63,19 +66,26 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
     }
   };
 
-  const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleTimelineClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     const timelineWidth = window.getComputedStyle(e.currentTarget).width;
-    const timeToSeek = (e.nativeEvent.offsetX / parseInt(timelineWidth)) * duration;
+    const timeToSeek =
+      (e.nativeEvent.offsetX / parseInt(timelineWidth)) * duration;
     audioRef.current.currentTime = timeToSeek;
   };
 
-  const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleVolumeChange = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     const sliderWidth = window.getComputedStyle(e.currentTarget).width;
     const newVolume = e.nativeEvent.offsetX / parseInt(sliderWidth);
     audioRef.current.volume = newVolume;
     setVolume(newVolume);
     if (audioPlayerRef.current) {
-      const volumePercentage = audioPlayerRef.current.querySelector('.volume-percentage') as HTMLDivElement;
+      const volumePercentage = audioPlayerRef.current.querySelector(
+        ".volume-percentage"
+      ) as HTMLDivElement;
       volumePercentage.style.width = `${newVolume * 100}%`;
     }
   };
@@ -87,8 +97,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
     const hours = parseInt((minutes / 60).toString());
     minutes -= hours * 60;
 
-    if (hours === 0) return `${minutes}:${String(seconds % 60).padStart(2, '0')}`;
-    return `${String(hours).padStart(2, '0')}:${minutes}:${String(seconds % 60).padStart(2, '0')}`;
+    if (hours === 0)
+      return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
+    return `${String(hours).padStart(2, "0")}:${minutes}:${String(
+      seconds % 60
+    ).padStart(2, "0")}`;
   };
 
   const handleSpeedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -97,14 +110,28 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
     audioRef.current.playbackRate = newPlaybackRate;
   };
 
+  const skipForward = () => {
+    const audio = audioRef.current;
+    audio.currentTime = Math.min(audio.currentTime + 10, duration);
+  };
+
+  const skipBackward = () => {
+    const audio = audioRef.current;
+    audio.currentTime = Math.max(audio.currentTime - 10, 0);
+  };
+
   return (
     <div className="audio-player w-full" ref={audioPlayerRef}>
       <div className="timeline" onClick={handleTimelineClick}>
         <div className="progress"></div>
       </div>
       <div className="controls">
+        
         <div className="play-container">
-          <div className={`toggle-play ${isPlaying ? 'pause' : 'play'}`} onClick={togglePlay}></div>
+          <div
+            className={`toggle-play ${isPlaying ? "pause" : "play"}`}
+            onClick={togglePlay}
+          ></div>
         </div>
         <div className="time text-[#E64E17]">
           <div className="current">{formatTime(currentTime)}</div>
@@ -113,7 +140,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
         </div>
 
         <div className="speed-controls text-[#E64E17]">
-          <select className='p-2 bg-fluency-bg-dark rounded-md font-bold' id="speedSelect" value={playbackRate} onChange={handleSpeedChange}>
+          <select
+            className="p-2 bg-fluency-bg-dark rounded-md font-bold"
+            id="speedSelect"
+            value={playbackRate}
+            onChange={handleSpeedChange}
+          >
             <option value={0.5}>0.5x</option>
             <option value={0.8}>1x</option>
             <option value={1.2}>1.5x</option>
@@ -121,9 +153,24 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
           </select>
         </div>
 
-        <div className="volume-container"> 
+        <div className="skip-controls flex items-center gap-2">
+          <button
+            onClick={skipBackward}
+            className="text-[#E64E17] font-bold bg-fluency-bg-dark rounded-full px-1 py-1 hover:bg-[#E64E17]/20"
+          >
+            <CiUndo className="w-6 h-6" />
+          </button>
+          <button
+            onClick={skipForward}
+            className="text-[#E64E17] font-bold bg-fluency-bg-dark rounded-full px-1 py-1 hover:bg-[#E64E17]/20"
+          >
+            <CiRedo className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className="volume-container">
           <div className="volume-button">
-            <HiVolumeUp className="volume icono-volumeMedium w-6 h-auto text-[#E64E17]"/>
+            <HiVolumeUp className="volume icono-volumeMedium w-6 h-auto text-[#E64E17]" />
           </div>
           <div className="volume-slider" onClick={handleVolumeChange}>
             <div className="volume-percentage"></div>

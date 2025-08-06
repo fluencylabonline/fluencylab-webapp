@@ -113,7 +113,6 @@ const FlashcardModal = ({ isOpen, onClose, editor }) => {
           </div>
         </div>
       </div>
-      <Toaster />
     </div>
   );
 };

@@ -17,7 +17,6 @@ import FluencyInput from "@/app/ui/Components/Input/input";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { Tooltip } from "@nextui-org/react";
-import TeacherCallButton from "@/app/SharedPages/Video/TeacherCallButton";
 import ConfirmationModal from "@/app/ui/Components/ModalComponents/confirmation";
 import InputModal from "@/app/ui/Components/ModalComponents/input";
 import { Backpack, FileText, Trash, PlusCircle } from "lucide-react";
