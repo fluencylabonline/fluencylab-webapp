@@ -36,7 +36,7 @@ import StudentCallButton from "@/app/SharedPages/Video/StudentCallButton";
 import Tour from "@/app/ui/Components/JoyRide/FluencyTour";
 
 // Dynamic import for html2pdf to avoid SSR issues
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 interface Notebook {
   studentName: string;
@@ -198,7 +198,7 @@ function Caderno() {
   };
 
   const handleDownload = async (url: string) => {
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   const [tasks, setTasks] = useState<any>({});
@@ -342,8 +342,8 @@ function Caderno() {
     const pdfPromise = new Promise<void>(async (resolve, reject) => {
       try {
         // Dynamically import html2pdf only on client side
-        const html2pdf = (await import('html2pdf.js')).default;
-        
+        const html2pdf = (await import("html2pdf.js")).default;
+
         const element = document.createElement("div");
         element.innerHTML = `
         <div class="p-8 bg-white text-black">
@@ -470,16 +470,302 @@ function Caderno() {
         onTourEnd={() => console.log("Caderno tour completed")}
       />
 
-      <div className="fade-in fade-out p-2 h-[92vh] min-w-screen overflow-hidden">
-        <div className="gap-3 lg:flex lg:flex-row md:flex md:flex-col flex flex-col h-full overflow-hidden">
+      <div className="fade-in fade-out p-2 h-max md:h-max lg:h-[92vh] min-w-screen overflow-hidden">
+        {/* Mobile Layout */}
+        <div className="lg:hidden flex flex-col gap-3 h-full overflow-hidden">
+          {/* Search Bar - Mobile */}
+          <div className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 flex-shrink-0">
+            <div className="relative w-full tour-notebooks-search">
+              <input
+                type="text"
+                placeholder="Buscar lições..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-fluency-gray-100 dark:bg-fluency-gray-800 border border-fluency-gray-200 dark:border-fluency-gray-700 focus:outline-none focus:ring-2 focus:ring-fluency-blue-500"
+              />
+              <FaSearch className="absolute left-3 top-3 text-fluency-gray-500" />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-3 text-fluency-gray-500 hover:text-fluency-red-500"
+                >
+                  <SlClose />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Notebooks List - Mobile */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 flex flex-col min-h-0"
+            className="flex-1 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 min-h-[40vh] max-h-[40vh] overflow-y-auto tour-notebooks-list"
+          >
+            <div className="h-full overflow-y-auto custom-scrollbar">
+              <div className="flex flex-col gap-3">
+                <AnimatePresence>
+                  {sortedNotebooks.length > 0 ? (
+                    sortedNotebooks.map((notebook) => (
+                      <motion.div
+                        key={notebook.id}
+                        whileHover={{ scale: 1.01 }}
+                        exit={{ scale: 0.9 }}
+                        className="bg-fluency-blue-100 dark:bg-fluency-gray-800 rounded-lg overflow-hidden border border-fluency-gray-200 dark:border-fluency-gray-700"
+                      >
+                        <div className="p-4">
+                          <div className="flex justify-between items-start gap-3">
+                            <Link
+                              href={{
+                                pathname: `/student-dashboard/caderno/aula/${encodeURIComponent(
+                                  notebook.studentName
+                                )}`,
+                                query: {
+                                  notebook: notebook.id,
+                                  student: notebook.student,
+                                },
+                              }}
+                              className="flex-1 min-w-0"
+                            >
+                              <h3 className="font-bold text-lg mb-1 break-words">
+                                {notebook.title}
+                              </h3>
+                              <p className="text-fluency-gray-600 dark:text-fluency-gray-300 text-sm break-words">
+                                {notebook.description || "Sem descrição"}
+                              </p>
+                            </Link>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                downloadNotebookAsPdf(notebook);
+                              }}
+                              className="p-2 rounded-full hover:bg-fluency-blue-200 dark:hover:bg-fluency-gray-700 transition-colors tour-notebooks-pdf-download"
+                              aria-label="Download PDF"
+                            >
+                              <FaFilePdf className="w-5 h-5 text-fluency-red-500" />
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-center py-8 text-fluency-gray-500"
+                    >
+                      {searchQuery
+                        ? "Nenhum caderno encontrado"
+                        : "Nenhum caderno disponível"}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Other sections for mobile */}
+          <div className="grid grid-cols-1 gap-3 flex-shrink-0">
+            {/* Tasks - Mobile */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg w-full min-h-max overflow-hidden tour-tasks-section"
+            >
+              <div className="w-full bg-gray-300 dark:bg-fluency-gray-500 h-3 mb-2">
+                <motion.div
+                  className="bg-fluency-green-500 h-3 transition-all duration-500"
+                  style={{
+                    width: `${taskCompletionPercentage}%`,
+                  }}
+                />
+              </div>
+              <div className="px-4 py-2">
+                <div className="flex justify-between items-center mb-3">
+                  <h2 className="text-lg font-bold flex items-center gap-2">
+                    <CheckCheck className="text-fluency-green-500" />
+                    Tarefas
+                  </h2>
+                </div>
+                <motion.div
+                  className="space-y-2 w-full max-h-[300px] overflow-y-auto pr-2"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.1,
+                      },
+                    },
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <AnimatePresence>
+                    {tasks &&
+                      tasks.Task &&
+                      tasks.Task.map((task: any, index: number) => (
+                        <motion.div
+                          key={index}
+                          variants={{
+                            hidden: { y: 20, opacity: 0 },
+                            visible: { y: 0, opacity: 1 },
+                          }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="flex items-center justify-between p-3 rounded-lg bg-fluency-gray-100 dark:bg-fluency-gray-700 shadow-sm hover:shadow-md transition-shadow"
+                        >
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <label className="flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                className="hidden"
+                                checked={task.done}
+                                onChange={(e) =>
+                                  handleTaskStatusChange(
+                                    "Task",
+                                    index,
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                              <div
+                                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors
+                    ${
+                      task.done
+                        ? "bg-green-500 border-green-500"
+                        : "border-gray-400 dark:border-gray-500 hover:border-blue-500"
+                    }`}
+                              >
+                                {task.done && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="3"
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                            </label>
+                            <span
+                              className={`text-sm font-medium truncate ${
+                                task.done
+                                  ? "line-through text-gray-500 dark:text-gray-400"
+                                  : "text-gray-800 dark:text-gray-200"
+                              }`}
+                            >
+                              {task.task}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
+                  </AnimatePresence>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Materials & Guidelines - Mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 tour-materials-section"
+              >
+                <h2 className="text-lg font-bold flex items-center gap-2 mb-3">
+                  <IoCloudDownloadOutline className="text-fluency-blue-500" />
+                  Materiais
+                </h2>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
+                  {materials.length > 0 ? (
+                    materials.map((material, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 rounded bg-fluency-blue-100 dark:bg-fluency-gray-800"
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div className="p-1 rounded bg-fluency-blue-200 dark:bg-fluency-gray-700">
+                            {renderMaterialIcon(material.name)}
+                          </div>
+                          <span className="text-sm truncate">
+                            {material.name}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => handleDownload(material.url)}
+                          className="p-1 rounded bg-fluency-green-100 dark:bg-fluency-green-900"
+                        >
+                          <IoCloudDownloadOutline className="w-4 h-4 text-fluency-green-700 dark:text-fluency-green-300" />
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <div className="bg-fluency-gray-100 dark:bg-fluency-gray-800 rounded-full p-3 mb-2 mx-auto w-fit">
+                        <IoCloudDownloadOutline className="w-6 h-6 text-fluency-gray-500" />
+                      </div>
+                      <p className="text-sm text-fluency-gray-500">
+                        Nenhum material
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg p-4 tour-guidelines-section"
+              >
+                <h2 className="text-lg font-bold flex items-center gap-2 mb-3">
+                  <Lightbulb className="text-fluency-orange-500" />
+                  Guidelines
+                </h2>
+                <div className="space-y-2 h-32 overflow-y-auto">
+                  <div
+                    onClick={() =>
+                      openModal(
+                        "text",
+                        "Nossa plataforma foi pensada para você! Aqui você pode:\n\n- Acessar seus cadernos de aula\n- Ver suas tarefas e marcar como concluídas\n- Baixar materiais extras e complementares\n- E muito mais! As outras abas te permitem praticar o idioma \n E também remarcar suas aulas!",
+                        "Como usar a plataforma"
+                      )
+                    }
+                    className="flex items-center gap-2 p-2 rounded bg-fluency-blue-50 dark:bg-fluency-gray-800 cursor-pointer"
+                  >
+                    <div className="bg-fluency-orange-100 dark:bg-fluency-orange-900 p-1 rounded">
+                      <FaInfoCircle className="text-fluency-yellow-600 dark:text-fluency-yellow-300 w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium">
+                        Como usar a plataforma
+                      </h3>
+                      <p className="text-xs text-fluency-gray-600 dark:text-fluency-gray-300">
+                        Guia completo
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden lg:flex gap-3 h-full overflow-hidden">
+          {/* Notebooks Section - Desktop */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-2/3 rounded-lg bg-fluency-pages-light dark:bg-fluency-pages-dark p-4 flex flex-col min-h-0"
           >
             <div className="flex justify-between items-center mb-4 gap-4 tour-call-button flex-shrink-0">
-              {/* <StudentCallButton student={{ studentID: id }} /> */}
-
               <div className="relative w-full tour-notebooks-search">
                 <input
                   type="text"
@@ -566,100 +852,136 @@ function Caderno() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:w-full md:w-full sm:w-full p-3 pr-6 bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg tour-tasks-section"
-          >
-            <div className="w-full lg:flex lg:flex-row lg:justify-around lg:items-center lg:gap-4 md:flex md:flex-col md:justify-between md:items-center md:gap-2 flex flex-col justify-center items-center gap-2 mx-4 ml-1">
-              <div className="p-1">
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                  <CheckCheck className="text-fluency-green-500" />
-                  Tarefas
-                </h2>
+          {/* Right Side - Desktop */}
+          <div className="flex flex-col gap-4 w-1/3">
+            {/* Tasks Section - Desktop */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="w-full bg-fluency-pages-light dark:bg-fluency-pages-dark rounded-lg tour-tasks-section"
+            >
+              <div className="w-full bg-gray-300 dark:bg-fluency-gray-500 h-3 mb-2">
+                <motion.div
+                  className="bg-fluency-green-500 h-3 transition-all duration-500"
+                  style={{
+                    width: `${taskCompletionPercentage}%`,
+                  }}
+                />
               </div>
-              <div className="w-full flex justify-center p-1">
-                <div className="w-full bg-fluency-gray-200 dark:bg-fluency-gray-600 rounded-lg">
-                  <div
-                    className="w-full bg-green-500 text-xs leading-none py-1 text-center font-normal text-white rounded-lg"
-                    style={{
-                      width: `${taskCompletionPercentage}%`,
-                      transition: "width 0.4s linear",
-                    }}
-                  >
-                    <p className="pl-2">
-                      {taskCompletionPercentage.toFixed()}%
-                    </p>
+              <div className="p-4">
+                <div className="w-full flex flex-col lg:flex-row lg:justify-around lg:items-center gap-4 mb-4">
+                  <div>
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                      <CheckCheck className="text-fluency-green-500" />
+                      Tarefas
+                    </h2>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="flex flex-col lg:items-start md:items-start sm:items-center w-full max-h-[90%] mt-1 mb-3 mx-2 pb-4 rounded-md overflow-hidden overflow-y-scroll">
-              <div className="w-full h-max overflow-hidden overflow-y-scroll">
-                {tasks &&
-                  tasks.Task &&
-                  tasks.Task.map((task: any, index: number) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 0.98 }}
-                      exit={{ scale: 1 }}
-                      className="flex flex-row mt-1 justify-between gap-2 items-center bg-fluency-blue-100 hover:bg-fluency-blue-200 dark:bg-fluency-gray-700 hover:dark:bg-fluency-gray-800 transition-all ease-in-out duration-300 p-[0.25rem] px-3 rounded-md"
-                    >
-                      <div className="flex flex-row gap-2 items-center">
-                        <label
-                          className="relative flex items-center p-3 rounded-full cursor-pointer"
-                          htmlFor="checkbox"
+                <motion.div
+                  className="space-y-2 w-full max-h-[300px] overflow-y-auto pr-2"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.1,
+                      },
+                    },
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <AnimatePresence>
+                    {tasks &&
+                      tasks.Task &&
+                      tasks.Task.map((task: any, index: number) => (
+                        <motion.div
+                          key={index}
+                          variants={{
+                            hidden: { y: 20, opacity: 0 },
+                            visible: { y: 0, opacity: 1 },
+                          }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="flex items-center justify-between p-3 rounded-lg bg-fluency-gray-100 dark:bg-fluency-gray-700 shadow-sm hover:shadow-md transition-shadow"
                         >
-                          <input
-                            className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-fluency-gray-500 dark:border-fluency-gray-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-fluency-green-700 checked:bg-fluency-green-700 checked:before:bg-fluency-green-700 hover:before:opacity-10"
-                            id="checkbox"
-                            type="checkbox"
-                            checked={task.done}
-                            onChange={(e) =>
-                              handleTaskStatusChange(
-                                "Task",
-                                index,
-                                e.target.checked
-                              )
-                            }
-                          />
-                          <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              stroke="currentColor"
-                              strokeWidth="1"
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <label className="flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                className="hidden"
+                                checked={task.done}
+                                onChange={(e) =>
+                                  handleTaskStatusChange(
+                                    "Task",
+                                    index,
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                              <div
+                                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors
+                    ${
+                      task.done
+                        ? "bg-green-500 border-green-500"
+                        : "border-gray-400 dark:border-gray-500 hover:border-blue-500"
+                    }`}
+                              >
+                                {task.done && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="3"
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                            </label>
+                            <label
+                              htmlFor={`checkbox-${index}`}
+                              className="flex-1 min-w-0"
                             >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              ></path>
-                            </svg>
-                          </span>
-                        </label>
-                        <label htmlFor="02-11">
-                          {task.link ? (
-                            <Link href={task.link}>
-                              <span className="font-semibold">{task.task}</span>
-                            </Link>
-                          ) : (
-                            <span className="font-semibold">{task.task}</span>
-                          )}
-                        </label>
-                      </div>
-                    </motion.div>
-                  ))}
+                              {task.link ? (
+                                <Link href={task.link}>
+                                  <span
+                                    className={`font-semibold text-sm break-words ${
+                                      task.done
+                                        ? "line-through text-gray-500 dark:text-gray-400"
+                                        : "text-gray-800 dark:text-gray-200"
+                                    }`}
+                                  >
+                                    {task.task}
+                                  </span>
+                                </Link>
+                              ) : (
+                                <span
+                                  className={`font-semibold text-sm break-words ${
+                                    task.done
+                                      ? "line-through text-gray-500 dark:text-gray-400"
+                                      : "text-gray-800 dark:text-gray-200"
+                                  }`}
+                                >
+                                  {task.task}
+                                </span>
+                              )}
+                            </label>
+                          </div>
+                        </motion.div>
+                      ))}
+                  </AnimatePresence>
+                </motion.div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          <div className="flex flex-col gap-4 w-full lg:w-1/2">
-            {/* Materials Section */}
+            {/* Materials Section - Desktop */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -673,7 +995,7 @@ function Caderno() {
                 </h2>
               </div>
 
-              <div className="max-h-80 overflow-y-auto custom-scrollbar p-2">
+              <div className="h-max overflow-y-auto custom-scrollbar p-2">
                 <AnimatePresence>
                   {materials.length > 0 ? (
                     <div className="grid grid-cols-1 gap-2">
@@ -687,11 +1009,11 @@ function Caderno() {
                           whileHover={{ scale: 1.02 }}
                           className="flex items-center justify-between p-3 rounded-lg bg-fluency-blue-100 dark:bg-fluency-gray-800 hover:bg-fluency-blue-50 dark:hover:bg-fluency-gray-700 transition-colors duration-200"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-md bg-fluency-blue-200 dark:bg-fluency-gray-700">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="p-2 rounded-md bg-fluency-blue-200 dark:bg-fluency-gray-700 flex-shrink-0">
                               {renderMaterialIcon(material.name)}
                             </div>
-                            <div className="max-w-[120px] overflow-hidden whitespace-nowrap">
+                            <div className="flex-1 min-w-0">
                               <p className="font-medium truncate text-fluency-gray-800 dark:text-fluency-gray-100">
                                 {material.name}
                               </p>
@@ -702,7 +1024,7 @@ function Caderno() {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleDownload(material.url)}
-                            className="p-2 rounded-full bg-fluency-green-100 dark:bg-fluency-green-900 hover:bg-fluency-green-200 dark:hover:bg-fluency-green-800"
+                            className="p-2 rounded-full bg-fluency-green-100 dark:bg-fluency-green-900 hover:bg-fluency-green-200 dark:hover:bg-fluency-green-800 flex-shrink-0"
                             aria-label="Download"
                           >
                             <IoCloudDownloadOutline className="w-5 h-5 text-fluency-green-700 dark:text-fluency-green-300" />
@@ -714,18 +1036,21 @@ function Caderno() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="flex flex-col items-center justify-center text-center"
+                      className="flex flex-col items-center justify-center text-center py-8"
                     >
                       <div className="bg-fluency-gray-100 dark:bg-fluency-gray-800 rounded-full p-4 mb-3">
                         <IoCloudDownloadOutline className="w-8 h-8 text-fluency-gray-500 dark:text-fluency-gray-400" />
                       </div>
+                      <p className="text-fluency-gray-500 dark:text-fluency-gray-400">
+                        Nenhum material disponível
+                      </p>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             </motion.div>
 
-            {/* Reminders Section */}
+            {/* Guidelines Section - Desktop */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -740,13 +1065,13 @@ function Caderno() {
               </div>
 
               <div className="p-4">
-                <ul className="space-y-2 h-[50vh] overflow-y-auto">
+                <ul className="space-y-2 h-max overflow-y-auto custom-scrollbar">
                   <motion.li
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     whileHover={{
-                      y: -5,
+                      y: -2,
                       boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
                     }}
                     className="flex items-start gap-3 p-3 rounded-lg bg-fluency-blue-50 dark:bg-fluency-gray-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-gray-700 cursor-pointer transition-colors"
@@ -758,11 +1083,11 @@ function Caderno() {
                       )
                     }
                   >
-                    <div className="bg-fluency-orange-100 dark:bg-fluency-orange-900 p-2 rounded-md mt-0.5">
+                    <div className="bg-fluency-orange-100 dark:bg-fluency-orange-900 p-2 rounded-md mt-0.5 flex-shrink-0">
                       <FaInfoCircle className="text-fluency-yellow-600 dark:text-fluency-yellow-300" />
                     </div>
-                    <div>
-                      <h3 className="font-medium text-nowrap text-fluency-gray-800 dark:text-fluency-gray-100">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-fluency-gray-800 dark:text-fluency-gray-100">
                         Como usar a plataforma
                       </h3>
                       <p className="text-sm text-fluency-gray-600 dark:text-fluency-gray-300 mt-1">
@@ -776,37 +1101,7 @@ function Caderno() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     whileHover={{
-                      y: -5,
-                      boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
-                    }}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-fluency-blue-50 dark:bg-fluency-gray-800 hover:bg-fluency-blue-100 dark:hover:bg-fluency-gray-700 cursor-pointer transition-colors"
-                    onClick={() =>
-                      openModal(
-                        "video",
-                        "",
-                        "Como remarcar uma aula"
-                      )
-                    }
-                  >
-                    <div className="bg-fluency-blue-100 dark:bg-fluency-blue-900 p-2 rounded-md mt-0.5">
-                      <FaCalendarAlt className="text-fluency-blue-600 dark:text-fluency-blue-300" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-nowrap text-fluency-gray-800 dark:text-fluency-gray-100">
-                        Como remarcar uma aula
-                      </h3>
-                      <p className="text-sm text-fluency-gray-600 dark:text-fluency-gray-300 mt-1">
-                        Tutorial em vídeo
-                      </p>
-                    </div>
-                  </motion.li>
-
-                  <motion.li
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    whileHover={{
-                      y: -5,
+                      y: -2,
                       boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
                     }}
                     className="flex items-start gap-3 p-3 rounded-lg bg-fluency-green-50 dark:bg-fluency-gray-800 hover:bg-fluency-green-100 dark:hover:bg-fluency-gray-700 cursor-pointer transition-colors"
@@ -818,11 +1113,11 @@ function Caderno() {
                       )
                     }
                   >
-                    <div className="bg-fluency-green-100 dark:bg-fluency-green-900 p-2 rounded-md mt-0.5">
+                    <div className="bg-fluency-green-100 dark:bg-fluency-green-900 p-2 rounded-md mt-0.5 flex-shrink-0">
                       <FaHeadset className="text-fluency-green-600 dark:text-fluency-green-300" />
                     </div>
-                    <div>
-                      <h3 className="font-medium text-nowrap text-fluency-gray-800 dark:text-fluency-gray-100">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-fluency-gray-800 dark:text-fluency-gray-100">
                         Contatos oficiais
                       </h3>
                       <p className="text-sm text-fluency-gray-600 dark:text-fluency-gray-300 mt-1">
