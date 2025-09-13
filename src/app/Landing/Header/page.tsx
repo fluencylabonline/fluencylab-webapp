@@ -30,6 +30,7 @@ const navigation = [
   { name: "Perguntas Frequentes", href: "#faq" },
   { name: "Games", href: "/games" },
   { name: "Nivelamento", href: "/u/placement" },
+  { name: "Libras", href: "/libras" },
 ];
 
 export default function Header() {
@@ -138,7 +139,13 @@ export default function Header() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <Image src={SmallLogo} width={100} height={100} className="w-[2.8rem] h-auto" alt="FluencyLab Logo" />
+                <Image
+                  src={SmallLogo}
+                  width={100}
+                  height={100}
+                  className="w-[2.8rem] h-auto"
+                  alt="FluencyLab Logo"
+                />
               </motion.div>
             </a>
           </motion.div>
@@ -175,7 +182,7 @@ export default function Header() {
                 whileHover={{
                   y: -3,
                   color: "#f97316", // This is your yellow color
-                  transition: { duration: 0.15, ease: "easeInOut" } // Set duration to 1 second
+                  transition: { duration: 0.15, ease: "easeInOut" }, // Set duration to 1 second
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setMobileMenuOpen(false)}
@@ -444,7 +451,6 @@ export default function Header() {
           </a>
         )}
       </motion.div>
-
     </motion.div>
   );
 }
